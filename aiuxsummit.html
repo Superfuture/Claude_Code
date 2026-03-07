@@ -494,6 +494,63 @@ body::before {
   letter-spacing:.2em;
 }
 
+/* ── CONNECT SECTION ────────────────────── */
+#connect {
+  padding:60px 0; opacity:0; transform:translateY(24px); transition:opacity .5s, transform .5s;
+}
+#connect.visible { opacity:1; transform:none; }
+.connect-box {
+  border:4px solid var(--bonus);
+  background:linear-gradient(135deg,rgba(255,68,255,.07) 0%,rgba(255,68,255,.02) 100%);
+  padding:40px; text-align:center;
+  box-shadow:8px 8px 0 var(--bonus), 8px 8px 0 4px #000;
+  position:relative;
+}
+.connect-box::before {
+  content:'★ PLAYER CARD ★';
+  font-family:var(--px); font-size:8px; color:var(--bonus);
+  position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+  background:var(--bg); padding:0 12px; letter-spacing:.1em;
+}
+.pixel-avatar {
+  width:80px; height:80px; margin:0 auto 24px;
+  image-rendering:pixelated; position:relative;
+}
+.pixel-avatar canvas { display:block; }
+.connect-name {
+  font-family:var(--px); font-size:clamp(13px,2.5vw,18px);
+  color:#fff; margin-bottom:8px; letter-spacing:.06em;
+}
+.connect-title {
+  font-family:var(--vt); font-size:22px; color:var(--bonus);
+  margin-bottom:20px; letter-spacing:.04em;
+}
+.connect-bio {
+  font-family:var(--vt); font-size:20px; color:var(--dim);
+  max-width:560px; margin:0 auto 28px; line-height:1.8;
+}
+.connect-btn {
+  display:inline-block; font-family:var(--px); font-size:10px;
+  padding:14px 28px; border:3px solid var(--bonus); color:var(--bonus);
+  text-decoration:none; letter-spacing:.08em;
+  box-shadow:4px 4px 0 var(--bonus);
+  transition:background .1s, color .1s, transform .1s, box-shadow .1s;
+}
+.connect-btn:hover {
+  background:var(--bonus); color:#000;
+  transform:translate(2px,2px); box-shadow:2px 2px 0 var(--bonus);
+}
+.connect-stats {
+  display:flex; justify-content:center; gap:32px; margin-bottom:28px;
+  flex-wrap:wrap;
+}
+.connect-stat {
+  font-family:var(--px); font-size:8px; letter-spacing:.06em;
+  border:2px solid rgba(255,68,255,.35); padding:8px 14px;
+}
+.connect-stat-val { color:var(--bonus); display:block; font-size:14px; margin-bottom:4px; }
+.connect-stat-lbl { color:var(--dim); }
+
 /* ── FOOTER ─────────────────────────────── */
 footer {
   text-align:center; padding:60px 20px 40px;
@@ -776,6 +833,29 @@ footer {
 
 </div><!-- /wrap -->
 
+<!-- CONNECT SECTION -->
+<div class="divider">· · · · · PLAYER PROFILE · · · · ·</div>
+<section id="connect" class="reveal">
+  <div class="connect-box">
+    <div class="pixel-avatar">
+      <canvas id="avatarCanvas" width="80" height="80"></canvas>
+    </div>
+    <div class="connect-name">JOEY PRIMIANI</div>
+    <div class="connect-title">Senior Product Designer · LinkedIn Premium</div>
+    <div class="connect-stats">
+      <div class="connect-stat"><span class="connect-stat-val">★ AI</span><span class="connect-stat-lbl">POWERED</span></div>
+      <div class="connect-stat"><span class="connect-stat-val">10+</span><span class="connect-stat-lbl">YRS EXP</span></div>
+      <div class="connect-stat"><span class="connect-stat-val">∞</span><span class="connect-stat-lbl">PROTOTYPES</span></div>
+    </div>
+    <div class="connect-bio">
+      Product designer obsessed with AI-powered workflows. Building faster, thinking bigger — from prompt to prototype to ship.
+    </div>
+    <a class="connect-btn" href="https://www.linkedin.com/in/joeyprimiani" target="_blank">
+      ▶ CONNECT ON LINKEDIN
+    </a>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-lives">❤️ ❤️ ❤️</div>
@@ -992,6 +1072,40 @@ copyBtn.addEventListener('click', () => {
 });
 
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+// ── PIXEL AVATAR ──────────────────────────
+(function(){
+  const c = document.getElementById('avatarCanvas');
+  if(!c) return;
+  const x = c.getContext('2d');
+  const S = 8; // pixel size
+  // 10x10 grid pixel art (1=skin,2=hair,3=shirt,4=bg,0=transparent)
+  const P = [
+    [0,0,2,2,2,2,2,2,0,0],
+    [0,2,2,2,2,2,2,2,2,0],
+    [0,2,1,1,1,1,1,1,2,0],
+    [0,2,1,1,1,1,1,1,2,0],
+    [0,0,1,5,1,1,5,1,0,0],
+    [0,0,1,1,1,1,1,1,0,0],
+    [0,0,1,1,6,6,1,1,0,0],
+    [0,0,3,3,3,3,3,3,0,0],
+    [0,3,3,3,3,3,3,3,3,0],
+    [0,3,3,0,0,0,0,3,3,0],
+  ];
+  const colors = {
+    1:'#F5C5A3', 2:'#3B2314', 3:'#7B6FFF',
+    4:'transparent', 5:'#2c1a0e', 6:'#c0624a'
+  };
+  P.forEach((row,r) => row.forEach((v,col) => {
+    if(!v) return;
+    x.fillStyle = colors[v];
+    x.fillRect(col*S, r*S, S, S);
+  }));
+  // pixel outline glow
+  x.strokeStyle = 'rgba(255,68,255,0.4)';
+  x.lineWidth = 2;
+  x.strokeRect(1,1,78,78);
+})();
 </script>
 </body>
 </html>
