@@ -594,6 +594,7 @@ const state = {
   moodBefore: null,
   moodAfter: null,
   sessionStart: 0,
+  sessionRafStart: 0,
   sessionActive: false,
   cyclesCompleted: 0,
   streak: 7,
@@ -652,6 +653,7 @@ initMoodPicker(
 ══════════════════════════════════════════════════════ */
 function startSession() {
   state.sessionStart   = Date.now();
+  state.sessionRafStart = performance.now();
   state.sessionActive  = true;
   state.cyclesCompleted = 0;
   prevPhaseIdx = -1;
@@ -694,7 +696,7 @@ const C_RING   = 2 * Math.PI * R_RING;
 let prevPhaseIdx = -1;
 
 function getPhase(now) {
-  const pos = (now - state.sessionStart) % CYCLE_MS;
+  const pos = (now - state.sessionRafStart) % CYCLE_MS;
   let acc = 0;
   for (let i=0; i<PHASES.length; i++) {
     if (pos < acc + PHASES[i].dur) {
@@ -711,7 +713,7 @@ function sessionTick(now) {
   const { idx, phase, t } = getPhase(now);
 
   // Cycles
-  const cycles = Math.floor((now - state.sessionStart) / CYCLE_MS);
+  const cycles = Math.floor((now - state.sessionRafStart) / CYCLE_MS);
   if (cycles !== state.cyclesCompleted) {
     state.cyclesCompleted = cycles;
     buildCycleDots(cycles);
