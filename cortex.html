@@ -685,19 +685,70 @@ footer {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 860px) {
-  nav { padding: 0 20px; }
+  /* Nav */
+  nav { padding: 0 16px; grid-template-columns: 1fr auto; }
   .nav-center { display: none; }
-  .hero { padding: 90px 24px 48px; }
-  .pie-stage { width: 320px; height: 320px; }
-  .hero-pie-scaler { transform: scale(1.1); }
-  .bento-section { padding: 0 20px 80px; }
+  .nav-right { grid-column: 2; }
+
+  /* Hero */
+  .hero { padding: 88px 20px 40px; }
+  .hero-stats { gap: 20px; }
+  .hero-stat-div { display: none; }
+  .hero-stat-n { font-size: 28px; }
+  .hero-cta-row { flex-direction: column; align-items: center; gap: 12px; }
+  .btn-free { margin-top: 0; }
+
+  /* Pie stage */
+  .pie-stage { width: 300px; height: 300px; }
+  .hero-pie-scaler { transform: scale(1.0); }
+
+  /* Demo */
+  .demo-section { padding: 60px 16px 60px; }
+  .demo-head { margin-bottom: 28px; }
+  .demo-browser { border-radius: 14px; }
+  .demo-sub { font-size: 14px; }
+
+  /* Press */
+  .press-strip { margin-bottom: 60px; }
+
+  /* Quote */
+  .quote-section { padding: 60px 24px; }
+  .quote-mark { font-size: 56px; }
+
+  /* Bento */
+  .bento-section { padding: 0 20px 60px; }
   .bento { grid-template-columns: 1fr; }
   .bcard-a,.bcard-b,.bcard-c,.bcard-d,.bcard-e,.bcard-f,.bcard-g { grid-column: span 1; }
-  .steps-row { grid-template-columns: 1fr; gap: 12px; }
+
+  /* How it works */
   .how-section { padding: 60px 24px; }
-  .net-section { padding: 60px 24px 80px; }
+  .steps-row { grid-template-columns: 1fr; gap: 12px; }
+
+  /* Networks */
+  .net-section { padding: 40px 24px 20px; }
+
+  /* Awards */
+  .award-section { padding: 24px 20px 0; gap: 12px; flex-direction: column; }
+  .award-item { width: 100%; }
+
+  /* Closing CTA */
+  .cta-section { padding: 80px 24px; }
+  .cta-headline { font-size: clamp(32px, 8vw, 48px); }
+
+  /* Footer */
   footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; margin-top: 0; }
-  .award-section { padding: 60px 24px 0; gap: 12px; }
+}
+
+@media (max-width: 480px) {
+  .hero-stats { flex-direction: column; gap: 16px; }
+  .hero-stat-div { display: none; }
+  .hero-stat { display: flex; align-items: center; gap: 12px; }
+  .hero-stat-n { font-size: 26px; }
+  .hero-stat-l { font-size: 11px; margin-top: 0; }
+  .pie-stage { width: 260px; height: 260px; }
+  .hero-pie-scaler { transform: scale(0.88); }
+  .btn-download { width: 100%; justify-content: center; }
+  .net-pill { font-size: 13px; padding: 8px 14px; }
 }
 </style>
 </head>
@@ -868,7 +919,7 @@ footer {
           <span id="demoToastTxt">Shared!</span>
         </div>
 
-        <div class="demo-hint" id="demoHint">Hold anywhere to share</div>
+        <div class="demo-hint" id="demoHint">Hold anywhere to share &mdash; best on desktop</div>
       </div>
     </div>
   </div>
