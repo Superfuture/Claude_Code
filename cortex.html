@@ -514,6 +514,63 @@ nav {
   width: 1px; height: 32px; background: var(--line);
 }
 
+/* ── BEFORE / AFTER ── */
+.compare-section {
+  max-width: 1080px; margin: 0 auto;
+  padding: 0 36px 100px;
+}
+.compare-inner {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 24px; align-items: center;
+}
+.compare-card {
+  border-radius: 24px; padding: 40px 36px;
+}
+.compare-before {
+  background: var(--bg2); border: 1px solid var(--line);
+}
+.compare-after {
+  background: var(--text); border: 1px solid rgba(255,255,255,.08);
+}
+.compare-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  margin-bottom: 28px; display: block;
+}
+.compare-label-bad { color: var(--dim); }
+.compare-label-good {
+  background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.compare-list {
+  list-style: none; display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px;
+}
+.compare-list li {
+  display: flex; align-items: center; gap: 14px;
+  font-size: 15px; font-weight: 500;
+}
+.compare-before .compare-list li { color: var(--mid); }
+.compare-after .compare-list li { color: rgba(255,255,255,.75); }
+.compare-step {
+  width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+  background: var(--line); color: var(--dim);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+}
+.compare-step-good {
+  background: var(--grad); color: #fff;
+}
+.compare-verdict {
+  font-size: 14px; font-weight: 700; letter-spacing: -.01em;
+  padding: 10px 16px; border-radius: 10px; display: inline-block;
+}
+.compare-verdict-bad { background: rgba(0,0,0,.05); color: var(--dim); }
+.compare-verdict-good {
+  background: var(--grad); color: #fff;
+  box-shadow: 0 4px 20px rgba(255,80,40,.3);
+}
+.compare-divider {
+  font-size: 13px; font-weight: 700; color: var(--dim);
+  text-align: center; letter-spacing: .08em;
+}
+
 /* ── CLOSING CTA ── */
 .cta-section {
   background: var(--text);
@@ -592,6 +649,7 @@ footer {
   letter-spacing: -.03em; color: #fff; margin-bottom: 8px;
 }
 .demo-sub { font-size: 15px; color: rgba(255,255,255,.4); }
+.demo-mobile-fallback { display: none; }
 
 .demo-browser {
   border-radius: 20px; overflow: hidden;
@@ -705,7 +763,8 @@ footer {
   /* Demo */
   .demo-section { padding: 60px 16px 60px; }
   .demo-head { margin-bottom: 28px; }
-  .demo-browser { border-radius: 14px; }
+  .demo-browser { display: none; }
+  .demo-mobile-fallback { display: block; }
   .demo-sub { font-size: 14px; }
 
   /* Press */
@@ -714,6 +773,11 @@ footer {
   /* Quote */
   .quote-section { padding: 60px 24px; }
   .quote-mark { font-size: 56px; }
+
+  /* Compare */
+  .compare-section { padding: 0 20px 60px; }
+  .compare-inner { grid-template-columns: 1fr; }
+  .compare-divider { display: none; }
 
   /* Bento */
   .bento-section { padding: 0 20px 60px; }
@@ -771,7 +835,7 @@ footer {
     <a href="#networks" class="nav-link">Networks</a>
   </div>
   <div class="nav-right">
-    <a href="https://cortexapp.com" class="btn-ghost" style="background:var(--grad);color:#fff;border-color:transparent;">Add to Chrome</a>
+    <a href="https://www.officialjp.com/cortex" class="btn-ghost" style="background:var(--grad);color:#fff;border-color:transparent;">Add to Chrome</a>
   </div>
 </nav>
 
@@ -807,7 +871,7 @@ footer {
   </div>
 
   <div class="hero-cta-row">
-    <a href="https://cortexapp.com" class="btn-download">
+    <a href="https://www.officialjp.com/cortex" class="btn-download">
       <span>
         Add to Chrome
         <span class="btn-download-sub">Free &middot; Chrome Web Store</span>
@@ -919,8 +983,14 @@ footer {
           <span id="demoToastTxt">Shared!</span>
         </div>
 
-        <div class="demo-hint" id="demoHint">Hold anywhere to share &mdash; best on desktop</div>
+        <div class="demo-hint" id="demoHint">Hold anywhere to share</div>
       </div>
+    </div>
+
+    <!-- Mobile fallback: shown only on small screens -->
+    <div class="demo-mobile-fallback">
+      <img src="cortex/images/cortex-press.jpg" alt="Cortex in action" style="width:100%;border-radius:16px;display:block;margin-bottom:20px;">
+      <p style="color:rgba(255,255,255,.5);font-size:14px;text-align:center;line-height:1.6;">The live demo works best on desktop.<br>Open this page on Chrome to try it yourself.</p>
     </div>
   </div>
 </section>
@@ -970,6 +1040,34 @@ footer {
   </div>
 </div>
 
+<!-- BEFORE / AFTER -->
+<section class="compare-section">
+  <div class="compare-inner">
+    <div class="compare-card compare-before">
+      <div class="compare-label compare-label-bad">The old way</div>
+      <ul class="compare-list">
+        <li><span class="compare-step">1</span>Right-click the page</li>
+        <li><span class="compare-step">2</span>Copy the URL</li>
+        <li><span class="compare-step">3</span>Open a new tab</li>
+        <li><span class="compare-step">4</span>Navigate to Twitter / Facebook</li>
+        <li><span class="compare-step">5</span>Paste &amp; write your post</li>
+        <li><span class="compare-step">6</span>Switch back to what you were reading</li>
+      </ul>
+      <div class="compare-verdict compare-verdict-bad">6 steps. 45+ seconds. Context lost.</div>
+    </div>
+    <div class="compare-divider">vs</div>
+    <div class="compare-card compare-after">
+      <div class="compare-label compare-label-good">With Cortex</div>
+      <ul class="compare-list">
+        <li><span class="compare-step compare-step-good">1</span>Hold your mouse anywhere</li>
+        <li><span class="compare-step compare-step-good">2</span>Slide to a network</li>
+        <li><span class="compare-step compare-step-good">3</span>Release — shared</li>
+      </ul>
+      <div class="compare-verdict compare-verdict-good">3 seconds. Never left the page.</div>
+    </div>
+  </div>
+</section>
+
 <!-- BENTO FEATURES -->
 <section class="bento-section" id="features">
   <div class="bento-header">
@@ -995,10 +1093,12 @@ footer {
     </div>
 
     <!-- C D E -->
-    <div class="bcard bcard-c">
-      <div class="bcard-icon">&#x1F5BC;</div>
-      <div class="bcard-title">Image sharing</div>
-      <div class="bcard-desc">Hold on any image to share it directly. A rainbow glow highlights exactly what you're sharing.</div>
+    <div class="bcard bcard-c" style="padding:0;overflow:hidden;">
+      <img src="cortex/images/cortex-press.jpg" alt="Cortex image sharing" style="width:100%;height:140px;object-fit:cover;display:block;">
+      <div style="padding:20px 24px;">
+        <div class="bcard-title">Image sharing</div>
+        <div class="bcard-desc">Hold on any image to share it directly. A rainbow glow highlights exactly what you're sharing.</div>
+      </div>
     </div>
     <div class="bcard bcard-d">
       <div class="bcard-icon">&#x270D;</div>
@@ -1015,7 +1115,7 @@ footer {
     <div class="bcard bcard-f">
       <div class="bcard-icon">&#x1F465;</div>
       <div class="bcard-title">Share to friends</div>
-      <div class="bcard-desc">Target a specific friend's wall or inbox directly from the pie menu. Face detection identifies the right person from images on the page.</div>
+      <div class="bcard-desc">Target a specific friend's wall or inbox directly from the pie menu — no searching, just share to exactly who you mean.</div>
     </div>
     <div class="bcard bcard-g">
       <div class="bcard-icon">&#x1F4C1;</div>
@@ -1076,10 +1176,10 @@ footer {
 <!-- CLOSING CTA -->
 <section class="cta-section">
   <span class="cta-eyebrow">Free · No setup · Works everywhere</span>
-  <h2 class="cta-headline">Share fast.<br>Starting now.</h2>
-  <p class="cta-sub">Join thousands who never leave a page to share again.</p>
+  <h2 class="cta-headline">Install in<br>10 seconds.</h2>
+  <p class="cta-sub">One extension. Every page. Never copy a URL again.</p>
   <div class="cta-row">
-    <a href="https://cortexapp.com" class="btn-download">
+    <a href="https://www.officialjp.com/cortex" class="btn-download">
       <span>
         Add to Chrome
         <span class="btn-download-sub">Free &middot; Chrome Web Store</span>
