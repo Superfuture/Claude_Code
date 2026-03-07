@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+/* ─── Design tokens ─────────────────────────────────────────── */
+:root {
+  --bg:           #050505;
+  --surface:      #0D0D0D;
+  --border:       #1A1A1A;
+  --fg:           #FFFFFF;
+  --muted:        #888888;
+  --accent:       #00D4FF;
+  --accent-glow:  rgba(0, 212, 255, 0.12);
+}
+
+.light {
+  --bg:           #F5F5F5;
+  --surface:      #FFFFFF;
+  --border:       #E0E0E0;
+  --fg:           #0A0A0A;
+  --muted:        #666666;
+  --accent:       #0077AA;
+  --accent-glow:  rgba(0, 119, 170, 0.10);
+}
+
+@theme inline {
+  --color-bg:           var(--bg);
+  --color-surface:      var(--surface);
+  --color-border:       var(--border);
+  --color-fg:           var(--fg);
+  --color-muted:        var(--muted);
+  --color-accent:       var(--accent);
+  --color-accent-glow:  var(--accent-glow);
+
+  --font-serif: var(--font-playfair), Georgia, 'Times New Roman', serif;
+  --font-sans:  var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+/* ─── Base ──────────────────────────────────────────────────── */
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Custom cursor ─────────────────────────────────────────── */
+@media (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
+
+.cursor-dot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 4px; height: 4px;
+  background: var(--fg);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: opacity 0.2s ease;
+  will-change: transform;
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 32px; height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transition: width 0.25s ease, height 0.25s ease,
+    border-color 0.25s ease, background-color 0.25s ease, opacity 0.2s ease;
+  will-change: transform;
+}
+
+.cursor-ring.is-hover-link {
+  width: 48px; height: 48px;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.cursor-ring.is-hover-card {
+  width: 72px; height: 72px;
+  background-color: var(--accent-glow);
+  border-color: var(--accent);
+}
+
+/* ─── Scrollbar hide ────────────────────────────────────────── */
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* ─── Selection + Focus ─────────────────────────────────────── */
+::selection { background: var(--accent); color: #000; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }

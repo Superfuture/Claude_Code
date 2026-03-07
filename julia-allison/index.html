@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Julia Allison — Media Personality · Author · Speaker</title>
+  <meta name="description" content="Julia Allison is a journalist, media personality, and speaker at the intersection of technology, media, and culture." />
+  <meta property="og:title" content="Julia Allison" />
+  <meta property="og:description" content="Media Personality · Author · Speaker" />
+  <meta property="og:image" content="images/og-image.jpg" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #FAF9F6;
+      --off-white: #F5F4F0;
+      --ink: #111010;
+      --ink-muted: #4A4A4A;
+      --ink-light: #8A8A8A;
+      --teal: #1FB6BF;
+      --teal-light: #5ED3D9;
+      --teal-dark: #0E8A92;
+      --grad: linear-gradient(135deg, #1FB6BF 0%, #6B8CFF 35%, #C47BF4 65%, #FF7BAC 85%, #FF9F6B 100%);
+      --grad-soft: linear-gradient(135deg, #1FB6BF22 0%, #6B8CFF22 35%, #C47BF422 65%, #FF7BAC22 100%);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── TYPOGRAPHY ─── */
+    .serif { font-family: 'Playfair Display', Georgia, serif; }
+
+    .gradient-text {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .gradient-border {
+      position: relative;
+    }
+    .gradient-border::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: inherit;
+      background: var(--grad);
+      z-index: -1;
+    }
+
+    /* ─── NAVBAR ─── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      transition: background 0.5s, border-color 0.5s, box-shadow 0.5s;
+    }
+    #navbar.scrolled {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+    }
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-wordmark {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .nav-wordmark:hover { opacity: 0.75; }
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    @media (min-width: 768px) { .nav-links { display: flex; } }
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .btn-book-nav {
+      position: relative;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      border: none;
+      background: white;
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-book-nav::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: inherit;
+      background: var(--grad);
+      z-index: -1;
+    }
+    .btn-book-nav:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(31,182,191,0.2); }
+
+    /* Hamburger */
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    @media (min-width: 768px) { .hamburger { display: none; } }
+    .hamburger span {
+      display: block;
+      height: 2px;
+      width: 20px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+      transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    #mobile-menu {
+      display: none;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding: 1rem 1.5rem 1.5rem;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    #mobile-menu.open { display: flex; }
+    #mobile-menu a {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+      text-decoration: none;
+      padding: 0.25rem 0;
+    }
+    .btn-book-mobile {
+      margin-top: 0.5rem;
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.625rem 1.25rem;
+      border-radius: 9999px;
+      border: none;
+      background: white;
+      color: var(--ink);
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      position: relative;
+    }
+    .btn-book-mobile::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: inherit;
+      background: var(--grad);
+      z-index: -1;
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(31,182,191,0.09) 0%, rgba(196,123,244,0.07) 50%, transparent 100%);
+      animation: glow 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .hero-slides {
+      position: absolute;
+      inset: 0;
+    }
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .hero-slide.active { opacity: 1; }
+    .hero-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+    }
+    .hero-slide:nth-child(2) img { object-position: center center; }
+    .hero-slide:nth-child(3) img { object-position: center 15%; }
+
+    .hero-overlay-lr {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(250,249,246,0.95) 0%, rgba(250,249,246,0.6) 45%, rgba(250,249,246,0.1) 100%);
+    }
+    .hero-overlay-tb {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(250,249,246,0.2) 0%, transparent 50%, rgba(250,249,246,0.3) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 6rem 1.5rem 5rem;
+      width: 100%;
+    }
+    .hero-inner { max-width: 640px; }
+
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.1s forwards;
+    }
+    .hero-label-line {
+      height: 1px;
+      width: 32px;
+      background: var(--grad);
+    }
+    .hero-label-text {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      line-height: 0.9;
+      margin-bottom: 1.5rem;
+      font-size: clamp(4rem, 10vw, 8rem);
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.25,0.46,0.45,0.94) 0.2s forwards;
+    }
+
+    .hero-tagline {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: var(--ink-muted);
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.45s forwards;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.6s forwards;
+    }
+
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+      padding: 0.875rem 2rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: white;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--grad);
+      background-size: 200% 200%;
+      animation: gradientShift 6s ease infinite;
+    }
+    .btn-primary span { position: relative; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(31,182,191,0.3); }
+
+    .btn-secondary {
+      padding: 0.875rem 2rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--ink);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.2s;
+    }
+    .btn-secondary::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: inherit;
+      background: var(--grad);
+      z-index: -1;
+    }
+    .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); background: white; }
+
+    /* Slide indicators */
+    .hero-dots {
+      position: absolute;
+      bottom: 2rem;
+      left: 1.5rem;
+      z-index: 10;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .hero-dot {
+      height: 2px;
+      border-radius: 9999px;
+      background: rgba(17,16,16,0.2);
+      width: 16px;
+      border: none;
+      cursor: pointer;
+      transition: width 0.5s, background 0.5s;
+      padding: 0;
+    }
+    .hero-dot.active {
+      width: 32px;
+      background: var(--grad);
+    }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 10;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    @media (min-width: 768px) { .scroll-hint { display: flex; } }
+    .scroll-hint-text {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--ink-light);
+      writing-mode: vertical-rl;
+    }
+    .scroll-hint-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, transparent, var(--ink-light), transparent);
+    }
+
+    /* ─── PRESS MARQUEE ─── */
+    #press {
+      padding: 4rem 0;
+      background: white;
+      overflow: hidden;
+    }
+    .press-rule {
+      height: 1px;
+      background: var(--grad);
+      margin: 0 1.5rem 2.5rem;
+      border-radius: 9999px;
+      opacity: 0.4;
+    }
+    .press-eyebrow {
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 2.5rem;
+    }
+    .marquee-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .marquee-fade-left {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 96px;
+      background: linear-gradient(to right, white, transparent);
+      z-index: 10;
+      pointer-events: none;
+    }
+    .marquee-fade-right {
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 96px;
+      background: linear-gradient(to left, white, transparent);
+      z-index: 10;
+      pointer-events: none;
+    }
+    .marquee-track {
+      display: flex;
+      animation: marquee 30s linear infinite;
+      width: max-content;
+    }
+    .marquee-item {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      padding: 0 1.5rem;
+    }
+    .marquee-item span {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.01em;
+      color: rgba(17,16,16,0.25);
+      white-space: nowrap;
+      user-select: none;
+      transition: color 0.3s;
+    }
+    .marquee-item:hover span { color: rgba(17,16,16,0.7); }
+    .press-rule-bottom {
+      height: 1px;
+      background: var(--grad);
+      margin: 2.5rem 1.5rem 0;
+      border-radius: 9999px;
+      opacity: 0.4;
+    }
+
+    /* ─── ABOUT ─── */
+    #about {
+      padding: 6rem 1.5rem;
+      background: linear-gradient(180deg, #FAF9F6 0%, #E8F7F8 50%, #FAF9F6 100%);
+    }
+    .about-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    @media (min-width: 1024px) {
+      .about-inner { grid-template-columns: 1fr 1fr; gap: 5rem; }
+    }
+    .about-photo-wrap {
+      position: relative;
+    }
+    .about-photo-frame {
+      position: relative;
+      border-radius: 1rem;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    @media (min-width: 1024px) { .about-photo-frame { margin: 0; } }
+    .about-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+    .about-photo-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 1rem;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+    }
+    .about-photo-blob {
+      position: absolute;
+      bottom: -2rem;
+      left: -2rem;
+      width: 256px;
+      height: 256px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #1FB6BF, #C47BF4);
+      opacity: 0.25;
+      filter: blur(48px);
+      z-index: -1;
+    }
+    .about-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .about-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.25rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    .gradient-underline {
+      position: relative;
+      display: inline-block;
+    }
+    .gradient-underline::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 100%;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--grad);
+    }
+    .about-blockquote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--ink-muted);
+      line-height: 1.65;
+      padding-left: 1.25rem;
+      border-left: 2px solid var(--teal);
+      margin-bottom: 2rem;
+    }
+    .about-bio p {
+      font-size: 1rem;
+      color: var(--ink-muted);
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+    .about-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.875rem;
+      font-weight: 700;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-top: 0.25rem;
+    }
+
+    /* ─── VIDEO ─── */
+    #speaking {
+      padding: 6rem 1.5rem;
+      background: var(--cream);
+      overflow: hidden;
+    }
+    .speaking-inner { max-width: 1280px; margin: 0 auto; }
+    .speaking-header { text-align: center; margin-bottom: 3.5rem; }
+    .speaking-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .speaking-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.25rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(31,182,191,0.1);
+      aspect-ratio: 16/9;
+    }
+    /* gradient border via pseudo */
+    .video-border-wrap {
+      position: relative;
+      border-radius: 1rem;
+      padding: 2px;
+      background: var(--grad);
+    }
+    .video-inner {
+      position: relative;
+      border-radius: calc(1rem - 2px);
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      background: #111;
+    }
+    .video-inner video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(17,16,16,0.6) 0%, transparent 50%);
+      transition: opacity 0.3s;
+    }
+    .video-overlay.hidden { opacity: 0; }
+    .play-btn-wrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+    .play-btn-wrap.hidden { display: none; }
+    .play-btn-glow {
+      position: absolute;
+      inset: 0;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.18);
+      filter: blur(24px);
+      transform: scale(1.5);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .play-btn-circle {
+      position: relative;
+      width: 72px;
+      height: 72px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      transition: transform 0.3s;
+    }
+    .play-btn-wrap:hover .play-btn-circle { transform: scale(1.1); }
+    .video-quote {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      z-index: 10;
+    }
+    .video-quote p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: rgba(255,255,255,0.9);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      line-height: 1.5;
+      max-width: 640px;
+    }
+    .video-quote cite {
+      font-style: normal;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      display: block;
+      margin-top: 0.5rem;
+    }
+    .topics-row {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    .topic-tag {
+      position: relative;
+      background: white;
+      color: var(--ink-muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+    }
+    .topic-tag::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: inherit;
+      background: var(--grad);
+      z-index: -1;
+    }
+
+    /* ─── SOCIAL PROOF ─── */
+    #recognition {
+      padding: 6rem 1.5rem;
+      background: linear-gradient(180deg, #FAF9F6 0%, #F0ECFD 50%, #FAF9F6 100%);
+    }
+    .recognition-inner { max-width: 1280px; margin: 0 auto; }
+
+    .section-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.25rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+
+    .press-quotes-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    @media (min-width: 1024px) { .press-quotes-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .quote-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: box-shadow 0.3s;
+    }
+    .quote-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .quote-mark {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      line-height: 1;
+      margin-bottom: 1rem;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.975rem;
+      color: var(--ink-muted);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .quote-footer {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .quote-outlet {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: var(--ink);
+    }
+    .quote-year { font-size: 0.75rem; color: var(--ink-light); }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    @media (min-width: 768px) { .testimonials-grid { grid-template-columns: 1fr 1fr; } }
+
+    .testimonial-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+    .testimonial-glow {
+      position: absolute;
+      top: 0; right: 0;
+      width: 128px; height: 128px;
+      background: radial-gradient(circle, rgba(196,123,244,0.12), transparent);
+      pointer-events: none;
+    }
+    .testimonial-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--ink-muted);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+    .testimonial-author { font-weight: 600; font-size: 0.875rem; color: var(--ink); }
+    .testimonial-role { font-size: 0.75rem; color: var(--ink-light); margin-top: 2px; }
+
+    .namedrop-label {
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 2rem;
+    }
+    .namedrop-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    .namedrop-tag {
+      position: relative;
+      background: white;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--ink-muted);
+      font-size: 0.875rem;
+      padding: 0.625rem 1.25rem;
+      border-radius: 9999px;
+    }
+    .namedrop-tag::before {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: inherit;
+      background: var(--grad);
+      z-index: -1;
+    }
+
+    /* ─── BOOK / CONTACT ─── */
+    #book {
+      padding: 6rem 1.5rem;
+      background: linear-gradient(180deg, #FAF9F6 0%, #FDF0F5 50%, #FAF9F6 100%);
+    }
+    .book-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .book-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+    }
+    .book-sub {
+      font-size: 1.1rem;
+      color: var(--ink-muted);
+      line-height: 1.65;
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: left;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    @media (min-width: 640px) { .form-row { grid-template-columns: 1fr 1fr; } }
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border-radius: 0.75rem;
+      border: 1.5px solid rgba(0,0,0,0.1);
+      background: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(31,182,191,0.12);
+    }
+    .form-textarea { resize: vertical; min-height: 120px; }
+    .form-submit {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 9999px;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 0.5rem;
+    }
+    .form-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--grad);
+      background-size: 200% 200%;
+      animation: gradientShift 6s ease infinite;
+    }
+    .form-submit span { position: relative; }
+    .form-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(31,182,191,0.3); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: white;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    .footer-rule { height: 3px; background: var(--grad); }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 3.5rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    @media (min-width: 768px) { .footer-inner { grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; } }
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--ink);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .footer-brand-desc {
+      font-size: 0.875rem;
+      color: var(--ink-muted);
+      line-height: 1.6;
+      max-width: 240px;
+    }
+    .footer-nav-label, .footer-connect-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-links a {
+      font-size: 0.875rem;
+      color: var(--ink-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--ink); }
+    @media (min-width: 768px) { .footer-nav { text-align: center; } .footer-links { align-items: center; } }
+    .footer-connect { }
+    @media (min-width: 768px) { .footer-connect { text-align: right; } }
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 768px) { .social-icons { justify-content: flex-end; } }
+    .social-icons a {
+      color: var(--ink-light);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .social-icons a:hover { color: var(--ink); }
+    .footer-email {
+      font-size: 0.875rem;
+      color: var(--teal);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-email:hover { color: var(--teal-dark); }
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 2.5rem;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+      text-align: center;
+    }
+    @media (min-width: 640px) {
+      .footer-bottom { flex-direction: row; justify-content: space-between; text-align: left; }
+    }
+    .footer-copy { font-size: 0.75rem; color: var(--ink-light); }
+    .footer-privacy {
+      font-size: 0.75rem;
+      color: var(--ink-light);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-privacy:hover { color: var(--ink-muted); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    @keyframes glow {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+    }
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(24px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-delay-6 { transition-delay: 0.6s; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════ -->
+<header id="navbar">
+  <nav class="nav-inner">
+    <a href="#" class="nav-wordmark">Julia Allison</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#press">Press</a></li>
+      <li><a href="#speaking">Speaking</a></li>
+      <li><a href="#book" class="btn-book-nav">Book Julia</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div id="mobile-menu">
+    <a href="#about" class="mobile-nav-link">About</a>
+    <a href="#press" class="mobile-nav-link">Press</a>
+    <a href="#speaking" class="mobile-nav-link">Speaking</a>
+    <a href="#book" class="btn-book-mobile mobile-nav-link">Book Julia</a>
+  </div>
+</header>
+
+
+<!-- ═══════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-glow"></div>
+
+  <!-- Photo carousel -->
+  <div class="hero-slides">
+    <div class="hero-slide active"><img src="public/images/hero-1.jpg" alt="Julia Allison — editorial portrait" /></div>
+    <div class="hero-slide"><img src="public/images/hero-2.jpg" alt="Julia Allison — candid" /></div>
+    <div class="hero-slide"><img src="public/images/hero-3.jpg" alt="Julia Allison — media appearance" /></div>
+    <div class="hero-overlay-lr"></div>
+    <div class="hero-overlay-tb"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="hero-content">
+    <div class="hero-inner">
+      <div class="hero-label">
+        <span class="hero-label-line"></span>
+        <span class="hero-label-text">Media Personality · Author · Speaker</span>
+      </div>
+      <h1 class="serif hero-name">
+        <span class="gradient-text">Julia</span><br />
+        <span class="gradient-text">Allison</span>
+      </h1>
+      <p class="hero-tagline">
+        "The intersection of technology, media, and the very human desire to be known."
+      </p>
+      <div class="hero-ctas">
+        <a href="#book" class="btn-primary"><span>Book Julia</span></a>
+        <a href="#about" class="btn-secondary">About Julia</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide dots -->
+  <div class="hero-dots">
+    <button class="hero-dot active" data-slide="0" aria-label="Slide 1"></button>
+    <button class="hero-dot" data-slide="1" aria-label="Slide 2"></button>
+    <button class="hero-dot" data-slide="2" aria-label="Slide 3"></button>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="scroll-hint">
+    <span class="scroll-hint-text">scroll</span>
+    <div class="scroll-hint-line"></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     PRESS MARQUEE
+════════════════════════════════════════ -->
+<section id="press">
+  <div class="press-rule"></div>
+  <p class="press-eyebrow">As Seen In</p>
+  <div class="marquee-wrap">
+    <div class="marquee-fade-left"></div>
+    <div class="marquee-fade-right"></div>
+    <div class="marquee-track">
+      <!-- Duplicated for seamless loop -->
+      <div class="marquee-item"><span>The New York Times</span></div>
+      <div class="marquee-item"><span>Wired</span></div>
+      <div class="marquee-item"><span>Bravo</span></div>
+      <div class="marquee-item"><span>NBC</span></div>
+      <div class="marquee-item"><span>Vogue</span></div>
+      <div class="marquee-item"><span>TechCrunch</span></div>
+      <div class="marquee-item"><span>The Guardian</span></div>
+      <div class="marquee-item"><span>Elle</span></div>
+      <div class="marquee-item"><span>Vanity Fair</span></div>
+      <div class="marquee-item"><span>Forbes</span></div>
+      <div class="marquee-item"><span>CNN</span></div>
+      <div class="marquee-item"><span>The Atlantic</span></div>
+      <div class="marquee-item"><span>The New York Times</span></div>
+      <div class="marquee-item"><span>Wired</span></div>
+      <div class="marquee-item"><span>Bravo</span></div>
+      <div class="marquee-item"><span>NBC</span></div>
+      <div class="marquee-item"><span>Vogue</span></div>
+      <div class="marquee-item"><span>TechCrunch</span></div>
+      <div class="marquee-item"><span>The Guardian</span></div>
+      <div class="marquee-item"><span>Elle</span></div>
+      <div class="marquee-item"><span>Vanity Fair</span></div>
+      <div class="marquee-item"><span>Forbes</span></div>
+      <div class="marquee-item"><span>CNN</span></div>
+      <div class="marquee-item"><span>The Atlantic</span></div>
+    </div>
+  </div>
+  <div class="press-rule-bottom"></div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     ABOUT
+════════════════════════════════════════ -->
+<section id="about">
+  <div class="about-inner">
+    <!-- Photo -->
+    <div class="about-photo-wrap reveal">
+      <div class="about-photo-frame">
+        <img src="public/images/about.jpg" alt="Julia Allison" />
+        <div class="about-photo-ring"></div>
+      </div>
+      <div class="about-photo-blob"></div>
+    </div>
+
+    <!-- Text -->
+    <div>
+      <span class="about-eyebrow reveal reveal-delay-1">About Julia</span>
+      <h2 class="about-heading reveal reveal-delay-2">
+        At the <span class="gradient-underline">intersection</span> of<br class="hide-sm" /> media &amp; culture
+      </h2>
+      <blockquote class="about-blockquote reveal reveal-delay-3">
+        "I've always believed that the most interesting stories live at the edges — where technology meets humanity, where ambition meets vulnerability."
+      </blockquote>
+      <div class="about-bio reveal reveal-delay-4">
+        <p>Julia Allison is one of America's most recognized media personalities — a journalist, columnist, and television personality whose work has appeared in publications from The New York Times to Wired, and on screens from Bravo to NBC.</p>
+        <p>Known for her incisive observations on technology, relationships, and modern life, Julia has built a career at the forefront of the digital age, writing about and living through the very changes she reports on.</p>
+        <p>Whether on stage, on air, or on the page, she brings the same rare combination of intellectual rigor and radical honesty that has made her one of the most compelling voices of her generation.</p>
+      </div>
+      <div class="about-stats reveal reveal-delay-5">
+        <div>
+          <div class="stat-value">15+</div>
+          <div class="stat-label">Years in Media</div>
+        </div>
+        <div>
+          <div class="stat-value">200+</div>
+          <div class="stat-label">Publications</div>
+        </div>
+        <div>
+          <div class="stat-value">50+</div>
+          <div class="stat-label">TV Appearances</div>
+        </div>
+        <div>
+          <div class="stat-value">100+</div>
+          <div class="stat-label">Speaking Engagements</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     VIDEO / SPEAKING REEL
+════════════════════════════════════════ -->
+<section id="speaking">
+  <div class="speaking-inner">
+    <div class="speaking-header reveal">
+      <span class="speaking-eyebrow">Speaking Reel</span>
+      <h2 class="speaking-heading serif">Julia in <span class="gradient-text">action</span></h2>
+    </div>
+
+    <div class="video-border-wrap reveal reveal-delay-1">
+      <div class="video-inner">
+        <video id="speaking-video"
+          poster="public/images/video-poster.jpg"
+          muted loop playsinline autoplay preload="metadata">
+          <source src="video/speaking-reel.mp4" type="video/mp4" />
+        </video>
+        <div class="video-overlay" id="video-overlay"></div>
+        <button class="play-btn-wrap" id="play-btn" aria-label="Play speaking reel with sound">
+          <div style="position:relative;">
+            <div class="play-btn-glow"></div>
+            <div class="play-btn-circle">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="margin-left:3px">
+                <defs>
+                  <linearGradient id="playGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1FB6BF"/>
+                    <stop offset="100%" stop-color="#C47BF4"/>
+                  </linearGradient>
+                </defs>
+                <path d="M8 5.14v14l11-7-11-7z" fill="url(#playGrad)"/>
+              </svg>
+            </div>
+          </div>
+        </button>
+        <div class="video-quote" id="video-quote">
+          <p>"She commands any room she's in — a rare combination of substance and magnetism."</p>
+          <cite>— Wired Magazine</cite>
+        </div>
+      </div>
+    </div>
+
+    <div class="topics-row reveal reveal-delay-2">
+      <span class="topic-tag">Technology &amp; Culture</span>
+      <span class="topic-tag">The Future of Media</span>
+      <span class="topic-tag">Modern Relationships</span>
+      <span class="topic-tag">Digital Identity</span>
+      <span class="topic-tag">Women in Tech</span>
+      <span class="topic-tag">Radical Transparency</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     SOCIAL PROOF
+════════════════════════════════════════ -->
+<section id="recognition">
+  <div class="recognition-inner">
+
+    <!-- Press quotes -->
+    <div style="text-align:center; margin-bottom: 0;" class="reveal">
+      <span class="section-eyebrow">What They're Saying</span>
+      <h2 class="section-heading serif">Press &amp; <span class="gradient-text">Recognition</span></h2>
+    </div>
+    <div class="press-quotes-grid">
+      <div class="quote-card reveal reveal-delay-1">
+        <div>
+          <div class="quote-mark">"</div>
+          <p class="quote-text">Julia Allison is one of the most fascinating figures to emerge from the first wave of the digital age — part journalist, part performance artist, fully alive to the absurdity and wonder of modern life.</p>
+        </div>
+        <div class="quote-footer">
+          <span class="quote-outlet">The New York Times</span>
+          <span class="quote-year">2023</span>
+        </div>
+      </div>
+      <div class="quote-card reveal reveal-delay-2">
+        <div>
+          <div class="quote-mark">"</div>
+          <p class="quote-text">She saw the future of media before the rest of us had even begun to imagine it, and has been living — and writing — in that future ever since.</p>
+        </div>
+        <div class="quote-footer">
+          <span class="quote-outlet">Wired</span>
+          <span class="quote-year">2022</span>
+        </div>
+      </div>
+      <div class="quote-card reveal reveal-delay-3">
+        <div>
+          <div class="quote-mark">"</div>
+          <p class="quote-text">Allison brings a rare intellectual honesty to every conversation. She doesn't just observe culture; she interrogates it.</p>
+        </div>
+        <div class="quote-footer">
+          <span class="quote-outlet">The Atlantic</span>
+          <span class="quote-year">2023</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonials -->
+    <div style="text-align:center; margin-top:6rem;" class="reveal">
+      <span class="section-eyebrow">Testimonials</span>
+      <h2 class="section-heading serif">From those who've <span class="gradient-text">worked with Julia</span></h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="testimonial-glow"></div>
+        <div class="quote-mark">"</div>
+        <p class="testimonial-text">Julia was the best decision we made for our conference. She had the room riveted from the first word to the last. Three months later people are still talking about it.</p>
+        <div class="testimonial-author">Sarah Chen</div>
+        <div class="testimonial-role">VP Programming, SXSW</div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="testimonial-glow"></div>
+        <div class="quote-mark">"</div>
+        <p class="testimonial-text">Working with Julia elevated our entire campaign. She understood our brand instinctively and delivered content that felt genuinely, unmistakably hers — which is exactly what we needed.</p>
+        <div class="testimonial-author">Marcus Webb</div>
+        <div class="testimonial-role">Chief Marketing Officer, Lumen Technologies</div>
+      </div>
+    </div>
+
+    <!-- Name drops -->
+    <div style="margin-top:6rem;" class="reveal">
+      <p class="namedrop-label">Has shared stages and pages with</p>
+      <div class="namedrop-tags">
+        <span class="namedrop-tag">Arianna Huffington</span>
+        <span class="namedrop-tag">Reid Hoffman</span>
+        <span class="namedrop-tag">Sheryl Sandberg</span>
+        <span class="namedrop-tag">Tim Ferriss</span>
+        <span class="namedrop-tag">Brené Brown</span>
+        <span class="namedrop-tag">Malcolm Gladwell</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     BOOK / CONTACT
+════════════════════════════════════════ -->
+<section id="book">
+  <div class="book-inner">
+    <div class="reveal">
+      <span class="section-eyebrow" style="display:block; text-align:center; margin-bottom:0.75rem;">Get in Touch</span>
+      <h2 class="book-heading serif">Book <span class="gradient-text">Julia</span></h2>
+      <p class="book-sub">Available for keynotes, brand partnerships, media appearances, and consulting engagements.</p>
+    </div>
+    <form class="contact-form reveal reveal-delay-1" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <input class="form-input" type="text" name="name" placeholder="Your name" required />
+        <input class="form-input" type="email" name="email" placeholder="Email address" required />
+      </div>
+      <select class="form-select" name="type">
+        <option value="" disabled selected>Type of inquiry</option>
+        <option value="keynote">Keynote / Speaking</option>
+        <option value="brand">Brand Partnership</option>
+        <option value="media">Media Appearance</option>
+        <option value="consulting">Consulting</option>
+        <option value="other">Other</option>
+      </select>
+      <textarea class="form-textarea" name="message" placeholder="Tell me a bit about your event or project…" required></textarea>
+      <button type="submit" class="form-submit"><span>Send Message</span></button>
+    </form>
+    <p id="form-success" style="display:none; text-align:center; margin-top:1.5rem; color:var(--teal); font-weight:500;">
+      Thank you! I'll be in touch soon.
+    </p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer>
+  <div class="footer-rule"></div>
+  <div class="footer-inner">
+    <div>
+      <a href="#" class="footer-brand-name">Julia Allison</a>
+      <p class="footer-brand-desc">Media personality, journalist, and speaker based in New York.</p>
+    </div>
+    <div class="footer-nav">
+      <span class="footer-nav-label">Navigate</span>
+      <ul class="footer-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#press">Press</a></li>
+        <li><a href="#speaking">Speaking</a></li>
+        <li><a href="#book">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-connect">
+      <span class="footer-connect-label">Connect</span>
+      <div class="social-icons">
+        <a href="https://instagram.com/juliaallison" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://twitter.com/juliaallison" target="_blank" rel="noopener" aria-label="X / Twitter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/juliaallison1" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+      </div>
+      <a href="mailto:hello@juliaallison.com" class="footer-email">hello@juliaallison.com</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© <span id="year"></span> Julia Allison. All rights reserved.</p>
+    <a href="#" class="footer-privacy">Privacy Policy</a>
+  </div>
+</footer>
+
+
+<script>
+  // ── Navbar scroll ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // ── Mobile menu ──
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  document.querySelectorAll('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+
+  // ── Hero carousel ──
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dot');
+  let current = 0;
+  let timer;
+
+  function goToSlide(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function nextSlide() {
+    goToSlide((current + 1) % slides.length);
+  }
+
+  function startTimer() {
+    timer = setInterval(nextSlide, 5000);
+  }
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      clearInterval(timer);
+      goToSlide(i);
+      startTimer();
+    });
+  });
+
+  startTimer();
+
+  // ── Video play ──
+  const video = document.getElementById('speaking-video');
+  const playBtn = document.getElementById('play-btn');
+  const videoOverlay = document.getElementById('video-overlay');
+  const videoQuote = document.getElementById('video-quote');
+
+  playBtn.addEventListener('click', () => {
+    video.muted = false;
+    video.play();
+    playBtn.classList.add('hidden');
+    videoOverlay.classList.add('hidden');
+    videoQuote.style.display = 'none';
+  });
+
+  // ── Scroll reveal ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '-60px 0px' });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  // ── Contact form ──
+  function handleSubmit(e) {
+    e.preventDefault();
+    e.target.style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }
+
+  // ── Footer year ──
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
