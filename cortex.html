@@ -453,10 +453,12 @@ nav {
   display: flex; align-items: center; gap: 10px; justify-content: center;
 }
 .quote-avatar {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--grad);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; flex-shrink: 0;
+  width: 44px; height: 44px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0;
+  border: 2px solid var(--line);
+}
+.quote-stars {
+  display: flex; gap: 2px; margin-bottom: 4px;
 }
 .quote-attr-text {
   font-size: 13px; font-weight: 600; color: var(--dim);
@@ -878,10 +880,17 @@ footer {
     It makes sharing <strong>beautiful and simple.</strong> It is to sharing as what Steve Jobs did to MP3 players.
   </p>
   <div class="quote-attr">
-    <div class="quote-avatar">👤</div>
+    <img class="quote-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Alex M.">
     <div>
+      <div class="quote-stars">
+        <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l1.85 3.75L14 5.5l-3 2.92.71 4.13L8 10.5l-3.71 1.95L5 8.42 2 5.5l4.15-.75L8 1z" fill="#FF8C00"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l1.85 3.75L14 5.5l-3 2.92.71 4.13L8 10.5l-3.71 1.95L5 8.42 2 5.5l4.15-.75L8 1z" fill="#FF8C00"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l1.85 3.75L14 5.5l-3 2.92.71 4.13L8 10.5l-3.71 1.95L5 8.42 2 5.5l4.15-.75L8 1z" fill="#FF8C00"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l1.85 3.75L14 5.5l-3 2.92.71 4.13L8 10.5l-3.71 1.95L5 8.42 2 5.5l4.15-.75L8 1z" fill="#FF8C00"/></svg>
+        <svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1l1.85 3.75L14 5.5l-3 2.92.71 4.13L8 10.5l-3.71 1.95L5 8.42 2 5.5l4.15-.75L8 1z" fill="#FF8C00"/></svg>
+      </div>
       <div class="quote-attr-text">Alex M.</div>
-      <div class="quote-attr-source">Chrome Web Store · 5 stars</div>
+      <div class="quote-attr-source">Chrome Web Store</div>
     </div>
   </div>
 </div>
