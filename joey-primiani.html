@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOEY PRIMIANI · PIXEL PORTFOLIO</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+  --bg:#0a0a0f;
+  --bg2:#0f0f1a;
+  --acc:#FF0066;
+  --l1:#FF6B35;
+  --l2:#FFE000;
+  --l3:#00FFFF;
+  --l4:#00FF41;
+  --bonus:#FF44FF;
+  --dim:rgba(255,255,255,.5);
+  --px:'Press Start 2P',monospace;
+  --vt:'VT323',monospace;
+}
+
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:#fff;
+  font-family:var(--vt);overflow-x:hidden;
+  cursor:none;
+}
+
+/* scanlines */
+body::before{
+  content:'';pointer-events:none;
+  position:fixed;inset:0;z-index:9000;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.15) 3px,rgba(0,0,0,.15) 4px);
+}
+
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* ── MARQUEE ── */
+.marquee-top{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:var(--acc);padding:7px 0;overflow:hidden;
+  border-bottom:4px solid #fff;
+}
+.marquee-inner{display:flex;white-space:nowrap;animation:ticker 20s linear infinite;}
+.marquee-inner span{font-family:var(--px);font-size:8px;letter-spacing:.08em;color:#fff;padding-right:48px;}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── CLIENTS MARQUEE ── */
+.clients-bar{
+  overflow:hidden;border-top:3px solid rgba(255,255,255,.1);
+  border-bottom:3px solid rgba(255,255,255,.1);
+  padding:14px 0;background:rgba(255,255,255,.03);
+}
+.clients-inner{display:flex;white-space:nowrap;animation:ticker 16s linear infinite;}
+.clients-inner span{
+  font-family:var(--px);font-size:9px;letter-spacing:.1em;
+  color:var(--dim);padding:0 32px;
+}
+.clients-inner span.highlight{color:#fff;}
+
+/* ── WRAP ── */
+.wrap{max-width:960px;margin:0 auto;padding:0 clamp(16px,4vw,48px);position:relative;z-index:1;}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:100px 24px 60px;gap:0;
+  position:relative;
+}
+
+.hero-badge{
+  font-family:var(--px);font-size:8px;letter-spacing:.1em;
+  background:var(--l2);color:#000;
+  padding:8px 18px;display:inline-block;
+  border:4px solid #000;box-shadow:4px 4px 0 #000;
+  animation:float 3s ease-in-out infinite;
+  margin-bottom:32px;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.hero-name{
+  font-family:var(--px);
+  font-size:clamp(18px,5vw,42px);
+  line-height:1.5;letter-spacing:.04em;
+  color:#fff;
+  text-shadow:4px 4px 0 var(--acc),8px 8px 0 rgba(255,0,102,.25);
+  margin-bottom:20px;
+}
+.hero-name .blink-cursor::after{
+  content:'█';animation:blink .8s step-end infinite;
+  font-size:.7em;color:var(--l2);
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+.hero-title{
+  font-family:var(--px);font-size:clamp(8px,1.8vw,11px);
+  color:var(--l3);letter-spacing:.06em;line-height:2;
+  margin-bottom:24px;
+}
+
+.hero-tagline{
+  font-family:var(--vt);font-size:clamp(22px,3vw,30px);
+  color:var(--dim);letter-spacing:.08em;margin-bottom:40px;
+}
+.hero-tagline span{color:var(--l2);}
+
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:48px;}
+.btn{
+  font-family:var(--px);font-size:9px;letter-spacing:.08em;
+  padding:14px 24px;border:3px solid;cursor:pointer;
+  text-decoration:none;display:inline-block;
+  transition:transform .1s,box-shadow .1s;
+}
+.btn:hover{transform:translate(-3px,-3px);}
+.btn-acc{border-color:var(--acc);color:var(--acc);box-shadow:4px 4px 0 var(--acc);}
+.btn-acc:hover{background:var(--acc);color:#000;box-shadow:1px 1px 0 var(--acc);}
+.btn-l3{border-color:var(--l3);color:var(--l3);box-shadow:4px 4px 0 var(--l3);}
+.btn-l3:hover{background:var(--l3);color:#000;box-shadow:1px 1px 0 var(--l3);}
+
+.hero-scroll{
+  font-family:var(--px);font-size:7px;color:var(--dim);
+  letter-spacing:.1em;animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ── STATS ── */
+#stats{
+  padding:0 0 60px;position:relative;z-index:1;
+}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+  border:4px solid var(--l2);
+  box-shadow:8px 8px 0 var(--l2),8px 8px 0 4px #000;
+}
+.stat{
+  padding:32px 20px;text-align:center;
+  border-right:4px solid var(--l2);
+  position:relative;overflow:hidden;
+}
+.stat:last-child{border-right:none;}
+.stat::after{
+  content:attr(data-bg);
+  position:absolute;bottom:-20px;right:-10px;
+  font-size:80px;opacity:.05;pointer-events:none;
+}
+.stat-val{
+  font-family:var(--px);font-size:clamp(18px,3vw,28px);
+  color:var(--l2);display:block;margin-bottom:10px;
+  text-shadow:0 0 20px rgba(255,224,0,.4);
+}
+.stat-lbl{font-family:var(--px);font-size:7px;color:var(--dim);letter-spacing:.08em;line-height:1.8;}
+
+/* ── SECTION COMMON ── */
+.section{
+  padding:80px 0;
+  opacity:0;transform:translateY(24px);
+  transition:opacity .5s,transform .5s;
+}
+.section.visible{opacity:1;transform:none;}
+
+.sec-label{
+  font-family:var(--px);font-size:8px;letter-spacing:.14em;
+  margin-bottom:16px;display:flex;align-items:center;gap:12px;
+}
+.sec-label::after{content:'';flex:1;height:2px;background:currentColor;opacity:.25;}
+
+.sec-title{
+  font-family:var(--px);font-size:clamp(14px,2.5vw,20px);
+  line-height:1.7;margin-bottom:40px;
+}
+
+.divider{
+  font-family:var(--px);font-size:8px;color:rgba(255,255,255,.15);
+  text-align:center;letter-spacing:.2em;padding:24px 0;
+  position:relative;z-index:1;
+}
+
+/* ── PROJECTS ── */
+.projects-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:24px;
+}
+.project-card{
+  border:4px solid;padding:0;
+  position:relative;overflow:hidden;
+  transition:transform .12s,box-shadow .12s;
+  cursor:pointer;
+}
+.project-card:hover{transform:translate(-6px,-6px);}
+
+.project-header{
+  padding:28px 24px 20px;
+  border-bottom:3px solid;
+  position:relative;
+}
+.project-year{
+  font-family:var(--px);font-size:7px;letter-spacing:.1em;
+  opacity:.6;margin-bottom:10px;display:block;
+}
+.project-icon{font-size:40px;display:block;margin-bottom:14px;}
+.project-name{font-family:var(--px);font-size:11px;line-height:1.8;letter-spacing:.04em;}
+.project-body{padding:20px 24px;}
+.project-desc{font-family:var(--vt);font-size:20px;color:var(--dim);line-height:1.6;margin-bottom:16px;}
+.project-awards{display:flex;flex-wrap:wrap;gap:8px;}
+.award{
+  font-family:var(--px);font-size:7px;letter-spacing:.06em;
+  padding:4px 8px;border:2px solid;opacity:.8;
+}
+
+/* project card colors */
+.pc-1{border-color:var(--l3);}
+.pc-1 .project-header{border-bottom-color:var(--l3);background:rgba(0,255,255,.04);}
+.pc-1 .project-name{color:var(--l3);}
+.pc-1 .award{border-color:var(--l3);color:var(--l3);}
+.pc-1:hover{box-shadow:8px 8px 0 var(--l3);}
+
+.pc-2{border-color:var(--bonus);}
+.pc-2 .project-header{border-bottom-color:var(--bonus);background:rgba(255,68,255,.04);}
+.pc-2 .project-name{color:var(--bonus);}
+.pc-2 .award{border-color:var(--bonus);color:var(--bonus);}
+.pc-2:hover{box-shadow:8px 8px 0 var(--bonus);}
+
+.pc-3{border-color:var(--l2);}
+.pc-3 .project-header{border-bottom-color:var(--l2);background:rgba(255,224,0,.04);}
+.pc-3 .project-name{color:var(--l2);}
+.pc-3 .award{border-color:var(--l2);color:var(--l2);}
+.pc-3:hover{box-shadow:8px 8px 0 var(--l2);}
+
+/* ── ABOUT ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+@media(max-width:640px){.about-grid{grid-template-columns:1fr;}}
+
+.about-text{font-family:var(--vt);font-size:22px;line-height:1.8;color:var(--dim);}
+.about-text strong{color:#fff;}
+.about-text p{margin-bottom:16px;}
+
+.skills-list{display:flex;flex-direction:column;gap:12px;}
+.skill-row{display:flex;align-items:center;gap:12px;}
+.skill-name{font-family:var(--px);font-size:8px;letter-spacing:.06em;width:120px;flex-shrink:0;}
+.skill-bar{flex:1;height:12px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);position:relative;overflow:hidden;}
+.skill-fill{height:100%;position:absolute;left:0;top:0;transition:width 1s ease;}
+
+/* ── CONTACT ── */
+#contact{padding:80px 0 40px;}
+.contact-box{
+  border:4px solid var(--acc);
+  background:linear-gradient(135deg,rgba(255,0,102,.06),rgba(255,0,102,.01));
+  padding:48px;text-align:center;
+  box-shadow:8px 8px 0 var(--acc),8px 8px 0 4px #000;
+  position:relative;
+}
+.contact-box::before{
+  content:'★ HIRE ME ★';
+  font-family:var(--px);font-size:8px;color:var(--acc);
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--bg);padding:0 14px;letter-spacing:.1em;
+}
+.contact-title{font-family:var(--px);font-size:clamp(12px,2.5vw,18px);line-height:1.8;margin-bottom:12px;}
+.contact-sub{font-family:var(--vt);font-size:22px;color:var(--dim);margin-bottom:32px;}
+.contact-email{
+  font-family:var(--px);font-size:11px;color:var(--l2);
+  letter-spacing:.08em;display:block;margin-bottom:32px;
+  text-decoration:none;
+}
+.contact-email:hover{text-decoration:underline;}
+.contact-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;padding:40px 24px;
+  border-top:3px solid rgba(255,255,255,.08);
+  font-family:var(--px);font-size:7px;color:var(--dim);
+  letter-spacing:.12em;line-height:2.5;
+  position:relative;z-index:1;
+}
+.footer-pixel{font-size:20px;margin-bottom:12px;animation:float 3s ease-in-out infinite;}
+
+/* ── HUD ── */
+.hud{
+  position:fixed;top:44px;right:16px;z-index:300;
+  font-family:var(--px);font-size:8px;
+  background:rgba(0,0,0,.88);border:3px solid var(--l2);
+  padding:8px 14px;text-align:right;line-height:2;
+  pointer-events:none;
+}
+.hud-val{color:var(--l2);}
+.hud-lbl{color:var(--dim);font-size:7px;}
+
+/* ── BACK TOP ── */
+.back-top{
+  position:fixed;bottom:24px;right:24px;z-index:300;
+  font-family:var(--px);font-size:8px;
+  border:3px solid var(--l2);color:var(--l2);
+  background:var(--bg);padding:10px 14px;
+  cursor:pointer;text-decoration:none;
+  box-shadow:3px 3px 0 #000;
+  opacity:0;transition:opacity .3s;
+}
+.back-top.show{opacity:1;}
+.back-top:hover{background:var(--l2);color:#000;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr;}
+  .stat{border-right:none;border-bottom:4px solid var(--l2);}
+  .stat:last-child{border-bottom:none;}
+  .hud{display:none;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<!-- HUD -->
+<div class="hud">
+  <div class="hud-lbl">XP</div>
+  <div class="hud-val" id="hudXP">000000</div>
+  <div class="hud-lbl" style="margin-top:4px">ZONE</div>
+  <div class="hud-val" id="hudZone">HERO</div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-top">
+  <div class="marquee-inner">
+    <span>★ JOEY PRIMIANI &nbsp;·&nbsp; SILICON VALLEY PRODUCT DESIGNER &nbsp;·&nbsp; CSS AWARD &nbsp;·&nbsp; WEBBY AWARD &nbsp;·&nbsp; CANNES GOLD LION &nbsp;·&nbsp; GRAMMY'S &nbsp;·&nbsp; 1000+ PROJECTS &nbsp;·&nbsp; 15+ YEARS &nbsp;·&nbsp; CHANGING THE WORLD ONE PIXEL AT A TIME &nbsp;·&nbsp;</span>
+    <span>★ JOEY PRIMIANI &nbsp;·&nbsp; SILICON VALLEY PRODUCT DESIGNER &nbsp;·&nbsp; CSS AWARD &nbsp;·&nbsp; WEBBY AWARD &nbsp;·&nbsp; CANNES GOLD LION &nbsp;·&nbsp; GRAMMY'S &nbsp;·&nbsp; 1000+ PROJECTS &nbsp;·&nbsp; 15+ YEARS &nbsp;·&nbsp; CHANGING THE WORLD ONE PIXEL AT A TIME &nbsp;·&nbsp;</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div style="position:relative;z-index:2;width:100%;max-width:900px;margin:0 auto;padding:0 24px;">
+    <div class="hero-badge">★ PLAYER ONE ★</div>
+    <h1 class="hero-name">JOEY<br>PRIMIANI<span class="blink-cursor"></span></h1>
+    <div class="hero-title">AWARD-WINNING SILICON VALLEY<br>PRODUCT DESIGNER &amp; CREATIVE ENTREPRENEUR</div>
+    <p class="hero-tagline">"Changing the world, <span>one pixel at a time</span>"</p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn btn-acc">▶ VIEW WORK</a>
+      <a href="#contact" class="btn btn-l3">✉ CONTACT</a>
+    </div>
+    <div class="hero-scroll">▼ SCROLL TO PLAY ▼</div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="wrap">
+  <div class="stats-grid section" id="stats-sec">
+    <div class="stat" data-bg="🎮">
+      <span class="stat-val" data-target="1000">000</span>
+      <span class="stat-lbl">PROJECTS<br>COMPLETED</span>
+    </div>
+    <div class="stat" data-bg="⚡">
+      <span class="stat-val">15+</span>
+      <span class="stat-lbl">YEARS OF<br>EXPERIENCE</span>
+    </div>
+    <div class="stat" data-bg="🏆">
+      <span class="stat-val" data-target="100">000</span>
+      <span class="stat-lbl">DESIGN<br>SPRINTS</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider">· · · · · · · · · · · · · · ·</div>
+
+<!-- CLIENTS -->
+<div class="clients-bar">
+  <div class="clients-inner">
+    <span class="highlight">GOOGLE</span>
+    <span>·</span>
+    <span class="highlight">LADY GAGA</span>
+    <span>·</span>
+    <span class="highlight">FORBES</span>
+    <span>·</span>
+    <span class="highlight">TECHCRUNCH</span>
+    <span>·</span>
+    <span class="highlight">WIRED</span>
+    <span>·</span>
+    <span class="highlight">FAST COMPANY</span>
+    <span>·</span>
+    <span class="highlight">VOGUE</span>
+    <span>·</span>
+    <span class="highlight">PRODUCT HUNT</span>
+    <span>·</span>
+    <span class="highlight">GOOGLE</span>
+    <span>·</span>
+    <span class="highlight">LADY GAGA</span>
+    <span>·</span>
+    <span class="highlight">FORBES</span>
+    <span>·</span>
+    <span class="highlight">TECHCRUNCH</span>
+    <span>·</span>
+    <span class="highlight">WIRED</span>
+    <span>·</span>
+    <span class="highlight">FAST COMPANY</span>
+    <span>·</span>
+    <span class="highlight">VOGUE</span>
+    <span>·</span>
+    <span class="highlight">PRODUCT HUNT</span>
+    <span>·</span>
+  </div>
+</div>
+
+<div class="divider">· · · · · SELECT PROJECT · · · · ·</div>
+
+<!-- PROJECTS -->
+<section id="projects" class="section wrap">
+  <div class="sec-label" style="color:var(--l3)">★ FEATURED WORK</div>
+  <div class="sec-title">AWARD-WINNING PROJECTS</div>
+
+  <div class="projects-grid">
+
+    <div class="project-card pc-1">
+      <div class="project-header">
+        <span class="project-year">2022</span>
+        <span class="project-icon">🔬</span>
+        <div class="project-name">GOOGLE X LABS</div>
+      </div>
+      <div class="project-body">
+        <div class="project-desc">UI/UX &amp; development for Google's moonshot factory. Pushing the boundaries of what's possible.</div>
+        <div class="project-awards">
+          <span class="award">★ CSS AWARD</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card pc-2">
+      <div class="project-header">
+        <span class="project-year">2022</span>
+        <span class="project-icon">📱</span>
+        <div class="project-name">FOLIO</div>
+      </div>
+      <div class="project-body">
+        <div class="project-desc">Creator &amp; designer of Folio — the platform redefining digital identity and NFT portfolios.</div>
+        <div class="project-awards">
+          <span class="award">★ VOGUE</span>
+          <span class="award">★ PRODUCT HUNT</span>
+          <span class="award">★ DOTLA</span>
+          <span class="award">★ YAHOO BUSINESS</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card pc-3">
+      <div class="project-header">
+        <span class="project-year">2018</span>
+        <span class="project-icon">🎵</span>
+        <div class="project-name">STUDIO XO</div>
+      </div>
+      <div class="project-body">
+        <div class="project-desc">UI/UX &amp; development for Lady Gaga's tech-fashion studio. Where fashion meets the future.</div>
+        <div class="project-awards">
+          <span class="award">★ WEBBY AWARD</span>
+          <span class="award">★ CANNES GOLD LION</span>
+          <span class="award">★ GRAMMY'S</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider">· · · · · PLAYER PROFILE · · · · ·</div>
+
+<!-- ABOUT -->
+<section id="about" class="section wrap">
+  <div class="sec-label" style="color:var(--l1)">★ ABOUT</div>
+  <div class="sec-title">THE DESIGNER</div>
+
+  <div class="about-grid">
+    <div>
+      <div class="about-text">
+        <p>I'm <strong>Joey Primiani</strong> — a Silicon Valley product designer and creative entrepreneur on a mission to <strong>advance humanity through technology and design</strong>.</p>
+        <p>With <strong>15+ years</strong> of experience and <strong>1,000+ projects</strong> shipped, I've built award-winning work for Google, Lady Gaga, and some of the world's most iconic brands.</p>
+        <p>I believe the best design <strong>disappears into the experience</strong> — invisible when it works, unforgettable when it doesn't.</p>
+      </div>
+    </div>
+    <div>
+      <div class="sec-label" style="color:var(--l1);margin-bottom:20px;">DISCIPLINES</div>
+      <div class="skills-list">
+        <div class="skill-row">
+          <span class="skill-name" style="color:var(--l3)">UI/UX</span>
+          <div class="skill-bar"><div class="skill-fill" style="width:0%;background:var(--l3);" data-width="98%"></div></div>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name" style="color:var(--bonus)">DEVELOPMENT</span>
+          <div class="skill-bar"><div class="skill-fill" style="width:0%;background:var(--bonus);" data-width="88%"></div></div>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name" style="color:var(--l2)">BRANDING</span>
+          <div class="skill-bar"><div class="skill-fill" style="width:0%;background:var(--l2);" data-width="92%"></div></div>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name" style="color:var(--l4)">PRODUCT</span>
+          <div class="skill-bar"><div class="skill-fill" style="width:0%;background:var(--l4);" data-width="95%"></div></div>
+        </div>
+        <div class="skill-row">
+          <span class="skill-name" style="color:var(--l1)">AI DESIGN</span>
+          <div class="skill-bar"><div class="skill-fill" style="width:0%;background:var(--l1);" data-width="100%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider">· · · · · GAME OVER? NEVER · · · · ·</div>
+
+<!-- CONTACT -->
+<section id="contact" class="wrap">
+  <div class="contact-box section">
+    <div class="contact-title">LET'S BUILD<br>SOMETHING LEGENDARY</div>
+    <div class="contact-sub">Available for projects, collabs &amp; moonshots.</div>
+    <a href="mailto:jp@superfuturelabs.com" class="contact-email">jp@superfuturelabs.com</a>
+    <div class="contact-links">
+      <a href="https://www.linkedin.com/in/jprim/" target="_blank" class="btn btn-acc">▶ LINKEDIN</a>
+      <a href="https://joeyprimiani.webflow.io/" target="_blank" class="btn btn-l3">🌐 WEBFLOW SITE</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-pixel">★</div>
+  JOEY PRIMIANI · 2026<br>
+  VIBE DESIGNED WITH CLAUDE CODE<br>
+  ★ CERTIFIED VIBE DESIGNER ★
+</footer>
+
+<a href="#hero" class="back-top" id="backTop">▲ TOP</a>
+
+<script>
+// ── STARFIELD ──
+const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');
+let W,H,stars=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+for(let i=0;i<220;i++) stars.push({x:Math.random()*9999,y:Math.random()*9999,s:Math.random()*1.8+.4,t:Math.random()*Math.PI*2,sp:Math.random()*.35+.05,c:['#fff','#ffffa0','#88ffff','#ff88ff','#88ff88'][Math.floor(Math.random()*5)]});
+function drawStars(){
+  ctx.clearRect(0,0,W,H);
+  stars.forEach(s=>{s.t+=.018;s.y+=s.sp;if(s.y>H)s.y=0;
+    ctx.globalAlpha=.3+Math.sin(s.t)*.35;ctx.fillStyle=s.c;
+    ctx.fillRect(Math.round(s.x%W),Math.round(s.y%H),Math.ceil(s.s),Math.ceil(s.s));
+  });ctx.globalAlpha=1;requestAnimationFrame(drawStars);
+}requestAnimationFrame(drawStars);
+
+// ── RAINBOW CURSOR ──
+(function(){
+  const P=[];let mx=-999,my=-999,hue=0,t=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  function loop(){
+    t++;if(t%2===0){P.push({x:mx,y:my,size:12+Math.random()*8,hue,alpha:1,vx:(Math.random()-.5)*1.8,vy:(Math.random()-.5)*1.8});hue=(hue+7)%360;if(P.length>100)P.shift();}
+    for(let i=P.length-1;i>=0;i--){const p=P[i];p.alpha-=.035;p.size*=.93;p.x+=p.vx;p.y+=p.vy;
+      if(p.alpha<=0){if(p._el)p._el.remove();P.splice(i,1);continue;}
+      if(!p._el){const d=document.createElement('div');d.style.cssText='position:fixed;pointer-events:none;z-index:99999;image-rendering:pixelated;border-radius:0;';document.body.appendChild(d);p._el=d;}
+      const s=Math.max(2,Math.round(p.size));
+      p._el.style.width=s+'px';p._el.style.height=s+'px';p._el.style.left=(p.x-s/2)+'px';p._el.style.top=(p.y-s/2)+'px';p._el.style.background=`hsl(${p.hue},100%,60%)`;p._el.style.opacity=p.alpha;
+    }requestAnimationFrame(loop);
+  }loop();
+})();
+
+// ── SCROLL REVEAL ──
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      // animate skill bars
+      e.target.querySelectorAll('.skill-fill[data-width]').forEach(b=>{
+        setTimeout(()=>{b.style.width=b.dataset.width;},200);
+      });
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.section').forEach(el=>io.observe(el));
+
+// ── BACK TO TOP ──
+const bt=document.getElementById('backTop');
+window.addEventListener('scroll',()=>bt.classList.toggle('show',scrollY>400),{passive:true});
+
+// ── HUD ──
+const hudXP=document.getElementById('hudXP'),hudZone=document.getElementById('hudZone');
+const zones=[['hero','HERO'],['stats-sec','STATS'],['projects','WORK'],['about','ABOUT'],['contact','CONTACT']];
+window.addEventListener('scroll',()=>{
+  const pct=scrollY/(document.body.scrollHeight-innerHeight);
+  hudXP.textContent=String(Math.floor(pct*999999)).padStart(6,'0');
+  for(let i=zones.length-1;i>=0;i--){
+    const el=document.getElementById(zones[i][0]);
+    if(el&&el.getBoundingClientRect().top<innerHeight*.6){hudZone.textContent=zones[i][1];break;}
+  }
+},{passive:true});
+
+// ── COUNT UP STATS ──
+const statVals=document.querySelectorAll('.stat-val[data-target]');
+const countIo=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target,target=+el.dataset.target,suffix=el.dataset.target>999?'+':'';
+    let n=0;const step=Math.ceil(target/60);
+    const t=setInterval(()=>{n=Math.min(n+step,target);el.textContent=n+(n>=target?'+':'');if(n>=target)clearInterval(t);},28);
+    countIo.unobserve(el);
+  });
+},{threshold:.5});
+statVals.forEach(el=>countIo.observe(el));
+
+// ── CLICK SPARKLES ──
+document.addEventListener('click',e=>{
+  const colors=['#FF0066','#FFE000','#00FFFF','#00FF41','#FF44FF','#FF6B35'];
+  for(let i=0;i<8;i++){
+    const s=document.createElement('div');
+    Object.assign(s.style,{position:'fixed',left:e.clientX+'px',top:e.clientY+'px',width:'8px',height:'8px',background:colors[Math.floor(Math.random()*colors.length)],zIndex:9999,pointerEvents:'none',imageRendering:'pixelated',transition:'all .5s ease'});
+    document.body.appendChild(s);
+    requestAnimationFrame(()=>{s.style.opacity='0';s.style.transform=`translate(${(Math.random()-.5)*80}px,${-40-Math.random()*40}px)`;});
+    setTimeout(()=>s.remove(),500);
+  }
+});
+</script>
+</body>
+</html>
