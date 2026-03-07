@@ -2,761 +2,930 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Breathe · Box Meditation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Breathe · Box Breathing</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #04071a;
+  --bg2: #070d2a;
+  --text: #e8eaf6;
+  --dim: rgba(232,234,246,.5);
+  --dimmer: rgba(232,234,246,.25);
+  --inhale: #818cf8;
+  --hold1: #fbbf24;
+  --exhale: #22d3ee;
+  --hold2: #c084fc;
+  --glass: rgba(255,255,255,.06);
+  --glass-border: rgba(255,255,255,.1);
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+}
 
 html, body {
-  width: 100%; height: 100%; overflow: hidden;
-  background: #04071a;
-  color: #e2e8f0;
-  font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  width: 100%; height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
 
-#aurora {
-  position: fixed; inset: 0; z-index: 0;
-}
-
-main {
-  position: fixed; inset: 0; z-index: 1;
+/* ── SCREENS ─────────────────────────────────────────── */
+.screen {
+  position: fixed; inset: 0;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  gap: clamp(20px, 3vh, 36px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .65s cubic-bezier(.4,0,.2,1);
+  z-index: 10;
 }
+.screen.active { opacity: 1; pointer-events: all; }
 
-/* ── Header ── */
-.app-label {
-  font-size: 10px; font-weight: 300;
-  letter-spacing: 0.45em; text-transform: uppercase;
-  color: rgba(255,255,255,0.25);
-  opacity: 0; animation: fadeUp 1.2s 0.3s ease forwards;
+/* ── AURORA BACKGROUND ───────────────────────────────── */
+#aurora {
+  position: fixed; inset: 0; z-index: 0;
+  overflow: hidden; pointer-events: none;
 }
-
-/* ── Central Breathing System ── */
-.breath-container {
-  position: relative;
-  width: clamp(260px, 50vmin, 360px);
-  height: clamp(260px, 50vmin, 360px);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; animation: fadeUp 1.2s 0.5s ease forwards;
-}
-
-/* SVG box ring */
-.box-svg {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  overflow: visible;
-}
-
-.ring-track {
-  fill: none;
-  stroke: rgba(255,255,255,0.06);
-  stroke-width: 1.5;
-}
-
-.ring-progress {
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  transition: stroke 1.2s ease, filter 1.2s ease;
-}
-
-.corner-dot {
-  transition: fill 1.2s ease, opacity 0.6s ease, r 0.6s ease;
-}
-
-.travel-dot {
-  transition: fill 1.2s ease;
-  filter: blur(0px);
-}
-
-/* Orb layers */
-.orb-halo {
+.aurora-orb {
   position: absolute; border-radius: 50%;
-  transition: width 0.1s linear, height 0.1s linear, background 1.2s ease, opacity 0.5s ease;
-  pointer-events: none;
+  filter: blur(90px); opacity: .15;
+  animation: auroraFloat linear infinite;
+}
+.orb1 { width: 700px; height: 700px; background: #4f46e5; top: -150px; left: -150px; animation-duration: 20s; }
+.orb2 { width: 600px; height: 600px; background: #7c3aed; bottom: -120px; right: -80px; animation-duration: 25s; animation-delay: -10s; }
+.orb3 { width: 450px; height: 450px; background: #0e7490; top: 25%; left: 35%; animation-duration: 17s; animation-delay: -5s; }
+@keyframes auroraFloat {
+  0%   { transform: translate(0,0) scale(1); }
+  33%  { transform: translate(50px,-35px) scale(1.08); }
+  66%  { transform: translate(-35px,50px) scale(.94); }
+  100% { transform: translate(0,0) scale(1); }
 }
 
-.orb-glow {
-  position: absolute; border-radius: 50%;
-  transition: width 0.1s linear, height 0.1s linear, opacity 0.8s ease;
-  pointer-events: none;
-  filter: blur(24px);
+/* ── CANVAS (session bg) ─────────────────────────────── */
+#blob-canvas {
+  position: fixed; inset: 0; z-index: 1;
+  pointer-events: none; opacity: 0;
+  transition: opacity 1s;
 }
+#blob-canvas.visible { opacity: 1; }
 
-.orb {
-  position: relative; border-radius: 50%;
+/* ── HOME SCREEN ─────────────────────────────────────── */
+#screen-home { z-index: 20; }
+
+.home-inner {
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 2px;
-  transition: width 0.1s linear, height 0.1s linear, box-shadow 1.2s ease;
-  cursor: pointer;
-  overflow: hidden;
-  background: radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%),
-              radial-gradient(circle at 60% 70%, rgba(0,0,0,0.4) 0%, transparent 50%),
-              var(--orb-bg, #0d1340);
+  align-items: center;
+  padding: 0 32px;
+  width: 100%; max-width: 420px;
 }
 
-.orb::before {
-  content: '';
+.home-header {
+  width: 100%; display: flex;
+  align-items: center; justify-content: space-between;
+  margin-bottom: 56px;
+}
+.streak-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  border-radius: 24px; padding: 8px 18px;
+  font-size: 13px; font-weight: 400; color: var(--dim);
+  letter-spacing: .01em;
+}
+.streak-count { color: var(--text); font-weight: 600; }
+.settings-btn {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .3s;
+  color: var(--dim); font-size: 17px;
+}
+.settings-btn:hover { background: rgba(255,255,255,.1); transform: rotate(45deg); }
+
+.home-title-area { text-align: center; margin-bottom: 56px; }
+.home-eyebrow {
+  font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--inhale); font-weight: 500; margin-bottom: 18px; opacity: .85;
+}
+.home-title {
+  font-family: var(--serif);
+  font-size: clamp(58px, 16vw, 88px);
+  line-height: .95; letter-spacing: -.03em;
+  background: linear-gradient(145deg, #e8eaf6 20%, #818cf8 60%, #c084fc 90%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 18px;
+}
+.home-subtitle {
+  font-size: 16px; color: var(--dim);
+  font-weight: 300; letter-spacing: .01em; line-height: 1.65;
+}
+.breathing-badge {
+  display: flex; gap: 6px; justify-content: center;
+  margin-top: 22px; flex-wrap: wrap;
+}
+.phase-pill {
+  font-size: 10px; letter-spacing: .07em;
+  padding: 4px 12px; border-radius: 20px;
+  font-weight: 500; opacity: .8;
+}
+.pill-inhale  { background: rgba(129,140,248,.14); color: var(--inhale); border: 1px solid rgba(129,140,248,.28); }
+.pill-hold1   { background: rgba(251,191,36,.1);   color: var(--hold1);  border: 1px solid rgba(251,191,36,.22); }
+.pill-exhale  { background: rgba(34,211,238,.1);   color: var(--exhale); border: 1px solid rgba(34,211,238,.22); }
+.pill-hold2   { background: rgba(192,132,252,.14); color: var(--hold2);  border: 1px solid rgba(192,132,252,.28); }
+
+.begin-btn {
+  width: 188px; height: 188px; border-radius: 50%;
+  background: transparent; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+.begin-btn:hover { transform: scale(1.07); }
+.begin-btn:active { transform: scale(.96); }
+.begin-ring {
   position: absolute; inset: 0; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.12) 0%, transparent 55%);
-  pointer-events: none;
+  border: 1.5px solid rgba(129,140,248,.3);
+  animation: ringPulse 3s ease-in-out infinite;
 }
-
-.orb-count {
-  font-size: clamp(36px, 7vmin, 56px);
-  font-weight: 100;
-  letter-spacing: -0.04em;
-  color: rgba(255,255,255,0.9);
-  line-height: 1;
-  transition: color 1.2s ease;
-  font-variant-numeric: tabular-nums;
+.begin-ring:nth-child(2) { inset: -14px; border-color: rgba(129,140,248,.16); animation-delay: .6s; }
+.begin-ring:nth-child(3) { inset: -30px; border-color: rgba(129,140,248,.07); animation-delay: 1.2s; }
+@keyframes ringPulse {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.05); opacity: .55; }
 }
-
-.orb-phase-mini {
-  font-size: 9px; font-weight: 300;
-  letter-spacing: 0.35em; text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
-  transition: color 1.2s ease;
+.begin-inner {
+  width: 148px; height: 148px; border-radius: 50%;
+  background: linear-gradient(145deg, rgba(79,70,229,.55) 0%, rgba(124,58,237,.55) 100%);
+  border: 1px solid rgba(129,140,248,.35);
+  backdrop-filter: blur(24px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 5px;
+  box-shadow: 0 0 70px rgba(79,70,229,.35), inset 0 1px 0 rgba(255,255,255,.12);
 }
+.begin-label {
+  font-size: 12px; letter-spacing: .22em; font-weight: 500; color: var(--text);
+}
+.begin-sub { font-size: 10px; color: var(--dimmer); letter-spacing: .12em; }
 
-/* ── Phase Text ── */
-.phase-text {
+/* ── MOOD SCREEN ─────────────────────────────────────── */
+#screen-mood, #screen-mood-after {
+  z-index: 30;
+  background: rgba(4,7,26,.75);
+  backdrop-filter: blur(24px);
+}
+.mood-card {
+  background: rgba(8,12,35,.85);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(32px);
+  border-radius: 28px; padding: 48px 40px;
+  width: calc(100% - 48px); max-width: 360px;
   text-align: center;
-  opacity: 0; animation: fadeUp 1.2s 0.7s ease forwards;
+  box-shadow: 0 40px 100px rgba(0,0,0,.55);
+}
+.mood-eyebrow {
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--inhale); opacity: .75; margin-bottom: 12px;
+}
+.mood-title {
+  font-family: var(--serif); font-size: 30px;
+  line-height: 1.25; margin-bottom: 8px;
+}
+.mood-subtitle {
+  font-size: 14px; color: var(--dim); margin-bottom: 36px;
+  line-height: 1.6; font-weight: 300;
+}
+.mood-emojis {
+  display: flex; gap: 8px; justify-content: center;
+  margin-bottom: 32px;
+}
+.mood-emoji {
+  font-size: 30px; width: 54px; height: 54px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 16px; cursor: pointer;
+  background: var(--glass); border: 1.5px solid transparent;
+  transition: all .22s cubic-bezier(.34,1.56,.64,1);
+}
+.mood-emoji:hover { transform: scale(1.18) translateY(-5px); background: rgba(255,255,255,.09); }
+.mood-emoji.selected {
+  border-color: var(--inhale); background: rgba(129,140,248,.18);
+  transform: scale(1.14) translateY(-5px);
+}
+.mood-actions { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.mood-continue {
+  width: 100%; padding: 16px; border-radius: 16px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border: none; color: white; font-family: var(--sans);
+  font-size: 15px; font-weight: 500; cursor: pointer;
+  letter-spacing: .04em;
+  box-shadow: 0 8px 36px rgba(79,70,229,.38);
+  transition: transform .2s, box-shadow .2s, opacity .3s;
+  opacity: 0; pointer-events: none;
+}
+.mood-continue:hover { transform: translateY(-2px); box-shadow: 0 14px 44px rgba(79,70,229,.5); }
+.mood-continue.show { opacity: 1; pointer-events: all; }
+.mood-skip {
+  font-size: 13px; color: var(--dimmer); cursor: pointer;
+  text-decoration: underline; text-underline-offset: 3px;
+  transition: color .2s; padding: 4px;
+}
+.mood-skip:hover { color: var(--dim); }
+
+/* ── SESSION SCREEN ──────────────────────────────────── */
+#screen-session {
+  z-index: 5;
+  background: transparent;
+  justify-content: space-between;
+  padding: 64px 24px 52px;
+}
+.session-top {
+  display: flex; flex-direction: column;
+  align-items: center; z-index: 10;
+}
+.phase-label {
+  font-family: var(--serif);
+  font-size: clamp(52px, 13vw, 76px);
+  letter-spacing: -.025em; line-height: 1;
+  transition: color .7s ease, text-shadow .7s ease;
+}
+.phase-instruction {
+  font-size: 13px; color: var(--dim); margin-top: 10px;
+  letter-spacing: .07em; font-weight: 300; font-style: italic;
+  opacity: 0; transition: opacity .6s;
+  height: 20px; text-align: center;
+}
+.phase-instruction.show { opacity: 1; }
+
+.session-mid {
+  flex: 1; display: flex; align-items: center;
+  justify-content: center; z-index: 10;
 }
 
-.phase-name {
-  font-size: clamp(22px, 4vmin, 30px);
-  font-weight: 200;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  transition: color 1.2s ease;
-  color: rgba(255,255,255,0.85);
+/* SVG progress ring */
+.progress-ring-wrap {
+  position: relative;
+  width: min(280px, 70vw); height: min(280px, 70vw);
+}
+.progress-ring-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  transform: rotate(-90deg);
+}
+.progress-ring-bg { fill: none; stroke: rgba(255,255,255,.05); stroke-width: 2.5; }
+.progress-ring-fill {
+  fill: none; stroke-width: 2.5;
+  stroke-linecap: round;
+  transition: stroke .7s ease;
+}
+.session-time-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.session-countdown {
+  font-family: var(--serif);
+  font-size: clamp(44px, 11vw, 64px);
+  line-height: 1; letter-spacing: -.02em;
+  transition: color .7s ease;
+}
+.session-phase-mini {
+  font-size: 10px; color: var(--dimmer);
+  letter-spacing: .18em; text-transform: uppercase;
+  margin-top: 6px;
 }
 
-.phase-sub {
-  font-size: 11px; font-weight: 300;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(255,255,255,0.3);
+.session-bottom {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px; z-index: 10;
 }
-
-/* ── Progress Pips ── */
-.phase-pips {
-  display: flex; gap: 8px; align-items: center;
-  opacity: 0; animation: fadeUp 1.2s 0.9s ease forwards;
+.cycle-info {
+  font-size: 12px; color: var(--dimmer);
+  letter-spacing: .14em; text-transform: uppercase;
 }
-
-.pip {
+.cycle-dots { display: flex; gap: 7px; margin-top: 6px; }
+.cycle-dot {
   width: 6px; height: 6px; border-radius: 50%;
-  background: rgba(255,255,255,0.12);
-  transition: background 0.6s ease, transform 0.3s ease, box-shadow 0.6s ease;
+  background: rgba(255,255,255,.12);
+  transition: background .4s, transform .4s;
 }
-.pip.active {
-  background: var(--phase-color, #6366f1);
-  box-shadow: 0 0 8px var(--phase-color, #6366f1);
-  transform: scale(1.3);
+.cycle-dot.done { background: var(--inhale); transform: scale(1.4); }
+.end-btn {
+  margin-top: 18px; padding: 10px 30px; border-radius: 24px;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09);
+  color: var(--dimmer); font-family: var(--sans); font-size: 12px;
+  letter-spacing: .14em; cursor: pointer;
+  transition: all .2s;
 }
-.pip.done {
-  background: rgba(255,255,255,0.28);
-}
+.end-btn:hover { background: rgba(255,255,255,.1); color: var(--dim); }
 
-/* ── Controls ── */
-.controls {
-  display: flex; flex-direction: column; align-items: center; gap: 12px;
-  opacity: 0; animation: fadeUp 1.2s 1.1s ease forwards;
+/* ── COMPLETE SCREEN ─────────────────────────────────── */
+#screen-complete {
+  z-index: 40;
+  background: rgba(4,7,26,.88);
+  backdrop-filter: blur(28px);
 }
+.complete-card {
+  background: rgba(8,12,35,.88);
+  border: 1px solid var(--glass-border);
+  border-radius: 28px; padding: 52px 40px;
+  width: calc(100% - 48px); max-width: 360px;
+  text-align: center;
+  box-shadow: 0 40px 100px rgba(0,0,0,.6);
+}
+.complete-glyph {
+  font-size: 48px; margin-bottom: 22px; display: block;
+  animation: completePop .6s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes completePop {
+  from { transform: scale(0) rotate(-20deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0); opacity: 1; }
+}
+.complete-title {
+  font-family: var(--serif); font-size: 38px;
+  margin-bottom: 8px; line-height: 1.15;
+  background: linear-gradient(145deg, #e8eaf6 30%, #818cf8 70%, #c084fc);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.complete-sub {
+  font-size: 15px; color: var(--dim); margin-bottom: 34px;
+  line-height: 1.55; font-weight: 300;
+}
+.complete-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-bottom: 34px;
+}
+.stat-item {
+  background: var(--glass); border: 1px solid var(--glass-border);
+  border-radius: 18px; padding: 18px 12px;
+}
+.stat-val {
+  font-family: var(--serif); font-size: 34px; line-height: 1;
+  background: linear-gradient(135deg, var(--inhale), var(--hold2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stat-label {
+  font-size: 10px; color: var(--dimmer); letter-spacing: .14em;
+  margin-top: 4px; text-transform: uppercase;
+}
+.complete-mood-label {
+  font-size: 14px; color: var(--dim); margin-bottom: 16px; font-weight: 300;
+}
+.done-btn {
+  width: 100%; padding: 17px; border-radius: 16px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border: none; color: white; font-family: var(--sans);
+  font-size: 15px; font-weight: 500; cursor: pointer;
+  letter-spacing: .04em;
+  box-shadow: 0 10px 36px rgba(79,70,229,.4);
+  transition: transform .2s, box-shadow .2s;
+}
+.done-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(79,70,229,.52); }
 
-.start-btn {
-  padding: 13px 44px;
-  border: 1px solid rgba(255,255,255,0.13);
-  border-radius: 100px;
-  background: rgba(255,255,255,0.04);
-  color: rgba(255,255,255,0.7);
-  font-size: 12px; font-weight: 300;
-  letter-spacing: 0.28em; text-transform: uppercase;
-  cursor: pointer;
-  backdrop-filter: blur(12px);
-  transition: background 0.3s ease, border-color 0.3s ease,
-              transform 0.2s ease, color 0.3s ease, box-shadow 0.3s ease;
+/* ── SETTINGS ────────────────────────────────────────── */
+#screen-settings {
+  z-index: 50;
+  background: rgba(4,7,26,.92);
+  backdrop-filter: blur(28px);
 }
-.start-btn:hover {
-  background: rgba(255,255,255,0.09);
-  border-color: rgba(255,255,255,0.25);
-  color: rgba(255,255,255,0.9);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+.settings-card {
+  background: rgba(8,12,35,.92);
+  border: 1px solid var(--glass-border);
+  border-radius: 28px; padding: 44px 36px;
+  width: calc(100% - 48px); max-width: 360px;
 }
-.start-btn:active { transform: translateY(0); }
+.settings-title { font-family: var(--serif); font-size: 30px; margin-bottom: 30px; }
+.settings-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.settings-row:last-of-type { border-bottom: none; }
+.settings-label { font-size: 14px; color: var(--dim); font-weight: 300; }
+.settings-val { font-size: 14px; font-weight: 500; }
+.settings-close {
+  width: 100%; padding: 15px; border-radius: 16px;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  color: var(--text); font-family: var(--sans);
+  font-size: 15px; cursor: pointer; margin-top: 26px;
+  transition: background .2s; letter-spacing: .02em;
+}
+.settings-close:hover { background: rgba(255,255,255,.1); }
 
-.session-info {
-  font-size: 10px; font-weight: 300;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  color: rgba(255,255,255,0.2);
-}
-
-/* ── Animations ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* hold phase subtle pulse */
-@keyframes holdPulse {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
-}
-.holding .orb-count { animation: holdPulse 2s ease-in-out infinite; }
-
-/* completion state */
-.done-tick {
-  font-size: clamp(28px, 6vmin, 44px);
-  color: rgba(255,255,255,0.85);
-  line-height: 1;
+/* ── FLASH OVERLAY ───────────────────────────────────── */
+#flash {
+  position: fixed; inset: 0; z-index: 200;
+  opacity: 0; pointer-events: none;
+  transition: opacity .1s;
 }
 </style>
 </head>
 <body>
 
-<canvas id="aurora"></canvas>
+<!-- Aurora -->
+<div id="aurora">
+  <div class="aurora-orb orb1"></div>
+  <div class="aurora-orb orb2"></div>
+  <div class="aurora-orb orb3"></div>
+</div>
 
-<main>
-  <p class="app-label">Box Breathing &nbsp;·&nbsp; 4 · 4 · 4 · 4</p>
+<!-- Blob canvas (session only) -->
+<canvas id="blob-canvas"></canvas>
 
-  <div class="breath-container" id="breathContainer">
-    <!-- SVG box ring -->
-    <svg class="box-svg" viewBox="0 0 320 320" id="boxSvg">
-      <!-- Track (faint) -->
-      <path class="ring-track" id="boxTrack"
-        d="M 80,16 H 240 A 64,64 0 0 1 304,80 V 240 A 64,64 0 0 1 240,304 H 80 A 64,64 0 0 1 16,240 V 80 A 64,64 0 0 1 80,16 Z"/>
+<!-- Phase flash -->
+<div id="flash"></div>
 
-      <!-- Animated progress fill -->
-      <path class="ring-progress" id="boxProgress"
-        d="M 80,16 H 240 A 64,64 0 0 1 304,80 V 240 A 64,64 0 0 1 240,304 H 80 A 64,64 0 0 1 16,240 V 80 A 64,64 0 0 1 80,16 Z"/>
+<!-- ════════════════ HOME ════════════════ -->
+<div id="screen-home" class="screen active">
+  <div class="home-inner">
+    <div class="home-header">
+      <div class="streak-chip">
+        🔥&nbsp;<span class="streak-count" id="streak-num">7</span>&nbsp;day streak
+      </div>
+      <div class="settings-btn" id="btn-settings">⚙</div>
+    </div>
 
-      <!-- Corner accent dots (at arc midpoints) -->
-      <circle class="corner-dot" id="cd0" cx="240" cy="16" r="3" opacity="0.3"/>
-      <circle class="corner-dot" id="cd1" cx="304" cy="80" r="3" opacity="0.3"/>
-      <circle class="corner-dot" id="cd2" cx="304" cy="240" r="3" opacity="0.3"/>
-      <circle class="corner-dot" id="cd3" cx="240" cy="304" r="3" opacity="0.3"/>
-      <circle class="corner-dot" id="cd4" cx="80"  cy="304" r="3" opacity="0.3"/>
-      <circle class="corner-dot" id="cd5" cx="16"  cy="240" r="3" opacity="0.3"/>
-      <circle class="corner-dot" id="cd6" cx="16"  cy="80"  r="3" opacity="0.3"/>
-      <circle class="corner-dot" id="cd7" cx="80"  cy="16"  r="3" opacity="0.3"/>
+    <div class="home-title-area">
+      <div class="home-eyebrow">Box Breathing · 4·4·4·4</div>
+      <div class="home-title">Breathe</div>
+      <div class="home-subtitle">Calm your nervous system<br>with rhythmic breath work</div>
+      <div class="breathing-badge">
+        <span class="phase-pill pill-inhale">Inhale 4s</span>
+        <span class="phase-pill pill-hold1">Hold 4s</span>
+        <span class="phase-pill pill-exhale">Exhale 4s</span>
+        <span class="phase-pill pill-hold2">Hold 4s</span>
+      </div>
+    </div>
 
-      <!-- Traveling dot -->
-      <circle class="travel-dot" id="travelDot" r="5" cx="80" cy="16"/>
-      <circle class="travel-dot" id="travelDotGlow" r="10" cx="80" cy="16" opacity="0.35" style="filter:blur(4px)"/>
-    </svg>
+    <button class="begin-btn" id="btn-begin">
+      <div class="begin-ring"></div>
+      <div class="begin-ring"></div>
+      <div class="begin-ring"></div>
+      <div class="begin-inner">
+        <span class="begin-label">BEGIN</span>
+        <span class="begin-sub">4 · 4 · 4 · 4</span>
+      </div>
+    </button>
+  </div>
+</div>
 
-    <!-- Orb layers -->
-    <div class="orb-halo" id="orbHalo"></div>
-    <div class="orb-glow" id="orbGlow"></div>
+<!-- ════════════════ MOOD BEFORE ════════════════ -->
+<div id="screen-mood" class="screen">
+  <div class="mood-card">
+    <div class="mood-eyebrow">Before · Check In</div>
+    <div class="mood-title">How are you feeling?</div>
+    <div class="mood-subtitle">Take a moment to notice<br>your current state of mind.</div>
+    <div class="mood-emojis" id="mood-before-list">
+      <div class="mood-emoji" data-val="1">😔</div>
+      <div class="mood-emoji" data-val="2">😐</div>
+      <div class="mood-emoji" data-val="3">🙂</div>
+      <div class="mood-emoji" data-val="4">😊</div>
+      <div class="mood-emoji" data-val="5">😄</div>
+    </div>
+    <div class="mood-actions">
+      <button class="mood-continue" id="mood-before-btn">Continue →</button>
+      <div class="mood-skip" id="mood-before-skip">Skip for now</div>
+    </div>
+  </div>
+</div>
 
-    <div class="orb" id="orb">
-      <span class="orb-count" id="orbCount">4</span>
-      <span class="orb-phase-mini" id="orbPhaseMini">Ready</span>
+<!-- ════════════════ SESSION ════════════════ -->
+<div id="screen-session" class="screen">
+  <div class="session-top">
+    <div class="phase-label" id="phase-label">Inhale</div>
+    <div class="phase-instruction" id="phase-instruction">breathe in slowly through your nose</div>
+  </div>
+
+  <div class="session-mid">
+    <div class="progress-ring-wrap">
+      <svg class="progress-ring-svg" id="ring-svg" viewBox="0 0 280 280">
+        <circle class="progress-ring-bg" cx="140" cy="140" r="126"/>
+        <circle class="progress-ring-fill" id="ring-fill" cx="140" cy="140" r="126"/>
+      </svg>
+      <div class="session-time-center">
+        <div class="session-countdown" id="session-countdown">4</div>
+        <div class="session-phase-mini" id="session-phase-mini">INHALE</div>
+      </div>
     </div>
   </div>
 
-  <div class="phase-text">
-    <h2 class="phase-name" id="phaseName">Welcome</h2>
-    <p class="phase-sub" id="phaseSub">find a comfortable position</p>
+  <div class="session-bottom">
+    <div class="cycle-info">Cycle <span id="cycle-num">1</span></div>
+    <div class="cycle-dots" id="cycle-dots"></div>
+    <button class="end-btn" id="btn-end">End Session</button>
   </div>
+</div>
 
-  <div class="phase-pips" id="phasePips">
-    <div class="pip" id="pip0"></div>
-    <div class="pip" id="pip1"></div>
-    <div class="pip" id="pip2"></div>
-    <div class="pip" id="pip3"></div>
+<!-- ════════════════ COMPLETE ════════════════ -->
+<div id="screen-complete" class="screen">
+  <div class="complete-card">
+    <span class="complete-glyph">✦</span>
+    <div class="complete-title">Well done</div>
+    <div class="complete-sub" id="complete-sub">You completed your session.</div>
+    <div class="complete-stats">
+      <div class="stat-item">
+        <div class="stat-val" id="stat-dur">0:00</div>
+        <div class="stat-label">Duration</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" id="stat-cyc">0</div>
+        <div class="stat-label">Cycles</div>
+      </div>
+    </div>
+    <div class="complete-mood-label">How do you feel now?</div>
+    <div class="mood-emojis" id="mood-after-list" style="margin-bottom:28px">
+      <div class="mood-emoji" data-val="1">😔</div>
+      <div class="mood-emoji" data-val="2">😐</div>
+      <div class="mood-emoji" data-val="3">🙂</div>
+      <div class="mood-emoji" data-val="4">😊</div>
+      <div class="mood-emoji" data-val="5">😄</div>
+    </div>
+    <button class="done-btn" id="btn-done">Done</button>
   </div>
+</div>
 
-  <div class="controls">
-    <button class="start-btn" id="startBtn">Begin</button>
-    <p class="session-info" id="sessionInfo">5 cycles &nbsp;·&nbsp; 1 min 20 sec</p>
+<!-- ════════════════ SETTINGS ════════════════ -->
+<div id="screen-settings" class="screen">
+  <div class="settings-card">
+    <div class="settings-title">Settings</div>
+    <div class="settings-row">
+      <span class="settings-label">Inhale</span>
+      <span class="settings-val" style="color:var(--inhale)">4 seconds</span>
+    </div>
+    <div class="settings-row">
+      <span class="settings-label">Hold (after inhale)</span>
+      <span class="settings-val" style="color:var(--hold1)">4 seconds</span>
+    </div>
+    <div class="settings-row">
+      <span class="settings-label">Exhale</span>
+      <span class="settings-val" style="color:var(--exhale)">4 seconds</span>
+    </div>
+    <div class="settings-row">
+      <span class="settings-label">Hold (after exhale)</span>
+      <span class="settings-val" style="color:var(--hold2)">4 seconds</span>
+    </div>
+    <div class="settings-row">
+      <span class="settings-label">Session length</span>
+      <span class="settings-val">5 minutes</span>
+    </div>
+    <button class="settings-close" id="btn-settings-close">← Back</button>
   </div>
-</main>
+</div>
 
 <script>
-/* ═══════════════════════════════════════════
-   PHASE DEFINITIONS
-═══════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════
+   CONFIG & STATE
+══════════════════════════════════════════════════════ */
 const PHASES = [
-  {
-    name: 'Inhale',   sub: 'breathe in slowly',
-    mini: 'inhale',   duration: 4,
-    scaleFrom: 0.42,  scaleTo: 1.0,
-    color1: '#818cf8', color2: '#6366f1',
-    glow:   'rgba(99,102,241,',
-    orbBg: 'radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%), radial-gradient(circle at 60% 70%, rgba(0,0,0,0.4) 0%, transparent 50%), linear-gradient(135deg, #1e1b4b 0%, #0d1340 100%)',
-  },
-  {
-    name: 'Hold',     sub: 'retain your breath',
-    mini: 'hold',     duration: 4,
-    scaleFrom: 1.0,   scaleTo: 1.0,
-    color1: '#fbbf24', color2: '#f59e0b',
-    glow:   'rgba(245,158,11,',
-    orbBg: 'radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%), radial-gradient(circle at 60% 70%, rgba(0,0,0,0.4) 0%, transparent 50%), linear-gradient(135deg, #1c1400 0%, #0d0900 100%)',
-  },
-  {
-    name: 'Exhale',   sub: 'release gently',
-    mini: 'exhale',   duration: 4,
-    scaleFrom: 1.0,   scaleTo: 0.42,
-    color1: '#22d3ee', color2: '#06b6d4',
-    glow:   'rgba(6,182,212,',
-    orbBg: 'radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%), radial-gradient(circle at 60% 70%, rgba(0,0,0,0.4) 0%, transparent 50%), linear-gradient(135deg, #001a1c 0%, #00090d 100%)',
-  },
-  {
-    name: 'Hold',     sub: 'let it go',
-    mini: 'hold',     duration: 4,
-    scaleFrom: 0.42,  scaleTo: 0.42,
-    color1: '#c084fc', color2: '#a855f7',
-    glow:   'rgba(168,85,247,',
-    orbBg: 'radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%), radial-gradient(circle at 60% 70%, rgba(0,0,0,0.4) 0%, transparent 50%), linear-gradient(135deg, #16002e 0%, #0a0015 100%)',
-  },
+  { name:'Inhale', dur:4000, color:'#818cf8', instr:'breathe in slowly through your nose',      scale:[.48,1.0] },
+  { name:'Hold',   dur:4000, color:'#fbbf24', instr:'hold gently — feel the fullness',           scale:[1.0,1.0] },
+  { name:'Exhale', dur:4000, color:'#22d3ee', instr:'release — long breath out through your mouth', scale:[1.0,.48] },
+  { name:'Hold',   dur:4000, color:'#c084fc', instr:'rest in the stillness, empty and calm',     scale:[.48,.48] },
 ];
+const BLOB_COLORS = ['#4f46e5','#7c3aed','#0e7490','#1a1a3e']; // per-phase deeper bg color
+const CYCLE_MS = PHASES.reduce((s,p)=>s+p.dur,0); // 16000
 
-const TOTAL_CYCLES = 5;
+const state = {
+  screen: 'home',
+  moodBefore: null,
+  moodAfter: null,
+  sessionStart: 0,
+  sessionActive: false,
+  cyclesCompleted: 0,
+  streak: 7,
+};
 
-/* SVG path metrics */
-// Path: M 80,16 H 240 A 64,64 0 0 1 304,80 V 240 A 64,64 0 0 1 240,304 H 80 A 64,64 0 0 1 16,240 V 80 A 64,64 0 0 1 80,16 Z
-// Straight edges: 240-80 = 160 each (×4 = 640)
-// Corner arcs: π*64/2 ≈ 100.53 each (×4 ≈ 402.1)
-// Total ≈ 1042.1 — we'll get exact via getTotalLength()
-let PATH_LEN = 1042;
-
-const ORB_MIN = 96;   // px (at container 320px)
-const ORB_MAX = 210;  // px
-
-/* ═══════════════════════════════════════════
-   STATE
-═══════════════════════════════════════════ */
-let running     = false;
-let phaseIdx    = 0;
-let cycleNum    = 0;
-let phaseStart  = null;
-let pausedAt    = null;  // elapsed ms when paused
-let raf         = null;
-let sessionDone = false;
-
-/* ═══════════════════════════════════════════
-   DOM REFS
-═══════════════════════════════════════════ */
-const progressEl  = document.getElementById('boxProgress');
-const trackEl     = document.getElementById('boxTrack');
-const travelDot   = document.getElementById('travelDot');
-const travelGlow  = document.getElementById('travelDotGlow');
-const orbEl       = document.getElementById('orb');
-const orbHaloEl   = document.getElementById('orbHalo');
-const orbGlowEl   = document.getElementById('orbGlow');
-const orbCountEl  = document.getElementById('orbCount');
-const orbMiniEl   = document.getElementById('orbPhaseMini');
-const phaseNameEl = document.getElementById('phaseName');
-const phaseSubEl  = document.getElementById('phaseSub');
-const startBtn    = document.getElementById('startBtn');
-const sessionInfo = document.getElementById('sessionInfo');
-const pips        = [0,1,2,3].map(i => document.getElementById(`pip${i}`));
-const cornerDots  = [0,1,2,3,4,5,6,7].map(i => document.getElementById(`cd${i}`));
-
-/* Orb container size (scales with viewport) */
-function getOrbMetrics() {
-  const container = document.getElementById('breathContainer');
-  const size = container.offsetWidth;
-  const scale = size / 320;
-  return { min: ORB_MIN * scale, max: ORB_MAX * scale };
+/* ══════════════════════════════════════════════════════
+   SCREEN NAV
+══════════════════════════════════════════════════════ */
+function goto(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  state.screen = id;
 }
 
-/* ═══════════════════════════════════════════
-   INIT SVG PATH LENGTH
-═══════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', () => {
-  PATH_LEN = trackEl.getTotalLength();
-  progressEl.style.strokeDasharray  = PATH_LEN;
-  progressEl.style.strokeDashoffset = PATH_LEN;
+/* ══════════════════════════════════════════════════════
+   HOME
+══════════════════════════════════════════════════════ */
+document.getElementById('streak-num').textContent = state.streak;
+document.getElementById('btn-begin').addEventListener('click', () => goto('mood'));
+document.getElementById('btn-settings').addEventListener('click', () => goto('settings'));
+document.getElementById('btn-settings-close').addEventListener('click', () => goto('home'));
 
-  // set initial orb size
-  const { min } = getOrbMetrics();
-  orbEl.style.width  = orbEl.style.height  = `${min}px`;
-  orbHaloEl.style.width = orbHaloEl.style.height = `${min * 1.8}px`;
-  orbGlowEl.style.width = orbGlowEl.style.height = `${min * 2.2}px`;
-  orbHaloEl.style.marginLeft = orbHaloEl.style.marginTop = `-${min * 0.4}px`;
-  orbGlowEl.style.marginLeft = orbGlowEl.style.marginTop = `-${min * 0.6}px`;
+/* ══════════════════════════════════════════════════════
+   MOOD PICKERS
+══════════════════════════════════════════════════════ */
+function initMoodPicker(listId, btnId, skipId, onPick, onContinue, onSkip) {
+  const list = document.getElementById(listId);
+  const btn  = btnId  ? document.getElementById(btnId)  : null;
+  const skip = skipId ? document.getElementById(skipId) : null;
 
-  // init colors
-  applyPhaseColor(PHASES[0], 0);
-});
-
-/* ═══════════════════════════════════════════
-   EASING
-═══════════════════════════════════════════ */
-function easeInOut(t) {
-  return t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t;
-}
-function easeIn(t)  { return t * t * t; }
-function easeOut(t) { return 1 - Math.pow(1-t, 3); }
-
-function lerp(a, b, t) { return a + (b - a) * t; }
-
-function hexToRgb(h) {
-  const r = parseInt(h.slice(1,3), 16);
-  const g = parseInt(h.slice(3,5), 16);
-  const b = parseInt(h.slice(5,7), 16);
-  return [r, g, b];
-}
-function lerpHex(a, b, t) {
-  const [r1,g1,b1] = hexToRgb(a);
-  const [r2,g2,b2] = hexToRgb(b);
-  const r = Math.round(lerp(r1,r2,t));
-  const g = Math.round(lerp(g1,g2,t));
-  const bl = Math.round(lerp(b1,b2,t));
-  return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${bl.toString(16).padStart(2,'0')}`;
-}
-
-/* ═══════════════════════════════════════════
-   COLOR APPLICATION
-═══════════════════════════════════════════ */
-function applyPhaseColor(phase, progress) {
-  const c = phase.color1;
-  progressEl.style.stroke = c;
-  progressEl.style.filter = `drop-shadow(0 0 6px ${c}) drop-shadow(0 0 12px ${c}80)`;
-  travelDot.style.fill   = c;
-  travelGlow.style.fill  = c;
-  phaseNameEl.style.color = c;
-  orbMiniEl.style.color   = 'rgba(255,255,255,0.35)';
-
-  // Halo and glow
-  orbHaloEl.style.background = `radial-gradient(circle, ${phase.glow}0.22) 0%, transparent 70%)`;
-  orbGlowEl.style.background = `radial-gradient(circle, ${phase.glow}0.35) 0%, transparent 70%)`;
-  orbGlowEl.style.opacity    = '1';
-
-  // Orb shadow
-  const { min, max } = getOrbMetrics();
-  const orbSize = parseFloat(orbEl.style.width) || min;
-  const glowSize = Math.round(lerp(30, 60, (orbSize-min)/(max-min)));
-  orbEl.style.boxShadow = [
-    `0 0 ${glowSize}px ${phase.glow}0.6)`,
-    `0 0 ${glowSize*2}px ${phase.glow}0.2)`,
-    `0 0 ${glowSize*3}px ${phase.glow}0.08)`,
-    `inset 0 1px 0 rgba(255,255,255,0.15)`,
-    `inset 0 0 20px rgba(255,255,255,0.04)`,
-  ].join(', ');
-
-  // Corner dots
-  cornerDots.forEach((d, i) => {
-    d.setAttribute('fill', c);
-    d.setAttribute('opacity', '0.2');
+  list.querySelectorAll('.mood-emoji').forEach(el => {
+    el.addEventListener('click', () => {
+      list.querySelectorAll('.mood-emoji').forEach(e => e.classList.remove('selected'));
+      el.classList.add('selected');
+      onPick(+el.dataset.val);
+      if (btn) btn.classList.add('show');
+    });
   });
-
-  // Pips
-  pips.forEach((p, i) => {
-    p.style.setProperty('--phase-color', PHASES[i].color1);
-    if (i < cycleNum % TOTAL_CYCLES) {
-      p.classList.add('done'); p.classList.remove('active');
-    } else {
-      p.classList.remove('done', 'active');
-    }
-  });
-  if (running) pips[phaseIdx].classList.add('active');
+  if (btn  && onContinue) btn.addEventListener('click', onContinue);
+  if (skip && onSkip)     skip.addEventListener('click', onSkip);
 }
 
-/* ═══════════════════════════════════════════
-   ANIMATION LOOP
-═══════════════════════════════════════════ */
-function tick(ts) {
-  if (!running) return;
-  if (phaseStart === null) phaseStart = ts;
+initMoodPicker(
+  'mood-before-list', 'mood-before-btn', 'mood-before-skip',
+  val => { state.moodBefore = val; },
+  startSession, startSession
+);
+initMoodPicker(
+  'mood-after-list', null, null,
+  val => { state.moodAfter = val; },
+  null, null
+);
 
-  const elapsed  = (ts - phaseStart) / 1000;
-  const phase    = PHASES[phaseIdx];
-  const progress = Math.min(elapsed / phase.duration, 1);
-
-  updateFrame(phase, progress, elapsed);
-
-  if (progress >= 1) {
-    advancePhase(ts);
-  } else {
-    raf = requestAnimationFrame(tick);
-  }
-}
-
-function updateFrame(phase, progress, elapsed) {
-  const { min, max } = getOrbMetrics();
-
-  /* Orb scale */
-  let scaledProgress;
-  if (phase.scaleTo > phase.scaleFrom) {
-    scaledProgress = easeOut(progress);      // expanding: ease out
-  } else if (phase.scaleTo < phase.scaleFrom) {
-    scaledProgress = easeIn(progress);       // contracting: ease in
-  } else {
-    scaledProgress = phase.scaleFrom;        // hold: constant
-  }
-  const orbSize = lerp(
-    lerp(min, max, phase.scaleFrom),
-    lerp(min, max, phase.scaleTo),
-    scaledProgress
-  );
-
-  orbEl.style.width  = orbEl.style.height  = `${orbSize}px`;
-  orbHaloEl.style.width  = orbHaloEl.style.height  = `${orbSize * 1.9}px`;
-  orbGlowEl.style.width  = orbGlowEl.style.height  = `${orbSize * 2.5}px`;
-  // Center the halo/glow
-  orbHaloEl.style.marginLeft = orbHaloEl.style.marginTop = `-${orbSize * 0.45}px`;
-  orbGlowEl.style.marginLeft = orbGlowEl.style.marginTop = `-${orbSize * 0.75}px`;
-
-  /* Orb background */
-  orbEl.style.background = phase.orbBg;
-
-  /* Orb glow intensity */
-  const glowSize = Math.round(lerp(25, 70, (orbSize-min)/(max-min)));
-  orbEl.style.boxShadow = [
-    `0 0 ${glowSize}px ${phase.glow}0.65)`,
-    `0 0 ${glowSize*1.8}px ${phase.glow}0.25)`,
-    `0 0 ${glowSize*3}px ${phase.glow}0.1)`,
-    `inset 0 1px 0 rgba(255,255,255,0.2)`,
-    `inset 0 0 24px rgba(255,255,255,0.05)`,
-  ].join(', ');
-
-  /* Progress arc */
-  const filled = (phaseIdx + progress) / PHASES.length * PATH_LEN;
-  progressEl.style.strokeDashoffset = PATH_LEN - filled;
-
-  /* Traveling dot */
-  const dotLen = filled % PATH_LEN;
-  const pt = progressEl.getPointAtLength(dotLen);
-  travelDot.setAttribute('cx', pt.x);
-  travelDot.setAttribute('cy', pt.y);
-  travelGlow.setAttribute('cx', pt.x);
-  travelGlow.setAttribute('cy', pt.y);
-
-  /* Countdown */
-  const secs = Math.max(1, Math.ceil(phase.duration - elapsed));
-  orbCountEl.textContent = secs;
-
-  /* Hold-phase orb class for pulse */
-  if (phase.name === 'Hold' && phase.scaleFrom === phase.scaleTo) {
-    orbEl.classList.add('holding');
-  } else {
-    orbEl.classList.remove('holding');
-  }
-}
-
-function advancePhase(ts) {
-  phaseIdx++;
-  if (phaseIdx >= PHASES.length) {
-    phaseIdx = 0;
-    cycleNum++;
-    if (cycleNum >= TOTAL_CYCLES) {
-      endSession();
-      return;
-    }
-    updateCycleDisplay();
-  }
-
-  const phase = PHASES[phaseIdx];
-  phaseNameEl.textContent = phase.name;
-  phaseSubEl.textContent  = phase.sub;
-  orbMiniEl.textContent   = phase.mini;
-  applyPhaseColor(phase, 0);
-
-  phaseStart = ts;
-  raf = requestAnimationFrame(tick);
-}
-
-/* ═══════════════════════════════════════════
-   SESSION CONTROL
-═══════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════
+   SESSION START / END
+══════════════════════════════════════════════════════ */
 function startSession() {
-  sessionDone = false;
-  running     = true;
-  phaseIdx    = 0;
-  cycleNum    = 1;
-  phaseStart  = null;
-  pausedAt    = null;
-
-  const phase = PHASES[0];
-  phaseNameEl.textContent = phase.name;
-  phaseSubEl.textContent  = phase.sub;
-  orbMiniEl.textContent   = phase.mini;
-  orbCountEl.textContent  = '4';
-  orbEl.classList.remove('holding');
-  applyPhaseColor(phase, 0);
-  updateCycleDisplay();
-
-  startBtn.textContent = 'Pause';
-  raf = requestAnimationFrame(tick);
-}
-
-function pauseSession(ts) {
-  running  = false;
-  pausedAt = ts - phaseStart;
-  if (raf) cancelAnimationFrame(raf);
-  startBtn.textContent = 'Resume';
-}
-
-function resumeSession() {
-  running    = true;
-  phaseStart = null; // will recalc on next tick using pausedAt
-  const orig = pausedAt;
-  raf = requestAnimationFrame(ts => {
-    phaseStart = ts - orig;
-    pausedAt   = null;
-    tick(ts);
-  });
-  startBtn.textContent = 'Pause';
+  state.sessionStart   = Date.now();
+  state.sessionActive  = true;
+  state.cyclesCompleted = 0;
+  prevPhaseIdx = -1;
+  goto('session');
+  document.getElementById('blob-canvas').classList.add('visible');
+  buildCycleDots(0);
+  document.getElementById('cycle-num').textContent = 1;
+  // reset ring
+  const R = 126, C = 2*Math.PI*R;
+  ringFill.setAttribute('stroke-dasharray',  C);
+  ringFill.setAttribute('stroke-dashoffset', C);
 }
 
 function endSession() {
-  running     = false;
-  sessionDone = true;
-  orbEl.classList.remove('holding');
+  state.sessionActive = false;
+  document.getElementById('blob-canvas').classList.remove('visible');
 
-  phaseNameEl.textContent = 'Complete';
-  phaseSubEl.textContent  = 'well done · breathe freely';
-  orbMiniEl.textContent   = '';
-  orbCountEl.innerHTML    = '&#10003;';
-  orbCountEl.style.fontSize = 'clamp(28px, 5vmin, 40px)';
+  const ms   = Date.now() - state.sessionStart;
+  const mins = Math.floor(ms/60000);
+  const secs = Math.floor((ms%60000)/1000);
+  document.getElementById('stat-dur').textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+  document.getElementById('stat-cyc').textContent = state.cyclesCompleted;
+  document.getElementById('complete-sub').textContent =
+    state.cyclesCompleted === 1 ? 'You completed 1 full cycle.' :
+    `You completed ${state.cyclesCompleted} full cycles.`;
 
-  startBtn.textContent = 'Begin Again';
-  sessionInfo.textContent = '5 cycles complete';
-
-  pips.forEach(p => { p.classList.remove('active'); p.classList.add('done'); });
-
-  // Full arc
-  progressEl.style.strokeDashoffset = '0';
-  travelDot.style.opacity  = '0';
-  travelGlow.style.opacity = '0';
+  goto('complete');
 }
 
-function resetToIdle() {
-  sessionDone = false;
-  phaseIdx = 0; cycleNum = 0;
-  orbEl.classList.remove('holding');
+document.getElementById('btn-end').addEventListener('click', endSession);
+document.getElementById('btn-done').addEventListener('click', () => goto('home'));
 
-  const { min } = getOrbMetrics();
-  orbEl.style.width  = orbEl.style.height  = `${min}px`;
-  orbHaloEl.style.width  = orbHaloEl.style.height  = `${min*1.9}px`;
-  orbGlowEl.style.width  = orbGlowEl.style.height  = `${min*2.5}px`;
+/* ══════════════════════════════════════════════════════
+   SESSION LOOP (wall-clock driven)
+══════════════════════════════════════════════════════ */
+const ringFill = document.getElementById('ring-fill');
+const R_RING   = 126;
+const C_RING   = 2 * Math.PI * R_RING;
 
-  progressEl.style.strokeDashoffset = PATH_LEN;
-  travelDot.style.opacity  = '1';
-  travelGlow.style.opacity = '0.35';
+let prevPhaseIdx = -1;
 
-  const pt = progressEl.getPointAtLength(0);
-  travelDot.setAttribute('cx', pt.x);
-  travelDot.setAttribute('cy', pt.y);
-  travelGlow.setAttribute('cx', pt.x);
-  travelGlow.setAttribute('cy', pt.y);
-
-  phaseNameEl.textContent = 'Welcome';
-  phaseSubEl.textContent  = 'find a comfortable position';
-  orbMiniEl.textContent   = 'Ready';
-  orbCountEl.textContent  = '4';
-  orbCountEl.style.fontSize = '';
-
-  startBtn.textContent = 'Begin';
-  sessionInfo.textContent = '5 cycles · 1 min 20 sec';
-
-  pips.forEach(p => p.classList.remove('active','done'));
-  applyPhaseColor(PHASES[0], 0);
-}
-
-function updateCycleDisplay() {
-  sessionInfo.textContent = `Cycle ${cycleNum} of ${TOTAL_CYCLES}`;
-  pips.forEach((p, i) => {
-    p.classList.remove('active','done');
-    if (i < cycleNum - 1) p.classList.add('done');
-  });
-  pips[phaseIdx]?.classList.add('active');
-}
-
-/* Button handler */
-let btnState = 'idle'; // idle | running | paused | done
-
-startBtn.addEventListener('click', () => {
-  if (sessionDone) {
-    resetToIdle();
-    return;
+function getPhase(now) {
+  const pos = (now - state.sessionStart) % CYCLE_MS;
+  let acc = 0;
+  for (let i=0; i<PHASES.length; i++) {
+    if (pos < acc + PHASES[i].dur) {
+      return { idx:i, phase:PHASES[i], t:(pos-acc)/PHASES[i].dur };
+    }
+    acc += PHASES[i].dur;
   }
-  if (!running && !pausedAt) {
-    startSession();
-  } else if (running) {
-    requestAnimationFrame(ts => pauseSession(ts));
-  } else {
-    resumeSession();
-  }
-});
+  return { idx:0, phase:PHASES[0], t:0 };
+}
 
-/* ═══════════════════════════════════════════
-   AURORA BACKGROUND
-═══════════════════════════════════════════ */
-const canvas = document.getElementById('aurora');
+function sessionTick(now) {
+  if (!state.sessionActive) { requestAnimationFrame(sessionTick); return; }
+
+  const { idx, phase, t } = getPhase(now);
+
+  // Cycles
+  const cycles = Math.floor((now - state.sessionStart) / CYCLE_MS);
+  if (cycles !== state.cyclesCompleted) {
+    state.cyclesCompleted = cycles;
+    buildCycleDots(cycles);
+    document.getElementById('cycle-num').textContent = cycles + 1;
+  }
+
+  // Phase change
+  if (idx !== prevPhaseIdx) {
+    prevPhaseIdx = idx;
+    onPhaseChange(phase);
+  }
+
+  // Ring progress
+  const offset = C_RING * (1 - t);
+  ringFill.style.strokeDashoffset = offset;
+  ringFill.style.stroke = phase.color;
+
+  // Countdown number
+  const secs = Math.ceil((1 - t) * phase.dur / 1000);
+  document.getElementById('session-countdown').textContent = secs;
+  document.getElementById('session-countdown').style.color = phase.color;
+  document.getElementById('session-phase-mini').textContent = phase.name.toUpperCase();
+
+  requestAnimationFrame(sessionTick);
+}
+requestAnimationFrame(sessionTick);
+
+function onPhaseChange(phase) {
+  // Phase label
+  const lbl = document.getElementById('phase-label');
+  lbl.style.color       = phase.color;
+  lbl.style.textShadow  = `0 0 80px ${phase.color}88, 0 0 30px ${phase.color}55`;
+  lbl.textContent       = phase.name;
+
+  // Instruction fade
+  const instr = document.getElementById('phase-instruction');
+  instr.classList.remove('show');
+  setTimeout(() => { instr.textContent = phase.instr; instr.classList.add('show'); }, 250);
+
+  // Pulse flash
+  const fl = document.getElementById('flash');
+  fl.style.background = phase.color;
+  fl.style.opacity = '.07';
+  setTimeout(() => { fl.style.opacity = '0'; }, 180);
+}
+
+function buildCycleDots(n) {
+  const el = document.getElementById('cycle-dots');
+  el.innerHTML = '';
+  for (let i=0; i<8; i++) {
+    const d = document.createElement('div');
+    d.className = 'cycle-dot' + (i < n ? ' done' : '');
+    el.appendChild(d);
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   CANVAS BLOB
+══════════════════════════════════════════════════════ */
+const canvas = document.getElementById('blob-canvas');
 const ctx    = canvas.getContext('2d');
+let cW, cH;
 
-function resize() {
-  canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
+function resizeCanvas() {
+  cW = canvas.width  = window.innerWidth;
+  cH = canvas.height = window.innerHeight;
 }
-resize();
-window.addEventListener('resize', () => { resize(); });
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
-const blobs = [
-  { x:0.15, y:0.20, rx:0.55, ry:0.45, col:[80,70,220],   vx: 0.00010, vy: 0.00007, t:0 },
-  { x:0.80, y:0.15, rx:0.45, ry:0.50, col:[120,60,200],   vx:-0.00008, vy: 0.00010, t:1 },
-  { x:0.50, y:0.80, rx:0.60, ry:0.40, col:[0, 160,200],   vx: 0.00006, vy:-0.00009, t:2 },
-  { x:0.85, y:0.70, rx:0.40, ry:0.50, col:[180,60,240],   vx:-0.00011, vy:-0.00007, t:3 },
-  { x:0.10, y:0.75, rx:0.50, ry:0.40, col:[200,120,20],   vx: 0.00009, vy: 0.00006, t:4 },
-  { x:0.60, y:0.30, rx:0.35, ry:0.45, col:[60, 180,160],  vx:-0.00007, vy: 0.00011, t:5 },
-];
+// Blob params
+const N_PTS   = 11;
+const noiseOff = Array.from({length:N_PTS}, ()=>Math.random()*Math.PI*2);
+const noiseFrq = Array.from({length:N_PTS}, ()=>.35+Math.random()*.45);
+const noiseMag = Array.from({length:N_PTS}, ()=>.12+Math.random()*.1);
 
-function drawAurora(ts) {
-  const w = canvas.width, h = canvas.height;
-  ctx.clearRect(0, 0, w, h);
+// Traveling dot
+let dotProgress = 0;
 
-  blobs.forEach(b => {
-    b.x += b.vx; b.y += b.vy;
-    if (b.x < -0.3 || b.x > 1.3) b.vx *= -1;
-    if (b.y < -0.3 || b.y > 1.3) b.vy *= -1;
+// Particles
+const sparks = [];
 
-    const cx = b.x * w, cy = b.y * h;
-    const rx = b.rx * Math.max(w, h);
-    const ry = b.ry * Math.max(w, h);
-    const r  = Math.max(rx, ry);
-
-    // elliptical gradient via transform
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.scale(rx/r, ry/r);
-
-    const grad = ctx.createRadialGradient(0,0,0, 0,0,r);
-    const [rr,gg,bb] = b.col;
-    grad.addColorStop(0,   `rgba(${rr},${gg},${bb},0.11)`);
-    grad.addColorStop(0.5, `rgba(${rr},${gg},${bb},0.05)`);
-    grad.addColorStop(1,   `rgba(${rr},${gg},${bb},0)`);
-
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(0, 0, r, 0, Math.PI*2);
-    ctx.fill();
-    ctx.restore();
-  });
-
-  requestAnimationFrame(drawAurora);
+function hexToRgb(hex) {
+  const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  return [r,g,b];
 }
+function lerp(a,b,t){ return a+(b-a)*t; }
+function lerpRgb(c1,c2,t){
+  return [Math.round(lerp(c1[0],c2[0],t)), Math.round(lerp(c1[1],c2[1],t)), Math.round(lerp(c1[2],c2[2],t))];
+}
+function rgbStr(c,a=1){ return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
+function easeInOut(t){ return t<.5?2*t*t:-1+(4-2*t)*t; }
 
-requestAnimationFrame(drawAurora);
+function blobLoop(now) {
+  requestAnimationFrame(blobLoop);
+  ctx.clearRect(0, 0, cW, cH);
 
-/* ═══════════════════════════════════════════
-   RESIZE HANDLER
-═══════════════════════════════════════════ */
-window.addEventListener('resize', () => {
-  if (!running && !pausedAt) {
-    const { min } = getOrbMetrics();
-    orbEl.style.width  = orbEl.style.height  = `${min}px`;
+  if (!state.sessionActive) return;
+
+  const { idx, phase, t } = getPhase(now);
+  const nextIdx = (idx+1)%4;
+
+  // Colors
+  const colA = hexToRgb(BLOB_COLORS[idx]);
+  const colB = hexToRgb(BLOB_COLORS[nextIdx]);
+  const blobCol = lerpRgb(colA, colB, t);
+
+  const phaseColA = hexToRgb(phase.color);
+  const phaseColB = hexToRgb(PHASES[nextIdx].color);
+  const glowCol = lerpRgb(phaseColA, phaseColB, t);
+
+  // Scale
+  const et = easeInOut(t);
+  const scale = lerp(phase.scale[0], phase.scale[1], et);
+  const baseR = Math.min(cW, cH) * .22 * scale;
+  const cx = cW*.5, cy = cH*.5;
+
+  // Build points
+  const pts = [];
+  for (let i=0; i<N_PTS; i++) {
+    const angle = (i/N_PTS)*Math.PI*2;
+    const noise = Math.sin(noiseOff[i] + now*.001*noiseFrq[i]) * noiseMag[i];
+    const r = baseR * (1 + noise);
+    pts.push({ x: cx + Math.cos(angle)*r, y: cy + Math.sin(angle)*r });
   }
-});
+
+  // Aurora glow (outer halo)
+  const haloR = baseR * 2.2;
+  const halo  = ctx.createRadialGradient(cx,cy,0, cx,cy,haloR);
+  halo.addColorStop(0,   rgbStr(glowCol, .28));
+  halo.addColorStop(.45, rgbStr(glowCol, .1));
+  halo.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.beginPath(); ctx.arc(cx,cy,haloR,0,Math.PI*2);
+  ctx.fillStyle = halo; ctx.fill();
+
+  // Secondary inner glow
+  const innerGlow = ctx.createRadialGradient(cx,cy,0, cx,cy,baseR*1.3);
+  innerGlow.addColorStop(0,   rgbStr(glowCol, .4));
+  innerGlow.addColorStop(.6,  rgbStr(glowCol, .15));
+  innerGlow.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.beginPath(); ctx.arc(cx,cy,baseR*1.3,0,Math.PI*2);
+  ctx.fillStyle = innerGlow; ctx.fill();
+
+  // Catmull-Rom blob path
+  const n = pts.length;
+  ctx.beginPath();
+  for (let i=0; i<n; i++) {
+    const p0 = pts[(i-1+n)%n], p1 = pts[i],
+          p2 = pts[(i+1)%n],   p3 = pts[(i+2)%n];
+    const cp1x=p1.x+(p2.x-p0.x)/6, cp1y=p1.y+(p2.y-p0.y)/6;
+    const cp2x=p2.x-(p3.x-p1.x)/6, cp2y=p2.y-(p3.y-p1.y)/6;
+    if (i===0) ctx.moveTo(p1.x, p1.y);
+    ctx.bezierCurveTo(cp1x,cp1y, cp2x,cp2y, p2.x,p2.y);
+  }
+  ctx.closePath();
+
+  // Fill: radial gradient
+  const fill = ctx.createRadialGradient(cx-baseR*.2,cy-baseR*.25,0, cx,cy,baseR*1.15);
+  fill.addColorStop(0,   rgbStr(blobCol,.9));
+  fill.addColorStop(.55, rgbStr(blobCol,.65));
+  fill.addColorStop(1,   rgbStr(blobCol,.35));
+  ctx.fillStyle = fill; ctx.fill();
+
+  // Blob edge stroke
+  ctx.strokeStyle = rgbStr(glowCol, .6);
+  ctx.lineWidth = 1.5; ctx.stroke();
+
+  // Specular highlight
+  const spec = ctx.createRadialGradient(cx-baseR*.28,cy-baseR*.3,0, cx,cy,baseR);
+  spec.addColorStop(0,   'rgba(255,255,255,.22)');
+  spec.addColorStop(.35, 'rgba(255,255,255,.06)');
+  spec.addColorStop(1,   'rgba(255,255,255,0)');
+  ctx.fillStyle = spec; ctx.fill();
+
+  // Traveling dot along blob edge
+  dotProgress = (dotProgress + .015) % 1;
+  const dotEdge = dotProgress * n;
+  const di1 = Math.floor(dotEdge) % n;
+  const di2 = (di1+1) % n;
+  const df  = dotEdge % 1;
+  const dotX = lerp(pts[di1].x, pts[di2].x, df);
+  const dotY = lerp(pts[di1].y, pts[di2].y, df);
+
+  if (Math.random() < .12) {
+    sparks.push({ x:dotX, y:dotY, vx:(Math.random()-.5)*2.2, vy:(Math.random()-.5)*2.2-0.5,
+                  r:Math.random()*2.5+1, a:.9, col:glowCol });
+  }
+
+  // Draw dot
+  ctx.beginPath(); ctx.arc(dotX, dotY, 5, 0, Math.PI*2);
+  ctx.fillStyle = '#ffffff';
+  ctx.shadowColor = rgbStr(glowCol,1); ctx.shadowBlur = 20;
+  ctx.fill(); ctx.shadowBlur = 0;
+
+  // Sparks
+  for (let i=sparks.length-1; i>=0; i--) {
+    const s=sparks[i];
+    s.x+=s.vx; s.y+=s.vy; s.vy+=.04; s.a-=.028; s.r*=.95;
+    if (s.a<=0||s.r<.3){ sparks.splice(i,1); continue; }
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle = rgbStr(s.col, s.a); ctx.fill();
+  }
+}
+requestAnimationFrame(blobLoop);
+
+/* ══════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════ */
+// Set initial ring
+ringFill.setAttribute('stroke-dasharray',  C_RING);
+ringFill.setAttribute('stroke-dashoffset', C_RING);
+
+// Set initial phase label color
+document.getElementById('phase-label').style.color = PHASES[0].color;
 </script>
 </body>
 </html>
