@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI DESIGN QUEST · AI UX SUMMIT 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+
+/* ── Reset ──────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --px: 'Press Start 2P', monospace;
+  --vt: 'VT323', monospace;
+  --bg:    #0a0a1a;
+  --bg2:   #12122a;
+  --white: #ffffff;
+  --dim:   rgba(255,255,255,0.55);
+  --sprint:#FF0066;
+  --l1:    #FF6B35;
+  --l2:    #FFE000;
+  --l3:    #00FFFF;
+  --l4:    #00FF41;
+  --bonus: #FF44FF;
+  --dark:  #000000;
+}
+
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--vt);
+  overflow-x: hidden;
+  line-height: 1.6;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='8' height='8' fill='white'/%3E%3Crect x='8' y='8' width='8' height='8' fill='white'/%3E%3C/svg%3E") 4 4, crosshair;
+}
+
+/* ── Starfield Canvas ───────────────────── */
+#stars {
+  position: fixed; inset:0; z-index:0; pointer-events:none;
+}
+
+/* ── Scanlines ──────────────────────────── */
+body::before {
+  content:''; position:fixed; inset:0; z-index:9998; pointer-events:none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 2px,
+    rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
+  );
+}
+
+/* ── Marquee Strip ──────────────────────── */
+.marquee-bar {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  background: var(--sprint); padding:6px 0; overflow:hidden;
+  border-bottom: 4px solid #fff;
+}
+.marquee-inner {
+  display:inline-flex; gap:0;
+  animation: scrollLeft 18s linear infinite;
+  white-space:nowrap;
+}
+.marquee-inner span {
+  font-family:var(--px); font-size:8px;
+  color:#000; padding:0 32px; letter-spacing:.06em;
+}
+@keyframes scrollLeft {
+  from { transform:translateX(0); }
+  to   { transform:translateX(-50%); }
+}
+
+/* ── Wrapper ────────────────────────────── */
+.wrap {
+  position:relative; z-index:1;
+  max-width:880px; margin:0 auto;
+  padding:0 clamp(16px,4vw,40px);
+}
+
+/* ── PIXEL BOX mixin ────────────────────── */
+.pbox {
+  border: 4px solid;
+  image-rendering: pixelated;
+  position: relative;
+}
+.pbox::before {
+  content:''; position:absolute; inset:4px;
+  border-top: 2px solid rgba(255,255,255,.25);
+  border-left: 2px solid rgba(255,255,255,.25);
+  border-bottom: 2px solid rgba(0,0,0,.5);
+  border-right: 2px solid rgba(0,0,0,.5);
+  pointer-events:none; z-index:1;
+}
+
+/* ── HERO / TITLE SCREEN ────────────────── */
+#hero {
+  min-height: 100vh; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:80px 20px 40px;
+  gap:28px; position:relative;
+}
+
+.hero-badge {
+  font-family:var(--px); font-size:9px;
+  background:var(--l2); color:#000;
+  padding:8px 16px; display:inline-block;
+  border:4px solid #000;
+  box-shadow: 4px 4px 0 #000;
+  animation: float 3s ease-in-out infinite;
+  letter-spacing:.08em;
+}
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+.hero-title {
+  font-family: var(--px);
+  font-size: clamp(20px, 4.5vw, 36px);
+  line-height: 1.6;
+  color:#fff;
+  text-shadow:
+    4px 4px 0 #FF0066,
+    8px 8px 0 rgba(255,0,102,.3);
+  letter-spacing:.04em;
+}
+.hero-title .glow {
+  color: var(--sprint);
+  animation: colorCycle 4s ease-in-out infinite;
+}
+@keyframes colorCycle {
+  0%   { color:var(--sprint); text-shadow: 0 0 20px var(--sprint); }
+  25%  { color:var(--l2);     text-shadow: 0 0 20px var(--l2); }
+  50%  { color:var(--l3);     text-shadow: 0 0 20px var(--l3); }
+  75%  { color:var(--l4);     text-shadow: 0 0 20px var(--l4); }
+  100% { color:var(--sprint); text-shadow: 0 0 20px var(--sprint); }
+}
+
+.hero-sub {
+  font-family:var(--vt); font-size:22px; color:var(--dim);
+  letter-spacing:.06em;
+}
+
+.hero-author {
+  font-family:var(--px); font-size:9px; color:var(--l3);
+  letter-spacing:.1em;
+}
+.hero-author span { color:#fff; }
+
+.press-start {
+  font-family:var(--px); font-size:11px; color:var(--l2);
+  letter-spacing:.1em;
+  animation: blink 1s step-end infinite;
+  padding:16px 28px;
+  border:4px solid var(--l2);
+  cursor:pointer;
+  background:transparent;
+  transition:background .1s;
+}
+.press-start:hover { background:var(--l2); color:#000; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.hero-deco {
+  display:flex; gap:16px; font-size:24px;
+  animation: deco 2s steps(1) infinite;
+}
+@keyframes deco { 0%{opacity:1} 50%{opacity:0.3} }
+
+.hero-nav {
+  display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+}
+.hnav {
+  font-family:var(--px); font-size:8px;
+  padding:8px 14px; border:3px solid;
+  cursor:pointer; text-decoration:none; display:block;
+  box-shadow:3px 3px 0 rgba(0,0,0,.8);
+  transition:transform .1s, box-shadow .1s;
+}
+.hnav:hover { transform:translate(2px,2px); box-shadow:1px 1px 0 rgba(0,0,0,.8); }
+.hnav-1 { border-color:var(--sprint); color:var(--sprint); }
+.hnav-2 { border-color:var(--l1); color:var(--l1); }
+.hnav-3 { border-color:var(--l2); color:var(--l2); }
+.hnav-4 { border-color:var(--l3); color:var(--l3); }
+.hnav-5 { border-color:var(--l4); color:var(--l4); }
+.hnav-6 { border-color:var(--bonus); color:var(--bonus); }
+
+/* ── Section common ─────────────────────── */
+.section {
+  padding:60px 0 40px; position:relative;
+  opacity:0; transform:translateY(20px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.section.visible { opacity:1; transform:none; }
+
+.sec-eyebrow {
+  font-family:var(--px); font-size:8px;
+  letter-spacing:.15em; margin-bottom:18px;
+  display:flex; align-items:center; gap:10px;
+}
+.sec-eyebrow::before, .sec-eyebrow::after {
+  content:''; flex:1; height:2px;
+  background:currentColor; opacity:.3;
+}
+
+.sec-title {
+  font-family:var(--px);
+  font-size:clamp(14px, 3vw, 22px);
+  line-height:1.7; margin-bottom:28px;
+}
+
+.sec-body { font-family:var(--vt); font-size:22px; line-height:1.7; }
+.sec-body p { margin-bottom:14px; }
+.sec-body strong { color:var(--l2); }
+
+/* ── SPRINT SECTION ─────────────────────── */
+#sprint {
+  padding:60px 0;
+  opacity:0; transform:translateY(20px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+#sprint.visible { opacity:1; transform:none; }
+
+.sprint-box {
+  border:4px solid var(--sprint);
+  background:linear-gradient(135deg, rgba(255,0,102,.08) 0%, rgba(255,0,102,.02) 100%);
+  box-shadow:
+    0 0 0 4px #000,
+    8px 8px 0 var(--sprint),
+    8px 8px 0 4px #000;
+  padding:clamp(24px,4vw,48px);
+  position:relative; overflow:hidden;
+}
+
+.sprint-box::after {
+  content:'⚡';
+  position:absolute; right:-10px; bottom:-20px;
+  font-size:160px; opacity:.05; pointer-events:none;
+  user-select:none;
+}
+
+.sprint-title {
+  font-family:var(--px); font-size:clamp(12px,3vw,18px);
+  color:var(--sprint); margin-bottom:10px;
+  text-shadow:0 0 16px rgba(255,0,102,.6);
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+.sprint-stars { animation:spinStar 3s linear infinite; display:inline-block; }
+@keyframes spinStar { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+.sprint-sub {
+  font-family:var(--vt); font-size:20px; color:var(--dim);
+  margin-bottom:32px; letter-spacing:.04em;
+}
+
+.sprint-steps {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:16px;
+}
+
+.step {
+  border:3px solid;
+  padding:20px 16px; position:relative;
+  cursor:default;
+  transition:transform .1s, box-shadow .1s;
+}
+.step:hover { transform:translateY(-4px); }
+
+.step-num {
+  font-family:var(--px); font-size:28px; font-weight:400;
+  position:absolute; top:-18px; left:12px;
+  padding:2px 10px;
+  border:3px solid; background:var(--bg);
+}
+.step-icon { font-size:40px; margin:12px 0 8px; display:block; }
+.step-label { font-family:var(--px); font-size:9px; line-height:1.8; letter-spacing:.04em; }
+.step-sub { font-family:var(--vt); font-size:17px; color:var(--dim); margin-top:6px; }
+
+.step-1 { border-color:#FF99CC; }
+.step-1 .step-num { border-color:#FF99CC; color:#FF99CC; }
+.step-1 .step-label { color:#FF99CC; }
+.step-2 { border-color:var(--l1); }
+.step-2 .step-num { border-color:var(--l1); color:var(--l1); }
+.step-2 .step-label { color:var(--l1); }
+.step-3 { border-color:var(--l3); }
+.step-3 .step-num { border-color:var(--l3); color:var(--l3); }
+.step-3 .step-label { color:var(--l3); }
+.step-4 { border-color:var(--l4); }
+.step-4 .step-num { border-color:var(--l4); color:var(--l4); }
+.step-4 .step-label { color:var(--l4); }
+.step-5 { border-color:var(--bonus); }
+.step-5 .step-num { border-color:var(--bonus); color:var(--bonus); }
+.step-5 .step-label { color:var(--bonus); }
+
+.step-arrow {
+  display:none; /* handled by grid */
+}
+
+/* ── LEVEL HEADER BAR ───────────────────── */
+.level-bar {
+  display:flex; align-items:center; gap:0;
+  border:4px solid; margin-bottom:28px; overflow:hidden;
+}
+.level-num {
+  font-family:var(--px); font-size:10px;
+  padding:12px 16px; white-space:nowrap;
+  border-right:4px solid; letter-spacing:.06em;
+}
+.level-name {
+  font-family:var(--px); font-size:clamp(10px,2vw,14px);
+  padding:12px 20px; flex:1; letter-spacing:.04em;
+}
+.level-timer {
+  font-family:var(--vt); font-size:20px;
+  padding:10px 16px; border-left:4px solid;
+  white-space:nowrap; opacity:.7;
+}
+
+/* ── LIST ITEMS ─────────────────────────── */
+.pixel-list {
+  list-style:none; font-family:var(--vt); font-size:22px;
+  display:flex; flex-direction:column; gap:8px;
+}
+.pixel-list li {
+  padding-left:28px; position:relative; line-height:1.5;
+}
+.pixel-list li::before {
+  content:'▶'; position:absolute; left:0;
+  font-size:14px; top:4px;
+}
+
+/* ── ITEM BOX (title ideas, prompts, etc) ─ */
+.item-grid {
+  display:flex; flex-direction:column; gap:10px; margin:16px 0;
+}
+.item {
+  border:3px solid; padding:14px 18px;
+  font-family:var(--vt); font-size:20px;
+  position:relative; line-height:1.5;
+  transition:transform .1s, box-shadow .1s;
+  cursor:default;
+}
+.item:hover { transform:translate(3px,-3px); }
+.item-icon { font-size:20px; margin-right:8px; }
+
+/* ── SUB-SECTION ────────────────────────── */
+.subsec {
+  border:3px solid; padding:20px 24px;
+  margin-bottom:16px; position:relative;
+  background:rgba(255,255,255,.02);
+}
+.subsec-title {
+  font-family:var(--px); font-size:10px;
+  margin-bottom:14px; letter-spacing:.06em;
+  display:flex; align-items:center; gap:8px;
+}
+.subsec-icon { font-size:20px; }
+
+/* ── TIME BAR ───────────────────────────── */
+.time-bar {
+  display:flex; align-items:center; gap:10px; margin-bottom:14px;
+}
+.time-label { font-family:var(--px); font-size:8px; color:var(--dim); white-space:nowrap; }
+.time-track {
+  flex:1; height:8px; background:rgba(255,255,255,.1);
+  border:2px solid rgba(255,255,255,.2); position:relative;
+}
+.time-fill {
+  height:100%; background:currentColor; position:absolute; left:0; top:0;
+}
+
+/* ── PROMPT BOX ─────────────────────────── */
+.prompt {
+  background:rgba(0,0,0,.5); border:2px solid var(--l3);
+  padding:16px 18px; font-family:var(--vt); font-size:20px;
+  line-height:1.7; position:relative; margin:12px 0;
+}
+.prompt::before {
+  content:'> ';color:var(--l3); font-family:var(--px); font-size:11px;
+}
+.prompt-label {
+  position:absolute; top:-12px; left:12px;
+  font-family:var(--px); font-size:8px;
+  background:var(--bg); padding:0 8px; color:var(--l3); letter-spacing:.1em;
+}
+
+/* ── DEMO OPTIONS ───────────────────────── */
+.demo-opts {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px;
+  margin:12px 0;
+}
+.demo-opt {
+  border:3px solid rgba(255,255,255,.2); padding:16px;
+  font-family:var(--vt); font-size:20px; line-height:1.6;
+  position:relative;
+}
+.demo-opt-label {
+  font-family:var(--px); font-size:8px; color:var(--l2);
+  margin-bottom:8px; display:block; letter-spacing:.08em;
+}
+
+/* ── CAREER CARDS ───────────────────────── */
+.career-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px; margin:16px 0;
+}
+.career-card {
+  border:4px solid; padding:22px 18px; text-align:center;
+  position:relative; overflow:hidden;
+}
+.career-card::after {
+  content:attr(data-icon);
+  position:absolute; bottom:-10px; right:-4px;
+  font-size:80px; opacity:.06; pointer-events:none;
+  user-select:none;
+}
+.career-card-icon { font-size:36px; display:block; margin-bottom:12px; }
+.career-card-title { font-family:var(--px); font-size:9px; line-height:1.8; margin-bottom:10px; }
+.career-card-desc { font-family:var(--vt); font-size:20px; color:var(--dim); line-height:1.5; }
+
+.cc-1 { border-color:var(--sprint); }
+.cc-1 .career-card-title { color:var(--sprint); }
+.cc-2 { border-color:var(--l2); }
+.cc-2 .career-card-title { color:var(--l2); }
+.cc-3 { border-color:var(--l4); }
+.cc-3 .career-card-title { color:var(--l4); }
+
+/* ── BONUS / SCRIPT ─────────────────────── */
+.script-box {
+  background:rgba(255,68,255,.06);
+  border:4px solid var(--bonus);
+  padding:28px;
+  box-shadow:
+    0 0 0 4px #000,
+    6px 6px 0 var(--bonus),
+    6px 6px 0 4px #000;
+  position:relative;
+}
+.script-box::before {
+  content:'"';
+  font-family:var(--px); font-size:80px; color:var(--bonus);
+  opacity:.15; position:absolute; top:-10px; left:10px;
+  pointer-events:none;
+}
+.script-text {
+  font-family:var(--vt); font-size:24px; line-height:1.8;
+  color:var(--white);
+}
+.script-text em { color:var(--l2); font-style:normal; }
+.cursor-blink::after {
+  content:'█'; animation:blink .8s step-end infinite;
+  font-family:var(--px); font-size:14px;
+}
+
+/* ── TIP CARDS ──────────────────────────── */
+.tips-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:14px; margin:14px 0;
+}
+.tip-card {
+  border:4px solid; padding:20px 16px; text-align:center;
+}
+.tip-icon { font-size:44px; display:block; margin-bottom:12px; }
+.tip-title { font-family:var(--px); font-size:9px; margin-bottom:10px; line-height:1.8; }
+.tip-desc { font-family:var(--vt); font-size:20px; color:var(--dim); line-height:1.5; }
+
+.tc-1 { border-color:#FF8C42; }
+.tc-1 .tip-title { color:#FF8C42; }
+.tc-2 { border-color:#A8DADC; }
+.tc-2 .tip-title { color:#A8DADC; }
+.tc-3 { border-color:#C9B1FF; }
+.tc-3 .tip-title { color:#C9B1FF; }
+
+/* ── QUOTE / CALLOUT ────────────────────── */
+.callout {
+  border-left:6px solid var(--l2); padding:14px 20px;
+  background:rgba(255,224,0,.05); margin:14px 0;
+  font-family:var(--vt); font-size:22px; line-height:1.7;
+}
+
+/* ── WORKFLOW COMPARE ───────────────────── */
+.workflow-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0;
+}
+.wf-box { border:3px solid; padding:18px 16px; }
+.wf-title { font-family:var(--px); font-size:8px; margin-bottom:12px; letter-spacing:.08em; }
+.wf-old { border-color:#ff6b6b; }
+.wf-old .wf-title { color:#ff6b6b; }
+.wf-new { border-color:var(--l4); }
+.wf-new .wf-title { color:var(--l4); }
+.wf-steps { font-family:var(--vt); font-size:20px; line-height:2; }
+.wf-arrow { text-align:center; padding:4px 0; color:var(--dim); font-size:14px; }
+
+/* ── SECTION DIVIDER ────────────────────── */
+.divider {
+  text-align:center; padding:20px 0;
+  font-family:var(--px); font-size:10px; color:var(--dim);
+  letter-spacing:.2em;
+}
+
+/* ── FOOTER ─────────────────────────────── */
+footer {
+  text-align:center; padding:60px 20px 40px;
+  border-top:4px solid rgba(255,255,255,.1);
+  position:relative; z-index:1;
+}
+.footer-ascii {
+  font-family:var(--px); font-size:8px; color:var(--dim);
+  line-height:2; letter-spacing:.06em; margin-bottom:20px;
+}
+.footer-lives {
+  font-size:28px; margin-bottom:16px;
+  animation:float 2s ease-in-out infinite;
+}
+.footer-copy {
+  font-family:var(--px); font-size:8px; color:var(--dim);
+  letter-spacing:.12em; line-height:2;
+}
+.footer-coin {
+  font-family:var(--px); font-size:10px; color:var(--l2);
+  margin-top:16px; animation:blink 1.5s step-end infinite;
+}
+
+/* ── BACK TO TOP ────────────────────────── */
+.back-top {
+  position:fixed; bottom:24px; right:24px; z-index:200;
+  font-family:var(--px); font-size:8px;
+  border:3px solid var(--l2); color:var(--l2);
+  background:var(--bg); padding:10px 14px;
+  cursor:pointer; text-decoration:none;
+  box-shadow:3px 3px 0 #000;
+  opacity:0; transition:opacity .3s;
+  animation:none;
+}
+.back-top.show { opacity:1; }
+.back-top:hover { background:var(--l2); color:#000; }
+
+/* ── XP / SCORE COUNTER ─────────────────── */
+.hud {
+  position:fixed; top:40px; right:16px; z-index:200;
+  font-family:var(--px); font-size:9px;
+  background:rgba(0,0,0,.85); border:3px solid var(--l2);
+  padding:8px 14px; text-align:right; line-height:1.8;
+}
+.hud-score { color:var(--l2); }
+.hud-label { color:var(--dim); font-size:7px; }
+
+/* ── PROMPT MODAL ───────────────────────── */
+.prompt-modal {
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,.85); align-items:center; justify-content:center;
+  padding:24px;
+}
+.prompt-modal.open { display:flex; }
+.prompt-box {
+  background:var(--bg); border:3px solid #FF99CC;
+  max-width:640px; width:100%; padding:32px;
+  position:relative; image-rendering:pixelated;
+  box-shadow:6px 6px 0 #FF99CC;
+  animation:popIn .15s steps(2) both;
+}
+@keyframes popIn {
+  from { transform:scale(.9); opacity:0; }
+  to   { transform:scale(1);  opacity:1; }
+}
+.prompt-box-label {
+  font-family:var(--px); font-size:8px; color:#FF99CC;
+  letter-spacing:.08em; margin-bottom:16px;
+}
+.prompt-box-title {
+  font-family:var(--px); font-size:11px; color:#fff;
+  line-height:2; margin-bottom:20px;
+}
+.prompt-text {
+  font-family:var(--vt); font-size:19px; color:#e0e0ff;
+  line-height:1.7; background:#111124; border:2px solid #FF99CC44;
+  padding:16px; margin-bottom:20px; white-space:pre-wrap;
+  cursor:text; user-select:all;
+}
+.prompt-actions { display:flex; gap:12px; flex-wrap:wrap; }
+.prompt-btn {
+  font-family:var(--px); font-size:8px; padding:10px 18px;
+  border:2px solid; background:transparent; cursor:pointer;
+  letter-spacing:.06em; transition:background .1s, color .1s;
+}
+.prompt-btn-copy { border-color:#FF99CC; color:#FF99CC; }
+.prompt-btn-copy:hover { background:#FF99CC; color:#000; }
+.prompt-btn-close { border-color:#555; color:#888; }
+.prompt-btn-close:hover { border-color:#fff; color:#fff; }
+.prompt-close-x {
+  position:absolute; top:12px; right:14px;
+  font-family:var(--px); font-size:10px; color:#555;
+  cursor:pointer; background:none; border:none; line-height:1;
+}
+.prompt-close-x:hover { color:#fff; }
+.step-1, .step-2 { cursor:pointer; }
+.step-1::after, .step-2::after {
+  content:'► CLICK'; font-family:var(--px); font-size:6px;
+  display:block; margin-top:8px; letter-spacing:.06em;
+}
+.step-1::after { color:#FF99CC88; }
+.step-2::after { color:rgba(255,107,53,.55); }
+
+/* ── RESPONSIVE ─────────────────────────── */
+@media (max-width:600px) {
+  .workflow-grid { grid-template-columns:1fr; }
+  .sprint-steps { grid-template-columns:1fr 1fr; }
+  .hero-title { font-size:16px; }
+  .press-start { font-size:8px; }
+  .hud { display:none; }
+}
+
+/* ── Reveal helper ──────────────────────── */
+.reveal {
+  opacity:0; transform:translateY(20px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.reveal.visible { opacity:1; transform:none; }
+
+</style>
+</head>
+<body>
+
+<!-- Stars canvas -->
+<canvas id="stars"></canvas>
+
+<!-- HUD -->
+<div class="hud">
+  <div class="hud-label">SCORE</div>
+  <div class="hud-score" id="scoreDisplay">000000</div>
+  <div class="hud-label" style="margin-top:4px">LEVEL</div>
+  <div style="color:var(--l3)" id="levelDisplay">1-1</div>
+</div>
+
+<!-- Marquee -->
+<div class="marquee-bar">
+  <div class="marquee-inner">
+    <span>⚡ AI DESIGN QUEST &nbsp;·&nbsp; AI UX SUMMIT 2026 &nbsp;·&nbsp; JOEY PRIMIANI &nbsp;·&nbsp; LINKEDIN PREMIUM &nbsp;·&nbsp; PRESS START &nbsp;·&nbsp; AI FOR PRODUCT DESIGNERS &nbsp;·&nbsp; 5-MINUTE DESIGN SPRINT &nbsp;·&nbsp;</span>
+    <span>⚡ AI DESIGN QUEST &nbsp;·&nbsp; AI UX SUMMIT 2026 &nbsp;·&nbsp; JOEY PRIMIANI &nbsp;·&nbsp; LINKEDIN PREMIUM &nbsp;·&nbsp; PRESS START &nbsp;·&nbsp; AI FOR PRODUCT DESIGNERS &nbsp;·&nbsp; 5-MINUTE DESIGN SPRINT &nbsp;·&nbsp;</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="wrap" style="z-index:2;position:relative">
+    <div class="hero-badge">★ AI UX SUMMIT 2026 ★</div>
+
+    <h1 class="hero-title">
+      AI DESIGN<br>
+      <span class="glow">QUEST</span>
+    </h1>
+
+    <p class="hero-sub">From Prompt → Prototype → Ship<br>A guide to running AI design sessions</p>
+
+    <div class="hero-deco">⭐ 🎮 ⭐ 🕹️ ⭐</div>
+
+    <p class="hero-author">Player: <span>JOEY PRIMIANI</span> · LinkedIn Premium</p>
+
+    <button class="press-start" onclick="document.getElementById('sprint').scrollIntoView({behavior:'smooth'})">
+      ▶ PRESS START
+    </button>
+
+    <nav class="hero-nav">
+      <a href="#sprint" class="hnav hnav-1">⚡ SPRINT</a>
+      <a href="#l1" class="hnav hnav-2">1 THE HOOK</a>
+      <a href="#l2" class="hnav hnav-3">2 STRUCTURE</a>
+      <a href="#l3" class="hnav hnav-4">3 TIPS</a>
+      <a href="#l4" class="hnav hnav-5">4 CAREER</a>
+      <a href="#bonus" class="hnav hnav-6">★ BONUS</a>
+    </nav>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ═══════ 5-MINUTE DESIGN SPRINT ═══════ -->
+  <section id="sprint" class="reveal">
+    <div class="sec-eyebrow" style="color:var(--sprint)">⚡ &nbsp; SPECIAL MISSION &nbsp; ⚡</div>
+    <div class="sprint-box">
+      <div class="sprint-title">
+        <span class="sprint-stars">★</span>
+        5-MINUTE DESIGN SPRINT
+        <span class="sprint-stars">★</span>
+      </div>
+      <p class="sprint-sub">Complete all 5 missions to ship faster than anyone expects</p>
+
+      <div class="sprint-steps">
+        <div class="step step-1">
+          <div class="step-num" style="background:var(--bg)">01</div>
+          <span class="step-icon">📋</span>
+          <div class="step-label">CREATE A<br>PLAN FILE</div>
+          <div class="step-sub">Define goals,<br>constraints &amp; scope</div>
+        </div>
+        <div class="step step-2">
+          <div class="step-num" style="background:var(--bg)">02</div>
+          <span class="step-icon">⚡</span>
+          <div class="step-label">CREATE<br>PROTOTYPE</div>
+          <div class="step-sub">AI → code →<br>working demo</div>
+        </div>
+        <div class="step step-3">
+          <div class="step-num" style="background:var(--bg)">03</div>
+          <span class="step-icon">🎨</span>
+          <div class="step-label">SEND TO<br>FIGMA</div>
+          <div class="step-sub">Export &amp; hand<br>off instantly</div>
+        </div>
+        <div class="step step-4">
+          <div class="step-num" style="background:var(--bg)">04</div>
+          <span class="step-icon">🧪</span>
+          <div class="step-label">TEST!</div>
+          <div class="step-sub">Real users,<br>real feedback</div>
+        </div>
+        <div class="step step-5">
+          <div class="step-num" style="background:var(--bg)">05</div>
+          <span class="step-icon">🚀</span>
+          <div class="step-label">SHIP!</div>
+          <div class="step-sub">Launch it &amp;<br>own the result</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">· · · · · LEVEL SELECT · · · · ·</div>
+
+  <!-- ═══════ LEVEL 1: THE HOOK ═══════ -->
+  <section id="l1" class="section">
+    <div class="level-bar" style="border-color:var(--l1); color:var(--l1)">
+      <div class="level-num" style="border-color:var(--l1); background:rgba(255,107,53,.1)">LEVEL 1</div>
+      <div class="level-name">START WITH A CLEAR PROMISE</div>
+      <div class="level-timer" style="border-color:var(--l1)">⏱ 5 MIN</div>
+    </div>
+
+    <p class="sec-body" style="margin-bottom:18px">
+      People show up to AI UX Summit 2026 for <strong>practical value</strong>, not theory. Your hook needs to be immediate and concrete.
+    </p>
+
+    <div class="subsec" style="border-color:var(--l1)">
+      <div class="subsec-title" style="color:var(--l1)">
+        <span class="subsec-icon">🎯</span> TITLE IDEAS — CHOOSE YOUR WEAPON
+      </div>
+      <div class="item-grid">
+        <div class="item" style="border-color:rgba(255,107,53,.5)">
+          <span class="item-icon">⭐</span>AI for Product Designers: From Idea → Prototype in 10 Minutes
+        </div>
+        <div class="item" style="border-color:rgba(255,107,53,.4)">
+          <span class="item-icon">⭐</span>How AI Is Changing the Design Process
+        </div>
+        <div class="item" style="border-color:rgba(255,107,53,.35)">
+          <span class="item-icon">⭐</span>Designing With AI: Faster Prototypes, Better Strategy
+        </div>
+        <div class="item" style="border-color:rgba(255,107,53,.3)">
+          <span class="item-icon">⭐</span>From Prompt to Product: Using AI in the Design Workflow
+        </div>
+      </div>
+    </div>
+
+    <div class="subsec" style="border-color:rgba(255,107,53,.4); margin-top:12px">
+      <div class="subsec-title" style="color:var(--l1)">
+        <span class="subsec-icon">💬</span> OPENING LINE EXAMPLE
+      </div>
+      <div class="callout">
+        "Today I want to show how AI can increase design leverage — not just help us move faster, but help us <strong>think more strategically</strong> about product decisions."
+      </div>
+      <p class="sec-body">This aligns with LinkedIn Premium work — it frames AI as product thinking, not just tools. 🎯</p>
+    </div>
+  </section>
+
+  <div class="divider">· · · · · · · · · ·</div>
+
+  <!-- ═══════ LEVEL 2: SESSION STRUCTURE ═══════ -->
+  <section id="l2" class="section">
+    <div class="level-bar" style="border-color:var(--l2); color:#000">
+      <div class="level-num" style="border-color:var(--l2); background:var(--l2); color:#000">LEVEL 2</div>
+      <div class="level-name" style="color:var(--l2)">STRUCTURE THE SESSION</div>
+      <div class="level-timer" style="border-color:var(--l2); color:var(--l2)">⏱ 30-45 MIN</div>
+    </div>
+
+    <!-- 2-1 CONTEXT -->
+    <div class="subsec" style="border-color:rgba(255,224,0,.4)">
+      <div class="subsec-title" style="color:var(--l2)">
+        <span class="subsec-icon">📡</span> STAGE 2-1: CONTEXT
+        <span style="font-family:var(--vt);font-size:18px;color:var(--dim);font-weight:400;margin-left:8px">5 min</span>
+      </div>
+      <div class="time-bar"><div class="time-label">LOAD</div><div class="time-track" style="color:var(--l2)"><div class="time-fill" style="width:13%"></div></div></div>
+      <p class="sec-body" style="margin-bottom:12px">Explain why AI matters for product teams <strong>right now</strong>.</p>
+      <ul class="pixel-list" style="color:var(--l2)">
+        <li style="color:var(--white)">AI is changing how quickly we can explore ideas</li>
+        <li style="color:var(--white)">Designers can prototype before engineering</li>
+        <li style="color:var(--white)">Strategy + experimentation becomes easier</li>
+      </ul>
+
+      <div class="workflow-grid" style="margin-top:18px">
+        <div class="wf-box wf-old">
+          <div class="wf-title">❌ OLD WORKFLOW</div>
+          <div class="wf-steps">
+            Idea<div class="wf-arrow">▼</div>
+            PRD<div class="wf-arrow">▼</div>
+            Design<div class="wf-arrow">▼</div>
+            Prototype<div class="wf-arrow">▼</div>
+            Validation
+          </div>
+        </div>
+        <div class="wf-box wf-new">
+          <div class="wf-title">✅ AI WORKFLOW</div>
+          <div class="wf-steps">
+            Idea<div class="wf-arrow">▼</div>
+            AI Prototype<div class="wf-arrow">▼</div>
+            Test<div class="wf-arrow">▼</div>
+            Refine<div class="wf-arrow">▼</div>
+            Ship ⚡
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2-2 DEMO -->
+    <div class="subsec" style="border-color:rgba(255,224,0,.4); margin-top:12px">
+      <div class="subsec-title" style="color:var(--l2)">
+        <span class="subsec-icon">🎮</span> STAGE 2-2: THE DEMO
+        <span style="font-family:var(--vt);font-size:18px;color:var(--dim);margin-left:8px">10-15 min</span>
+      </div>
+      <div class="time-bar"><div class="time-label">LOAD</div><div class="time-track" style="color:var(--l2)"><div class="time-fill" style="width:38%"></div></div></div>
+      <p class="sec-body">This is the <strong>most important part</strong>. Show something real. Build live. 🎯</p>
+      <div class="demo-opts">
+        <div class="demo-opt">
+          <span class="demo-opt-label">OPTION A</span>
+          Claude Code → Figma MCP → prototype UI
+        </div>
+        <div class="demo-opt">
+          <span class="demo-opt-label">OPTION B</span>
+          AI generates: user flows, edge cases, empty states, interaction specs
+        </div>
+        <div class="demo-opt">
+          <span class="demo-opt-label">OPTION C</span>
+          AI generates product strategy options
+        </div>
+      </div>
+      <div class="prompt" style="margin-top:14px">
+        <div class="prompt-label">EXAMPLE PROMPT</div>
+        "Generate three UX approaches for helping LinkedIn Premium users request warm introductions."
+      </div>
+      <p class="sec-body" style="margin-top:10px;color:var(--l2)">▶ People love seeing something built live.</p>
+    </div>
+
+    <!-- 2-3 CASE STUDY -->
+    <div class="subsec" style="border-color:rgba(255,224,0,.4); margin-top:12px">
+      <div class="subsec-title" style="color:var(--l2)">
+        <span class="subsec-icon">📖</span> STAGE 2-3: REAL CASE STUDY
+        <span style="font-family:var(--vt);font-size:18px;color:var(--dim);margin-left:8px">10 min</span>
+      </div>
+      <div class="time-bar"><div class="time-label">LOAD</div><div class="time-track" style="color:var(--l2)"><div class="time-fill" style="width:63%"></div></div></div>
+      <p class="sec-body" style="margin-bottom:14px">This is where <strong>you become the expert</strong>. Show your actual work.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+        <div class="item" style="border-color:rgba(255,107,107,.4)">
+          <span class="item-icon">🔴</span><strong style="color:#ff6b6b;font-family:var(--px);font-size:9px">PROBLEM</strong><br>Designing Premium feature flows
+        </div>
+        <div class="item" style="border-color:rgba(0,255,255,.3)">
+          <span class="item-icon">🔵</span><strong style="color:var(--l3);font-family:var(--px);font-size:9px">AI HELPED</strong><br>Exploring variations, edge cases &amp; flows
+        </div>
+        <div class="item" style="border-color:rgba(0,255,65,.3)">
+          <span class="item-icon">🟢</span><strong style="color:var(--l4);font-family:var(--px);font-size:9px">IMPACT</strong><br>Faster prototyping, more strategy time
+        </div>
+      </div>
+      <div class="callout" style="margin-top:14px">
+        This positions you as a <strong>strategic practitioner</strong>, not just a tool user. ⭐
+      </div>
+    </div>
+
+    <!-- 2-4 PROMPTS -->
+    <div class="subsec" style="border-color:rgba(255,224,0,.4); margin-top:12px">
+      <div class="subsec-title" style="color:var(--l2)">
+        <span class="subsec-icon">🔧</span> STAGE 2-4: PRACTICAL PROMPTS
+        <span style="font-family:var(--vt);font-size:18px;color:var(--dim);margin-left:8px">5 min</span>
+      </div>
+      <div class="time-bar"><div class="time-label">LOAD</div><div class="time-track" style="color:var(--l2)"><div class="time-fill" style="width:80%"></div></div></div>
+      <p class="sec-body">Give them something they can use <strong>tomorrow</strong>. Turn your talk into a toolkit.</p>
+      <div class="prompt">
+        <div class="prompt-label">PRODUCT THINKING</div>
+        "Act as a product strategist. Suggest three ways this feature could increase retention."
+      </div>
+      <div class="prompt">
+        <div class="prompt-label">DESIGN FLOWS</div>
+        "Generate a complete UX flow including empty states, error states, and edge cases."
+      </div>
+      <div class="prompt">
+        <div class="prompt-label">RESEARCH</div>
+        "What are potential usability risks with this design?"
+      </div>
+    </div>
+
+    <!-- 2-5 Q&A -->
+    <div class="subsec" style="border-color:rgba(255,224,0,.4); margin-top:12px">
+      <div class="subsec-title" style="color:var(--l2)">
+        <span class="subsec-icon">💬</span> STAGE 2-5: Q&amp;A / DISCUSSION
+        <span style="font-family:var(--vt);font-size:18px;color:var(--dim);margin-left:8px">5-10 min</span>
+      </div>
+      <div class="time-bar"><div class="time-label">LOAD</div><div class="time-track" style="color:var(--l2)"><div class="time-fill" style="width:95%"></div></div></div>
+      <p class="sec-body" style="margin-bottom:12px">Ask the crowd — make it feel <strong>collaborative</strong>.</p>
+      <ul class="pixel-list" style="color:var(--l2)">
+        <li style="color:var(--white)">"How are people already using AI in their workflow?"</li>
+        <li style="color:var(--white)">"What's one task you wish AI could help with?"</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="divider">· · · · · · · · · ·</div>
+
+  <!-- ═══════ LEVEL 4: CAREER ═══════ -->
+  <section id="l4" class="section">
+    <div class="level-bar" style="border-color:var(--l4); color:var(--l4)">
+      <div class="level-num" style="border-color:var(--l4); background:rgba(0,255,65,.08)">LEVEL 4</div>
+      <div class="level-name">HOW THIS HELPS YOUR CAREER</div>
+      <div class="level-timer" style="border-color:var(--l4)">🚀 POWER UP</div>
+    </div>
+
+    <p class="sec-body" style="margin-bottom:20px">This event does <strong>three powerful things</strong> for you at LinkedIn.</p>
+
+    <div class="career-grid">
+      <div class="career-card cc-1" data-icon="🤖">
+        <span class="career-card-icon">🤖</span>
+        <div class="career-card-title">AI LEADER<br>REPUTATION</div>
+        <div class="career-card-desc">You become "The designer who understands AI workflows." That label sticks.</div>
+      </div>
+      <div class="career-card cc-2" data-icon="🌐">
+        <span class="career-card-icon">🌐</span>
+        <div class="career-card-title">NETWORK<br>EXPANSION</div>
+        <div class="career-card-desc">Design, PM, Eng, Research will all reach out. Cross-functional reach multiplies.</div>
+      </div>
+      <div class="career-card cc-3" data-icon="⭐">
+        <span class="career-card-icon">⭐</span>
+        <div class="career-card-title">STAFF-LEVEL<br>SIGNAL</div>
+        <div class="career-card-desc">Staff designers influence teams, teach others, introduce new workflows. This shows it.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">· · · · · BONUS STAGE UNLOCKED · · · · ·</div>
+
+  <!-- ═══════ BONUS: OPENING SCRIPT ═══════ -->
+  <section id="bonus" class="section">
+    <div class="level-bar" style="border-color:var(--bonus); color:var(--bonus)">
+      <div class="level-num" style="border-color:var(--bonus); background:rgba(255,68,255,.08)">★ BONUS</div>
+      <div class="level-name">STRONG OPENING SCRIPT</div>
+      <div class="level-timer" style="border-color:var(--bonus)">💎 SECRET</div>
+    </div>
+
+    <p class="sec-body" style="margin-bottom:18px">Start here. Memorize this. Own it. 🎤</p>
+
+    <div class="script-box">
+      <div class="script-text">
+        "Hi everyone — I'm Joey, a designer on the LinkedIn Premium team.<br><br>
+        Today I want to show how AI can increase our design leverage — not just helping us move faster, but helping us <em>explore ideas earlier</em> and think more <em>strategically</em> about product decisions.<br><br>
+        I'll show a quick example of connecting Claude Code to Figma MCP to create prototypes, then walk through how I've been using AI in my design workflow."
+        <span class="cursor-blink"></span>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;text-align:center">
+      <div style="font-family:var(--px);font-size:9px;color:var(--bonus);margin-bottom:12px;letter-spacing:.1em">THEN LAUNCH THE 5-MIN DESIGN SPRINT ↓</div>
+      <a href="#sprint" class="press-start" style="font-size:10px;display:inline-block;text-decoration:none;color:var(--bonus);border-color:var(--bonus)">⚡ BACK TO SPRINT</a>
+    </div>
+  </section>
+
+</div><!-- /wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-lives">❤️ ❤️ ❤️</div>
+  <div class="footer-ascii">
+    ████████████████████████████<br>
+    █ &nbsp; THANKS FOR PLAYING &nbsp; █<br>
+    ████████████████████████████
+  </div>
+  <div class="footer-copy">
+    JOEY PRIMIANI · LINKEDIN PREMIUM · 2026<br>
+    AI DESIGN QUEST · ALL RIGHTS RESERVED
+  </div>
+  <div class="footer-coin">INSERT COIN TO CONTINUE ▶</div>
+</footer>
+
+<!-- Back to top -->
+<a href="#hero" class="back-top" id="backTop">▲ TOP</a>
+
+<script>
+/* ── Starfield ──────────────────────── */
+const canvas = document.getElementById('stars');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resize(){
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+function initStars(){
+  stars = [];
+  for(let i=0;i<200;i++){
+    stars.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height,
+      size: Math.random()*2+0.5,
+      speed: Math.random()*0.4+0.05,
+      brightness: Math.random(),
+      twinkleSpeed: Math.random()*0.04+0.01,
+      twinklePhase: Math.random()*Math.PI*2,
+      color: ['#ffffff','#ffffa0','#a0a0ff','#ff88ff','#88ffff'][Math.floor(Math.random()*5)],
+    });
+  }
+}
+initStars();
+
+function drawStars(t){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  stars.forEach(s=>{
+    s.y += s.speed;
+    if(s.y > canvas.height){ s.y=0; s.x=Math.random()*canvas.width; }
+    s.twinklePhase += s.twinkleSpeed;
+    const alpha = 0.3 + 0.7*(Math.sin(s.twinklePhase)*0.5+0.5);
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = s.color;
+    ctx.fillRect(Math.floor(s.x), Math.floor(s.y), Math.ceil(s.size), Math.ceil(s.size));
+  });
+  ctx.globalAlpha=1;
+  requestAnimationFrame(drawStars);
+}
+requestAnimationFrame(drawStars);
+
+/* ── Scroll reveal ──────────────────── */
+const revealEls = document.querySelectorAll('.section,.reveal');
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:0.08});
+revealEls.forEach(el=>io.observe(el));
+
+/* ── Back to top ────────────────────── */
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll',()=>{
+  backTop.classList.toggle('show', window.scrollY>400);
+},{ passive:true });
+
+/* ── HUD Score (scroll-driven) ──────── */
+const scoreEl  = document.getElementById('scoreDisplay');
+const levelEl  = document.getElementById('levelDisplay');
+const sections = [
+  {id:'sprint', level:'0-1'},
+  {id:'l1',     level:'1-1'},
+  {id:'l2',     level:'2-1'},
+  {id:'l3',     level:'3-1'},
+  {id:'l4',     level:'4-1'},
+  {id:'bonus',  level:'★-1'},
+];
+
+let score=0;
+window.addEventListener('scroll',()=>{
+  const sy = window.scrollY;
+  const docH = document.body.scrollHeight - window.innerHeight;
+  score = Math.floor((sy/docH)*999999);
+  scoreEl.textContent = String(score).padStart(6,'0');
+
+  for(let i=sections.length-1;i>=0;i--){
+    const el=document.getElementById(sections[i].id);
+    if(el && el.getBoundingClientRect().top < window.innerHeight*0.6){
+      levelEl.textContent=sections[i].level;
+      break;
+    }
+  }
+},{passive:true});
+
+/* ── Pixel click sparkle ────────────── */
+document.addEventListener('click',e=>{
+  for(let i=0;i<6;i++){
+    const spark=document.createElement('div');
+    const colors=['#FF0066','#FFE000','#00FFFF','#00FF41','#FF44FF','#FF6B35'];
+    Object.assign(spark.style,{
+      position:'fixed', left:e.clientX+'px', top:e.clientY+'px',
+      width:'8px', height:'8px',
+      background:colors[Math.floor(Math.random()*colors.length)],
+      zIndex:9999, pointerEvents:'none',
+      transform:`translate(${(Math.random()-0.5)*40}px, ${(Math.random()-0.5)*40}px)`,
+      transition:'all .5s ease',
+      imageRendering:'pixelated',
+    });
+    document.body.appendChild(spark);
+    requestAnimationFrame(()=>{
+      spark.style.opacity='0';
+      spark.style.transform+=` translate(${(Math.random()-0.5)*60}px, ${-30-Math.random()*30}px)`;
+    });
+    setTimeout(()=>spark.remove(),500);
+  }
+});
+
+/* ── Easter egg: Konami code ────────── */
+const konami=[38,38,40,40,37,39,37,39,66,65];
+let ki=0;
+document.addEventListener('keydown',e=>{
+  if(e.keyCode===konami[ki]){ki++;}else{ki=0;}
+  if(ki===konami.length){
+    ki=0;
+    document.body.style.animation='colorCycle 2s linear 3';
+    alert('★ CHEAT CODE ACTIVATED ★\n+99999 XP BONUS!\nYou are ready to run the best Lunch & Learn ever. 🎮');
+  }
+});
+</script>
+
+<!-- PLAN FILE PROMPT MODAL -->
+<div class="prompt-modal" id="planModal">
+  <div class="prompt-box">
+    <button class="prompt-close-x" id="modalCloseX">✕</button>
+    <div class="prompt-box-label" id="modalLabel"></div>
+    <div class="prompt-box-title" id="modalTitle">PASTE THIS INTO CLAUDE</div>
+    <div class="prompt-text" id="promptText"></div>
+    <div class="prompt-actions">
+      <button class="prompt-btn prompt-btn-copy" id="copyBtn">📋 COPY PROMPT</button>
+      <button class="prompt-btn prompt-btn-close" id="modalCloseBtn">✕ CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const planModal = document.getElementById('planModal');
+const copyBtn = document.getElementById('copyBtn');
+const closeModal = () => planModal.classList.remove('open');
+
+const stepPrompts = {
+  1: {
+    label: '★ STEP 01 · CLAUDE PROMPT',
+    title: 'PASTE THIS INTO CLAUDE TO START YOUR PLAN FILE',
+    color: '#FF99CC',
+    text: 'Create me a plan file for [Product Idea] and interview me in detail using the AskUserQuestionTool about literally anything: technical implementation, UI & UX, concerns, tradeoffs, etc.'
+  },
+  2: {
+    label: '★ STEP 02 · CLAUDE PROMPT',
+    title: 'PASTE THIS INTO CLAUDE TO BUILD YOUR PROTOTYPE',
+    color: '#FF6B35',
+    text: 'Using this plan file create me a prototype and send to Figma'
+  }
+};
+
+function openModal(step) {
+  const p = stepPrompts[step];
+  const box = planModal.querySelector('.prompt-box');
+  box.style.borderColor = p.color;
+  box.style.boxShadow = `6px 6px 0 ${p.color}`;
+  document.getElementById('modalLabel').style.color = p.color;
+  document.getElementById('modalLabel').textContent = p.label;
+  document.getElementById('modalTitle').textContent = p.title;
+  document.getElementById('promptText').textContent = p.text;
+  planModal.classList.add('open');
+}
+
+document.querySelector('.step-1').addEventListener('click', () => openModal(1));
+document.querySelector('.step-2').addEventListener('click', () => openModal(2));
+document.getElementById('modalCloseX').addEventListener('click', closeModal);
+document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+planModal.addEventListener('click', e => { if(e.target === planModal) closeModal(); });
+
+copyBtn.addEventListener('click', () => {
+  const text = document.getElementById('promptText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    copyBtn.textContent = '✓ COPIED!';
+    setTimeout(() => { copyBtn.textContent = '📋 COPY PROMPT'; }, 2000);
+  });
+});
+
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
