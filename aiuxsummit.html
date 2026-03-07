@@ -708,7 +708,7 @@ footer {
 
     <div class="hero-deco">⭐ 🎮 ⭐ 🕹️ ⭐</div>
 
-    <p class="hero-author">Player: <span>JOEY PRIMIANI</span> · LinkedIn Premium</p>
+    <p class="hero-author">Player: <span>JOEY PRIMIANI</span> · LinkedIn</p>
 
     <button class="press-start" onclick="document.getElementById('sprint').scrollIntoView({behavior:'smooth'})">
       ▶ PRESS START
@@ -839,7 +839,7 @@ footer {
     ████████████████████████████
   </div>
   <div class="footer-copy">
-    JOEY PRIMIANI · LINKEDIN PREMIUM · 2026<br>
+    JOEY PRIMIANI · 2026<br>
     AI DESIGN QUEST · ALL RIGHTS RESERVED
   </div>
   <div class="footer-coin">INSERT COIN TO CONTINUE ▶</div>
@@ -893,6 +893,62 @@ function drawStars(t){
   requestAnimationFrame(drawStars);
 }
 requestAnimationFrame(drawStars);
+
+/* ── Rainbow cursor trail ───────────── */
+(function(){
+  const particles = [];
+  let mx = -999, my = -999, hue = 0;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+  function spawn() {
+    particles.push({
+      x: mx, y: my,
+      size: 10 + Math.random() * 8,
+      hue: hue,
+      alpha: 1,
+      vx: (Math.random() - 0.5) * 1.5,
+      vy: (Math.random() - 0.5) * 1.5,
+    });
+    hue = (hue + 8) % 360;
+    if (particles.length > 80) particles.shift();
+  }
+
+  let spawnTimer = 0;
+  function loop() {
+    spawnTimer++;
+    if (spawnTimer % 2 === 0) spawn();
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.alpha -= 0.04;
+      p.size *= 0.94;
+      p.x += p.vx;
+      p.y += p.vy;
+      const el = p._el;
+      if (p.alpha <= 0) {
+        if (el) el.remove();
+        particles.splice(i, 1);
+        continue;
+      }
+      if (!el) {
+        const d = document.createElement('div');
+        d.style.cssText = `position:fixed;pointer-events:none;z-index:99999;
+          image-rendering:pixelated;border-radius:0;`;
+        document.body.appendChild(d);
+        p._el = d;
+      }
+      const s = Math.max(2, Math.round(p.size));
+      p._el.style.width  = s + 'px';
+      p._el.style.height = s + 'px';
+      p._el.style.left   = (p.x - s/2) + 'px';
+      p._el.style.top    = (p.y - s/2) + 'px';
+      p._el.style.background = `hsl(${p.hue},100%,60%)`;
+      p._el.style.opacity = p.alpha;
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
 
 /* ── Scroll reveal ──────────────────── */
 const revealEls = document.querySelectorAll('.section,.reveal');
