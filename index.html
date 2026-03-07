@@ -589,13 +589,14 @@ footer {
   cursor:pointer; background:none; border:none; line-height:1;
 }
 .prompt-close-x:hover { color:#fff; }
-.step-1, .step-2 { cursor:pointer; }
-.step-1::after, .step-2::after {
+.step-1, .step-2, .step-4 { cursor:pointer; }
+.step-1::after, .step-2::after, .step-4::after {
   content:'► CLICK'; font-family:var(--px); font-size:6px;
   display:block; margin-top:8px; letter-spacing:.06em;
 }
 .step-1::after { color:#FF99CC88; }
 .step-2::after { color:rgba(255,107,53,.55); }
+.step-4::after { color:rgba(0,255,65,.45); }
 
 /* ── RESPONSIVE ─────────────────────────── */
 @media (max-width:600px) {
@@ -1135,6 +1136,13 @@ const stepPrompts = {
     title: 'PASTE THIS INTO CLAUDE TO BUILD YOUR PROTOTYPE',
     color: '#FF6B35',
     text: 'Using this plan file create me a prototype and send to Figma'
+  },
+  4: {
+    label: '★ STEP 04 · INSTRUCTIONS',
+    title: 'HOW TO PUBLISH YOUR PROTOTYPE',
+    color: '#00FF41',
+    text: '1. Push your prototype to a GitHub repo\n\n2. Go to Settings → Pages\n\n3. Set source to: Deploy from branch → main → / (root)\n\n4. Hit Save — your shareable URL will be live at:\nhttps://[username].github.io/[repo-name]',
+    hideCopy: true
   }
 };
 
@@ -1147,11 +1155,13 @@ function openModal(step) {
   document.getElementById('modalLabel').textContent = p.label;
   document.getElementById('modalTitle').textContent = p.title;
   document.getElementById('promptText').textContent = p.text;
+  copyBtn.style.display = p.hideCopy ? 'none' : '';
   planModal.classList.add('open');
 }
 
 document.querySelector('.step-1').addEventListener('click', () => openModal(1));
 document.querySelector('.step-2').addEventListener('click', () => openModal(2));
+document.querySelector('.step-4').addEventListener('click', () => openModal(4));
 document.getElementById('modalCloseX').addEventListener('click', closeModal);
 document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
 planModal.addEventListener('click', e => { if(e.target === planModal) closeModal(); });
