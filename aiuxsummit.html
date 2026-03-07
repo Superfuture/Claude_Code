@@ -667,13 +667,14 @@ footer {
   cursor:pointer; background:none; border:none; line-height:1;
 }
 .prompt-close-x:hover { color:#fff; }
-.step-1, .step-2, .step-4 { cursor:pointer; }
-.step-1::after, .step-2::after, .step-4::after {
+.step-1, .step-2, .step-3, .step-4 { cursor:pointer; }
+.step-1::after, .step-2::after, .step-3::after, .step-4::after {
   content:'► CLICK'; font-family:var(--px); font-size:6px;
   display:block; margin-top:8px; letter-spacing:.06em;
 }
 .step-1::after { color:#FF99CC88; }
 .step-2::after { color:rgba(255,107,53,.55); }
+.step-3::after { color:rgba(0,255,255,.45); }
 .step-4::after { color:rgba(0,255,65,.45); }
 
 /* ── RESPONSIVE ─────────────────────────── */
@@ -1111,6 +1112,13 @@ const stepPrompts = {
     color: '#FF6B35',
     text: 'Using this plan file create me a prototype and send to Figma'
   },
+  3: {
+    label: '★ STEP 03 · FIGMA MCP SETUP',
+    title: 'CONNECT CLAUDE CODE TO FIGMA',
+    color: '#00FFFF',
+    text: '1. Install Figma MCP\n   npm install -g @figma/mcp\n\n2. Add to your Claude config (~/.claude/claude.json):\n   {\n     "mcpServers": {\n       "figma": {\n         "command": "figma-mcp",\n         "args": ["--token", "YOUR_FIGMA_TOKEN"]\n       }\n     }\n   }\n\n3. Get your Figma token:\n   Figma → Settings → Security\n   → Personal Access Tokens\n\n4. Restart Claude Code — Figma\n   tools will appear automatically',
+    hideCopy: true
+  },
   4: {
     label: '★ STEP 04 · INSTRUCTIONS',
     title: 'HOW TO PUBLISH YOUR PROTOTYPE',
@@ -1135,6 +1143,7 @@ function openModal(step) {
 
 document.querySelector('.step-1').addEventListener('click', () => openModal(1));
 document.querySelector('.step-2').addEventListener('click', () => openModal(2));
+document.querySelector('.step-3').addEventListener('click', () => openModal(3));
 document.querySelector('.step-4').addEventListener('click', () => openModal(4));
 document.getElementById('modalCloseX').addEventListener('click', closeModal);
 document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
