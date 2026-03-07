@@ -507,7 +507,7 @@ body::before {
 #gameCanvas {
   border:4px solid var(--l2); display:block; margin:0 auto;
   image-rendering:pixelated; box-shadow:0 0 30px rgba(255,224,0,.3);
-  cursor:none;
+  cursor:none; max-width:100%;
 }
 .arcade-controls {
   font-family:var(--px); font-size:8px; color:var(--dim);
@@ -852,7 +852,7 @@ footer {
   <div class="arcade-sub">Destroy the bugs before they reach your design system</div>
   <canvas id="gameCanvas" width="480" height="400"></canvas>
   <div class="arcade-controls">
-    <span>← →</span> MOVE &nbsp;·&nbsp; <span>SPACE</span> SHOOT &nbsp;·&nbsp; <span>CLICK</span> TO START
+    <span>← →</span> MOVE &nbsp;·&nbsp; <span>SPACE</span> SHOOT &nbsp;·&nbsp; <span>TAP</span> TO START / SHOOT
   </div>
 </section>
 
@@ -1169,6 +1169,15 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal();
   const W = 480, H = 400;
   const PX = "'Press Start 2P', monospace";
 
+  // Scale canvas to fit screen
+  function resizeCanvas() {
+    const maxW = Math.min(480, window.innerWidth - 32);
+    gc.style.width = maxW + 'px';
+    gc.style.height = (maxW * (H / W)) + 'px';
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
   let state = 'idle'; // idle | playing | dead | win
   let score = 0, lives = 3, level = 1;
   let frameId;
@@ -1203,7 +1212,24 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal();
     if(e.code==='Space') { e.preventDefault(); if(state==='idle'||state==='dead'||state==='win') startGame(); }
   });
   document.addEventListener('keyup', e => keys[e.code] = false);
-  gc.addEventListener('click', () => { if(state==='idle'||state==='dead'||state==='win') startGame(); });
+  gc.addEventListener('click', () => { if(state==='idle'||state==='dead'||state==='win') startGame(); else shoot(); });
+
+  // Touch controls
+  let touchStartX = 0;
+  gc.addEventListener('touchstart', e => {
+    e.preventDefault();
+    touchStartX = e.touches[0].clientX;
+    if(state==='idle'||state==='dead'||state==='win') { startGame(); return; }
+    shoot();
+  }, {passive:false});
+  gc.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if(state!=='playing') return;
+    const dx = e.touches[0].clientX - touchStartX;
+    touchStartX = e.touches[0].clientX;
+    const scale = W / gc.getBoundingClientRect().width;
+    player.x = Math.max(20, Math.min(W-20, player.x + dx * scale));
+  }, {passive:false});
 
   function startGame() {
     score=0; lives=3; level=1; bullets=[]; enemyBullets=[];
