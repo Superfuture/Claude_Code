@@ -494,6 +494,63 @@ body::before {
   letter-spacing:.2em;
 }
 
+/* ── CONNECT SECTION ────────────────────── */
+#connect {
+  padding:60px 0; opacity:0; transform:translateY(24px); transition:opacity .5s, transform .5s;
+}
+#connect.visible { opacity:1; transform:none; }
+.connect-box::before {
+  content:'★ PLAYER CARD ★';
+  font-family:var(--px); font-size:8px; color:var(--bonus);
+  position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+  background:var(--bg); padding:0 12px; letter-spacing:.1em;
+}
+.connect-box {
+  border:4px solid var(--bonus);
+  background:linear-gradient(135deg,rgba(255,68,255,.07) 0%,rgba(255,68,255,.02) 100%);
+  padding:40px; text-align:center;
+  box-shadow:8px 8px 0 var(--bonus), 8px 8px 0 4px #000;
+  position:relative; max-width:480px; margin:0 auto;
+}
+.pixel-avatar {
+  width:80px; height:80px; margin:0 auto 24px;
+  image-rendering:pixelated; position:relative;
+}
+.pixel-avatar canvas { display:block; }
+.connect-name {
+  font-family:var(--px); font-size:clamp(13px,2.5vw,18px);
+  color:#fff; margin-bottom:8px; letter-spacing:.06em;
+}
+.connect-title {
+  font-family:var(--vt); font-size:22px; color:var(--bonus);
+  margin-bottom:20px; letter-spacing:.04em;
+}
+.connect-bio {
+  font-family:var(--vt); font-size:20px; color:var(--dim);
+  max-width:560px; margin:0 auto 28px; line-height:1.8;
+}
+.connect-btn {
+  display:inline-block; font-family:var(--px); font-size:10px;
+  padding:14px 28px; border:3px solid var(--bonus); color:var(--bonus);
+  text-decoration:none; letter-spacing:.08em;
+  box-shadow:4px 4px 0 var(--bonus);
+  transition:background .1s, color .1s, transform .1s, box-shadow .1s;
+}
+.connect-btn:hover {
+  background:var(--bonus); color:#000;
+  transform:translate(2px,2px); box-shadow:2px 2px 0 var(--bonus);
+}
+.connect-stats {
+  display:flex; justify-content:center; gap:32px; margin-bottom:28px;
+  flex-wrap:wrap;
+}
+.connect-stat {
+  font-family:var(--px); font-size:8px; letter-spacing:.06em;
+  border:2px solid rgba(255,68,255,.35); padding:8px 14px;
+}
+.connect-stat-val { color:var(--bonus); display:block; font-size:14px; margin-bottom:4px; }
+.connect-stat-lbl { color:var(--dim); }
+
 /* ── FOOTER ─────────────────────────────── */
 footer {
   text-align:center; padding:60px 20px 40px;
@@ -718,189 +775,6 @@ footer {
 
   <div class="divider">· · · · · LEVEL SELECT · · · · ·</div>
 
-  <!-- ═══════ LEVEL 1: THE HOOK ═══════ -->
-  <section id="l1" class="section">
-    <div class="level-bar" style="border-color:var(--l1); color:var(--l1)">
-      <div class="level-num" style="border-color:var(--l1); background:rgba(255,107,53,.1)">LEVEL 1</div>
-      <div class="level-name">START WITH A CLEAR PROMISE</div>
-      <div class="level-timer" style="border-color:var(--l1)">⏱ 5 MIN</div>
-    </div>
-
-    <p class="sec-body" style="margin-bottom:18px">
-      People show up to AI UX Summit 2026 for <strong>practical value</strong>, not theory. Your hook needs to be immediate and concrete.
-    </p>
-
-    <div class="subsec" style="border-color:var(--l1)">
-      <div class="subsec-title" style="color:var(--l1)">
-        <span class="subsec-icon">🎯</span> TITLE IDEAS — CHOOSE YOUR WEAPON
-      </div>
-      <div class="item-grid">
-        <div class="item" style="border-color:rgba(255,107,53,.5)">
-          <span class="item-icon">⭐</span>AI for Product Designers: From Idea → Prototype in 10 Minutes
-        </div>
-        <div class="item" style="border-color:rgba(255,107,53,.4)">
-          <span class="item-icon">⭐</span>How AI Is Changing the Design Process
-        </div>
-        <div class="item" style="border-color:rgba(255,107,53,.35)">
-          <span class="item-icon">⭐</span>Designing With AI: Faster Prototypes, Better Strategy
-        </div>
-        <div class="item" style="border-color:rgba(255,107,53,.3)">
-          <span class="item-icon">⭐</span>From Prompt to Product: Using AI in the Design Workflow
-        </div>
-      </div>
-    </div>
-
-    <div class="subsec" style="border-color:rgba(255,107,53,.4); margin-top:12px">
-      <div class="subsec-title" style="color:var(--l1)">
-        <span class="subsec-icon">💬</span> OPENING LINE EXAMPLE
-      </div>
-      <div class="callout">
-        "Today I want to show how AI can increase design leverage — not just help us move faster, but help us <strong>think more strategically</strong> about product decisions."
-      </div>
-      <p class="sec-body">This aligns with LinkedIn Premium work — it frames AI as product thinking, not just tools. 🎯</p>
-    </div>
-  </section>
-
-  <div class="divider">· · · · · · · · · ·</div>
-
-  <!-- ═══════ LEVEL 2: SESSION STRUCTURE ═══════ -->
-  <section id="l2" class="section">
-    <div class="level-bar" style="border-color:var(--l2); color:#000">
-      <div class="level-num" style="border-color:var(--l2); background:var(--l2); color:#000">LEVEL 2</div>
-      <div class="level-name" style="color:var(--l2)">STRUCTURE THE SESSION</div>
-      <div class="level-timer" style="border-color:var(--l2); color:var(--l2)">⏱ 30-45 MIN</div>
-    </div>
-
-    <!-- 2-1 CONTEXT -->
-    <div class="subsec" style="border-color:rgba(255,224,0,.4)">
-      <div class="subsec-title" style="color:var(--l2)">
-        <span class="subsec-icon">📡</span> STAGE 2-1: CONTEXT
-        <span style="font-family:var(--vt);font-size:18px;color:var(--dim);font-weight:400;margin-left:8px">5 min</span>
-      </div>
-      <div class="time-bar"><div class="time-label">LOAD</div><div class="time-track" style="color:var(--l2)"><div class="time-fill" style="width:13%"></div></div></div>
-      <p class="sec-body" style="margin-bottom:12px">Explain why AI matters for product teams <strong>right now</strong>.</p>
-      <ul class="pixel-list" style="color:var(--l2)">
-        <li style="color:var(--white)">AI is changing how quickly we can explore ideas</li>
-        <li style="color:var(--white)">Designers can prototype before engineering</li>
-        <li style="color:var(--white)">Strategy + experimentation becomes easier</li>
-      </ul>
-
-      <div class="workflow-grid" style="margin-top:18px">
-        <div class="wf-box wf-old">
-          <div class="wf-title">❌ OLD WORKFLOW</div>
-          <div class="wf-steps">
-            Idea<div class="wf-arrow">▼</div>
-            PRD<div class="wf-arrow">▼</div>
-            Design<div class="wf-arrow">▼</div>
-            Prototype<div class="wf-arrow">▼</div>
-            Validation
-          </div>
-        </div>
-        <div class="wf-box wf-new">
-          <div class="wf-title">✅ AI WORKFLOW</div>
-          <div class="wf-steps">
-            Idea<div class="wf-arrow">▼</div>
-            AI Prototype<div class="wf-arrow">▼</div>
-            Test<div class="wf-arrow">▼</div>
-            Refine<div class="wf-arrow">▼</div>
-            Ship ⚡
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2-2 DEMO -->
-    <div class="subsec" style="border-color:rgba(255,224,0,.4); margin-top:12px">
-      <div class="subsec-title" style="color:var(--l2)">
-        <span class="subsec-icon">🎮</span> STAGE 2-2: THE DEMO
-        <span style="font-family:var(--vt);font-size:18px;color:var(--dim);margin-left:8px">10-15 min</span>
-      </div>
-      <div class="time-bar"><div class="time-label">LOAD</div><div class="time-track" style="color:var(--l2)"><div class="time-fill" style="width:38%"></div></div></div>
-      <p class="sec-body">This is the <strong>most important part</strong>. Show something real. Build live. 🎯</p>
-      <div class="demo-opts">
-        <div class="demo-opt">
-          <span class="demo-opt-label">OPTION A</span>
-          Claude Code → Figma MCP → prototype UI
-        </div>
-        <div class="demo-opt">
-          <span class="demo-opt-label">OPTION B</span>
-          AI generates: user flows, edge cases, empty states, interaction specs
-        </div>
-        <div class="demo-opt">
-          <span class="demo-opt-label">OPTION C</span>
-          AI generates product strategy options
-        </div>
-      </div>
-      <div class="prompt" style="margin-top:14px">
-        <div class="prompt-label">EXAMPLE PROMPT</div>
-        "Generate three UX approaches for helping LinkedIn Premium users request warm introductions."
-      </div>
-      <p class="sec-body" style="margin-top:10px;color:var(--l2)">▶ People love seeing something built live.</p>
-    </div>
-
-    <!-- 2-3 CASE STUDY -->
-    <div class="subsec" style="border-color:rgba(255,224,0,.4); margin-top:12px">
-      <div class="subsec-title" style="color:var(--l2)">
-        <span class="subsec-icon">📖</span> STAGE 2-3: REAL CASE STUDY
-        <span style="font-family:var(--vt);font-size:18px;color:var(--dim);margin-left:8px">10 min</span>
-      </div>
-      <div class="time-bar"><div class="time-label">LOAD</div><div class="time-track" style="color:var(--l2)"><div class="time-fill" style="width:63%"></div></div></div>
-      <p class="sec-body" style="margin-bottom:14px">This is where <strong>you become the expert</strong>. Show your actual work.</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
-        <div class="item" style="border-color:rgba(255,107,107,.4)">
-          <span class="item-icon">🔴</span><strong style="color:#ff6b6b;font-family:var(--px);font-size:9px">PROBLEM</strong><br>Designing Premium feature flows
-        </div>
-        <div class="item" style="border-color:rgba(0,255,255,.3)">
-          <span class="item-icon">🔵</span><strong style="color:var(--l3);font-family:var(--px);font-size:9px">AI HELPED</strong><br>Exploring variations, edge cases &amp; flows
-        </div>
-        <div class="item" style="border-color:rgba(0,255,65,.3)">
-          <span class="item-icon">🟢</span><strong style="color:var(--l4);font-family:var(--px);font-size:9px">IMPACT</strong><br>Faster prototyping, more strategy time
-        </div>
-      </div>
-      <div class="callout" style="margin-top:14px">
-        This positions you as a <strong>strategic practitioner</strong>, not just a tool user. ⭐
-      </div>
-    </div>
-
-    <!-- 2-4 PROMPTS -->
-    <div class="subsec" style="border-color:rgba(255,224,0,.4); margin-top:12px">
-      <div class="subsec-title" style="color:var(--l2)">
-        <span class="subsec-icon">🔧</span> STAGE 2-4: PRACTICAL PROMPTS
-        <span style="font-family:var(--vt);font-size:18px;color:var(--dim);margin-left:8px">5 min</span>
-      </div>
-      <div class="time-bar"><div class="time-label">LOAD</div><div class="time-track" style="color:var(--l2)"><div class="time-fill" style="width:80%"></div></div></div>
-      <p class="sec-body">Give them something they can use <strong>tomorrow</strong>. Turn your talk into a toolkit.</p>
-      <div class="prompt">
-        <div class="prompt-label">PRODUCT THINKING</div>
-        "Act as a product strategist. Suggest three ways this feature could increase retention."
-      </div>
-      <div class="prompt">
-        <div class="prompt-label">DESIGN FLOWS</div>
-        "Generate a complete UX flow including empty states, error states, and edge cases."
-      </div>
-      <div class="prompt">
-        <div class="prompt-label">RESEARCH</div>
-        "What are potential usability risks with this design?"
-      </div>
-    </div>
-
-    <!-- 2-5 Q&A -->
-    <div class="subsec" style="border-color:rgba(255,224,0,.4); margin-top:12px">
-      <div class="subsec-title" style="color:var(--l2)">
-        <span class="subsec-icon">💬</span> STAGE 2-5: Q&amp;A / DISCUSSION
-        <span style="font-family:var(--vt);font-size:18px;color:var(--dim);margin-left:8px">5-10 min</span>
-      </div>
-      <div class="time-bar"><div class="time-label">LOAD</div><div class="time-track" style="color:var(--l2)"><div class="time-fill" style="width:95%"></div></div></div>
-      <p class="sec-body" style="margin-bottom:12px">Ask the crowd — make it feel <strong>collaborative</strong>.</p>
-      <ul class="pixel-list" style="color:var(--l2)">
-        <li style="color:var(--white)">"How are people already using AI in their workflow?"</li>
-        <li style="color:var(--white)">"What's one task you wish AI could help with?"</li>
-      </ul>
-    </div>
-  </section>
-
-  <div class="divider">· · · · · · · · · ·</div>
-
   <!-- ═══════ LEVEL 4: CAREER ═══════ -->
   <section id="l4" class="section">
     <div class="level-bar" style="border-color:var(--l4); color:var(--l4)">
@@ -930,34 +804,31 @@ footer {
     </div>
   </section>
 
-  <div class="divider">· · · · · BONUS STAGE UNLOCKED · · · · ·</div>
-
-  <!-- ═══════ BONUS: OPENING SCRIPT ═══════ -->
-  <section id="bonus" class="section">
-    <div class="level-bar" style="border-color:var(--bonus); color:var(--bonus)">
-      <div class="level-num" style="border-color:var(--bonus); background:rgba(255,68,255,.08)">★ BONUS</div>
-      <div class="level-name">STRONG OPENING SCRIPT</div>
-      <div class="level-timer" style="border-color:var(--bonus)">💎 SECRET</div>
-    </div>
-
-    <p class="sec-body" style="margin-bottom:18px">Start here. Memorize this. Own it. 🎤</p>
-
-    <div class="script-box">
-      <div class="script-text">
-        "Hi everyone — I'm Joey, a designer on the LinkedIn Premium team.<br><br>
-        Today I want to show how AI can increase our design leverage — not just helping us move faster, but helping us <em>explore ideas earlier</em> and think more <em>strategically</em> about product decisions.<br><br>
-        I'll show a quick example of connecting Claude Code to Figma MCP to create prototypes, then walk through how I've been using AI in my design workflow."
-        <span class="cursor-blink"></span>
-      </div>
-    </div>
-
-    <div style="margin-top:24px;text-align:center">
-      <div style="font-family:var(--px);font-size:9px;color:var(--bonus);margin-bottom:12px;letter-spacing:.1em">THEN LAUNCH THE 5-MIN DESIGN SPRINT ↓</div>
-      <a href="#sprint" class="press-start" style="font-size:10px;display:inline-block;text-decoration:none;color:var(--bonus);border-color:var(--bonus)">⚡ BACK TO SPRINT</a>
-    </div>
-  </section>
 
 </div><!-- /wrap -->
+
+<!-- CONNECT SECTION -->
+<div class="divider">· · · · · PLAYER PROFILE · · · · ·</div>
+<section id="connect" class="reveal">
+  <div class="connect-box">
+    <div class="pixel-avatar">
+      <canvas id="avatarCanvas" width="80" height="80"></canvas>
+    </div>
+    <div class="connect-name">JOEY PRIMIANI</div>
+    <div class="connect-title">LinkedIn</div>
+    <div class="connect-stats">
+      <div class="connect-stat"><span class="connect-stat-val">★ AI</span><span class="connect-stat-lbl">POWERED</span></div>
+      <div class="connect-stat"><span class="connect-stat-val">15+</span><span class="connect-stat-lbl">YRS EXP</span></div>
+      <div class="connect-stat"><span class="connect-stat-val">∞</span><span class="connect-stat-lbl">PROTOTYPES</span></div>
+    </div>
+    <div class="connect-bio">
+      Product designer obsessed with AI-powered workflows. Building faster, thinking bigger — from prompt to prototype to ship.
+    </div>
+    <a class="connect-btn" href="https://www.linkedin.com/in/jprim/" target="_blank">
+      ▶ CONNECT ON LINKEDIN
+    </a>
+  </div>
+</section>
 
 <!-- FOOTER -->
 <footer>
@@ -1175,6 +1046,40 @@ copyBtn.addEventListener('click', () => {
 });
 
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+// ── PIXEL AVATAR ──────────────────────────
+(function(){
+  const c = document.getElementById('avatarCanvas');
+  if(!c) return;
+  const x = c.getContext('2d');
+  const S = 8; // pixel size
+  // 10x10 grid pixel art (1=skin,2=hair,3=shirt,4=bg,0=transparent)
+  const P = [
+    [0,0,2,2,2,2,2,2,0,0],
+    [0,2,2,2,2,2,2,2,2,0],
+    [0,2,1,1,1,1,1,1,2,0],
+    [0,2,1,1,1,1,1,1,2,0],
+    [0,0,1,5,1,1,5,1,0,0],
+    [0,0,1,1,1,1,1,1,0,0],
+    [0,0,1,1,6,6,1,1,0,0],
+    [0,0,3,3,3,3,3,3,0,0],
+    [0,3,3,3,3,3,3,3,3,0],
+    [0,3,3,0,0,0,0,3,3,0],
+  ];
+  const colors = {
+    1:'#F5C5A3', 2:'#3B2314', 3:'#7B6FFF',
+    4:'transparent', 5:'#2c1a0e', 6:'#c0624a'
+  };
+  P.forEach((row,r) => row.forEach((v,col) => {
+    if(!v) return;
+    x.fillStyle = colors[v];
+    x.fillRect(col*S, r*S, S, S);
+  }));
+  // pixel outline glow
+  x.strokeStyle = 'rgba(255,68,255,0.4)';
+  x.lineWidth = 2;
+  x.strokeRect(1,1,78,78);
+})();
 </script>
 </body>
 </html>
