@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Good Companies — Technology Innovation Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+
+/* ─── Reset & Variables ─────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --dark:    #0B0B0A;
+  --dark2:   #141413;
+  --light:   #F5F4EF;
+  --white:   #FAFAF7;
+  --accent:  #BEFF0A;
+  --text:    #111110;
+  --muted:   #888884;
+  --border:  rgba(255,255,255,0.09);
+  --border-d: rgba(0,0,0,0.08);
+
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans:  'DM Sans', -apple-system, 'Helvetica Neue', sans-serif;
+
+  --max: 1200px;
+  --gap: clamp(60px, 10vw, 120px);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--light);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; }
+a   { color: inherit; text-decoration: none; }
+
+/* ─── Utility ───────────────────────────────────── */
+.container { max-width: var(--max); margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+
+.label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+}
+.label::before {
+  content: ''; display: block;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor; flex-shrink: 0;
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ─── Navigation ────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 clamp(20px, 5vw, 48px);
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid transparent;
+  transition: background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease;
+}
+nav.scrolled {
+  background: rgba(11,11,10,0.88);
+  border-color: var(--border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+.nav-logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex; align-items: center; gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 13px; font-weight: 400;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: #fff; }
+
+.nav-cta {
+  padding: 9px 22px;
+  background: var(--accent);
+  color: var(--dark) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  border-radius: 100px;
+  letter-spacing: 0.01em !important;
+  transition: background 0.2s ease, transform 0.15s ease !important;
+}
+.nav-cta:hover { background: #d4ff2e !important; transform: translateY(-1px); }
+
+.nav-mobile-toggle {
+  display: none; flex-direction: column; gap: 4px;
+  background: none; border: none; cursor: pointer; padding: 4px;
+}
+.nav-mobile-toggle span {
+  display: block; width: 22px; height: 1.5px;
+  background: rgba(255,255,255,0.7);
+  transition: all 0.3s;
+}
+
+/* ─── Hero ──────────────────────────────────────── */
+#hero {
+  min-height: 100svh;
+  background: var(--dark);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding-top: 64px;
+  position: relative; overflow: hidden;
+}
+
+/* Subtle background texture elements */
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+.hero-glow-1 {
+  width: 600px; height: 600px;
+  top: -100px; right: -100px;
+  background: rgba(190, 255, 10, 0.07);
+}
+.hero-glow-2 {
+  width: 400px; height: 400px;
+  bottom: 100px; left: -80px;
+  background: rgba(100, 80, 255, 0.08);
+}
+
+.hero-grid-line {
+  position: absolute; inset: 0; pointer-events: none;
+  opacity: 0.03;
+  background-image:
+    linear-gradient(#fff 1px, transparent 1px),
+    linear-gradient(90deg, #fff 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.hero-inner {
+  position: relative; z-index: 2;
+  padding: clamp(60px, 10vh, 100px) clamp(20px, 5vw, 48px);
+  max-width: var(--max); margin: 0 auto; width: 100%;
+}
+
+.hero-label {
+  color: var(--accent);
+  margin-bottom: 32px;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  opacity: 0; animation: fadeUp 0.8s 0.2s ease forwards;
+}
+
+.hero-headline {
+  font-family: var(--serif);
+  font-size: clamp(52px, 8vw, 108px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: #fff;
+  max-width: 900px;
+  margin-bottom: 36px;
+  opacity: 0; animation: fadeUp 0.9s 0.35s ease forwards;
+}
+.hero-headline em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: clamp(16px, 1.5vw, 19px);
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  max-width: 520px;
+  line-height: 1.65;
+  margin-bottom: 48px;
+  opacity: 0; animation: fadeUp 0.9s 0.5s ease forwards;
+}
+
+.hero-actions {
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.9s 0.65s ease forwards;
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 32px;
+  background: var(--accent);
+  color: var(--dark);
+  font-size: 15px; font-weight: 600;
+  border-radius: 100px;
+  border: none; cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  letter-spacing: 0.01em;
+}
+.btn-primary:hover {
+  background: #d4ff2e;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(190,255,10,0.25);
+}
+.btn-primary .arrow { font-size: 18px; transition: transform 0.2s; }
+.btn-primary:hover .arrow { transform: translateX(4px); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 24px;
+  color: rgba(255,255,255,0.55);
+  font-size: 15px; font-weight: 400;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.btn-ghost:hover { color: #fff; }
+
+/* Hero bottom bar */
+.hero-bottom {
+  position: relative; z-index: 2;
+  border-top: 1px solid var(--border);
+  max-width: var(--max); margin: 0 auto; width: 100%;
+  padding: 20px clamp(20px, 5vw, 48px);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px;
+  opacity: 0; animation: fadeUp 0.9s 0.85s ease forwards;
+}
+
+.hero-stat {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.hero-stat-num {
+  font-family: var(--serif);
+  font-size: 26px; color: #fff; line-height: 1;
+}
+.hero-stat-label {
+  font-size: 11px; color: rgba(255,255,255,0.35);
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.hero-bottom-divider {
+  width: 1px; height: 40px;
+  background: var(--border);
+}
+
+/* ─── Ticker / Logo Strip ───────────────────────── */
+.ticker-section {
+  background: var(--accent);
+  overflow: hidden;
+  padding: 14px 0;
+}
+
+.ticker-track {
+  display: flex; gap: 0;
+  width: max-content;
+  animation: ticker 20s linear infinite;
+}
+.ticker-track:hover { animation-play-state: paused; }
+
+.ticker-item {
+  display: flex; align-items: center; gap: 40px;
+  padding: 0 40px;
+  white-space: nowrap;
+  font-size: 13px; font-weight: 600;
+  color: rgba(0,0,0,0.55);
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.ticker-item span {
+  color: rgba(0,0,0,0.9);
+  font-weight: 700;
+}
+.ticker-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(0,0,0,0.3); flex-shrink: 0;
+}
+
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Services / Pillars ────────────────────────── */
+#pillars {
+  padding: var(--gap) 0;
+  background: var(--white);
+}
+
+.section-header {
+  margin-bottom: clamp(48px, 6vw, 72px);
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+}
+
+.section-label { color: var(--muted); margin-bottom: 16px; }
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 54px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  max-width: 600px;
+}
+
+.section-link {
+  font-size: 14px; font-weight: 500;
+  color: var(--muted);
+  display: flex; align-items: center; gap: 6px;
+  transition: color 0.2s, gap 0.2s;
+  white-space: nowrap;
+  padding-bottom: 4px;
+}
+.section-link:hover { color: var(--text); gap: 12px; }
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  border: 2px solid var(--border-d);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--border-d);
+}
+
+.pillar-card {
+  background: var(--white);
+  padding: clamp(32px, 4vw, 48px);
+  display: flex; flex-direction: column;
+  gap: 20px;
+  transition: background 0.3s;
+  position: relative; overflow: hidden;
+}
+.pillar-card:hover { background: var(--light); }
+
+.pillar-number {
+  font-size: 11px; font-weight: 500;
+  color: var(--muted); letter-spacing: 0.1em;
+}
+
+.pillar-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.pillar-icon-ventures { background: rgba(190,255,10,0.12); }
+.pillar-icon-projects  { background: rgba(100,80,255,0.08); }
+.pillar-icon-impact    { background: rgba(255,80,120,0.08); }
+
+.pillar-title {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-top: 8px;
+}
+
+.pillar-desc {
+  font-size: 15px; font-weight: 300;
+  color: var(--muted); line-height: 1.65;
+  flex: 1;
+}
+
+.pillar-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 500;
+  color: var(--text);
+  transition: gap 0.2s;
+  margin-top: 8px;
+}
+.pillar-link:hover { gap: 12px; }
+
+/* ─── Work / Portfolio ──────────────────────────── */
+#work {
+  padding: var(--gap) 0;
+  background: var(--dark);
+}
+
+#work .section-label { color: rgba(255,255,255,0.3); }
+#work .section-title { color: #fff; }
+#work .section-link  { color: rgba(255,255,255,0.35); }
+#work .section-link:hover { color: rgba(255,255,255,0.8); }
+
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.work-card {
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  position: relative;
+  cursor: pointer;
+  group: true;
+}
+.work-card:nth-child(1) { grid-column: span 2; aspect-ratio: unset; min-height: 360px; }
+.work-card:nth-child(4) { grid-column: span 2; aspect-ratio: unset; min-height: 320px; }
+
+.work-card-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.work-card:hover .work-card-bg { transform: scale(1.04); }
+
+/* Card gradients — each brand unique */
+.bg-dgenz   { background: linear-gradient(135deg, #10003d 0%, #1a0870 40%, #0a1560 100%); }
+.bg-tune    { background: linear-gradient(135deg, #2d0020 0%, #5c0040 40%, #1a0030 100%); }
+.bg-invest  { background: linear-gradient(135deg, #001c35 0%, #003550 40%, #002535 100%); }
+.bg-sigui   { background: linear-gradient(135deg, #0f1a00 0%, #1f3300 40%, #0a1200 100%); }
+.bg-shield  { background: linear-gradient(135deg, #001430 0%, #00223d 40%, #001030 100%); }
+.bg-luxury  { background: linear-gradient(135deg, #1a0e00 0%, #2e1a00 40%, #140a00 100%); }
+
+/* Decorative element inside card bg */
+.work-card-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.06) 0%, transparent 60%);
+}
+
+.work-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
+}
+
+.work-card-content {
+  position: absolute; inset: 0;
+  padding: 28px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+
+.work-card-tag {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 5px 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 100px;
+  font-size: 10px; font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(8px);
+}
+
+.work-card-bottom {}
+.work-card-name {
+  font-family: var(--serif);
+  font-size: clamp(24px, 3vw, 38px);
+  color: #fff; line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.work-card-desc {
+  font-size: 13px; font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.5;
+  max-width: 320px;
+}
+
+.work-card-arrow {
+  position: absolute; top: 28px; right: 28px;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.5);
+  font-size: 14px;
+  opacity: 0; transform: scale(0.8);
+  transition: opacity 0.3s, transform 0.3s;
+  background: rgba(255,255,255,0.05);
+}
+.work-card:hover .work-card-arrow {
+  opacity: 1; transform: scale(1);
+}
+
+/* ─── Philosophy ─────────────────────────────────── */
+#philosophy {
+  padding: var(--gap) 0;
+  background: var(--light);
+}
+
+.philosophy-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 80px);
+  align-items: center;
+}
+
+.philosophy-quote {
+  font-family: var(--serif);
+  font-size: clamp(36px, 4.5vw, 60px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.philosophy-quote em { font-style: italic; color: var(--muted); }
+
+.philosophy-right {
+  display: flex; flex-direction: column; gap: 28px;
+  padding-top: 8px;
+}
+
+.philosophy-text {
+  font-size: 16px; font-weight: 300;
+  color: #444440; line-height: 1.75;
+}
+
+.philosophy-values {
+  display: flex; flex-direction: column; gap: 0;
+  border-top: 1px solid var(--border-d);
+}
+
+.philosophy-value {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border-d);
+  font-size: 15px; font-weight: 400;
+  cursor: default;
+  transition: padding-left 0.2s;
+}
+.philosophy-value:hover { padding-left: 8px; }
+.philosophy-value span { color: var(--muted); font-size: 13px; }
+
+/* ─── Process ────────────────────────────────────── */
+#process {
+  padding: var(--gap) 0;
+  background: var(--white);
+  border-top: 1px solid var(--border-d);
+}
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--border-d);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.process-step {
+  padding: clamp(28px, 3.5vw, 40px);
+  border-right: 1px solid var(--border-d);
+  position: relative;
+}
+.process-step:last-child { border-right: none; }
+
+.process-num {
+  font-size: 11px; font-weight: 500;
+  color: var(--muted); letter-spacing: 0.1em;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.process-step-title {
+  font-family: var(--serif);
+  font-size: clamp(22px, 2.5vw, 28px);
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+  line-height: 1.1;
+}
+
+.process-step-desc {
+  font-size: 14px; font-weight: 300;
+  color: var(--muted); line-height: 1.65;
+}
+
+/* ─── CTA Section ───────────────────────────────── */
+#cta {
+  background: var(--dark);
+  padding: clamp(80px, 12vh, 140px) 0;
+  position: relative; overflow: hidden;
+}
+
+.cta-glow {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px; height: 400px;
+  background: radial-gradient(ellipse, rgba(190,255,10,0.08) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.cta-inner {
+  position: relative; z-index: 1;
+  text-align: center;
+  max-width: 700px; margin: 0 auto;
+}
+
+.cta-label { color: var(--accent); justify-content: center; margin-bottom: 28px; }
+
+.cta-headline {
+  font-family: var(--serif);
+  font-size: clamp(44px, 6vw, 76px);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 20px;
+}
+.cta-headline em { font-style: italic; color: var(--accent); }
+
+.cta-sub {
+  font-size: 17px; font-weight: 300;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.65;
+  margin-bottom: 48px;
+  max-width: 500px; margin-left: auto; margin-right: auto;
+}
+
+.cta-actions {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+.btn-primary-lg {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 18px 40px;
+  background: var(--accent);
+  color: var(--dark);
+  font-size: 16px; font-weight: 600;
+  border-radius: 100px;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.btn-primary-lg:hover {
+  background: #d4ff2e; transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(190,255,10,0.3);
+}
+.btn-primary-lg .arrow { transition: transform 0.2s; }
+.btn-primary-lg:hover .arrow { transform: translateX(5px); }
+
+.cta-note {
+  font-size: 12px; color: rgba(255,255,255,0.2);
+  letter-spacing: 0.06em;
+}
+
+/* ─── Footer ─────────────────────────────────────── */
+footer {
+  background: var(--dark2);
+  border-top: 1px solid var(--border);
+  padding: 48px 0 36px;
+}
+
+.footer-inner {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 40px; flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+.footer-brand {}
+.footer-logo {
+  font-family: var(--serif); font-size: 20px; color: #fff;
+  margin-bottom: 12px;
+}
+.footer-logo span { color: var(--accent); }
+.footer-tagline {
+  font-size: 13px; font-weight: 300;
+  color: rgba(255,255,255,0.3);
+  max-width: 220px; line-height: 1.6;
+}
+
+.footer-links {
+  display: flex; gap: 60px; flex-wrap: wrap;
+}
+.footer-col { display: flex; flex-direction: column; gap: 14px; }
+.footer-col-title {
+  font-size: 11px; font-weight: 500;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.footer-col a {
+  font-size: 14px; font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: #fff; }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.footer-copy {
+  font-size: 12px; color: rgba(255,255,255,0.2);
+  letter-spacing: 0.04em;
+}
+
+/* ─── Animations ─────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Responsive ─────────────────────────────────── */
+@media (max-width: 900px) {
+  .pillars-grid { grid-template-columns: 1fr; }
+  .work-grid    { grid-template-columns: 1fr 1fr; }
+  .work-card:nth-child(1),
+  .work-card:nth-child(4) { grid-column: span 2; }
+  .philosophy-inner { grid-template-columns: 1fr; }
+  .process-grid { grid-template-columns: 1fr 1fr; }
+  .process-step { border-right: none; border-bottom: 1px solid var(--border-d); }
+  .process-step:nth-child(odd) { border-right: 1px solid var(--border-d); }
+  .process-step:last-child { border-bottom: none; }
+  .nav-links, .nav-cta { display: none; }
+  .nav-mobile-toggle { display: flex; }
+  .hero-bottom { display: none; }
+}
+
+@media (max-width: 600px) {
+  .work-grid { grid-template-columns: 1fr; }
+  .work-card:nth-child(1),
+  .work-card:nth-child(4) { grid-column: span 1; }
+  .process-grid { grid-template-columns: 1fr; }
+  .process-step { border-right: none !important; }
+  .footer-links { gap: 32px; }
+  .section-header { flex-direction: column; align-items: flex-start; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ─── Nav ──────────────────────────────────── -->
+<nav id="nav">
+  <a href="/" class="nav-logo">Good<span>.</span>Companies</a>
+
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#pillars">Services</a></li>
+    <li><a href="#philosophy">About</a></li>
+    <li><a href="/press">Press</a></li>
+    <li><a href="/contact" class="nav-cta">Work with us</a></li>
+  </ul>
+
+  <button class="nav-mobile-toggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ─── Hero ─────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <div class="hero-grid-line"></div>
+
+  <div class="hero-inner">
+    <div class="hero-label label">Boutique Technology Studio</div>
+
+    <h1 class="hero-headline">
+      We build companies<br>that <em>matter.</em>
+    </h1>
+
+    <p class="hero-sub">
+      Good Companies is a technology innovation studio. We partner with world-class founders and organizations to turn ambitious, impactful ideas into successful companies.
+    </p>
+
+    <div class="hero-actions">
+      <a href="/contact" class="btn-primary">
+        Work with us <span class="arrow">→</span>
+      </a>
+      <a href="#work" class="btn-ghost">
+        See our work ↓
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-stat">
+      <div class="hero-stat-num">12+</div>
+      <div class="hero-stat-label">Companies built</div>
+    </div>
+    <div class="hero-bottom-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">5</div>
+      <div class="hero-stat-label">Active ventures</div>
+    </div>
+    <div class="hero-bottom-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">3</div>
+      <div class="hero-stat-label">Continents</div>
+    </div>
+    <div class="hero-bottom-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">100%</div>
+      <div class="hero-stat-label">Impact-driven</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Ticker ────────────────────────────────── -->
+<div class="ticker-section" aria-hidden="true">
+  <div class="ticker-track" id="ticker">
+    <div class="ticker-item">
+      <span>DGenz World</span> <div class="ticker-dot"></div>
+      Ventures
+      <div class="ticker-dot"></div>
+      <span>TuneStars</span> <div class="ticker-dot"></div>
+      Ventures
+      <div class="ticker-dot"></div>
+      <span>ItsInvestable</span> <div class="ticker-dot"></div>
+      Ventures
+      <div class="ticker-dot"></div>
+      <span>Sigui</span> <div class="ticker-dot"></div>
+      Projects
+      <div class="ticker-dot"></div>
+      <span>My Global Shield</span> <div class="ticker-dot"></div>
+      Projects
+      <div class="ticker-dot"></div>
+      <span>Luxury Travels</span> <div class="ticker-dot"></div>
+      Projects
+      <div class="ticker-dot"></div>
+      <span>Wyclef Jean</span> <div class="ticker-dot"></div>
+      Projects
+      <div class="ticker-dot"></div>
+      <span>Jerry Wonda</span> <div class="ticker-dot"></div>
+      Projects
+      <div class="ticker-dot"></div>
+    </div>
+    <!-- Duplicate for seamless loop -->
+    <div class="ticker-item" aria-hidden="true">
+      <span>DGenz World</span> <div class="ticker-dot"></div>
+      Ventures
+      <div class="ticker-dot"></div>
+      <span>TuneStars</span> <div class="ticker-dot"></div>
+      Ventures
+      <div class="ticker-dot"></div>
+      <span>ItsInvestable</span> <div class="ticker-dot"></div>
+      Ventures
+      <div class="ticker-dot"></div>
+      <span>Sigui</span> <div class="ticker-dot"></div>
+      Projects
+      <div class="ticker-dot"></div>
+      <span>My Global Shield</span> <div class="ticker-dot"></div>
+      Projects
+      <div class="ticker-dot"></div>
+      <span>Luxury Travels</span> <div class="ticker-dot"></div>
+      Projects
+      <div class="ticker-dot"></div>
+      <span>Wyclef Jean</span> <div class="ticker-dot"></div>
+      Projects
+      <div class="ticker-dot"></div>
+      <span>Jerry Wonda</span> <div class="ticker-dot"></div>
+      Projects
+      <div class="ticker-dot"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Pillars / Services ───────────────────── -->
+<section id="pillars">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="label section-label reveal">What we do</div>
+        <h2 class="section-title reveal reveal-delay-1">Three ways<br>we create value.</h2>
+      </div>
+      <a href="/contact" class="section-link reveal reveal-delay-2">Start a conversation →</a>
+    </div>
+
+    <div class="pillars-grid">
+      <div class="pillar-card reveal">
+        <div>
+          <div class="pillar-number">01</div>
+          <div class="pillar-icon pillar-icon-ventures">🚀</div>
+        </div>
+        <h3 class="pillar-title">Ventures</h3>
+        <p class="pillar-desc">
+          We co-found and build world-class technology companies from the ground up — embedding with founders to build products, teams, and business models that scale.
+        </p>
+        <a href="#work" class="pillar-link">See ventures →</a>
+      </div>
+
+      <div class="pillar-card reveal reveal-delay-1">
+        <div>
+          <div class="pillar-number">02</div>
+          <div class="pillar-icon pillar-icon-projects">⚡</div>
+        </div>
+        <h3 class="pillar-title">Projects</h3>
+        <p class="pillar-desc">
+          Hand-picked engagements with incredible people and organizations. We bring our full studio to bear on your most important technology challenges.
+        </p>
+        <a href="#work" class="pillar-link">See projects →</a>
+      </div>
+
+      <div class="pillar-card reveal reveal-delay-2">
+        <div>
+          <div class="pillar-number">03</div>
+          <div class="pillar-icon pillar-icon-impact">🌍</div>
+        </div>
+        <h3 class="pillar-title">Impact</h3>
+        <p class="pillar-desc">
+          All we have at the end of our lives is what we've given to others. We measure success not just in revenue, but in lives meaningfully changed.
+        </p>
+        <a href="/contact" class="pillar-link">Learn more →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Work / Portfolio ─────────────────────── -->
+<section id="work">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="label section-label reveal">Selected work</div>
+        <h2 class="section-title reveal reveal-delay-1">Companies &amp;<br>projects we love.</h2>
+      </div>
+      <a href="/work" class="section-link reveal reveal-delay-2">View all work →</a>
+    </div>
+
+    <div class="work-grid">
+
+      <div class="work-card reveal">
+        <div class="work-card-bg bg-dgenz"></div>
+        <div class="work-card-overlay"></div>
+        <div class="work-card-content">
+          <span class="work-card-tag">Venture</span>
+          <div class="work-card-bottom">
+            <div class="work-card-name">DGenz World</div>
+            <div class="work-card-desc">The next-generation platform redefining digital identity for a new generation of creators and communities.</div>
+          </div>
+        </div>
+        <div class="work-card-arrow">↗</div>
+      </div>
+
+      <div class="work-card reveal reveal-delay-1">
+        <div class="work-card-bg bg-tune"></div>
+        <div class="work-card-overlay"></div>
+        <div class="work-card-content">
+          <span class="work-card-tag">Venture</span>
+          <div class="work-card-bottom">
+            <div class="work-card-name">TuneStars</div>
+            <div class="work-card-desc">Where music talent meets technology. Connecting artists with audiences at scale.</div>
+          </div>
+        </div>
+        <div class="work-card-arrow">↗</div>
+      </div>
+
+      <div class="work-card reveal reveal-delay-1">
+        <div class="work-card-bg bg-invest"></div>
+        <div class="work-card-overlay"></div>
+        <div class="work-card-content">
+          <span class="work-card-tag">Venture</span>
+          <div class="work-card-bottom">
+            <div class="work-card-name">ItsInvestable</div>
+            <div class="work-card-desc">Democratizing access to investment opportunities for the next generation of investors.</div>
+          </div>
+        </div>
+        <div class="work-card-arrow">↗</div>
+      </div>
+
+      <div class="work-card reveal">
+        <div class="work-card-bg bg-sigui"></div>
+        <div class="work-card-overlay"></div>
+        <div class="work-card-content">
+          <span class="work-card-tag">Project</span>
+          <div class="work-card-bottom">
+            <div class="work-card-name">Sigui</div>
+            <div class="work-card-desc">Powering connections between organizations and the communities they serve.</div>
+          </div>
+        </div>
+        <div class="work-card-arrow">↗</div>
+      </div>
+
+      <div class="work-card reveal reveal-delay-1">
+        <div class="work-card-bg bg-shield"></div>
+        <div class="work-card-overlay"></div>
+        <div class="work-card-content">
+          <span class="work-card-tag">Project</span>
+          <div class="work-card-bottom">
+            <div class="work-card-name">My Global Shield</div>
+            <div class="work-card-desc">Protecting people globally with technology-driven safety and security solutions.</div>
+          </div>
+        </div>
+        <div class="work-card-arrow">↗</div>
+      </div>
+
+      <div class="work-card reveal reveal-delay-2">
+        <div class="work-card-bg bg-luxury"></div>
+        <div class="work-card-overlay"></div>
+        <div class="work-card-content">
+          <span class="work-card-tag">Project</span>
+          <div class="work-card-bottom">
+            <div class="work-card-name">Luxury Travels</div>
+            <div class="work-card-desc">Redefining premium travel experiences through bespoke digital concierge technology.</div>
+          </div>
+        </div>
+        <div class="work-card-arrow">↗</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── Philosophy ────────────────────────────── -->
+<section id="philosophy">
+  <div class="container">
+    <div class="philosophy-inner">
+      <div class="reveal">
+        <div class="label section-label" style="color:var(--muted); margin-bottom:24px;">Our belief</div>
+        <div class="philosophy-quote">
+          The best companies<br>are <em>good</em> companies.
+        </div>
+      </div>
+
+      <div class="philosophy-right reveal reveal-delay-2">
+        <p class="philosophy-text">
+          We believe that commercial success and positive impact aren't opposing forces — they're the same thing, when you build with purpose from day one. That's why we're selective about who we work with.
+        </p>
+        <p class="philosophy-text">
+          We look for founders and organizations with extraordinary ambition, uncommon integrity, and a genuine desire to leave the world better than they found it.
+        </p>
+
+        <div class="philosophy-values">
+          <div class="philosophy-value">
+            Selective partnerships <span>We say no often</span>
+          </div>
+          <div class="philosophy-value">
+            Deep collaboration <span>We build with you</span>
+          </div>
+          <div class="philosophy-value">
+            Long-term thinking <span>Decades, not quarters</span>
+          </div>
+          <div class="philosophy-value">
+            Impact as a metric <span>Lives changed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Process ───────────────────────────────── -->
+<section id="process">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="label section-label reveal">How we work</div>
+        <h2 class="section-title reveal reveal-delay-1">From idea to<br>world-class company.</h2>
+      </div>
+    </div>
+
+    <div class="process-grid">
+      <div class="process-step reveal">
+        <span class="process-num">01</span>
+        <h3 class="process-step-title">Select</h3>
+        <p class="process-step-desc">We carefully evaluate potential partners. If there's alignment on vision, values, and ambition, we go deep.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-1">
+        <span class="process-num">02</span>
+        <h3 class="process-step-title">Build</h3>
+        <p class="process-step-desc">We embed our team with yours. Product, engineering, design, strategy — we build alongside you, not for you.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <span class="process-num">03</span>
+        <h3 class="process-step-title">Scale</h3>
+        <p class="process-step-desc">We help you grow — connecting you with the right investors, talent, and strategic partners at the right moment.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <span class="process-num">04</span>
+        <h3 class="process-step-title">Impact</h3>
+        <p class="process-step-desc">We measure success by the change we create. Revenue, reach, and the real difference made in people's lives.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ───────────────────────────────────── -->
+<section id="cta">
+  <div class="cta-glow"></div>
+  <div class="container">
+    <div class="cta-inner">
+      <div class="label cta-label reveal">Ready to build?</div>
+      <h2 class="cta-headline reveal reveal-delay-1">
+        Let's build something <em>impactful.</em>
+      </h2>
+      <p class="cta-sub reveal reveal-delay-2">
+        We're selective about who we work with. If you have an ambitious idea that can make a real difference, we'd love to hear from you.
+      </p>
+      <div class="cta-actions reveal reveal-delay-3">
+        <a href="/contact" class="btn-primary-lg">
+          Start a conversation <span class="arrow">→</span>
+        </a>
+      </div>
+      <p class="cta-note reveal reveal-delay-4">We respond to every inquiry within 48 hours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">Good<span>.</span>Companies</div>
+        <p class="footer-tagline">A boutique technology innovation studio.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <div class="footer-col-title">Navigate</div>
+          <a href="#work">Work</a>
+          <a href="#pillars">Services</a>
+          <a href="#philosophy">About</a>
+          <a href="/press">Press</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Ventures</div>
+          <a href="#">DGenz World</a>
+          <a href="#">TuneStars</a>
+          <a href="#">ItsInvestable</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Connect</div>
+          <a href="/contact">Contact us</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">Twitter / X</a>
+          <a href="#">Instagram</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; 2025 Good Companies. All rights reserved.</p>
+      <p class="footer-copy">Built with purpose.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ─── Nav scroll state ── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+/* ─── Scroll reveal ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ─── Smooth anchor scrolling ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+/* ─── Ticker duplicate (ensure seamless loop) ── */
+// Already duplicated in HTML; animation handles the rest.
+
+/* ─── Work card hover: subtle parallax tilt ── */
+document.querySelectorAll('.work-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width  - 0.5;
+    const y = (e.clientY - rect.top)  / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${x * 4}deg) rotateX(${-y * 3}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform 0.5s ease';
+    setTimeout(() => card.style.transition = '', 500);
+  });
+});
+</script>
+</body>
+</html>

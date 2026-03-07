@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breathe · Box Meditation</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%; overflow: hidden;
+  background: #04071a;
+  color: #e2e8f0;
+  font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  user-select: none;
+}
+
+#aurora {
+  position: fixed; inset: 0; z-index: 0;
+}
+
+main {
+  position: fixed; inset: 0; z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: clamp(20px, 3vh, 36px);
+}
+
+/* ── Header ── */
+.app-label {
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 0.45em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  opacity: 0; animation: fadeUp 1.2s 0.3s ease forwards;
+}
+
+/* ── Central Breathing System ── */
+.breath-container {
+  position: relative;
+  width: clamp(260px, 50vmin, 360px);
+  height: clamp(260px, 50vmin, 360px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; animation: fadeUp 1.2s 0.5s ease forwards;
+}
+
+/* SVG box ring */
+.box-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  overflow: visible;
+}
+
+.ring-track {
+  fill: none;
+  stroke: rgba(255,255,255,0.06);
+  stroke-width: 1.5;
+}
+
+.ring-progress {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke 1.2s ease, filter 1.2s ease;
+}
+
+.corner-dot {
+  transition: fill 1.2s ease, opacity 0.6s ease, r 0.6s ease;
+}
+
+.travel-dot {
+  transition: fill 1.2s ease;
+  filter: blur(0px);
+}
+
+/* Orb layers */
+.orb-halo {
+  position: absolute; border-radius: 50%;
+  transition: width 0.1s linear, height 0.1s linear, background 1.2s ease, opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.orb-glow {
+  position: absolute; border-radius: 50%;
+  transition: width 0.1s linear, height 0.1s linear, opacity 0.8s ease;
+  pointer-events: none;
+  filter: blur(24px);
+}
+
+.orb {
+  position: relative; border-radius: 50%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px;
+  transition: width 0.1s linear, height 0.1s linear, box-shadow 1.2s ease;
+  cursor: pointer;
+  overflow: hidden;
+  background: radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%),
+              radial-gradient(circle at 60% 70%, rgba(0,0,0,0.4) 0%, transparent 50%),
+              var(--orb-bg, #0d1340);
+}
+
+.orb::before {
+  content: '';
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.12) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.orb-count {
+  font-size: clamp(36px, 7vmin, 56px);
+  font-weight: 100;
+  letter-spacing: -0.04em;
+  color: rgba(255,255,255,0.9);
+  line-height: 1;
+  transition: color 1.2s ease;
+  font-variant-numeric: tabular-nums;
+}
+
+.orb-phase-mini {
+  font-size: 9px; font-weight: 300;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  transition: color 1.2s ease;
+}
+
+/* ── Phase Text ── */
+.phase-text {
+  text-align: center;
+  opacity: 0; animation: fadeUp 1.2s 0.7s ease forwards;
+}
+
+.phase-name {
+  font-size: clamp(22px, 4vmin, 30px);
+  font-weight: 200;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  transition: color 1.2s ease;
+  color: rgba(255,255,255,0.85);
+}
+
+.phase-sub {
+  font-size: 11px; font-weight: 300;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── Progress Pips ── */
+.phase-pips {
+  display: flex; gap: 8px; align-items: center;
+  opacity: 0; animation: fadeUp 1.2s 0.9s ease forwards;
+}
+
+.pip {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  transition: background 0.6s ease, transform 0.3s ease, box-shadow 0.6s ease;
+}
+.pip.active {
+  background: var(--phase-color, #6366f1);
+  box-shadow: 0 0 8px var(--phase-color, #6366f1);
+  transform: scale(1.3);
+}
+.pip.done {
+  background: rgba(255,255,255,0.28);
+}
+
+/* ── Controls ── */
+.controls {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  opacity: 0; animation: fadeUp 1.2s 1.1s ease forwards;
+}
+
+.start-btn {
+  padding: 13px 44px;
+  border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 100px;
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.7);
+  font-size: 12px; font-weight: 300;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: background 0.3s ease, border-color 0.3s ease,
+              transform 0.2s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+.start-btn:hover {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.start-btn:active { transform: translateY(0); }
+
+.session-info {
+  font-size: 10px; font-weight: 300;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+}
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* hold phase subtle pulse */
+@keyframes holdPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+.holding .orb-count { animation: holdPulse 2s ease-in-out infinite; }
+
+/* completion state */
+.done-tick {
+  font-size: clamp(28px, 6vmin, 44px);
+  color: rgba(255,255,255,0.85);
+  line-height: 1;
+}
+</style>
+</head>
+<body>
+
+<canvas id="aurora"></canvas>
+
+<main>
+  <p class="app-label">Box Breathing &nbsp;·&nbsp; 4 · 4 · 4 · 4</p>
+
+  <div class="breath-container" id="breathContainer">
+    <!-- SVG box ring -->
+    <svg class="box-svg" viewBox="0 0 320 320" id="boxSvg">
+      <!-- Track (faint) -->
+      <path class="ring-track" id="boxTrack"
+        d="M 80,16 H 240 A 64,64 0 0 1 304,80 V 240 A 64,64 0 0 1 240,304 H 80 A 64,64 0 0 1 16,240 V 80 A 64,64 0 0 1 80,16 Z"/>
+
+      <!-- Animated progress fill -->
+      <path class="ring-progress" id="boxProgress"
+        d="M 80,16 H 240 A 64,64 0 0 1 304,80 V 240 A 64,64 0 0 1 240,304 H 80 A 64,64 0 0 1 16,240 V 80 A 64,64 0 0 1 80,16 Z"/>
+
+      <!-- Corner accent dots (at arc midpoints) -->
+      <circle class="corner-dot" id="cd0" cx="240" cy="16" r="3" opacity="0.3"/>
+      <circle class="corner-dot" id="cd1" cx="304" cy="80" r="3" opacity="0.3"/>
+      <circle class="corner-dot" id="cd2" cx="304" cy="240" r="3" opacity="0.3"/>
+      <circle class="corner-dot" id="cd3" cx="240" cy="304" r="3" opacity="0.3"/>
+      <circle class="corner-dot" id="cd4" cx="80"  cy="304" r="3" opacity="0.3"/>
+      <circle class="corner-dot" id="cd5" cx="16"  cy="240" r="3" opacity="0.3"/>
+      <circle class="corner-dot" id="cd6" cx="16"  cy="80"  r="3" opacity="0.3"/>
+      <circle class="corner-dot" id="cd7" cx="80"  cy="16"  r="3" opacity="0.3"/>
+
+      <!-- Traveling dot -->
+      <circle class="travel-dot" id="travelDot" r="5" cx="80" cy="16"/>
+      <circle class="travel-dot" id="travelDotGlow" r="10" cx="80" cy="16" opacity="0.35" style="filter:blur(4px)"/>
+    </svg>
+
+    <!-- Orb layers -->
+    <div class="orb-halo" id="orbHalo"></div>
+    <div class="orb-glow" id="orbGlow"></div>
+
+    <div class="orb" id="orb">
+      <span class="orb-count" id="orbCount">4</span>
+      <span class="orb-phase-mini" id="orbPhaseMini">Ready</span>
+    </div>
+  </div>
+
+  <div class="phase-text">
+    <h2 class="phase-name" id="phaseName">Welcome</h2>
+    <p class="phase-sub" id="phaseSub">find a comfortable position</p>
+  </div>
+
+  <div class="phase-pips" id="phasePips">
+    <div class="pip" id="pip0"></div>
+    <div class="pip" id="pip1"></div>
+    <div class="pip" id="pip2"></div>
+    <div class="pip" id="pip3"></div>
+  </div>
+
+  <div class="controls">
+    <button class="start-btn" id="startBtn">Begin</button>
+    <p class="session-info" id="sessionInfo">5 cycles &nbsp;·&nbsp; 1 min 20 sec</p>
+  </div>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════
+   PHASE DEFINITIONS
+═══════════════════════════════════════════ */
+const PHASES = [
+  {
+    name: 'Inhale',   sub: 'breathe in slowly',
+    mini: 'inhale',   duration: 4,
+    scaleFrom: 0.42,  scaleTo: 1.0,
+    color1: '#818cf8', color2: '#6366f1',
+    glow:   'rgba(99,102,241,',
+    orbBg: 'radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%), radial-gradient(circle at 60% 70%, rgba(0,0,0,0.4) 0%, transparent 50%), linear-gradient(135deg, #1e1b4b 0%, #0d1340 100%)',
+  },
+  {
+    name: 'Hold',     sub: 'retain your breath',
+    mini: 'hold',     duration: 4,
+    scaleFrom: 1.0,   scaleTo: 1.0,
+    color1: '#fbbf24', color2: '#f59e0b',
+    glow:   'rgba(245,158,11,',
+    orbBg: 'radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%), radial-gradient(circle at 60% 70%, rgba(0,0,0,0.4) 0%, transparent 50%), linear-gradient(135deg, #1c1400 0%, #0d0900 100%)',
+  },
+  {
+    name: 'Exhale',   sub: 'release gently',
+    mini: 'exhale',   duration: 4,
+    scaleFrom: 1.0,   scaleTo: 0.42,
+    color1: '#22d3ee', color2: '#06b6d4',
+    glow:   'rgba(6,182,212,',
+    orbBg: 'radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%), radial-gradient(circle at 60% 70%, rgba(0,0,0,0.4) 0%, transparent 50%), linear-gradient(135deg, #001a1c 0%, #00090d 100%)',
+  },
+  {
+    name: 'Hold',     sub: 'let it go',
+    mini: 'hold',     duration: 4,
+    scaleFrom: 0.42,  scaleTo: 0.42,
+    color1: '#c084fc', color2: '#a855f7',
+    glow:   'rgba(168,85,247,',
+    orbBg: 'radial-gradient(circle at 38% 32%, rgba(255,255,255,0.18) 0%, transparent 60%), radial-gradient(circle at 60% 70%, rgba(0,0,0,0.4) 0%, transparent 50%), linear-gradient(135deg, #16002e 0%, #0a0015 100%)',
+  },
+];
+
+const TOTAL_CYCLES = 5;
+
+/* SVG path metrics */
+// Path: M 80,16 H 240 A 64,64 0 0 1 304,80 V 240 A 64,64 0 0 1 240,304 H 80 A 64,64 0 0 1 16,240 V 80 A 64,64 0 0 1 80,16 Z
+// Straight edges: 240-80 = 160 each (×4 = 640)
+// Corner arcs: π*64/2 ≈ 100.53 each (×4 ≈ 402.1)
+// Total ≈ 1042.1 — we'll get exact via getTotalLength()
+let PATH_LEN = 1042;
+
+const ORB_MIN = 96;   // px (at container 320px)
+const ORB_MAX = 210;  // px
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let running     = false;
+let phaseIdx    = 0;
+let cycleNum    = 0;
+let phaseStart  = null;
+let pausedAt    = null;  // elapsed ms when paused
+let raf         = null;
+let sessionDone = false;
+
+/* ═══════════════════════════════════════════
+   DOM REFS
+═══════════════════════════════════════════ */
+const progressEl  = document.getElementById('boxProgress');
+const trackEl     = document.getElementById('boxTrack');
+const travelDot   = document.getElementById('travelDot');
+const travelGlow  = document.getElementById('travelDotGlow');
+const orbEl       = document.getElementById('orb');
+const orbHaloEl   = document.getElementById('orbHalo');
+const orbGlowEl   = document.getElementById('orbGlow');
+const orbCountEl  = document.getElementById('orbCount');
+const orbMiniEl   = document.getElementById('orbPhaseMini');
+const phaseNameEl = document.getElementById('phaseName');
+const phaseSubEl  = document.getElementById('phaseSub');
+const startBtn    = document.getElementById('startBtn');
+const sessionInfo = document.getElementById('sessionInfo');
+const pips        = [0,1,2,3].map(i => document.getElementById(`pip${i}`));
+const cornerDots  = [0,1,2,3,4,5,6,7].map(i => document.getElementById(`cd${i}`));
+
+/* Orb container size (scales with viewport) */
+function getOrbMetrics() {
+  const container = document.getElementById('breathContainer');
+  const size = container.offsetWidth;
+  const scale = size / 320;
+  return { min: ORB_MIN * scale, max: ORB_MAX * scale };
+}
+
+/* ═══════════════════════════════════════════
+   INIT SVG PATH LENGTH
+═══════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  PATH_LEN = trackEl.getTotalLength();
+  progressEl.style.strokeDasharray  = PATH_LEN;
+  progressEl.style.strokeDashoffset = PATH_LEN;
+
+  // set initial orb size
+  const { min } = getOrbMetrics();
+  orbEl.style.width  = orbEl.style.height  = `${min}px`;
+  orbHaloEl.style.width = orbHaloEl.style.height = `${min * 1.8}px`;
+  orbGlowEl.style.width = orbGlowEl.style.height = `${min * 2.2}px`;
+  orbHaloEl.style.marginLeft = orbHaloEl.style.marginTop = `-${min * 0.4}px`;
+  orbGlowEl.style.marginLeft = orbGlowEl.style.marginTop = `-${min * 0.6}px`;
+
+  // init colors
+  applyPhaseColor(PHASES[0], 0);
+});
+
+/* ═══════════════════════════════════════════
+   EASING
+═══════════════════════════════════════════ */
+function easeInOut(t) {
+  return t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t;
+}
+function easeIn(t)  { return t * t * t; }
+function easeOut(t) { return 1 - Math.pow(1-t, 3); }
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function hexToRgb(h) {
+  const r = parseInt(h.slice(1,3), 16);
+  const g = parseInt(h.slice(3,5), 16);
+  const b = parseInt(h.slice(5,7), 16);
+  return [r, g, b];
+}
+function lerpHex(a, b, t) {
+  const [r1,g1,b1] = hexToRgb(a);
+  const [r2,g2,b2] = hexToRgb(b);
+  const r = Math.round(lerp(r1,r2,t));
+  const g = Math.round(lerp(g1,g2,t));
+  const bl = Math.round(lerp(b1,b2,t));
+  return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${bl.toString(16).padStart(2,'0')}`;
+}
+
+/* ═══════════════════════════════════════════
+   COLOR APPLICATION
+═══════════════════════════════════════════ */
+function applyPhaseColor(phase, progress) {
+  const c = phase.color1;
+  progressEl.style.stroke = c;
+  progressEl.style.filter = `drop-shadow(0 0 6px ${c}) drop-shadow(0 0 12px ${c}80)`;
+  travelDot.style.fill   = c;
+  travelGlow.style.fill  = c;
+  phaseNameEl.style.color = c;
+  orbMiniEl.style.color   = 'rgba(255,255,255,0.35)';
+
+  // Halo and glow
+  orbHaloEl.style.background = `radial-gradient(circle, ${phase.glow}0.22) 0%, transparent 70%)`;
+  orbGlowEl.style.background = `radial-gradient(circle, ${phase.glow}0.35) 0%, transparent 70%)`;
+  orbGlowEl.style.opacity    = '1';
+
+  // Orb shadow
+  const { min, max } = getOrbMetrics();
+  const orbSize = parseFloat(orbEl.style.width) || min;
+  const glowSize = Math.round(lerp(30, 60, (orbSize-min)/(max-min)));
+  orbEl.style.boxShadow = [
+    `0 0 ${glowSize}px ${phase.glow}0.6)`,
+    `0 0 ${glowSize*2}px ${phase.glow}0.2)`,
+    `0 0 ${glowSize*3}px ${phase.glow}0.08)`,
+    `inset 0 1px 0 rgba(255,255,255,0.15)`,
+    `inset 0 0 20px rgba(255,255,255,0.04)`,
+  ].join(', ');
+
+  // Corner dots
+  cornerDots.forEach((d, i) => {
+    d.setAttribute('fill', c);
+    d.setAttribute('opacity', '0.2');
+  });
+
+  // Pips
+  pips.forEach((p, i) => {
+    p.style.setProperty('--phase-color', PHASES[i].color1);
+    if (i < cycleNum % TOTAL_CYCLES) {
+      p.classList.add('done'); p.classList.remove('active');
+    } else {
+      p.classList.remove('done', 'active');
+    }
+  });
+  if (running) pips[phaseIdx].classList.add('active');
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATION LOOP
+═══════════════════════════════════════════ */
+function tick(ts) {
+  if (!running) return;
+  if (phaseStart === null) phaseStart = ts;
+
+  const elapsed  = (ts - phaseStart) / 1000;
+  const phase    = PHASES[phaseIdx];
+  const progress = Math.min(elapsed / phase.duration, 1);
+
+  updateFrame(phase, progress, elapsed);
+
+  if (progress >= 1) {
+    advancePhase(ts);
+  } else {
+    raf = requestAnimationFrame(tick);
+  }
+}
+
+function updateFrame(phase, progress, elapsed) {
+  const { min, max } = getOrbMetrics();
+
+  /* Orb scale */
+  let scaledProgress;
+  if (phase.scaleTo > phase.scaleFrom) {
+    scaledProgress = easeOut(progress);      // expanding: ease out
+  } else if (phase.scaleTo < phase.scaleFrom) {
+    scaledProgress = easeIn(progress);       // contracting: ease in
+  } else {
+    scaledProgress = phase.scaleFrom;        // hold: constant
+  }
+  const orbSize = lerp(
+    lerp(min, max, phase.scaleFrom),
+    lerp(min, max, phase.scaleTo),
+    scaledProgress
+  );
+
+  orbEl.style.width  = orbEl.style.height  = `${orbSize}px`;
+  orbHaloEl.style.width  = orbHaloEl.style.height  = `${orbSize * 1.9}px`;
+  orbGlowEl.style.width  = orbGlowEl.style.height  = `${orbSize * 2.5}px`;
+  // Center the halo/glow
+  orbHaloEl.style.marginLeft = orbHaloEl.style.marginTop = `-${orbSize * 0.45}px`;
+  orbGlowEl.style.marginLeft = orbGlowEl.style.marginTop = `-${orbSize * 0.75}px`;
+
+  /* Orb background */
+  orbEl.style.background = phase.orbBg;
+
+  /* Orb glow intensity */
+  const glowSize = Math.round(lerp(25, 70, (orbSize-min)/(max-min)));
+  orbEl.style.boxShadow = [
+    `0 0 ${glowSize}px ${phase.glow}0.65)`,
+    `0 0 ${glowSize*1.8}px ${phase.glow}0.25)`,
+    `0 0 ${glowSize*3}px ${phase.glow}0.1)`,
+    `inset 0 1px 0 rgba(255,255,255,0.2)`,
+    `inset 0 0 24px rgba(255,255,255,0.05)`,
+  ].join(', ');
+
+  /* Progress arc */
+  const filled = (phaseIdx + progress) / PHASES.length * PATH_LEN;
+  progressEl.style.strokeDashoffset = PATH_LEN - filled;
+
+  /* Traveling dot */
+  const dotLen = filled % PATH_LEN;
+  const pt = progressEl.getPointAtLength(dotLen);
+  travelDot.setAttribute('cx', pt.x);
+  travelDot.setAttribute('cy', pt.y);
+  travelGlow.setAttribute('cx', pt.x);
+  travelGlow.setAttribute('cy', pt.y);
+
+  /* Countdown */
+  const secs = Math.max(1, Math.ceil(phase.duration - elapsed));
+  orbCountEl.textContent = secs;
+
+  /* Hold-phase orb class for pulse */
+  if (phase.name === 'Hold' && phase.scaleFrom === phase.scaleTo) {
+    orbEl.classList.add('holding');
+  } else {
+    orbEl.classList.remove('holding');
+  }
+}
+
+function advancePhase(ts) {
+  phaseIdx++;
+  if (phaseIdx >= PHASES.length) {
+    phaseIdx = 0;
+    cycleNum++;
+    if (cycleNum >= TOTAL_CYCLES) {
+      endSession();
+      return;
+    }
+    updateCycleDisplay();
+  }
+
+  const phase = PHASES[phaseIdx];
+  phaseNameEl.textContent = phase.name;
+  phaseSubEl.textContent  = phase.sub;
+  orbMiniEl.textContent   = phase.mini;
+  applyPhaseColor(phase, 0);
+
+  phaseStart = ts;
+  raf = requestAnimationFrame(tick);
+}
+
+/* ═══════════════════════════════════════════
+   SESSION CONTROL
+═══════════════════════════════════════════ */
+function startSession() {
+  sessionDone = false;
+  running     = true;
+  phaseIdx    = 0;
+  cycleNum    = 1;
+  phaseStart  = null;
+  pausedAt    = null;
+
+  const phase = PHASES[0];
+  phaseNameEl.textContent = phase.name;
+  phaseSubEl.textContent  = phase.sub;
+  orbMiniEl.textContent   = phase.mini;
+  orbCountEl.textContent  = '4';
+  orbEl.classList.remove('holding');
+  applyPhaseColor(phase, 0);
+  updateCycleDisplay();
+
+  startBtn.textContent = 'Pause';
+  raf = requestAnimationFrame(tick);
+}
+
+function pauseSession(ts) {
+  running  = false;
+  pausedAt = ts - phaseStart;
+  if (raf) cancelAnimationFrame(raf);
+  startBtn.textContent = 'Resume';
+}
+
+function resumeSession() {
+  running    = true;
+  phaseStart = null; // will recalc on next tick using pausedAt
+  const orig = pausedAt;
+  raf = requestAnimationFrame(ts => {
+    phaseStart = ts - orig;
+    pausedAt   = null;
+    tick(ts);
+  });
+  startBtn.textContent = 'Pause';
+}
+
+function endSession() {
+  running     = false;
+  sessionDone = true;
+  orbEl.classList.remove('holding');
+
+  phaseNameEl.textContent = 'Complete';
+  phaseSubEl.textContent  = 'well done · breathe freely';
+  orbMiniEl.textContent   = '';
+  orbCountEl.innerHTML    = '&#10003;';
+  orbCountEl.style.fontSize = 'clamp(28px, 5vmin, 40px)';
+
+  startBtn.textContent = 'Begin Again';
+  sessionInfo.textContent = '5 cycles complete';
+
+  pips.forEach(p => { p.classList.remove('active'); p.classList.add('done'); });
+
+  // Full arc
+  progressEl.style.strokeDashoffset = '0';
+  travelDot.style.opacity  = '0';
+  travelGlow.style.opacity = '0';
+}
+
+function resetToIdle() {
+  sessionDone = false;
+  phaseIdx = 0; cycleNum = 0;
+  orbEl.classList.remove('holding');
+
+  const { min } = getOrbMetrics();
+  orbEl.style.width  = orbEl.style.height  = `${min}px`;
+  orbHaloEl.style.width  = orbHaloEl.style.height  = `${min*1.9}px`;
+  orbGlowEl.style.width  = orbGlowEl.style.height  = `${min*2.5}px`;
+
+  progressEl.style.strokeDashoffset = PATH_LEN;
+  travelDot.style.opacity  = '1';
+  travelGlow.style.opacity = '0.35';
+
+  const pt = progressEl.getPointAtLength(0);
+  travelDot.setAttribute('cx', pt.x);
+  travelDot.setAttribute('cy', pt.y);
+  travelGlow.setAttribute('cx', pt.x);
+  travelGlow.setAttribute('cy', pt.y);
+
+  phaseNameEl.textContent = 'Welcome';
+  phaseSubEl.textContent  = 'find a comfortable position';
+  orbMiniEl.textContent   = 'Ready';
+  orbCountEl.textContent  = '4';
+  orbCountEl.style.fontSize = '';
+
+  startBtn.textContent = 'Begin';
+  sessionInfo.textContent = '5 cycles · 1 min 20 sec';
+
+  pips.forEach(p => p.classList.remove('active','done'));
+  applyPhaseColor(PHASES[0], 0);
+}
+
+function updateCycleDisplay() {
+  sessionInfo.textContent = `Cycle ${cycleNum} of ${TOTAL_CYCLES}`;
+  pips.forEach((p, i) => {
+    p.classList.remove('active','done');
+    if (i < cycleNum - 1) p.classList.add('done');
+  });
+  pips[phaseIdx]?.classList.add('active');
+}
+
+/* Button handler */
+let btnState = 'idle'; // idle | running | paused | done
+
+startBtn.addEventListener('click', () => {
+  if (sessionDone) {
+    resetToIdle();
+    return;
+  }
+  if (!running && !pausedAt) {
+    startSession();
+  } else if (running) {
+    requestAnimationFrame(ts => pauseSession(ts));
+  } else {
+    resumeSession();
+  }
+});
+
+/* ═══════════════════════════════════════════
+   AURORA BACKGROUND
+═══════════════════════════════════════════ */
+const canvas = document.getElementById('aurora');
+const ctx    = canvas.getContext('2d');
+
+function resize() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', () => { resize(); });
+
+const blobs = [
+  { x:0.15, y:0.20, rx:0.55, ry:0.45, col:[80,70,220],   vx: 0.00010, vy: 0.00007, t:0 },
+  { x:0.80, y:0.15, rx:0.45, ry:0.50, col:[120,60,200],   vx:-0.00008, vy: 0.00010, t:1 },
+  { x:0.50, y:0.80, rx:0.60, ry:0.40, col:[0, 160,200],   vx: 0.00006, vy:-0.00009, t:2 },
+  { x:0.85, y:0.70, rx:0.40, ry:0.50, col:[180,60,240],   vx:-0.00011, vy:-0.00007, t:3 },
+  { x:0.10, y:0.75, rx:0.50, ry:0.40, col:[200,120,20],   vx: 0.00009, vy: 0.00006, t:4 },
+  { x:0.60, y:0.30, rx:0.35, ry:0.45, col:[60, 180,160],  vx:-0.00007, vy: 0.00011, t:5 },
+];
+
+function drawAurora(ts) {
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+
+  blobs.forEach(b => {
+    b.x += b.vx; b.y += b.vy;
+    if (b.x < -0.3 || b.x > 1.3) b.vx *= -1;
+    if (b.y < -0.3 || b.y > 1.3) b.vy *= -1;
+
+    const cx = b.x * w, cy = b.y * h;
+    const rx = b.rx * Math.max(w, h);
+    const ry = b.ry * Math.max(w, h);
+    const r  = Math.max(rx, ry);
+
+    // elliptical gradient via transform
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(rx/r, ry/r);
+
+    const grad = ctx.createRadialGradient(0,0,0, 0,0,r);
+    const [rr,gg,bb] = b.col;
+    grad.addColorStop(0,   `rgba(${rr},${gg},${bb},0.11)`);
+    grad.addColorStop(0.5, `rgba(${rr},${gg},${bb},0.05)`);
+    grad.addColorStop(1,   `rgba(${rr},${gg},${bb},0)`);
+
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  });
+
+  requestAnimationFrame(drawAurora);
+}
+
+requestAnimationFrame(drawAurora);
+
+/* ═══════════════════════════════════════════
+   RESIZE HANDLER
+═══════════════════════════════════════════ */
+window.addEventListener('resize', () => {
+  if (!running && !pausedAt) {
+    const { min } = getOrbMetrics();
+    orbEl.style.width  = orbEl.style.height  = `${min}px`;
+  }
+});
+</script>
+</body>
+</html>
