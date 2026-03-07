@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cortex | Tutorial</title>
+	<meta charset="utf-8" />
+	<style>
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+		body {
+			font-family: Helvetica, Arial, sans-serif;
+			background: #f5f5f5;
+			color: #333;
+			padding: 60px 40px;
+		}
+		h1 { font-size: 32px; margin-bottom: 10px; }
+		p  { font-size: 16px; line-height: 1.6; color: #555; margin-bottom: 16px; }
+		.hero {
+			max-width: 680px;
+			margin: 0 auto;
+			text-align: center;
+			padding: 60px 0 40px;
+		}
+		.hero img { width: 64px; margin-bottom: 20px; }
+		.hero h1  { font-size: 36px; margin-bottom: 12px; }
+		.hero p   { font-size: 18px; color: #777; }
+		.steps {
+			max-width: 620px;
+			margin: 0 auto 60px;
+		}
+		.step-item {
+			background: white;
+			border-radius: 12px;
+			padding: 28px 32px;
+			margin-bottom: 16px;
+			display: flex;
+			align-items: flex-start;
+			gap: 20px;
+			box-shadow: 0 1px 4px rgba(0,0,0,.07);
+		}
+		.step-num {
+			font-size: 22px;
+			font-weight: bold;
+			color: #ccc;
+			min-width: 32px;
+			padding-top: 2px;
+		}
+		.step-body h3 { font-size: 17px; margin-bottom: 6px; }
+		.step-body p  { font-size: 14px; color: #777; margin: 0; }
+		.sample-content {
+			max-width: 620px;
+			margin: 0 auto 40px;
+			background: white;
+			border-radius: 12px;
+			padding: 32px;
+			box-shadow: 0 1px 4px rgba(0,0,0,.07);
+		}
+		.sample-content h2 { font-size: 22px; margin-bottom: 14px; }
+		.sample-content p  { font-size: 15px; color: #555; margin-bottom: 12px; }
+		.sample-content img {
+			width: 100%; max-width: 480px;
+			border-radius: 8px;
+			display: block;
+			margin: 16px auto 0;
+			background: #ddd;
+			min-height: 200px;
+		}
+	</style>
+	<link rel="stylesheet" href="/cortex.css" />
+	<link rel="stylesheet" href="/pages/css/tutorial.css" />
+</head>
+<body>
+
+<div class="hero">
+	<img src="/images/weareone.png" alt="Cortex" />
+	<h1>You're all set!</h1>
+	<p>Try Cortex on this page — hold down anywhere to share.</p>
+</div>
+
+<div class="steps">
+	<div class="step-item">
+		<div class="step-num">1</div>
+		<div class="step-body">
+			<h3>Hold down your mouse button</h3>
+			<p>Press and hold on any image or text on this page for about half a second. Don't move your mouse.</p>
+		</div>
+	</div>
+	<div class="step-item">
+		<div class="step-num">2</div>
+		<div class="step-body">
+			<h3>Select a network</h3>
+			<p>A pie menu will appear. Slide out to the service you want to share to and release.</p>
+		</div>
+	</div>
+	<div class="step-item">
+		<div class="step-num">3</div>
+		<div class="step-body">
+			<h3>Add a message (optional)</h3>
+			<p>Hold a little longer on the icon to open a comment box. Type your message and hit Enter.</p>
+		</div>
+	</div>
+</div>
+
+<div class="sample-content">
+	<h2>Try sharing this article</h2>
+	<p>Cortex lets you share any page, image, or link to your favourite social networks — all without leaving the page you're on.</p>
+	<p>It's fast, minimal, and works everywhere. Hold down on the image below or anywhere on this page to give it a try.</p>
+	<img src="/images/logo.png" alt="Sample image to share" />
+</div>
+
+<script src="/libs/underscore.js"></script>
+<script src="/libs/basic.js"></script>
+<script src="/libs/jquery.js"></script>
+<script src="/libs/jquery.mousetracing.js"></script>
+<script src="/libs/jquery.longclick.js"></script>
+<script src="/libs/raphael.js"></script>
+<script src="/libs/raphael.pie.js"></script>
+<script src="/libs/measure.js"></script>
+<script src="/libs/ratio.js"></script>
+<script src="/libs/jquery.thumbnail.js"></script>
+<script src="/libs/piemenu.js"></script>
+<script src="/libs/jquery.patch-css-transforms.js"></script>
+<script src="/libs/jquery.color.js"></script>
+<script src="/libs/jquery.measure-image.js"></script>
+<script src="/libs/rangy.js"></script>
+<script src="/libs/jquery.comment-input.js"></script>
+<script src="/blacklist.js"></script>
+<script src="/cortex.js"></script>
+<script src="/pages/js/tutorial.js"></script>
+</body>
+</html>

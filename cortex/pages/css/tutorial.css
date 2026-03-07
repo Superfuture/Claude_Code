@@ -1,0 +1,64 @@
+.step {
+	position:fixed;
+	display:block;
+	font:26px Helvetica;
+	background-color: #F0F8FB;
+	color: #292929;
+	text-shadow: 1px 1px 0 white;
+	padding: 13px;
+	width: 390px;
+	text-align: center;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	box-shadow: none;
+	opacity:0;
+}
+
+.step h1 {
+	font:inherit;
+	color:inherit;
+	font-weight:bold;
+	font-size:30px;
+	margin:0 0 5px 0;
+	padding:0;
+}
+
+.step p {
+	margin:0;
+	padding:0;
+	margin-bottom:4px;
+	color:inherit;
+}
+
+#welcome {
+	width:380px;
+	opacity:1;
+	left:50%;
+	top:150px;
+	margin-left:-203px;
+}
+
+#welcome #hold {
+	display:none;
+	margin-top:20px;
+}
+
+#activated {
+	width:380px;
+}
+
+#comment, #comment-to-gmail {
+	width:300px;
+}
+
+#completed {
+	width:500px;
+	left:50%;
+	top:40%;
+	margin-left:-263px;
+	background-color: #E2FBDF;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 0px;
+}

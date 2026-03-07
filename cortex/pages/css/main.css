@@ -1,0 +1,171 @@
+/* Reset */
+* {
+	margin:0;
+	padding:0;
+	font-weight:normal;
+	-webkit-box-sizing:border-box;
+}
+
+:focus {
+	outline:none;
+}
+
+ul {
+	list-style:none;
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
+
+/* Basic styling */
+html {
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+body {
+	font-family:Helvetica, Arial, sans-serif;
+	font-size:16px;
+	background:url(/images/bgbar.jpg) repeat-x top;
+	padding:10px 0;
+}
+
+.clear {
+	clear: both;
+}
+
+a { 
+	color: #3A5894;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+h2 {
+	font-size:24px;
+	font-weight:bold;
+}
+
+h3 {
+	font-size:16px;
+	font-weight:bold;
+}
+
+input[type=text], input[type=password], textarea {
+	border:1px solid #999;
+}
+
+/* Main layout */
+body > div:first-child {
+	width: 640px;
+	margin:0 auto;
+	background:url(/images/logo.png) no-repeat;
+	padding-top:107px;
+}
+
+h2 {
+	margin-bottom:19px;
+}
+
+#switch-view {
+	margin-top:-40px;
+	text-indent: -9999px;
+	overflow: hidden;
+	display:block;
+	float:right;
+	width:25px;
+	height:24px;
+}
+
+/* Popup layout */
+/* Smaller logo for popup*/
+.popup {
+	padding-left:0px;
+	padding-right:0px;
+}
+
+.popup > div:first-child {
+	background:url(/images/logoSmaller.png) no-repeat 10px 0;
+	padding-top: 65px;
+	width:auto;
+}
+
+.popup #switch-view {
+	margin-top:-40px;
+	text-indent: 0;
+	background: url(/images/icons/settings_icon.png) no-repeat;
+	font-size: 13px;
+	font-family: "Helvetica Neue";
+	font-weight: 400;
+	padding-left: 25px;
+	padding-top: 4px;
+	width: auto;
+	color: #447BDB;
+}
+
+/* Labelling */
+::-webkit-input-placeholder {
+	color:#E6E6E6;
+}
+
+/* Setup */
+.instructions li {
+	margin-left:38px;
+	margin-bottom:30px;
+	color:#585858;
+	counter-increment:getstarted;
+}
+
+.instructions li:last-child {
+	margin-bottom:0 !important;
+}
+
+.instructions li:before {
+	display:block;
+	float:left;
+	position:relative;
+	margin-left:-38px;
+	top:-3px;
+	background:#585858;
+	color:white;
+	text-align:center;
+	width:30px;
+	height:29px;
+	padding-top:1px;
+	-webkit-border-radius:15px;
+	content:counter(getstarted);
+}
+
+.instructions li:before, .instructions h3 {
+	font:bold 24px Helvetica, Arial, sans-serif;
+}
+
+.instructions h3 {
+	line-height:100%;
+}
+
+.instructions small {
+	font-size:14px;
+	font-style:italic;
+	color:#7D7D7D;
+}

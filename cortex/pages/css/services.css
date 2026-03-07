@@ -1,0 +1,102 @@
+#services {
+	display:block; 
+	list-style:none;
+	margin-top:-15px;
+}
+
+#services:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+
+#switch-view {
+	background:url(/images/icons/history_icon.png);
+	margin-right:15px;
+}
+
+#services > li {
+	list-style-type: none;
+	text-decoration: none;
+	float:left;
+	width:150px;
+	margin-right:10px;
+	text-align:center;
+	margin-top:20px;
+	cursor:pointer;
+}
+
+#services > li img {
+	display:block;
+	width:59px;
+	margin:6px auto 15px;
+}
+
+#services .service-name {
+	font-size: 14px;
+	font-weight: normal;
+	color: #555;
+	margin: 0 0 4px;
+	text-align: center;
+}
+
+#services #lightbox {
+	cursor:default;
+}
+
+#services .disconnected .pick-friends {
+	display:none;
+}
+
+#services .auth, #services .friend-picker {
+	display:none;
+}
+
+#services .friend-picker .save {
+	float:right;
+	margin:0;
+	margin-left:20px;
+}
+
+.auth input {
+	width:208px;
+	height:24px;
+	padding:3px;
+	border-bottom-width:0;
+	font-size:16px;
+	text-align:center;
+	margin:0 auto;
+	margin-bottom:10px;
+	display:block;
+}
+
+.auth input:last-child {
+	border-bottom-width:1px;
+}
+
+.tooltip {
+	z-index:1;
+	position:absolute;
+	width:100px;
+}
+
+.tooltip .pointer {
+	width:15px;
+	height:10px;
+	background:url(/images/tooltip-arrow.png) no-repeat;
+	position:relative;
+	margin:0 auto;
+}
+
+.tooltip .text {
+  color:white;
+  text-align:center;
+  width:100px;
+	font-size:16px;
+	background:#131313;
+	padding:4px 0;
+	-webkit-border-radius:5px;
+}
