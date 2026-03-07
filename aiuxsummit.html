@@ -494,6 +494,27 @@ body::before {
   letter-spacing:.2em;
 }
 
+/* ── ARCADE GAME ─────────────────────────── */
+#arcade {
+  padding:40px 0 60px; text-align:center; position:relative; z-index:1;
+}
+.arcade-title {
+  font-family:var(--px); font-size:clamp(10px,2vw,14px);
+  color:var(--l2); margin-bottom:8px; letter-spacing:.06em;
+  text-shadow:0 0 16px var(--l2);
+}
+.arcade-sub { font-family:var(--vt); font-size:20px; color:var(--dim); margin-bottom:24px; }
+#gameCanvas {
+  border:4px solid var(--l2); display:block; margin:0 auto;
+  image-rendering:pixelated; box-shadow:0 0 30px rgba(255,224,0,.3);
+  cursor:none;
+}
+.arcade-controls {
+  font-family:var(--px); font-size:8px; color:var(--dim);
+  margin-top:16px; letter-spacing:.06em; line-height:2.4;
+}
+.arcade-controls span { color:#fff; }
+
 /* ── CONNECT SECTION ────────────────────── */
 #connect {
   padding:60px 0; opacity:0; transform:translateY(24px); transition:opacity .5s, transform .5s;
@@ -783,7 +804,7 @@ footer {
       <div class="level-timer" style="border-color:var(--l4)">🚀 POWER UP</div>
     </div>
 
-    <p class="sec-body" style="margin-bottom:20px">Learning Claude Code gives designers <strong>a massive creative edge</strong>. Here's why it changes everything.</p>
+    <p class="sec-body" style="margin-bottom:20px">Claude Code gives designers <strong>a serious career boost</strong>. Here's why.</p>
 
     <div class="career-grid">
       <div class="career-card cc-1" data-icon="⚡">
@@ -821,6 +842,17 @@ footer {
 
 
 </div><!-- /wrap -->
+
+<!-- ARCADE GAME -->
+<div class="divider">· · · · · BONUS STAGE · · · · ·</div>
+<section id="arcade">
+  <div class="arcade-title">★ DESIGN INVADERS ★</div>
+  <div class="arcade-sub">Destroy the bugs before they reach your design system</div>
+  <canvas id="gameCanvas" width="480" height="400"></canvas>
+  <div class="arcade-controls">
+    <span>← →</span> MOVE &nbsp;·&nbsp; <span>SPACE</span> SHOOT &nbsp;·&nbsp; <span>CLICK</span> TO START
+  </div>
+</section>
 
 <!-- CONNECT SECTION -->
 <div class="divider">· · · · · PLAYER PROFILE · · · · ·</div>
@@ -1117,6 +1149,229 @@ copyBtn.addEventListener('click', () => {
 });
 
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+// ── DESIGN INVADERS GAME ──────────────────
+(function(){
+  const gc = document.getElementById('gameCanvas');
+  const gx = gc.getContext('2d');
+  const W = 480, H = 400;
+  const PX = "'Press Start 2P', monospace";
+
+  let state = 'idle'; // idle | playing | dead | win
+  let score = 0, lives = 3, level = 1;
+  let frameId;
+
+  // Player
+  let player = { x:W/2, y:H-40, w:32, h:16, speed:4, color:'#00FFFF' };
+
+  // Bullets
+  let bullets = [];
+  let enemyBullets = [];
+  let shootCooldown = 0;
+
+  // Enemies — emoji labels for 8-bit feel
+  const EMOJIS = ['🐛','🦟','👾','🐞','🕷️'];
+  let enemies = [];
+  let enemyDir = 1, enemySpeed = 0.6, enemyDrop = 16;
+  let enemyShootTimer = 0;
+
+  function makeEnemies() {
+    enemies = [];
+    const cols = 8, rows = 4;
+    for(let r=0;r<rows;r++) for(let c=0;c<cols;c++) {
+      enemies.push({ x:60+c*48, y:50+r*44, w:28, h:28,
+        emoji: EMOJIS[r % EMOJIS.length], alive:true });
+    }
+  }
+
+  // Input
+  const keys = {};
+  document.addEventListener('keydown', e => {
+    keys[e.code] = true;
+    if(e.code==='Space') { e.preventDefault(); if(state==='idle'||state==='dead'||state==='win') startGame(); }
+  });
+  document.addEventListener('keyup', e => keys[e.code] = false);
+  gc.addEventListener('click', () => { if(state==='idle'||state==='dead'||state==='win') startGame(); });
+
+  function startGame() {
+    score=0; lives=3; level=1; bullets=[]; enemyBullets=[];
+    enemyDir=1; enemySpeed=0.6; shootCooldown=0; enemyShootTimer=0;
+    player.x = W/2;
+    makeEnemies();
+    state='playing';
+  }
+
+  function shoot() {
+    if(shootCooldown>0) return;
+    bullets.push({ x:player.x, y:player.y-10, w:3, h:10, speed:8 });
+    shootCooldown = 18;
+  }
+
+  function drawRect(x,y,w,h,color) {
+    gx.fillStyle = color;
+    gx.fillRect(Math.round(x-w/2), Math.round(y-h/2), w, h);
+  }
+
+  function drawText(txt, x, y, size, color, align='center') {
+    gx.font = `${size}px ${PX}`;
+    gx.fillStyle = color;
+    gx.textAlign = align;
+    gx.fillText(txt, x, y);
+  }
+
+  function drawEmoji(emoji, x, y, size=22) {
+    gx.font = `${size}px serif`;
+    gx.textAlign = 'center';
+    gx.textBaseline = 'middle';
+    gx.fillText(emoji, x, y);
+  }
+
+  function drawPlayer() {
+    // ship body
+    gx.fillStyle = player.color;
+    gx.fillRect(player.x-16, player.y, 32, 12);
+    gx.fillRect(player.x-8, player.y-8, 16, 10);
+    gx.fillRect(player.x-4, player.y-14, 8, 8);
+    // glow
+    gx.shadowColor = player.color;
+    gx.shadowBlur = 10;
+    gx.fillRect(player.x-16, player.y, 32, 12);
+    gx.shadowBlur = 0;
+  }
+
+  function update() {
+    if(state!=='playing') return;
+
+    // move player
+    if(keys['ArrowLeft']||keys['KeyA']) player.x = Math.max(20, player.x - player.speed);
+    if(keys['ArrowRight']||keys['KeyD']) player.x = Math.min(W-20, player.x + player.speed);
+    if(keys['Space']||keys['ArrowUp']) shoot();
+    if(shootCooldown>0) shootCooldown--;
+
+    // move bullets
+    bullets = bullets.filter(b => { b.y -= b.speed; return b.y > 0; });
+
+    // move enemy bullets
+    enemyBullets = enemyBullets.filter(b => { b.y += b.speed; return b.y < H; });
+
+    // move enemies
+    let hitWall = false;
+    const alive = enemies.filter(e=>e.alive);
+    alive.forEach(e => { e.x += enemyDir * enemySpeed; });
+    alive.forEach(e => { if(e.x+e.w/2>W-20 || e.x-e.w/2<20) hitWall=true; });
+    if(hitWall) {
+      enemyDir *= -1;
+      alive.forEach(e => { e.y += enemyDrop; });
+    }
+
+    // enemy shoot
+    enemyShootTimer--;
+    if(enemyShootTimer<=0 && alive.length>0) {
+      const shooter = alive[Math.floor(Math.random()*alive.length)];
+      enemyBullets.push({ x:shooter.x, y:shooter.y+14, w:4, h:10, speed:3+level*0.4 });
+      enemyShootTimer = Math.max(20, 60 - level*8);
+    }
+
+    // bullet vs enemy
+    bullets.forEach(b => {
+      enemies.forEach(e => {
+        if(!e.alive) return;
+        if(Math.abs(b.x-e.x)<16 && Math.abs(b.y-e.y)<16) {
+          e.alive=false; b.y=-999; score+=10;
+        }
+      });
+    });
+
+    // enemy bullet vs player
+    enemyBullets.forEach(b => {
+      if(Math.abs(b.x-player.x)<18 && Math.abs(b.y-player.y)<14) {
+        b.y=9999; lives--;
+        if(lives<=0) { state='dead'; return; }
+      }
+    });
+
+    // enemies reach bottom
+    alive.forEach(e => { if(e.y > H-50) { state='dead'; } });
+
+    // win
+    if(alive.length===0) {
+      level++; enemySpeed+=0.3; bullets=[]; enemyBullets=[];
+      makeEnemies(); enemies.forEach(e=>{ e.y+=level*10; });
+    }
+  }
+
+  function draw() {
+    // bg
+    gx.fillStyle = '#0a0a0f';
+    gx.fillRect(0,0,W,H);
+
+    // ground line
+    gx.fillStyle='rgba(0,255,65,.3)';
+    gx.fillRect(0,H-28,W,2);
+
+    if(state==='idle') {
+      drawText('DESIGN INVADERS', W/2, 120, 12, '#FFE000');
+      drawText('DESTROY THE BUGS', W/2, 160, 8, '#00FFFF');
+      drawText('BEFORE THEY SHIP', W/2, 185, 8, '#00FFFF');
+      gx.font='24px serif'; gx.textAlign='center';
+      gx.fillText('🐛 👾 🐞 🕷️ 🦟', W/2, 240);
+      drawText('CLICK OR PRESS SPACE', W/2, 300, 8, '#FF44FF');
+      drawText('TO START', W/2, 325, 8, '#FF44FF');
+      return;
+    }
+
+    if(state==='dead') {
+      drawText('GAME OVER', W/2, 150, 14, '#FF0066');
+      drawText(`SCORE: ${score}`, W/2, 200, 9, '#FFE000');
+      drawText('CLICK TO RETRY', W/2, 270, 8, '#FF44FF');
+      return;
+    }
+
+    if(state==='win') {
+      drawText('YOU WIN!', W/2, 150, 16, '#00FF41');
+      drawText(`SCORE: ${score}`, W/2, 200, 9, '#FFE000');
+      drawText('CLICK TO PLAY AGAIN', W/2, 270, 8, '#FF44FF');
+      return;
+    }
+
+    // HUD
+    drawText(`SCORE: ${score}`, 10, 20, 8, '#FFE000', 'left');
+    drawText(`LVL ${level}`, W/2, 20, 8, '#00FFFF');
+    drawText(`♥ ${lives}`, W-10, 20, 8, '#FF0066', 'right');
+
+    // enemies
+    enemies.forEach(e => {
+      if(!e.alive) return;
+      drawEmoji(e.emoji, e.x, e.y, 22);
+    });
+
+    // player bullets
+    bullets.forEach(b => {
+      gx.fillStyle='#FFE000';
+      gx.shadowColor='#FFE000'; gx.shadowBlur=6;
+      gx.fillRect(b.x-1, b.y-5, 3, 10);
+      gx.shadowBlur=0;
+    });
+
+    // enemy bullets
+    enemyBullets.forEach(b => {
+      gx.fillStyle='#FF0066';
+      gx.shadowColor='#FF0066'; gx.shadowBlur=6;
+      gx.fillRect(b.x-2, b.y-5, 4, 10);
+      gx.shadowBlur=0;
+    });
+
+    // player
+    drawPlayer();
+  }
+
+  function loop() {
+    update();
+    draw();
+    frameId = requestAnimationFrame(loop);
+  }
+  loop();
+})();
 
 // ── PIXEL AVATAR ──────────────────────────
 (function(){
