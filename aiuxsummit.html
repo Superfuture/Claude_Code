@@ -1106,7 +1106,7 @@ const stepPrompts = {
     label: '★ STEP 01 · CLAUDE PROMPT',
     title: 'PASTE THIS INTO CLAUDE TO START YOUR PLAN FILE',
     color: '#FF99CC',
-    text: 'Create me a plan file for [Product Idea] and interview me in detail using the AskUserQuestionTool about literally anything: technical implementation, UI & UX, concerns, tradeoffs, etc.'
+    html: 'Create me a plan file for [Product Idea] and interview me in detail using the <span style="color:#FFE000;font-weight:bold;text-shadow:0 0 8px #FFE000">AskUserQuestionTool</span> about literally anything: technical implementation, UI &amp; UX, concerns, tradeoffs, etc.'
   },
   2: {
     label: '★ STEP 02 · CLAUDE PROMPT',
@@ -1138,7 +1138,8 @@ function openModal(step) {
   document.getElementById('modalLabel').style.color = p.color;
   document.getElementById('modalLabel').textContent = p.label;
   document.getElementById('modalTitle').textContent = p.title;
-  document.getElementById('promptText').textContent = p.text;
+  const pt = document.getElementById('promptText');
+  if(p.html) { pt.innerHTML = p.html; } else { pt.textContent = p.text; }
   copyBtn.style.display = p.hideCopy ? 'none' : '';
   planModal.classList.add('open');
 }
@@ -1152,7 +1153,7 @@ document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
 planModal.addEventListener('click', e => { if(e.target === planModal) closeModal(); });
 
 copyBtn.addEventListener('click', () => {
-  const text = document.getElementById('promptText').textContent;
+  const text = document.getElementById('promptText').innerText;
   navigator.clipboard.writeText(text).then(() => {
     copyBtn.textContent = '✓ COPIED!';
     setTimeout(() => { copyBtn.textContent = '📋 COPY PROMPT'; }, 2000);
