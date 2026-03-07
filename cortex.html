@@ -330,29 +330,10 @@ nav {
   background: var(--bg2); text-align: center;
 }
 .mini-pie {
-  position: relative; width: 110px; height: 110px;
+  width: 110px; height: 110px;
   display: flex; align-items: center; justify-content: center;
   margin-bottom: 16px;
 }
-.mini-center {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: #fff; font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 12px rgba(255,80,40,.2);
-  z-index: 2; position: relative;
-}
-.mini-dot {
-  position: absolute; top: 50%; left: 50%;
-  width: 22px; height: 22px; border-radius: 50%;
-  transform: translate(-50%,-50%) var(--mp);
-  box-shadow: 0 2px 8px rgba(0,0,0,.15);
-}
-.mp1{--mp:translate(-40px,-8px); background:#FF1368;}
-.mp2{--mp:translate(-22px,-36px); background:#FF3366;}
-.mp3{--mp:translate(12px,-42px); background:#FF5533;}
-.mp4{--mp:translate(42px,-14px); background:#FF7020;}
-.mp5{--mp:translate(32px,30px); background:#FF8C00;}
-.mp6{--mp:translate(-10px,42px); background:#FF5533;}
 
 /* ── HOW IT WORKS ── */
 .how-section {
@@ -450,21 +431,39 @@ nav {
   background: var(--bg2);
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  padding: 80px 36px;
+  padding: 100px 36px;
   text-align: center;
 }
+.quote-mark {
+  font-size: 80px; line-height: .6;
+  background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  display: block; margin-bottom: 24px; font-family: Georgia, serif;
+}
 .quote-text {
-  max-width: 760px; margin: 0 auto 20px;
-  font-size: clamp(20px, 2.5vw, 30px);
+  max-width: 820px; margin: 0 auto 28px;
+  font-size: clamp(24px, 3vw, 38px);
   font-weight: 300; font-style: italic;
-  line-height: 1.55; color: var(--text); letter-spacing: -.02em;
+  line-height: 1.45; color: var(--text); letter-spacing: -.02em;
 }
 .quote-text strong {
   font-weight: 800; font-style: normal;
   background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 .quote-attr {
+  display: flex; align-items: center; gap: 10px; justify-content: center;
+}
+.quote-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.quote-attr-text {
   font-size: 13px; font-weight: 600; color: var(--dim);
+  letter-spacing: .03em;
+}
+.quote-attr-source {
+  font-size: 11px; color: var(--dim); opacity: .6;
   letter-spacing: .05em; text-transform: uppercase;
 }
 
@@ -490,6 +489,52 @@ nav {
   box-shadow: 0 8px 24px rgba(255,80,40,.1);
 }
 .award-icon { font-size: 22px; }
+
+/* ── HERO STATS ── */
+.hero-stats {
+  display: flex; align-items: center; gap: 48px;
+  justify-content: center; margin-bottom: 40px;
+}
+.hero-stat { text-align: center; }
+.hero-stat-n {
+  display: block;
+  font-size: clamp(28px, 4vw, 42px); font-weight: 900; letter-spacing: -.04em;
+  background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.hero-stat-l {
+  display: block;
+  font-size: 12px; font-weight: 500; color: var(--dim); margin-top: 4px;
+  letter-spacing: .02em;
+}
+.hero-stat-div {
+  width: 1px; height: 32px; background: var(--line);
+}
+
+/* ── CLOSING CTA ── */
+.cta-section {
+  background: var(--text);
+  padding: 120px 36px;
+  text-align: center;
+}
+.cta-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  display: block; margin-bottom: 20px;
+}
+.cta-headline {
+  font-size: clamp(36px, 5vw, 64px); font-weight: 900;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  letter-spacing: -.04em; line-height: 1.0;
+  color: #fff; margin-bottom: 16px;
+}
+.cta-sub {
+  font-size: 18px; color: rgba(255,255,255,.45);
+  margin-bottom: 48px; font-weight: 400;
+}
+.cta-row {
+  display: flex; align-items: center; gap: 16px; justify-content: center;
+}
 
 /* ── FOOTER ── */
 footer {
@@ -688,7 +733,24 @@ footer {
     <span class="headline-grad">fast.</span>
   </h1>
 
-  <p class="hero-sub">Solve one of social media's biggest problems. Hold anywhere, slide to share — without ever leaving the page.</p>
+  <p class="hero-sub">Hold anywhere, slide to a network, release. Without ever leaving the page.</p>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-n">10K+</span>
+      <span class="hero-stat-l">Users in week one</span>
+    </div>
+    <div class="hero-stat-div"></div>
+    <div class="hero-stat">
+      <span class="hero-stat-n">#1</span>
+      <span class="hero-stat-l">Fast Company Interface Idea</span>
+    </div>
+    <div class="hero-stat-div"></div>
+    <div class="hero-stat">
+      <span class="hero-stat-n">1</span>
+      <span class="hero-stat-l">Gesture to share anywhere</span>
+    </div>
+  </div>
 
   <div class="hero-cta-row">
     <a href="https://cortexapp.com" class="btn-download">
@@ -747,8 +809,9 @@ footer {
     </div>
   </div>
 
-  <p style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);opacity:.7;">
-    The actual extension — try it below
+  <p style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--p1);display:flex;align-items:center;gap:8px;">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M8 13l-4-4M8 13l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Try the real thing below
   </p>
 </section>
 
@@ -808,6 +871,21 @@ footer {
   </div>
 </section>
 
+<!-- QUOTE -->
+<div class="quote-section">
+  <span class="quote-mark">"</span>
+  <p class="quote-text">
+    It makes sharing <strong>beautiful and simple.</strong> It is to sharing as what Steve Jobs did to MP3 players.
+  </p>
+  <div class="quote-attr">
+    <div class="quote-avatar">👤</div>
+    <div>
+      <div class="quote-attr-text">Alex M.</div>
+      <div class="quote-attr-source">Chrome Web Store · 5 stars</div>
+    </div>
+  </div>
+</div>
+
 <!-- PRESS STRIP -->
 <div class="press-strip">
   <div class="press-inner">
@@ -849,13 +927,7 @@ footer {
     <!-- B: Mini pie visual -->
     <div class="bcard bcard-b">
       <div class="mini-pie">
-        <div class="mini-dot mp1"></div>
-        <div class="mini-dot mp2"></div>
-        <div class="mini-dot mp3"></div>
-        <div class="mini-dot mp4"></div>
-        <div class="mini-dot mp5"></div>
-        <div class="mini-dot mp6"></div>
-        <div class="mini-center">&#x1F310;</div>
+        <div style="width:110px;height:110px;border-radius:50%;background:conic-gradient(#000000 0deg 60deg,#1877F2 60deg 120deg,#EA4335 120deg 180deg,#EF3F56 180deg 240deg,#E60023 240deg 300deg,#1F1F1F 300deg 360deg);-webkit-mask:radial-gradient(circle,transparent 37%,black 37%);mask:radial-gradient(circle,transparent 37%,black 37%);"></div>
       </div>
       <div class="bcard-title" style="text-align:center">Radial menu</div>
       <div class="bcard-desc" style="text-align:center;font-size:13px;">Muscle memory, not menus</div>
@@ -892,14 +964,6 @@ footer {
 
   </div>
 </section>
-
-<!-- QUOTE -->
-<div class="quote-section">
-  <p class="quote-text">
-    "It makes sharing <strong>beautiful and simple.</strong> It is to sharing as what Steve Jobs did to MP3 players."
-  </p>
-  <p class="quote-attr">Cortex User Review</p>
-</div>
 
 <!-- HOW IT WORKS -->
 <section class="how-section" id="how">
@@ -947,6 +1011,21 @@ footer {
   <a href="https://patents.google.com/patent/US8869068B2" target="_blank" rel="noopener" class="award-item"><span class="award-icon">&#x1F4DC;</span>US Patent 8,869,068 B2</a>
   <a href="https://www.producthunt.com/products/cortex/launches/cortex?utm_source=other&utm_medium=social" target="_blank" rel="noopener" class="award-item"><span class="award-icon">&#x2605;</span>Product Hunt Featured</a>
 </div>
+
+<!-- CLOSING CTA -->
+<section class="cta-section">
+  <span class="cta-eyebrow">Free · No setup · Works everywhere</span>
+  <h2 class="cta-headline">Share fast.<br>Starting now.</h2>
+  <p class="cta-sub">Join thousands who never leave a page to share again.</p>
+  <div class="cta-row">
+    <a href="https://cortexapp.com" class="btn-download">
+      <span>
+        Add to Chrome
+        <span class="btn-download-sub">Free &middot; Chrome Web Store</span>
+      </span>
+    </a>
+  </div>
+</section>
 
 <!-- FOOTER -->
 <footer>
