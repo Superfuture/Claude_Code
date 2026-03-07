@@ -632,6 +632,7 @@ footer {
   position:relative; image-rendering:pixelated;
   box-shadow:6px 6px 0 #FF99CC;
   animation:popIn .15s steps(2) both;
+  max-height:60vh; overflow-y:auto;
 }
 @keyframes popIn {
   from { transform:scale(.9); opacity:0; }
@@ -888,7 +889,8 @@ footer {
   </div>
   <div class="footer-copy">
     JOEY PRIMIANI · 2026<br>
-    AI DESIGN QUEST · ALL RIGHTS RESERVED
+    AI DESIGN QUEST · ALL RIGHTS RESERVED<br>
+    ★ CERTIFIED VIBE DESIGNER ★
   </div>
   <div class="footer-coin">INSERT COIN TO CONTINUE ▶</div>
 </footer>
@@ -1116,7 +1118,7 @@ const stepPrompts = {
     label: '★ STEP 03 · FIGMA MCP SETUP',
     title: 'CONNECT CLAUDE CODE TO FIGMA',
     color: '#00FFFF',
-    text: '1. Install Figma MCP\n   npm install -g @figma/mcp\n\n2. Add to your Claude config (~/.claude/claude.json):\n   {\n     "mcpServers": {\n       "figma": {\n         "command": "figma-mcp",\n         "args": ["--token", "YOUR_FIGMA_TOKEN"]\n       }\n     }\n   }\n\n3. Get your Figma token:\n   Figma → Settings → Security\n   → Personal Access Tokens\n\n4. Restart Claude Code — Figma\n   tools will appear automatically',
+    text: '1. Install Figma MCP\n   npm install -g @figma/mcp\n\n2. Get your Figma token:\n   Figma → Settings → Security\n   → Personal Access Tokens\n\n3. Restart Claude Code — Figma\n   tools will appear automatically',
     hideCopy: true
   },
   4: {
