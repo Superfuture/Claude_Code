@@ -374,9 +374,16 @@ footer{
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
   .stats-grid{grid-template-columns:1fr;}
-  .stat{border-right:none;border-bottom:4px solid var(--l2);}
+  .stat{border-right:none;border-bottom:4px solid var(--l2);padding:20px 16px;}
   .stat:last-child{border-bottom:none;}
+  .stat-val{font-size:clamp(16px,7vw,24px);}
+  .stat-lbl{font-size:6px;}
   .hud{display:none;}
+  .section{padding:48px 0;}
+  .wrap{padding:0 20px;}
+  .about-text{font-size:18px;line-height:1.6;}
+  .about-text p{margin-bottom:12px;}
+  .sec-title{margin-bottom:24px;}
 }
 </style>
 </head>
