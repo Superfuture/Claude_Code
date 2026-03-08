@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- Dark bg -->
+  <rect width="16" height="16" fill="#0a0a0f"/>
+  <!-- Lightning bolt — yellow #FFE000, 8-bit pixel style -->
+  <!-- Top section: top-right sliding left -->
+  <rect x="6" y="1" width="4" height="2" fill="#FFE000"/>
+  <rect x="4" y="3" width="4" height="2" fill="#FFE000"/>
+  <rect x="2" y="5" width="4" height="2" fill="#FFE000"/>
+  <!-- Wide middle crossbar -->
+  <rect x="2" y="6" width="12" height="2" fill="#FFE000"/>
+  <!-- Bottom section: center-right sliding left -->
+  <rect x="6" y="8" width="8" height="2" fill="#FFE000"/>
+  <rect x="6" y="10" width="4" height="2" fill="#FFE000"/>
+  <rect x="4" y="12" width="4" height="2" fill="#FFE000"/>
+  <rect x="2" y="14" width="4" height="1" fill="#FFE000"/>
+  <!-- Pink accent pixel corners for extra 8-bit flair -->
+  <rect x="6" y="1" width="1" height="1" fill="#FF0066"/>
+  <rect x="9" y="1" width="1" height="1" fill="#FF0066"/>
+</svg>
