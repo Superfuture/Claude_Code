@@ -1,0 +1,17 @@
+{
+  "name": "JOEY PRIMIANI · PIXEL PORTFOLIO",
+  "short_name": "JOEY PRIMIANI",
+  "description": "Award-winning Silicon Valley product designer. 15+ years. Cannes Gold Lion. Webby. CSS Award.",
+  "start_url": "/Claude_Code/joey-primiani.html",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#FF0066",
+  "icons": [
+    {
+      "src": "joey-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
