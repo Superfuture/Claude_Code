@@ -178,47 +178,20 @@ nav {
   aspect-ratio: 4 / 3;
   min-height: 180px;
   overflow: hidden;
-  transition: filter 0.4s ease;
+  transition: transform 0.5s ease;
 }
 
-.project-card:hover .card-img {
-  filter: brightness(0.96);
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
 }
 
-.img-a { background: #F2F2F2; }
-.img-b { background: #E8E8E8; }
-.img-c { background: #DEDEDE; }
-
-/* Unique per-project tints */
-/* Redo — cool slate */
-.proj-1 .img-a { background: #DDE0E8; }
-.proj-1 .img-b { background: #CDD2DE; }
-.proj-1 .img-c { background: #BFC5D4; }
-
-/* Titan — warm charcoal */
-.proj-2 .img-a { background: #DCDCDC; }
-.proj-2 .img-b { background: #CECECE; }
-.proj-2 .img-c { background: #BFBFBF; }
-
-/* Farm Global — sage green */
-.proj-3 .img-a { background: #D5DDD5; }
-.proj-3 .img-b { background: #C6D1C6; }
-.proj-3 .img-c { background: #B8C4B9; }
-
-/* Anders — warm sand */
-.proj-4 .img-a { background: #DDD8D0; }
-.proj-4 .img-b { background: #D0CAC0; }
-.proj-4 .img-c { background: #C4BCB1; }
-
-/* Club — neutral */
-.proj-5 .img-a { background: #DADADA; }
-.proj-5 .img-b { background: #CBCBCB; }
-.proj-5 .img-c { background: #BBBBBB; }
-
-/* Véloce — warm cream */
-.proj-6 .img-a { background: #DDD9D0; }
-.proj-6 .img-b { background: #D0CBBf; }
-.proj-6 .img-c { background: #C4BFAB; }
+.project-card:hover .card-img img {
+  transform: scale(1.03);
+}
 
 /* Card meta */
 .card-meta {
@@ -541,9 +514,9 @@ footer {
   <!-- Project 1: Redo -->
   <article class="project-card proj-1">
     <div class="card-images">
-      <div class="card-img img-a"></div>
-      <div class="card-img img-b"></div>
-      <div class="card-img img-c"></div>
+      <div class="card-img"><img src="frame-and-form/redo-1.png" alt="Redo project image 1"></div>
+      <div class="card-img"><img src="frame-and-form/redo-2.png" alt="Redo project image 2"></div>
+      <div class="card-img"><img src="frame-and-form/redo-3.png" alt="Redo project image 3"></div>
     </div>
     <div class="card-meta">
       <div class="card-meta-left">
@@ -560,9 +533,9 @@ footer {
   <!-- Project 2: Titan -->
   <article class="project-card proj-2">
     <div class="card-images">
-      <div class="card-img img-a"></div>
-      <div class="card-img img-b"></div>
-      <div class="card-img img-c"></div>
+      <div class="card-img"><img src="frame-and-form/titan-1.png" alt="Titan project image 1"></div>
+      <div class="card-img"><img src="frame-and-form/titan-2.png" alt="Titan project image 2"></div>
+      <div class="card-img"><img src="frame-and-form/titan-3.png" alt="Titan project image 3"></div>
     </div>
     <div class="card-meta">
       <div class="card-meta-left">
@@ -579,9 +552,9 @@ footer {
   <!-- Project 3: Farm Global -->
   <article class="project-card proj-3">
     <div class="card-images">
-      <div class="card-img img-a"></div>
-      <div class="card-img img-b"></div>
-      <div class="card-img img-c"></div>
+      <div class="card-img"><img src="frame-and-form/farm-global-1.png" alt="Farm Global project image 1"></div>
+      <div class="card-img"><img src="frame-and-form/farm-global-2.png" alt="Farm Global project image 2"></div>
+      <div class="card-img"><img src="frame-and-form/farm-global-3.png" alt="Farm Global project image 3"></div>
     </div>
     <div class="card-meta">
       <div class="card-meta-left">
@@ -598,9 +571,9 @@ footer {
   <!-- Project 4: Anders -->
   <article class="project-card proj-4">
     <div class="card-images">
-      <div class="card-img img-a"></div>
-      <div class="card-img img-b"></div>
-      <div class="card-img img-c"></div>
+      <div class="card-img"><img src="frame-and-form/anders-1.png" alt="Anders project image 1"></div>
+      <div class="card-img"><img src="frame-and-form/anders-2.png" alt="Anders project image 2"></div>
+      <div class="card-img"><img src="frame-and-form/anders-3.png" alt="Anders project image 3"></div>
     </div>
     <div class="card-meta">
       <div class="card-meta-left">
@@ -617,9 +590,9 @@ footer {
   <!-- Project 5: Club -->
   <article class="project-card proj-5">
     <div class="card-images">
-      <div class="card-img img-a"></div>
-      <div class="card-img img-b"></div>
-      <div class="card-img img-c"></div>
+      <div class="card-img"><img src="frame-and-form/club-1.png" alt="Club project image 1"></div>
+      <div class="card-img"><img src="frame-and-form/club-2.png" alt="Club project image 2"></div>
+      <div class="card-img"><img src="frame-and-form/club-3.png" alt="Club project image 3"></div>
     </div>
     <div class="card-meta">
       <div class="card-meta-left">
@@ -636,9 +609,9 @@ footer {
   <!-- Project 6: Véloce -->
   <article class="project-card proj-6">
     <div class="card-images">
-      <div class="card-img img-a"></div>
-      <div class="card-img img-b"></div>
-      <div class="card-img img-c"></div>
+      <div class="card-img"><img src="frame-and-form/veloce-1.png" alt="Véloce project image 1"></div>
+      <div class="card-img"><img src="frame-and-form/veloce-2.png" alt="Véloce project image 2"></div>
+      <div class="card-img"><img src="frame-and-form/veloce-3.png" alt="Véloce project image 3"></div>
     </div>
     <div class="card-meta">
       <div class="card-meta-left">
