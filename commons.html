@@ -338,7 +338,57 @@ body{
   transition:all 0.15s;
 }
 .ico:hover{color:var(--text);background:rgba(255,255,255,0.06);}
-.ico.saved{color:var(--amber);}
+
+/* ── COMMENTS SHEET ── */
+.comments-sheet{
+  position:absolute;bottom:0;left:0;right:0;z-index:150;
+  background:#0E1118;
+  border-radius:20px 20px 0 0;
+  border-top:1px solid rgba(255,255,255,0.09);
+  box-shadow:0 -8px 40px rgba(0,0,0,0.7);
+  display:flex;flex-direction:column;
+  max-height:72%;
+  transform:translateY(100%);
+  transition:transform 0.38s cubic-bezier(.22,1,.36,1);
+}
+.comments-sheet.open{transform:translateY(0);}
+.sheet-handle{width:36px;height:4px;background:rgba(255,255,255,0.14);border-radius:2px;margin:10px auto 0;}
+.sheet-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px 10px;
+  border-bottom:1px solid var(--border);
+  font-family:var(--syne);font-size:13px;font-weight:700;color:var(--text);
+}
+.sheet-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1;padding:2px 4px;}
+.comments-list{flex:1;overflow-y:auto;padding:12px 18px;scrollbar-width:none;display:flex;flex-direction:column;gap:14px;}
+.comments-list::-webkit-scrollbar{display:none;}
+.comment-row{display:flex;gap:10px;align-items:flex-start;}
+.comment-av{width:30px;height:30px;border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:var(--syne);font-size:10px;font-weight:700;color:#fff;}
+.comment-av img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated;}
+.comment-bubble{flex:1;}
+.comment-name{font-family:var(--syne);font-size:11px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.comment-txt{font-family:var(--dm);font-size:12px;color:var(--text2);line-height:1.55;}
+.comment-time{font-family:var(--dm);font-size:9px;color:var(--muted);margin-top:3px;}
+.comment-input-row{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px 18px;
+  border-top:1px solid var(--border);
+}
+.comment-input-av{width:28px;height:28px;border-radius:50%;overflow:hidden;flex-shrink:0;}
+.comment-input-av img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated;}
+.comment-field{
+  flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border2);
+  border-radius:18px;padding:8px 14px;
+  font-family:var(--dm);font-size:12px;color:var(--text);outline:none;
+  -webkit-user-select:text;
+}
+.comment-field::placeholder{color:var(--muted);}
+.comment-send{
+  background:var(--violet);border:none;border-radius:50%;
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:opacity 0.15s;
+}
+.comment-send:hover{opacity:0.85;}
 
 /* ── BOTTOM NAV — liquid glass ── */
 .bottom-nav{
@@ -352,13 +402,23 @@ body{
     inset 0 -1px 0 rgba(0,0,0,0.15),
     0 -1px 24px rgba(0,0,0,0.3);
   display:flex;
+  transition:background 0.35s,border-color 0.35s,box-shadow 0.35s;
 }
+/* Light-mode nav — when bright content is behind */
+.bottom-nav.nav-light{
+  background:rgba(248,248,252,0.82);
+  border-top-color:rgba(0,0,0,0.07);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.9),0 -1px 24px rgba(0,0,0,0.08);
+}
+.bottom-nav.nav-light .nav-btn{color:rgba(0,0,0,0.32);}
+.bottom-nav.nav-light .nav-btn.on{color:rgba(0,0,0,0.82);}
+.bottom-nav.nav-light .nav-dot{background:rgba(0,0,0,0.75);}
 .nav-btn{
   flex:1;display:flex;flex-direction:column;align-items:center;
   gap:5px;padding:14px 0 18px;cursor:pointer;
   font-family:var(--dm);font-size:9px;font-weight:500;letter-spacing:0.06em;
   color:var(--muted);background:none;border:none;
-  transition:color 0.15s;
+  transition:color 0.25s;
 }
 .nav-btn.on{color:var(--text);}
 .nav-btn:hover:not(.on){color:var(--text2);}
@@ -366,7 +426,7 @@ body{
 .nav-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke .15s;}
 .nav-dot{
   width:3px;height:3px;border-radius:50%;background:var(--text);
-  margin-top:1px;opacity:0;transition:opacity 0.15s;
+  margin-top:1px;opacity:0;transition:opacity 0.15s,background 0.25s;
 }
 .nav-btn.on .nav-dot{opacity:1;}
 
@@ -527,10 +587,8 @@ body{
               </div>
               <div class="card-foot">
                 <button class="upvote on" onclick="vote(this)"><span class="arr">▲</span><span class="n">248</span></button>
-                <button class="act">💬 <span>34</span></button>
-                <div class="sp"></div>
-                <button class="ico" onclick="toggleSave(this)">🔖</button>
-                <button class="ico" onclick="share()">↗</button>
+                <button class="act" onclick="openComments(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5A2 2 0 0 1 10 10.5H4L1.5 13V3.5A2 2 0 0 1 3.5 1.5H10A2 2 0 0 1 12 3.5Z"/></svg> <span>34</span></button>
+                <button class="act" onclick="share()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="2.5" r="1.5"/><circle cx="10.5" cy="11.5" r="1.5"/><circle cx="3.5" cy="7" r="1.5"/><line x1="9" y1="3.2" x2="5" y2="6.1"/><line x1="9" y1="10.8" x2="5" y2="7.9"/></svg></button>
               </div>
             </div>
 
@@ -565,10 +623,8 @@ body{
               </div>
               <div class="card-foot">
                 <button class="upvote" onclick="vote(this)"><span class="arr">▲</span><span class="n">187</span></button>
-                <button class="act">💬 <span>21</span></button>
-                <div class="sp"></div>
-                <button class="ico" onclick="toggleSave(this)">🔖</button>
-                <button class="ico" onclick="share()">↗</button>
+                <button class="act" onclick="openComments(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5A2 2 0 0 1 10 10.5H4L1.5 13V3.5A2 2 0 0 1 3.5 1.5H10A2 2 0 0 1 12 3.5Z"/></svg> <span>21</span></button>
+                <button class="act" onclick="share()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="2.5" r="1.5"/><circle cx="10.5" cy="11.5" r="1.5"/><circle cx="3.5" cy="7" r="1.5"/><line x1="9" y1="3.2" x2="5" y2="6.1"/><line x1="9" y1="10.8" x2="5" y2="7.9"/></svg></button>
               </div>
             </div>
 
@@ -603,10 +659,8 @@ body{
               </div>
               <div class="card-foot">
                 <button class="upvote" onclick="vote(this)"><span class="arr">▲</span><span class="n">142</span></button>
-                <button class="act">💬 <span>18</span></button>
-                <div class="sp"></div>
-                <button class="ico" onclick="toggleSave(this)">🔖</button>
-                <button class="ico" onclick="share()">↗</button>
+                <button class="act" onclick="openComments(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5A2 2 0 0 1 10 10.5H4L1.5 13V3.5A2 2 0 0 1 3.5 1.5H10A2 2 0 0 1 12 3.5Z"/></svg> <span>18</span></button>
+                <button class="act" onclick="share()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="2.5" r="1.5"/><circle cx="10.5" cy="11.5" r="1.5"/><circle cx="3.5" cy="7" r="1.5"/><line x1="9" y1="3.2" x2="5" y2="6.1"/><line x1="9" y1="10.8" x2="5" y2="7.9"/></svg></button>
               </div>
             </div>
 
@@ -641,10 +695,8 @@ body{
               </div>
               <div class="card-foot">
                 <button class="upvote" onclick="vote(this)"><span class="arr">▲</span><span class="n">98</span></button>
-                <button class="act">💬 <span>11</span></button>
-                <div class="sp"></div>
-                <button class="ico" onclick="toggleSave(this)">🔖</button>
-                <button class="ico" onclick="share()">↗</button>
+                <button class="act" onclick="openComments(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5A2 2 0 0 1 10 10.5H4L1.5 13V3.5A2 2 0 0 1 3.5 1.5H10A2 2 0 0 1 12 3.5Z"/></svg> <span>11</span></button>
+                <button class="act" onclick="share()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="2.5" r="1.5"/><circle cx="10.5" cy="11.5" r="1.5"/><circle cx="3.5" cy="7" r="1.5"/><line x1="9" y1="3.2" x2="5" y2="6.1"/><line x1="9" y1="10.8" x2="5" y2="7.9"/></svg></button>
               </div>
             </div>
 
@@ -679,10 +731,8 @@ body{
               </div>
               <div class="card-foot">
                 <button class="upvote" onclick="vote(this)"><span class="arr">▲</span><span class="n">76</span></button>
-                <button class="act">💬 <span>9</span></button>
-                <div class="sp"></div>
-                <button class="ico" onclick="toggleSave(this)">🔖</button>
-                <button class="ico" onclick="share()">↗</button>
+                <button class="act" onclick="openComments(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5A2 2 0 0 1 10 10.5H4L1.5 13V3.5A2 2 0 0 1 3.5 1.5H10A2 2 0 0 1 12 3.5Z"/></svg> <span>9</span></button>
+                <button class="act" onclick="share()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="2.5" r="1.5"/><circle cx="10.5" cy="11.5" r="1.5"/><circle cx="3.5" cy="7" r="1.5"/><line x1="9" y1="3.2" x2="5" y2="6.1"/><line x1="9" y1="10.8" x2="5" y2="7.9"/></svg></button>
               </div>
             </div>
 
@@ -710,10 +760,8 @@ body{
               </div>
               <div class="card-foot">
                 <button class="upvote" onclick="vote(this)"><span class="arr">▲</span><span class="n">4</span></button>
-                <button class="act">💬 0</button>
-                <div class="sp"></div>
-                <button class="ico" onclick="toggleSave(this)">🔖</button>
-                <button class="ico" onclick="share()">↗</button>
+                <button class="act" onclick="openComments(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5A2 2 0 0 1 10 10.5H4L1.5 13V3.5A2 2 0 0 1 3.5 1.5H10A2 2 0 0 1 12 3.5Z"/></svg> 0</button>
+                <button class="act" onclick="share()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="2.5" r="1.5"/><circle cx="10.5" cy="11.5" r="1.5"/><circle cx="3.5" cy="7" r="1.5"/><line x1="9" y1="3.2" x2="5" y2="6.1"/><line x1="9" y1="10.8" x2="5" y2="7.9"/></svg></button>
               </div>
             </div>
             <div class="card">
@@ -735,10 +783,8 @@ body{
               </div>
               <div class="card-foot">
                 <button class="upvote" onclick="vote(this)"><span class="arr">▲</span><span class="n">17</span></button>
-                <button class="act">💬 3</button>
-                <div class="sp"></div>
-                <button class="ico" onclick="toggleSave(this)">🔖</button>
-                <button class="ico" onclick="share()">↗</button>
+                <button class="act" onclick="openComments(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5A2 2 0 0 1 10 10.5H4L1.5 13V3.5A2 2 0 0 1 3.5 1.5H10A2 2 0 0 1 12 3.5Z"/></svg> 3</button>
+                <button class="act" onclick="share()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="2.5" r="1.5"/><circle cx="10.5" cy="11.5" r="1.5"/><circle cx="3.5" cy="7" r="1.5"/><line x1="9" y1="3.2" x2="5" y2="6.1"/><line x1="9" y1="10.8" x2="5" y2="7.9"/></svg></button>
               </div>
             </div>
           </div><!-- /new -->
@@ -765,10 +811,8 @@ body{
               </div>
               <div class="card-foot">
                 <button class="upvote" onclick="vote(this)"><span class="arr">▲</span><span class="n">142</span></button>
-                <button class="act">💬 18</button>
-                <div class="sp"></div>
-                <button class="ico" onclick="toggleSave(this)">🔖</button>
-                <button class="ico" onclick="share()">↗</button>
+                <button class="act" onclick="openComments(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5A2 2 0 0 1 10 10.5H4L1.5 13V3.5A2 2 0 0 1 3.5 1.5H10A2 2 0 0 1 12 3.5Z"/></svg> 18</button>
+                <button class="act" onclick="share()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="2.5" r="1.5"/><circle cx="10.5" cy="11.5" r="1.5"/><circle cx="3.5" cy="7" r="1.5"/><line x1="9" y1="3.2" x2="5" y2="6.1"/><line x1="9" y1="10.8" x2="5" y2="7.9"/></svg></button>
               </div>
             </div>
             <div class="card">
@@ -790,10 +834,8 @@ body{
               </div>
               <div class="card-foot">
                 <button class="upvote" onclick="vote(this)"><span class="arr">▲</span><span class="n">248</span></button>
-                <button class="act">💬 34</button>
-                <div class="sp"></div>
-                <button class="ico" onclick="toggleSave(this)">🔖</button>
-                <button class="ico" onclick="share()">↗</button>
+                <button class="act" onclick="openComments(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5A2 2 0 0 1 10 10.5H4L1.5 13V3.5A2 2 0 0 1 3.5 1.5H10A2 2 0 0 1 12 3.5Z"/></svg> 34</button>
+                <button class="act" onclick="share()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="2.5" r="1.5"/><circle cx="10.5" cy="11.5" r="1.5"/><circle cx="3.5" cy="7" r="1.5"/><line x1="9" y1="3.2" x2="5" y2="6.1"/><line x1="9" y1="10.8" x2="5" y2="7.9"/></svg></button>
               </div>
             </div>
           </div><!-- /trending -->
@@ -1099,10 +1141,8 @@ function submitPost() {
       </div>
       <div class="card-foot">
         <button class="upvote on" onclick="vote(this)"><span class="arr">▲</span><span class="n">1</span></button>
-        <button class="act">💬 <span>0</span></button>
-        <div class="sp"></div>
-        <button class="ico" onclick="toggleSave(this)">🔖</button>
-        <button class="ico" onclick="share()">↗</button>
+        <button class="act" onclick="openComments(this)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8.5A2 2 0 0 1 10 10.5H4L1.5 13V3.5A2 2 0 0 1 3.5 1.5H10A2 2 0 0 1 12 3.5Z"/></svg> <span>0</span></button>
+                <button class="act" onclick="share()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="2.5" r="1.5"/><circle cx="10.5" cy="11.5" r="1.5"/><circle cx="3.5" cy="7" r="1.5"/><line x1="9" y1="3.2" x2="5" y2="6.1"/><line x1="9" y1="10.8" x2="5" y2="7.9"/></svg></button>
       </div>`;
 
     // Insert at top of HOT feed
@@ -1211,6 +1251,174 @@ function burstConfetti(anchor) {
 const _spinStyle = document.createElement('style');
 _spinStyle.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
 document.head.appendChild(_spinStyle);
+
+// ── COMMENTS SHEET ──
+const SEED_MAP = {SC:'SarahChen',MW:'MarcusWebb',YT:'YukiTanaka',PN:'PriyaNair',AR:'AlexRivera'};
+const SAMPLE_COMMENTS = {
+  1: [{seed:'SC',name:'Sarah Chen',handle:'sarahchen',text:'This is stunning — what model version did you use?',time:'2m'},
+      {seed:'MW',name:'Marcus Webb',handle:'marcuswebb',text:'The geometry is so precise 🔥 Did you use ControlNet for the structure?',time:'8m'},
+      {seed:'YT',name:'Yuki Tanaka',handle:'yukitanaka',text:'Saving this prompt, incredible result.',time:'14m'}],
+  2: [{seed:'PN',name:'Priya Nair',handle:'priyanair',text:'Love the dark mode treatment, very fintech-forward.',time:'1h'},
+      {seed:'AR',name:'Alex Rivera',handle:'alexrivera',text:'Did you use --style raw on this? The quality looks insane',time:'3h'}],
+  3: [{seed:'MW',name:'Marcus Webb',handle:'marcuswebb',text:'The cfg 12 really shows — brutal and beautiful.',time:'30m'},
+      {seed:'SC',name:'Sarah Chen',handle:'sarahchen',text:'This composition is perfect. ControlNet for the win.',time:'45m'},
+      {seed:'AR',name:'Alex Rivera',handle:'alexrivera',text:'What sampler? DPM++ really does magic on editorial work.',time:'2h'}],
+  4: [{seed:'YT',name:'Yuki Tanaka',handle:'yukitanaka',text:'Firefly is underrated for product work, this proves it.',time:'4h'},
+      {seed:'MW',name:'Marcus Webb',handle:'marcuswebb',text:'The marble texture is so realistic I had to do a double take.',time:'6h'}],
+  5: [{seed:'SC',name:'Sarah Chen',handle:'sarahchen',text:'After Effects + Runway is such a power combo.',time:'20h'},
+      {seed:'PN',name:'Priya Nair',handle:'priyanair',text:'40 frames generated and only 12 picked — the curation makes it.',time:'22h'}],
+};
+let _commentCardIndex = 0;
+
+function openComments(btn) {
+  // Remove any existing sheet
+  document.querySelector('.comments-sheet')?.remove();
+
+  const card = btn.closest('.card');
+  const countEl = btn.querySelector('span') || btn;
+  _commentCardIndex = (_commentCardIndex % 5) + 1;
+  const comments = SAMPLE_COMMENTS[_commentCardIndex] || SAMPLE_COMMENTS[1];
+
+  const sheet = document.createElement('div');
+  sheet.className = 'comments-sheet';
+
+  const commentsHtml = comments.map(c => `
+    <div class="comment-row">
+      <div class="comment-av" style="background:linear-gradient(135deg,#6B4EFF,#F72585);">
+        <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=${SEED_MAP[c.seed]}&backgroundColor=1a1a2e" crossorigin="anonymous">
+      </div>
+      <div class="comment-bubble">
+        <div class="comment-name">${c.name} <span style="font-weight:400;color:var(--muted);font-family:var(--dm);">@${c.handle}</span></div>
+        <div class="comment-txt">${c.text}</div>
+        <div class="comment-time">${c.time} ago</div>
+      </div>
+    </div>`).join('');
+
+  sheet.innerHTML = `
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <span>Comments <span style="color:var(--muted);font-size:11px;font-weight:500;">${comments.length}</span></span>
+      <button class="sheet-close" onclick="closeComments()">✕</button>
+    </div>
+    <div class="comments-list">${commentsHtml}</div>
+    <div class="comment-input-row">
+      <div class="comment-input-av">
+        <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=JoeyPrimiani&backgroundColor=1a1a2e" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;image-rendering:pixelated;">
+      </div>
+      <input class="comment-field" id="comment-field" placeholder="Add a comment…" onkeydown="if(event.key==='Enter'){sendComment(this,'${_commentCardIndex}')}">
+      <button class="comment-send" onclick="sendComment(document.getElementById('comment-field'),'${_commentCardIndex}')">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="1" y1="6" x2="11" y2="6"/><polyline points="7,2 11,6 7,10"/>
+        </svg>
+      </button>
+    </div>`;
+
+  document.querySelector('.phone-screen').appendChild(sheet);
+  // Animate in
+  requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add('open')));
+
+  // Tap backdrop to close
+  sheet.addEventListener('click', e => { if (e.target === sheet) closeComments(); });
+}
+
+function closeComments() {
+  const sheet = document.querySelector('.comments-sheet');
+  if (!sheet) return;
+  sheet.classList.remove('open');
+  setTimeout(() => sheet.remove(), 380);
+}
+
+function sendComment(input, cardIdx) {
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  const list = document.querySelector('.comments-list');
+  const row = document.createElement('div');
+  row.className = 'comment-row';
+  row.style.cssText = 'opacity:0;transform:translateY(8px);transition:opacity 0.3s,transform 0.3s;';
+  row.innerHTML = `
+    <div class="comment-input-av" style="width:30px;height:30px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+      <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=JoeyPrimiani&backgroundColor=1a1a2e" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;image-rendering:pixelated;">
+    </div>
+    <div class="comment-bubble">
+      <div class="comment-name">Joey Primiani <span style="font-weight:400;color:var(--muted);font-family:var(--dm);">@jp</span></div>
+      <div class="comment-txt">${text}</div>
+      <div class="comment-time">just now</div>
+    </div>`;
+  list.appendChild(row);
+  list.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    row.style.opacity = '1'; row.style.transform = 'translateY(0)';
+  }));
+}
+
+// ── ADAPTIVE NAV CONTRAST ──
+(function() {
+  const nav = document.querySelector('.bottom-nav');
+  const app = document.getElementById('app');
+
+  // Sample brightness of an image's bottom portion
+  function imgBrightness(img) {
+    try {
+      const c = document.createElement('canvas');
+      c.width = 16; c.height = 8;
+      const ctx = c.getContext('2d');
+      // sample bottom 30% of image (most likely to be behind nav as you scroll)
+      const sy = img.naturalHeight * 0.7;
+      const sh = img.naturalHeight * 0.3;
+      ctx.drawImage(img, 0, sy, img.naturalWidth, sh, 0, 0, 16, 8);
+      const d = ctx.getImageData(0, 0, 16, 8).data;
+      let sum = 0;
+      for (let i = 0; i < d.length; i += 4) sum += 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+      return sum / (d.length / 4);
+    } catch(e) { return null; }
+  }
+
+  // Check background color brightness
+  function colorBrightness(el) {
+    const bg = getComputedStyle(el).backgroundColor;
+    const m = bg.match(/[\d.]+/g);
+    if (!m || m.length < 3) return null;
+    const a = m[3] !== undefined ? parseFloat(m[3]) : 1;
+    if (a < 0.15) return null;
+    return 0.299*+m[0] + 0.587*+m[1] + 0.114*+m[2];
+  }
+
+  function update() {
+    const navRect = nav.getBoundingClientRect();
+    const sampleY = navRect.top + 6; // just inside top edge of nav
+    const sampleXs = [0.2, 0.4, 0.6, 0.8].map(f => navRect.left + navRect.width * f);
+
+    let totalB = 0, n = 0;
+    for (const x of sampleXs) {
+      let el = document.elementFromPoint(x, sampleY);
+      while (el && el !== document.body) {
+        if (el.tagName === 'IMG' && el.complete && el.naturalWidth) {
+          const b = imgBrightness(el);
+          if (b !== null) { totalB += b; n++; break; }
+        }
+        const b = colorBrightness(el);
+        if (b !== null && b > 1) { totalB += b; n++; break; }
+        el = el.parentElement;
+      }
+    }
+    nav.classList.toggle('nav-light', n > 0 && totalB / n > 145);
+  }
+
+  // Set crossOrigin before images load so canvas can read them
+  document.querySelectorAll('.card-img img').forEach(img => {
+    img.crossOrigin = 'anonymous';
+  });
+
+  let ticking = false;
+  app.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => { update(); ticking = false; });
+  });
+  setTimeout(update, 500); // initial check after images settle
+})();
 </script>
 </body>
 </html>
