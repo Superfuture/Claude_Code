@@ -27,11 +27,22 @@
 	text-align:center;
 	margin-top:20px;
 	cursor:pointer;
-	transition: transform 0.15s ease;
+	position: relative;
 }
 
-#services > li:hover {
-	transform: translateY(-10px);
+.service-label {
+	display: block;
+	font-size: 13px;
+	font-weight: 500;
+	color: #333;
+	margin-bottom: 4px;
+	opacity: 0;
+	transition: opacity 0.15s ease;
+	height: 18px;
+}
+
+#services > li:hover .service-label {
+	opacity: 1;
 }
 
 #services > li img {
