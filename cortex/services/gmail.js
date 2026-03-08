@@ -12,22 +12,25 @@ Gmail.prototype.connect = function(popup, success, error) {
 	var that = this;
 
 	chrome.identity.getAuthToken({interactive: true}, function(token) {
-    that.data.token = token
-    that.finishConnecting(token)
+    if (chrome.runtime.lastError || !token) {
+      console.log('Gmail auth error:', chrome.runtime.lastError && chrome.runtime.lastError.message);
+      error();
+      return;
+    }
 
     fetch('https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=' + token,
     {}).then((res) => {
       if(res.status == 200) {
+        that.data.token = token;
+        that.finishConnecting(token);
         success();
       } else {
-        that.disconnect();
         error();
       }
     }).catch((err) => {
-      that.disconnect();
       error();
-    })
-		
+    });
+
 	});
 };
 
