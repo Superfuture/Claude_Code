@@ -31,18 +31,7 @@
 }
 
 .service-label {
-	display: block;
-	font-size: 13px;
-	font-weight: 500;
-	color: #333;
-	margin-bottom: 4px;
-	opacity: 0;
-	transition: opacity 0.15s ease;
-	height: 18px;
-}
-
-#services > li:hover .service-label {
-	opacity: 1;
+	display: none;
 }
 
 #services > li img {
@@ -55,9 +44,6 @@
 	border-radius: 0 8px 8px 8px;
 }
 
-#services > li#twitter .service-label {
-	display: none;
-}
 
 #services .service-name {
 	font-size: 14px;
