@@ -4,6 +4,15 @@ var cortexBaseUrl = (function() {
 })();
 function cortexUrl(path) { return cortexBaseUrl + path.replace(/^\//, ''); }
 
+// Cache sound preference and keep it in sync
+var cortexSoundEnabled = true;
+chrome.storage.local.get(['soundEnabled'], function(result) {
+	cortexSoundEnabled = result.soundEnabled !== false;
+});
+chrome.storage.onChanged.addListener(function(changes) {
+	if (changes.soundEnabled) cortexSoundEnabled = changes.soundEnabled.newValue !== false;
+});
+
 // Safe wrapper for chrome.runtime.sendMessage — silently fails if extension context is invalidated
 function safelySendMessage(message, callback) {
 	try {
@@ -245,11 +254,9 @@ function Cortex() {
 					}, function(response) {
 						if (response && !response.success) { console.error(response.error); } else if (response) {
 							//Play sound (if enabled)
-							chrome.storage.local.get(['soundEnabled'], function(result) {
-								if (result.soundEnabled !== false) {
-									new Audio(cortexUrl('/sounds/swoosh.mp3')).play();
-								}
-							});
+							if (cortexSoundEnabled) {
+								new Audio(cortexUrl('/sounds/swoosh.mp3')).play();
+							}
 						}
 					});
 				});
