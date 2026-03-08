@@ -254,7 +254,7 @@ body::before{
   position:relative;
 }
 .contact-box::before{
-  content:'★ HIRE ME ★';
+  content:'';
   font-family:var(--px);font-size:8px;color:var(--acc);
   position:absolute;top:-14px;left:50%;transform:translateX(-50%);
   background:var(--bg);padding:0 14px;letter-spacing:.1em;
@@ -303,6 +303,34 @@ footer{
 .back-top.show{opacity:1;}
 .back-top:hover{background:var(--l2);color:#000;}
 
+/* ── 8-BIT FACE ── */
+#hero-character{display:inline-flex;flex-direction:column;align-items:center;margin-bottom:32px;animation:float 3s ease-in-out infinite;}
+#hero-bubble{background:#fff;border:3px solid #0a0a1a;box-shadow:4px 4px 0 #0a0a1a;padding:10px 20px;font-family:var(--px);font-size:9px;color:#0a0a1a;letter-spacing:.05em;line-height:1.8;margin-bottom:14px;position:relative;min-width:220px;max-width:320px;text-align:center;white-space:normal;}
+#hero-bubble::after{content:'';position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);border-left:10px solid transparent;border-right:10px solid transparent;border-top:14px solid #0a0a1a;}
+#hero-bubble::before{content:'';position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid #fff;z-index:1;}
+#hero-bubble-cursor::after{content:'█';animation:blink .8s step-end infinite;color:var(--l2);}
+.face-wrap{position:relative;display:block;line-height:0;}
+#hero-face{image-rendering:pixelated;image-rendering:crisp-edges;display:block;cursor:crosshair;filter:drop-shadow(0 0 20px rgba(255,19,104,.6)) drop-shadow(0 0 50px rgba(0,224,255,.25));}
+.crt-lines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 1px,rgba(0,0,0,.09) 1px,rgba(0,0,0,.09) 2px),radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.45) 100%);}
+@media(max-width:600px){#hero-face{width:240px;height:336px;}}
+
+/* ── CHAT ── */
+#hero-chat{display:flex;gap:0;margin-top:10px;width:320px;max-width:90vw;}
+#hero-chat-input{
+  flex:1;background:#050510;border:3px solid var(--l3);border-right:0;
+  color:var(--l3);font-family:var(--px);font-size:7px;
+  padding:10px 12px;outline:none;letter-spacing:.05em;min-width:0;
+}
+#hero-chat-input::placeholder{color:rgba(0,255,255,.3);}
+#hero-chat-input:focus{border-color:var(--l2);box-shadow:0 0 14px rgba(0,255,255,.25);}
+#hero-chat-send{
+  background:var(--l3);color:#000;border:3px solid var(--l3);
+  font-family:var(--px);font-size:10px;padding:0 16px;
+  cursor:pointer;flex-shrink:0;transition:background .1s,color .1s;
+}
+#hero-chat-send:hover{background:#000;color:var(--l3);}
+@media(max-width:600px){#hero-chat{width:240px;}}
+
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
   .stats-grid{grid-template-columns:1fr;}
@@ -334,6 +362,17 @@ footer{
 
 <!-- HERO -->
 <section id="hero">
+  <div id="hero-character">
+    <div id="hero-bubble"><span id="hero-bubble-text"></span><span id="hero-bubble-cursor"></span></div>
+    <div class="face-wrap">
+      <canvas id="hero-face" width="320" height="448"></canvas>
+      <div class="crt-lines"></div>
+    </div>
+    <div id="hero-chat">
+      <input type="text" id="hero-chat-input" placeholder="> TALK TO JOEY..." maxlength="60" autocomplete="off">
+      <button id="hero-chat-send">▶</button>
+    </div>
+  </div>
   <div style="position:relative;z-index:2;width:100%;max-width:900px;margin:0 auto;padding:0 24px;">
     <div class="hero-badge">★ PLAYER ONE ★</div>
     <h1 class="hero-name">JOEY<br>PRIMIANI<span class="blink-cursor"></span></h1>
@@ -350,10 +389,6 @@ footer{
 <!-- STATS -->
 <div class="wrap">
   <div class="stats-grid section" id="stats-sec">
-    <div class="stat" data-bg="🎮">
-      <span class="stat-val" data-target="1000">000</span>
-      <span class="stat-lbl">PROJECTS<br>COMPLETED</span>
-    </div>
     <div class="stat" data-bg="⚡">
       <span class="stat-val">15+</span>
       <span class="stat-lbl">YEARS OF<br>EXPERIENCE</span>
@@ -361,6 +396,10 @@ footer{
     <div class="stat" data-bg="🏆">
       <span class="stat-val" data-target="100">000</span>
       <span class="stat-lbl">DESIGN<br>SPRINTS</span>
+    </div>
+    <div class="stat" data-bg="👥">
+      <span class="stat-val">1B+</span>
+      <span class="stat-lbl">MEMBERS<br>IMPACTED</span>
     </div>
   </div>
 </div>
@@ -432,10 +471,10 @@ footer{
       <div class="project-header">
         <span class="project-year">2022</span>
         <span class="project-icon">📱</span>
-        <div class="project-name">FOLIO</div>
+        <div class="project-name">LITTLE MONSTERS</div>
       </div>
       <div class="project-body">
-        <div class="project-desc">Creator &amp; designer of Folio — the platform redefining digital identity and NFT portfolios.</div>
+        <div class="project-desc">Creator &amp; designer of Lady Gaga's Little Monsters — the platform redefining digital identity and fan communities.</div>
         <div class="project-awards">
           <span class="award">★ VOGUE</span>
           <span class="award">★ PRODUCT HUNT</span>
@@ -449,10 +488,10 @@ footer{
       <div class="project-header">
         <span class="project-year">2018</span>
         <span class="project-icon">🎵</span>
-        <div class="project-name">STUDIO XO</div>
+        <div class="project-name">INTUIT</div>
       </div>
       <div class="project-body">
-        <div class="project-desc">UI/UX &amp; development for Lady Gaga's tech-fashion studio. Where fashion meets the future.</div>
+        <div class="project-desc">UI/UX &amp; development for Intuit. Where finance meets the future.</div>
         <div class="project-awards">
           <span class="award">★ WEBBY AWARD</span>
           <span class="award">★ CANNES GOLD LION</span>
@@ -475,7 +514,7 @@ footer{
     <div>
       <div class="about-text">
         <p>I'm <strong>Joey Primiani</strong> — a Silicon Valley product designer and creative entrepreneur on a mission to <strong>advance humanity through technology and design</strong>.</p>
-        <p>With <strong>15+ years</strong> of experience and <strong>1,000+ projects</strong> shipped, I've built award-winning work for Google, Lady Gaga, and some of the world's most iconic brands.</p>
+        <p>With <strong>15+ years</strong> of experience, I've built award-winning work for Google, Lady Gaga, and some of the world's most iconic brands.</p>
         <p>I believe the best design <strong>disappears into the experience</strong> — invisible when it works, unforgettable when it doesn't.</p>
       </div>
     </div>
@@ -517,7 +556,6 @@ footer{
     <a href="mailto:jp@superfuturelabs.com" class="contact-email">jp@superfuturelabs.com</a>
     <div class="contact-links">
       <a href="https://www.linkedin.com/in/jprim/" target="_blank" class="btn btn-acc">▶ LINKEDIN</a>
-      <a href="https://joeyprimiani.webflow.io/" target="_blank" class="btn btn-l3">🌐 WEBFLOW SITE</a>
     </div>
   </div>
 </section>
@@ -615,6 +653,236 @@ document.addEventListener('click',e=>{
     setTimeout(()=>s.remove(),500);
   }
 });
+
+// ── 8-BIT FACE ──
+(function(){
+  const cv=document.getElementById('hero-face');
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const PX=16,COLS=20,ROWS=28;
+  const PAL=[null,'#0d0d2a','#f5b484','#c07050','#f0f0f5','#0a0a1a',null,'#0a0a1a','#c07050','#cc2244','#fffef5','#ff1368','#0a0a1a'];
+  const SPR=[
+    [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],
+    [0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
+    [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,2,2,2,2,2,2,2,2,2,2,1,1,1,1,0],
+    [0,1,1,3,2,2,2,2,2,2,2,2,2,2,2,2,3,1,1,0],
+    [0,1,1,3,2,2,2,2,2,2,2,2,2,2,2,2,3,1,1,0],
+    [0,1,1,3,2,7,7,7,2,2,2,2,7,7,7,2,3,1,1,0],
+    [0,0,1,3,2,4,4,4,2,2,2,2,4,4,4,2,3,1,0,0],
+    [0,0,1,3,2,4,5,4,2,2,2,2,4,5,4,2,3,1,0,0],
+    [0,0,1,3,2,4,4,4,2,2,2,2,4,4,4,2,3,1,0,0],
+    [0,0,1,3,2,2,2,2,2,2,2,2,2,2,2,2,3,1,0,0],
+    [0,0,1,3,2,2,2,2,2,8,8,2,2,2,2,2,3,1,0,0],
+    [0,0,0,3,2,2,2,8,8,8,8,8,2,2,2,2,3,0,0,0],
+    [0,0,0,3,2,2,2,2,2,2,2,2,2,2,2,2,3,0,0,0],
+    [0,0,0,3,2,2,2,9,9,9,9,9,9,2,2,2,3,0,0,0],
+    [0,0,0,3,2,2,2,9,10,10,10,10,9,2,2,2,3,0,0,0],
+    [0,0,0,3,2,2,2,9,9,9,9,9,9,2,2,2,3,0,0,0],
+    [0,0,0,3,2,2,2,2,2,2,2,2,2,2,2,2,3,0,0,0],
+    [0,0,0,0,0,3,2,2,2,2,2,2,2,2,3,0,0,0,0,0],
+    [0,0,0,0,0,3,2,2,2,2,2,2,2,2,3,0,0,0,0,0],
+    [0,0,0,0,0,0,2,2,2,2,2,2,2,0,0,0,0,0,0,0],
+    [0,0,0,0,11,11,11,11,11,11,11,11,11,11,11,11,0,0,0,0],
+    [0,0,0,11,11,12,12,12,12,12,12,12,12,12,12,11,11,0,0,0],
+    [0,0,11,11,12,12,12,12,12,12,12,12,12,12,12,12,11,11,0,0],
+    [0,11,11,12,12,12,12,12,12,12,12,12,12,12,12,12,12,11,11,0],
+    [11,11,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,11,11],
+    [11,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,11],
+    [12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12],
+  ];
+
+  const LE={col:6,row:8},RE={col:13,row:8};
+  let mgx=-1,mgy=-1,lmx=-1,lmy=-1;
+  let blinkState=0,expr='normal',exprTimer=null,idleTime=0,particles=[];
+
+  // Speech bubble typewriter
+  const bubTxt=document.getElementById('hero-bubble-text');
+  const MSGS=['HELLO WORLD! ✦','LET\'S BUILD SOMETHING','PIXEL PERFECT DESIGN','15+ YEARS OF CRAFT','CHANGING THE WORLD','ONE PIXEL AT A TIME','AWARD-WINNING WORK ★','SILICON VALLEY MADE'];
+  let mIdx=0,cIdx=0,chatMode=false,chatTimer=null;
+  function typeMsg(){
+    if(chatMode)return;
+    const m=MSGS[mIdx];
+    if(cIdx<m.length){bubTxt.textContent=m.slice(0,cIdx);cIdx++;setTimeout(typeMsg,80);}
+    else{bubTxt.textContent=m;setTimeout(()=>{if(!chatMode){mIdx=(mIdx+1)%MSGS.length;cIdx=0;typeMsg();}},2500);}
+  }
+  function typeResponse(msg,e){
+    chatMode=true;clearTimeout(chatTimer);
+    bubTxt.textContent='';
+    if(e)setExpr(e,e==='surprised'?900:e==='wink'?700:e==='sunglasses'?3500:1200);
+    let i=0;
+    function t(){
+      if(i<=msg.length){bubTxt.textContent=msg.slice(0,i);i++;chatTimer=setTimeout(t,60);}
+      else{chatTimer=setTimeout(()=>{chatMode=false;cIdx=0;typeMsg();},3800);}
+    }
+    t();
+  }
+  window._joeyRespond=typeResponse;
+  typeMsg();
+
+  function setExpr(e,dur){clearTimeout(exprTimer);expr=e;if(dur)exprTimer=setTimeout(()=>expr='normal',dur);}
+
+  document.addEventListener('mousemove',e=>{
+    const r=cv.getBoundingClientRect();
+    mgx=(e.clientX-r.left)/r.width*COLS;
+    mgy=(e.clientY-r.top)/r.height*ROWS;
+    if(lmx>=0){const v=Math.hypot(e.clientX-lmx,e.clientY-lmy);if(v>60&&(expr==='normal'||expr==='sunglasses'||expr==='sleepy'))setExpr('surprised',700);}
+    lmx=e.clientX;lmy=e.clientY;
+    if(expr==='sunglasses'||expr==='sleepy')setExpr('normal');
+    idleTime=0;
+  });
+
+  setInterval(()=>{if(expr==='normal'){idleTime++;if(idleTime===5)setExpr('sunglasses');else if(idleTime===12)setExpr('sleepy');}},1000);
+
+  cv.addEventListener('click',e=>{
+    setExpr('wink',600);
+    const r=cv.getBoundingClientRect();
+    const cx=(e.clientX-r.left)/r.width*cv.width,cy=(e.clientY-r.top)/r.height*cv.height;
+    ['#ff1368','#ffe000','#00e0ff','#ffffff','#ff5533'].forEach((c,i)=>{
+      for(let j=0;j<3;j++){const a=(i*3+j)/15*Math.PI*2;particles.push({type:'px',x:cx,y:cy,vx:Math.cos(a)*PX*.5,vy:Math.sin(a)*PX*.5-PX*.15,c,l:30,m:30});}
+    });
+  });
+
+  setInterval(()=>{if(expr==='sleepy')particles.push({type:'z',x:(14+Math.random()*2)*PX,y:PX,vx:.6,vy:-1.4,c:'#ffe000',l:70,m:70});},900);
+
+  function pupilOff(ec){
+    if(mgx<0)return{x:0,y:0};
+    const dx=mgx-(ec.col+.5),dy=mgy-(ec.row+.5),d=Math.hypot(dx,dy);
+    if(d<.01)return{x:0,y:0};
+    return{x:dx*Math.min(d,.7)/d,y:dy*Math.min(d,.7)/d};
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    const blink=blinkState===2,halfC=blinkState===1,halfO=blinkState===3;
+    const oL=pupilOff(LE),oR=pupilOff(RE);
+    const shades=expr==='sunglasses',sleepy=expr==='sleepy';
+
+    for(let r=0;r<ROWS;r++){
+      for(let c=0;c<COLS;c++){
+        const v=SPR[r][c];
+        if(!v)continue;
+        if(v===5)continue;
+        if(v===4){
+          if(shades)continue;
+          if(blink||(halfC&&r===7)||(halfO&&r===9)){ctx.fillStyle=PAL[2];ctx.fillRect(c*PX,r*PX,PX,PX);continue;}
+        }
+        if(PAL[v]){ctx.fillStyle=PAL[v];ctx.fillRect(c*PX,r*PX,PX,PX);}
+      }
+    }
+
+    if(!blink&&!shades&&!sleepy){
+      ctx.fillStyle=PAL[5];
+      ctx.fillRect(Math.round((LE.col+oL.x)*PX),Math.round((LE.row+oL.y)*PX),PX,PX);
+      if(expr!=='wink')ctx.fillRect(Math.round((RE.col+oR.x)*PX),Math.round((RE.row+oR.y)*PX),PX,PX);
+    }
+
+    if(expr==='wink'){
+      ctx.fillStyle=PAL[2];[7,8,9].forEach(r=>ctx.fillRect(12*PX,r*PX,3*PX,PX));
+      ctx.fillStyle='#0a0a1a';ctx.fillRect(12*PX,8*PX,3*PX,PX);
+    }
+    if(shades){
+      ctx.fillStyle='#001818';ctx.fillRect(4*PX,7*PX,5*PX,3*PX);ctx.fillRect(11*PX,7*PX,5*PX,3*PX);
+      ctx.fillStyle='#0a0a1a';ctx.fillRect(9*PX,8*PX,2*PX,PX);
+      ctx.strokeStyle='#00e0ff';ctx.lineWidth=2;
+      ctx.strokeRect(4*PX+1,7*PX+1,5*PX-2,3*PX-2);ctx.strokeRect(11*PX+1,7*PX+1,5*PX-2,3*PX-2);
+      ctx.lineWidth=1;
+    }
+    if(expr==='surprised'){
+      ctx.fillStyle='#1a0008';ctx.fillRect(8*PX,14*PX,4*PX,3*PX);
+      ctx.fillStyle=PAL[9];
+      ctx.fillRect(7*PX,14*PX,PX,3*PX);ctx.fillRect(12*PX,14*PX,PX,3*PX);
+      ctx.fillRect(7*PX,13*PX,6*PX,PX);ctx.fillRect(7*PX,17*PX,6*PX,PX);
+      ctx.fillStyle=PAL[2];ctx.fillRect(5*PX,6*PX,3*PX,PX);ctx.fillRect(12*PX,6*PX,3*PX,PX);
+      ctx.fillStyle=PAL[7];ctx.fillRect(5*PX,5*PX,3*PX,PX);ctx.fillRect(12*PX,5*PX,3*PX,PX);
+    }
+    if(sleepy){
+      ctx.fillStyle=PAL[2];ctx.fillRect(5*PX,7*PX,3*PX,PX);ctx.fillRect(12*PX,7*PX,3*PX,PX);
+      ctx.fillStyle='#0a0a1a';ctx.fillRect(5*PX,8*PX,3*PX,PX);ctx.fillRect(12*PX,8*PX,3*PX,PX);
+    }
+
+    ctx.save();
+    particles=particles.filter(p=>p.l>0);
+    particles.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.l--;
+      ctx.globalAlpha=p.l/p.m;
+      if(p.type==='z'){
+        ctx.fillStyle=p.c;ctx.font='10px "Press Start 2P"';ctx.fillText('z',p.x,p.y);
+      } else {
+        p.vy+=.5;ctx.fillStyle=p.c;ctx.fillRect(Math.round(p.x),Math.round(p.y),PX,PX);
+      }
+    });
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+
+  function doBlink(){
+    if(expr==='surprised'||expr==='sunglasses'){setTimeout(doBlink,1500+Math.random()*2e3);return;}
+    blinkState=1;
+    setTimeout(()=>blinkState=2,50);setTimeout(()=>blinkState=3,110);
+    setTimeout(()=>{blinkState=0;setTimeout(doBlink,2500+Math.random()*3e3);},170);
+  }
+  setTimeout(doBlink,1500);
+  draw();
+})();
+
+// ── JOEY CHAT ──
+(function(){
+  const input=document.getElementById('hero-chat-input');
+  const btn=document.getElementById('hero-chat-send');
+  if(!input||!btn)return;
+
+  const RESPONSES=[
+    {keys:['hello','hi ','hey','sup','yo ','hiya','howdy'],reply:"HELLO! I'M JOEY — PIXEL PUSHER EXTRAORDINAIRE ★",expr:'surprised'},
+    {keys:['who are you','about you','tell me about','yourself'],reply:"SILICON VALLEY DESIGNER. 15+ YEARS. PIXEL PERFECTIONIST.",expr:'sunglasses'},
+    {keys:['what do you do','what can you'],reply:"I DESIGN FUTURES. PIXEL BY PIXEL. THAT'S MY THING. ★",expr:'normal'},
+    {keys:['design','designer','ux','ui ','interface'],reply:"I CRAFT DIGITAL EXPERIENCES THAT CHANGE LIVES!",expr:'normal'},
+    {keys:['google','x labs','moonshot'],reply:"BUILT AT GOOGLE X LABS. MOONSHOTS ONLY. 🔬",expr:'surprised'},
+    {keys:['lady gaga','little monsters','gaga','monster'],reply:"♥ CREATED LADY GAGA'S LITTLE MONSTERS PLATFORM!",expr:'surprised'},
+    {keys:['intuit','finance','quickbooks'],reply:"BROUGHT FINANCE INTO THE FUTURE AT INTUIT!",expr:'normal'},
+    {keys:['award','cannes','webby','grammy','css award'],reply:"GOLD LIONS. WEBBYS. CSS AWARDS. THE SHELF IS FULL. 🏆",expr:'sunglasses'},
+    {keys:['hire','collab','work together','work with','project','available'],reply:"JP@SUPERFUTURELABS.COM — LET'S BUILD SOMETHING! ✉",expr:'wink'},
+    {keys:['ai','artificial intelligence','machine learning','llm'],reply:"AI + DESIGN = MY SUPERPOWER. THE FUTURE IS NOW! ★",expr:'surprised'},
+    {keys:['pixel','8bit','8-bit','retro','pixelated'],reply:"PIXEL PERFECT. ALWAYS HAS BEEN. ALWAYS WILL BE. ★",expr:'wink'},
+    {keys:['wow','amazing','cool','awesome','incredible','fantastic'],reply:"YOU ARE TOO KIND! THAT MEANS THE WORLD! ★",expr:'surprised'},
+    {keys:['thank','thanks','ty','thx'],reply:"ANYTIME! ★ NOW GO BUILD SOMETHING GREAT!",expr:'wink'},
+    {keys:['joke','funny','haha','lol','laugh'],reply:"WHY DO DESIGNERS HATE NATURE? TOO MANY BUGS! 🐛",expr:'wink'},
+    {keys:['love','♥','heart','adore'],reply:"♥ RIGHT BACK AT YOU! YOU'RE ABSOLUTELY AWESOME!",expr:'surprised'},
+    {keys:['silicon valley','the valley','san francisco','bay area'],reply:"BORN & BUILT IN THE VALLEY. 🌉 BEST ZIP CODE.",expr:'sunglasses'},
+    {keys:['years','experience','how long','career'],reply:"15+ YEARS OF CRAFT. EVERY PIXEL COUNTS. ★",expr:'sunglasses'},
+    {keys:['billion','1b','impact','members'],reply:"1 BILLION MEMBERS IMPACTED AND COUNTING! 🚀",expr:'surprised'},
+    {keys:['sleep','sleepy','tired','zzz','bored'],reply:"ZZZ... SORRY! I'M FULLY AWAKE NOW! LET'S GO! ★",expr:'surprised'},
+    {keys:['help','what can i ask','questions'],reply:"ASK ME ANYTHING! DESIGN. LIFE. THE PIXEL UNIVERSE.",expr:'normal'},
+    {keys:['favorite','favourite','best'],reply:"MY FAVE PIXEL? THE ONE THAT MAKES IT PERFECT. ★",expr:'wink'},
+    {keys:['future','vision'],reply:"DESIGN THAT CHANGES HUMANITY. THAT'S THE VISION. ★",expr:'surprised'},
+    {keys:['color','colour','colors'],reply:"ALL OF THEM. PIXEL ART TAUGHT ME THAT. 🎨",expr:'wink'},
+    {keys:['music','sound','audio'],reply:"DESIGNED SOUND. WORKED WITH GRAMMY ARTISTS. ★",expr:'sunglasses'},
+  ];
+  const FALLBACKS=[
+    "INTERESTING! TELL ME MORE... ★",
+    "PROCESSING... PIXEL BY PIXEL! 🔲",
+    "THAT COMPUTES! WHAT ELSE? ✦",
+    "I'M LISTENING... KEEP GOING! ★",
+    "EVERY QUESTION DESERVES A GREAT ANSWER!",
+    "QUERY RECEIVED. ANALYZING... ★",
+  ];
+  let fbIdx=0;
+
+  function handleSend(){
+    const raw=input.value.trim();
+    if(!raw||!window._joeyRespond)return;
+    const q=' '+raw.toLowerCase()+' ';
+    let found=null;
+    for(const r of RESPONSES){
+      if(r.keys.some(k=>q.includes(k))){found=r;break;}
+    }
+    if(found){window._joeyRespond(found.reply,found.expr);}
+    else{window._joeyRespond(FALLBACKS[fbIdx%FALLBACKS.length],null);fbIdx++;}
+    input.value='';
+    input.focus();
+  }
+
+  btn.addEventListener('click',handleSend);
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')handleSend();});
+})();
 </script>
-</body>
-</html>
