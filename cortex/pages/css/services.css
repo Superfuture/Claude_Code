@@ -27,6 +27,11 @@
 	text-align:center;
 	margin-top:20px;
 	cursor:pointer;
+	transition: transform 0.15s ease;
+}
+
+#services > li:hover {
+	transform: translateY(-10px);
 }
 
 #services > li img {
