@@ -14,11 +14,12 @@ a.connect, a.pick-friends, a.save, a.next {
 	transition: opacity 0.15s, background 0.15s, color 0.15s;
 }
 
-/* Add — gradient */
+/* Add — blue circle */
 .disconnected a.connect {
-	background: linear-gradient(135deg, #FF1368 0%, #FF5533 52%, #FF8C00 100%);
+	background: #1877F2 !important;
 	color: #fff;
 	border-color: transparent;
+	border-radius: 99px !important;
 }
 
 .disconnected a.connect:hover {
