@@ -115,7 +115,8 @@ body{
 
 /* ── SCROLLABLE APP ── */
 .app{
-  position:absolute;inset:0;overflow-y:scroll;overflow-x:hidden;
+  position:absolute;top:52px;left:0;right:0;bottom:0;
+  overflow-y:scroll;overflow-x:hidden;
   scrollbar-width:none;background:var(--bg);
   scroll-behavior:smooth;
 }
@@ -999,12 +1000,26 @@ function showPostModal() {
     <div style="background:#0E1118;border:1px solid rgba(255,255,255,0.09);border-radius:24px 24px 0 0;
       padding:8px 0 0;width:100%;font-family:'Syne',sans-serif;
       box-shadow:0 -8px 40px rgba(0,0,0,0.6);">
-      <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px;"></div>
+      <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 16px;"></div>
       <div style="padding:0 20px 28px;">
         <div style="font-size:15px;font-weight:700;color:#EEEEF2;margin-bottom:14px;letter-spacing:0.04em;">✦ New Post</div>
+
+        <!-- Image upload zone -->
+        <label id="img-upload-label" style="display:flex;flex-direction:column;align-items:center;justify-content:center;
+          width:100%;height:96px;border:1.5px dashed rgba(107,78,255,0.4);border-radius:12px;
+          background:rgba(107,78,255,0.05);cursor:pointer;margin-bottom:10px;transition:all 0.15s;
+          color:#9B8AFF;font-family:'DM Sans',sans-serif;font-size:11px;gap:6px;overflow:hidden;"
+          onmouseenter="this.style.borderColor='rgba(107,78,255,0.7)'"
+          onmouseleave="this.style.borderColor='rgba(107,78,255,0.4)'">
+          <input type="file" accept="image/*" style="display:none;" id="post-img-input" onchange="previewPostImg(this)">
+          <span id="img-upload-icon" style="font-size:22px;line-height:1;">⊕</span>
+          <span id="img-upload-txt">Upload image</span>
+          <img id="img-preview" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;" />
+        </label>
+
         <textarea placeholder="Describe your work and process..." style="width:100%;background:rgba(255,255,255,0.04);
           border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:11px 12px;color:#EEEEF2;
-          font-family:'DM Sans',sans-serif;font-size:12px;resize:none;height:72px;outline:none;
+          font-family:'DM Sans',sans-serif;font-size:12px;resize:none;height:60px;outline:none;
           margin-bottom:8px;display:block;-webkit-user-select:text;"></textarea>
         <input placeholder="↳ Paste your AI prompt..." style="width:100%;background:rgba(107,78,255,0.06);
           border:1px solid rgba(107,78,255,0.25);border-radius:10px;padding:9px 12px;color:#EEEEF2;
@@ -1021,6 +1036,24 @@ function showPostModal() {
     </div>`;
   document.querySelector('.phone-screen').appendChild(overlay);
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+}
+
+function previewPostImg(input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const label = document.getElementById('img-upload-label');
+    const preview = document.getElementById('img-preview');
+    const icon = document.getElementById('img-upload-icon');
+    const txt = document.getElementById('img-upload-txt');
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+    icon.style.display = 'none';
+    txt.style.display = 'none';
+    label.style.position = 'relative';
+    label.style.padding = '0';
+  };
+  reader.readAsDataURL(input.files[0]);
 }
 </script>
 </body>
