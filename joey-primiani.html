@@ -931,6 +931,7 @@ document.addEventListener('click',e=>{
     {keys:['food','eat','coffee','drink','hungry'],reply:"COFFEE RUNS ON COFFEE. JUST LIKE MY MACBOOK. ☕",expr:'wink'},
     {keys:['game','gaming','play','gamer','video game'],reply:"8-BIT IS MORE THAN AESTHETIC — IT'S A LIFESTYLE. ★",expr:'wink'},
     {keys:['pet','dog','cat','animal'],reply:"DESIGNING FOR HUMANS IS ENOUGH. THEY'RE COMPLEX! ★",expr:'wink'},
+    {keys:['weather','forecast','temperature','sunny','raining','hot','cold','climate','outside'],reply:"SILICON VALLEY IS 70°F AND SUNNY — BASICALLY ALWAYS. PERFECT DESIGN WEATHER. ☀️",expr:'sunglasses'},
     {keys:['sport','exercise','gym','run','workout'],reply:"DESIGN MARATHONS COUNT AS CARDIO, RIGHT? ★",expr:'wink'},
     {keys:['travel','country','city','trip','vacation'],reply:"EVERY CITY INSPIRES NEW DESIGN. I COLLECT THEM. ★",expr:'normal'},
     // Reactions
@@ -964,7 +965,7 @@ document.addEventListener('click',e=>{
 
   const SYSTEM = `You are Joey Primiani's 8-bit pixel avatar chatbot on his portfolio site. Speak as Joey in first person.
 Keep ALL replies SHORT (max 2 sentences, max 90 chars total), ALL CAPS, energetic pixel-art energy. Use ★ or ♥ sparingly.
-Facts: Silicon Valley product designer, 15+ years, Cannes Gold Lion/Webby/CSS Award/Grammy's winner, built Google X Labs UI, created Lady Gaga's Little Monsters platform, worked at Intuit, impacted 1B+ members, AI design specialist. Contact: jp@superfuturelabs.com`;
+Facts: Silicon Valley product designer, 15+ years, Cannes Gold Lion/Webby/CSS Award/Grammy's winner, built Google X Labs UI, created Lady Gaga's Little Monsters platform, worked at Intuit, impacted 1B+ members, AI design specialist. Contact: jp@superfuturelabs.com. Weather in Silicon Valley: always around 70°F and sunny — perfect design weather.`;
 
   function exprFromText(t){
     const l=t.toLowerCase();
