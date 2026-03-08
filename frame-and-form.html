@@ -49,6 +49,15 @@ nav {
   letter-spacing: -0.01em;
   color: var(--black);
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-mark {
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
 .nav-links {
@@ -488,7 +497,11 @@ footer {
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">Frame &amp; Form</a>
+  <a href="#" class="nav-logo">
+    <img src="frame-and-form/logo-left.svg" alt="Frame" class="nav-mark">
+    <img src="frame-and-form/logo-right.svg" alt="Form" class="nav-mark">
+    <span>Frame &amp; Form</span>
+  </a>
   <ul class="nav-links">
     <li><a href="#work">Our Work</a></li>
     <li><a href="#about">About</a></li>
