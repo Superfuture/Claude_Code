@@ -20,7 +20,7 @@
 		"windows"
 	],
    "oauth2": {
-    "client_id": "552680223755-ndu4f1n0pv2f1bhbvaehghdu78qvt2sg.apps.googleusercontent.com",
+    "client_id": "552680223755-hrsplccsmacpicbkfb98c4sfd0a2uhqk.apps.googleusercontent.com",
     "scopes":[
       "https://www.googleapis.com/auth/gmail.send",
       "https://www.googleapis.com/auth/userinfo.email"
