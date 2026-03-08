@@ -1399,72 +1399,62 @@ function sendComment(input, cardIdx) {
 (function() {
   const nav = document.querySelector('.bottom-nav');
   const app = document.getElementById('app');
-  const _cache = new Map(); // img.src -> brightness value
+  const _cors = new Map(); // src -> CORS Image (or null=pending, false=failed)
 
-  // Load image with CORS headers (bypasses tainted-canvas problem) and compute brightness
-  function precompute(imgEl) {
-    const src = imgEl.src || imgEl.currentSrc;
-    if (!src || _cache.has(src)) return;
-    _cache.set(src, null); // mark pending
-    const tmp = new Image();
-    tmp.crossOrigin = 'anonymous';
-    tmp.onload = function() {
-      try {
-        const c = document.createElement('canvas');
-        c.width = 12; c.height = 6;
-        const ctx = c.getContext('2d');
-        // sample the bottom third (the part most likely to be behind the nav)
-        ctx.drawImage(tmp, 0, tmp.naturalHeight * 0.65, tmp.naturalWidth, tmp.naturalHeight * 0.35, 0, 0, 12, 6);
-        const d = ctx.getImageData(0, 0, 12, 6).data;
-        let sum = 0;
-        for (let i = 0; i < d.length; i += 4) sum += 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
-        _cache.set(src, sum / (d.length / 4));
-      } catch(e) { _cache.set(src, 100); }
-      update();
-    };
-    tmp.onerror = () => _cache.set(src, null);
-    tmp.src = src;
+  function preloadCORS(src) {
+    if (!src || _cors.has(src)) return;
+    _cors.set(src, null);
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => { _cors.set(src, img); update(); };
+    img.onerror = () => { _cors.set(src, false); };
+    img.src = src;
   }
 
-  function colorBrightness(el) {
-    const bg = getComputedStyle(el).backgroundColor;
-    const m = bg.match(/[\d.]+/g);
-    if (!m || m.length < 3) return null;
-    const a = m[3] !== undefined ? parseFloat(m[3]) : 1;
-    if (a < 0.15) return null;
-    return 0.299*+m[0] + 0.587*+m[1] + 0.114*+m[2];
+  function sampleOverlap(corsImg, imgRect, navRect) {
+    // Compute exactly which vertical slice of the image is behind the nav
+    const overlapTop = Math.max(navRect.top, imgRect.top);
+    const overlapBot = Math.min(navRect.bottom, imgRect.bottom);
+    if (overlapBot - overlapTop < 2) return null;
+    const fracTop = (overlapTop - imgRect.top) / imgRect.height;
+    const fracBot = (overlapBot - imgRect.top) / imgRect.height;
+    const sy = Math.floor(corsImg.naturalHeight * fracTop);
+    const sh = Math.max(1, Math.floor(corsImg.naturalHeight * (fracBot - fracTop)));
+    try {
+      const c = document.createElement('canvas');
+      c.width = 16; c.height = 4;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(corsImg, 0, sy, corsImg.naturalWidth, sh, 0, 0, 16, 4);
+      const d = ctx.getImageData(0, 0, 16, 4).data;
+      let sum = 0;
+      for (let i = 0; i < d.length; i += 4) sum += 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+      return sum / (d.length / 4);
+    } catch(e) { return null; }
   }
 
   function update() {
-    nav.style.pointerEvents = 'none';
     const navRect = nav.getBoundingClientRect();
-    const sampleY = navRect.top + 10;
-    const sampleXs = [0.1, 0.3, 0.5, 0.7, 0.9].map(f => navRect.left + navRect.width * f);
-
     let totalB = 0, n = 0;
-    for (const x of sampleXs) {
-      let el = document.elementFromPoint(x, sampleY);
-      while (el && el !== document.body) {
-        if (el.tagName === 'IMG') {
-          const src = el.src || el.currentSrc;
-          if (src && !_cache.has(src)) precompute(el);
-          const b = _cache.get(src);
-          if (b !== null && b !== undefined) { totalB += b; n++; }
-          break;
-        }
-        const b = colorBrightness(el);
-        if (b !== null && b > 1) { totalB += b; n++; break; }
-        el = el.parentElement;
-      }
-    }
-    nav.style.pointerEvents = '';
+
+    // Check every card image for overlap with the nav
+    document.querySelectorAll('.card-img img').forEach(imgEl => {
+      const src = imgEl.src || imgEl.currentSrc;
+      if (!src) return;
+      if (!_cors.has(src)) { preloadCORS(src); return; }
+      const corsImg = _cors.get(src);
+      if (!corsImg) return;
+      const imgRect = imgEl.getBoundingClientRect();
+      const b = sampleOverlap(corsImg, imgRect, navRect);
+      if (b !== null) { totalB += b; n++; }
+    });
+
     nav.classList.toggle('nav-light', n > 0 && totalB / n > 128);
   }
 
-  // Pre-compute all card images eagerly
-  document.querySelectorAll('.card-img img, .explore-card img').forEach(img => {
-    if (img.complete && img.naturalWidth) precompute(img);
-    else img.addEventListener('load', () => precompute(img), { once: true });
+  // Eagerly preload CORS copies of all card images
+  document.querySelectorAll('.card-img img').forEach(imgEl => {
+    const go = () => preloadCORS(imgEl.src || imgEl.currentSrc);
+    imgEl.complete ? go() : imgEl.addEventListener('load', go, { once: true });
   });
 
   let ticking = false;
@@ -1473,7 +1463,7 @@ function sendComment(input, cardIdx) {
     ticking = true;
     requestAnimationFrame(() => { update(); ticking = false; });
   });
-  setTimeout(update, 800);
+  setTimeout(update, 600);
 })();
 </script>
 </body>
