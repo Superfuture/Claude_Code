@@ -79,8 +79,9 @@ input[type=text], input[type=password], textarea {
 body > div:first-child {
 	width: 640px;
 	margin:0 auto;
-	background:url(/images/logo.png) no-repeat;
+	background:url(/images/logo.png) no-repeat center top;
 	padding-top:107px;
+	text-align: center;
 }
 
 h2 {

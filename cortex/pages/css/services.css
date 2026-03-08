@@ -7,7 +7,7 @@
 }
 
 #services {
-	display:block;
+	display:inline-block;
 	list-style:none;
 	margin-top:-15px;
 }
@@ -140,11 +140,11 @@
 
 /* How to use hint */
 #settings-hint {
-	display: flex;
+	display: inline-flex;
 	align-items: flex-start;
 	gap: 10px;
 	margin: 24px auto 0;
-	width: 640px;
+	width: auto;
 	padding: 14px 18px;
 	background: #fff8f5;
 	border: 1px solid rgba(255,85,51,.15);
