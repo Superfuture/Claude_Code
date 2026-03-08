@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI UX Summit 2026 — Master AI Design Skills</title>
+  <meta name="description" content="The premier AI + UX conference for designers. March 10, 2026 · Live Online · 15 Speakers from Apple, Netflix, Google, LinkedIn & more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Reset & Base ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FAF9F7;
+      --bg2: #F0EFEB;
+      --text: #111111;
+      --muted: rgba(17,17,17,0.55);
+      --accent: #2563EB;
+      --cta: #059669;
+      --cta-hover: #047857;
+      --border: rgba(17,17,17,0.1);
+      --border-strong: rgba(17,17,17,0.18);
+      --shadow-sm: 0 1px 4px rgba(17,17,17,0.06), 0 2px 12px rgba(17,17,17,0.05);
+      --shadow-md: 0 4px 16px rgba(17,17,17,0.08), 0 8px 32px rgba(17,17,17,0.06);
+      --shadow-lg: 0 8px 32px rgba(17,17,17,0.10), 0 20px 60px rgba(17,17,17,0.08);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── Scrollbar ─────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+    /* ─── Typography ────────────────────────────────── */
+    .display {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 800;
+      line-height: 1.05;
+      color: var(--text);
+    }
+    .display-lg { font-size: clamp(48px, 7.5vw, 96px); }
+    .display-md { font-size: clamp(34px, 5vw, 60px); }
+    .display-sm { font-size: clamp(26px, 3.8vw, 44px); }
+    .section-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+
+    /* ─── Layout ────────────────────────────────────── */
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    section { position: relative; z-index: 1; }
+
+    /* ─── Buttons ────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 100px;
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+      white-space: nowrap;
+    }
+    .btn-cta {
+      background: var(--cta);
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(5,150,105,0.28);
+    }
+    .btn-cta:hover {
+      background: var(--cta-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(5,150,105,0.38);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border-strong);
+    }
+    .btn-outline:hover {
+      border-color: var(--text);
+      background: rgba(17,17,17,0.04);
+      transform: translateY(-2px);
+    }
+    .btn-lg { padding: 17px 34px; font-size: 16px; }
+
+    /* ─── Urgency Bar ────────────────────────────────── */
+    .urgency-bar {
+      background: var(--text);
+      border-bottom: 1px solid rgba(17,17,17,0.15);
+      padding: 10px 24px; text-align: center;
+      font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1002;
+      height: 40px; display: flex; align-items: center; justify-content: center;
+    }
+    .urgency-bar strong { font-weight: 700; color: #ffffff; }
+
+    /* ─── NAV ────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 40px; left: 0; right: 0; z-index: 1000;
+      padding: 14px 0;
+      background: rgba(250,249,247,0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid transparent;
+      transition: background 0.4s ease, border-color 0.4s ease, padding 0.3s ease;
+    }
+    nav.scrolled {
+      background: rgba(250,249,247,0.95);
+      border-color: var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 12px 0;
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1180px; margin: 0 auto; padding: 0 24px;
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex; align-items: center; gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted); font-size: 14px; font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+
+    /* ─── HERO ────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding-top: 140px; padding-bottom: 80px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Dot pattern background */
+    .hero-dots {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background-image: radial-gradient(circle, rgba(17,17,17,0.12) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse 85% 85% at 50% 0%, black 30%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 85% at 50% 0%, black 30%, transparent 100%);
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center;
+      max-width: 960px; margin: 0 auto; padding: 0 24px;
+    }
+
+    /* Pill badge */
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 18px; border-radius: 100px;
+      background: rgba(37,99,235,0.08);
+      border: 1px solid rgba(37,99,235,0.2);
+      font-size: 13px; font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cta);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero-headline {
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+      font-weight: 800;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2.1vw, 20px);
+      color: var(--muted);
+      max-width: 680px;
+      line-height: 1.65;
+      margin-bottom: 40px;
+    }
+
+    .hero-ctas {
+      display: flex; align-items: center; gap: 14px;
+      flex-wrap: wrap; justify-content: center;
+      margin-bottom: 48px;
+    }
+
+    /* Social proof */
+    .hero-social {
+      display: flex; align-items: center; gap: 16px;
+      flex-wrap: wrap; justify-content: center;
+      margin-bottom: 56px;
+    }
+    .avatar-stack {
+      display: flex;
+    }
+    .avatar-stack .av {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 2px solid var(--bg);
+      margin-left: -10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #ffffff;
+    }
+    .avatar-stack .av:first-child { margin-left: 0; }
+    .social-text {
+      font-size: 14px; color: var(--muted);
+    }
+    .social-text strong { color: var(--text); }
+    .social-divider { width: 1px; height: 20px; background: var(--border); }
+    .stars { color: #F59E0B; font-size: 14px; }
+
+    /* Company strip in hero */
+    .hero-companies {
+      width: 100%;
+      padding: 24px 0 0;
+      border-top: 1px solid var(--border);
+    }
+    .hero-companies p {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+      opacity: 0.7;
+    }
+    .logo-badges {
+      display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    }
+    .logo-badge {
+      padding: 6px 14px; border-radius: 100px;
+      background: #ffffff; border: 1px solid var(--border);
+      font-size: 12px; font-weight: 600; color: var(--muted);
+      letter-spacing: 0.02em;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Countdown */
+    .countdown-wrap {
+      margin-top: 40px; text-align: center; width: 100%;
+    }
+    .countdown-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+    }
+    .countdown {
+      display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
+    }
+    .cd-box {
+      display: flex; flex-direction: column; align-items: center;
+      background: #111111;
+      border-radius: 12px; padding: 16px 20px; min-width: 80px;
+      box-shadow: var(--shadow-md);
+    }
+    .cd-num {
+      font-family: 'Cormorant Garamond', serif; font-weight: 800;
+      font-size: 36px; line-height: 1; color: #ffffff;
+      font-variant-numeric: tabular-nums;
+    }
+    .cd-unit {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 6px;
+    }
+
+    /* ─── MARQUEE STRIP ────────────────────────────── */
+    #strip {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      overflow: hidden;
+    }
+    .marquee-track {
+      display: flex; gap: 0;
+      width: max-content;
+      animation: marquee 30s linear infinite;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 36px;
+      font-size: 13px; font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .marquee-dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--border-strong);
+      flex-shrink: 0;
+    }
+
+    /* ─── ABOUT SECTION ─────────────────────────────── */
+    #about {
+      padding: 120px 0;
+      background: var(--bg);
+    }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+      align-items: start;
+    }
+    .learn-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      margin-bottom: 28px;
+    }
+    .learn-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(37,99,235,0.08);
+      border: 1px solid rgba(37,99,235,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0; margin-top: 2px;
+    }
+    .learn-text h4 {
+      font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--text);
+    }
+    .learn-text p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+    .event-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+      box-shadow: var(--shadow-md);
+    }
+    .event-detail {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .event-detail:last-of-type { border-bottom: none; }
+    .event-detail-icon { font-size: 18px; width: 28px; text-align: center; }
+    .event-detail-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .event-detail-value { font-size: 15px; font-weight: 500; color: var(--text); }
+
+    .includes-title {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent); margin: 24px 0 16px;
+    }
+    .checklist { list-style: none; }
+    .checklist li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; color: var(--muted);
+      padding: 6px 0;
+    }
+    .checklist li::before {
+      content: '✓';
+      width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(5,150,105,0.1);
+      border: 1px solid rgba(5,150,105,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: var(--cta);
+      flex-shrink: 0;
+    }
+
+    /* ─── SPEAKERS ───────────────────────────────────── */
+    #speakers { padding: 120px 0; background: var(--bg2); }
+    .section-head { text-align: center; margin-bottom: 64px; }
+    .section-head h2 { margin-bottom: 16px; }
+    .section-head p { font-size: 17px; color: var(--muted); max-width: 560px; margin: 0 auto; }
+
+    .speakers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .speaker-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease, border-color 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .speaker-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-strong);
+    }
+
+    .speaker-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      display: block; overflow: hidden;
+      margin-bottom: 16px;
+      position: relative; z-index: 1;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+    }
+    .speaker-avatar svg {
+      display: block; width: 100%; height: 100%;
+    }
+    .speaker-name {
+      font-size: 16px; font-weight: 700; margin-bottom: 4px;
+      color: var(--text);
+    }
+    .speaker-title {
+      font-size: 13px; color: var(--muted); margin-bottom: 4px;
+    }
+    .speaker-company {
+      font-size: 12px; font-weight: 600;
+      display: inline-block; padding: 3px 10px; border-radius: 100px;
+      margin-bottom: 14px;
+    }
+    .speaker-tag {
+      font-size: 11px; font-weight: 500; color: var(--muted);
+    }
+    .speaker-tag span {
+      color: var(--accent); font-weight: 600;
+    }
+
+    /* Company accent colors — light mode adjusted */
+    .co-netflix { background: rgba(229,9,20,0.08); color: #c7000f; }
+    .co-hubspot { background: rgba(255,90,50,0.10); color: #d0450f; }
+    .co-apple { background: rgba(17,17,17,0.06); color: rgba(17,17,17,0.75); }
+    .co-google { background: rgba(66,133,244,0.10); color: #1a5fd6; }
+    .co-linkedin { background: rgba(10,102,194,0.10); color: #0a56a8; }
+    .co-deloitte { background: rgba(90,160,0,0.10); color: #4a8900; }
+    .co-slack { background: rgba(224,30,90,0.10); color: #b51247; }
+    .co-autodesk { background: rgba(0,140,180,0.10); color: #006e8c; }
+    .co-ebay { background: rgba(0,100,160,0.10); color: #005f99; }
+    .co-clickup { background: rgba(100,70,180,0.10); color: #5c3fb0; }
+    .co-sofi { background: rgba(0,130,100,0.10); color: #006650; }
+    .co-bnsf { background: rgba(220,130,0,0.10); color: #9c5d00; }
+    .co-aiready { background: rgba(37,99,235,0.10); color: var(--accent); }
+
+    /* Avatar colors */
+    .av-1 { background: linear-gradient(135deg,#5B6EF5,#7C3AFF); }
+    .av-2 { background: linear-gradient(135deg,#E50914,#FF6B6B); }
+    .av-3 { background: linear-gradient(135deg,#FF7A59,#FF4C00); }
+    .av-4 { background: linear-gradient(135deg,#F39428,#E67E00); }
+    .av-5 { background: linear-gradient(135deg,#0A66C2,#0088CC); }
+    .av-6 { background: linear-gradient(135deg,#6B46C1,#9333EA); }
+    .av-7 { background: linear-gradient(135deg,#009473,#00C49F); }
+    .av-8 { background: linear-gradient(135deg,#E01E5A,#FF4081); }
+    .av-9 { background: linear-gradient(135deg,#86BC25,#5D9900); }
+    .av-10 { background: linear-gradient(135deg,#0072B1,#00A8E0); }
+    .av-11 { background: linear-gradient(135deg,#555,#888); }
+    .av-12 { background: linear-gradient(135deg,#1877F2,#0A66C2); }
+    .av-13 { background: linear-gradient(135deg,#009BC4,#0073A8); }
+    .av-14 { background: linear-gradient(135deg,#4285F4,#34A853); }
+    .av-15 { background: linear-gradient(135deg,#E01E5A,#4A154B); }
+
+    /* ─── AGENDA ─────────────────────────────────────── */
+    #agenda { padding: 120px 0; background: var(--bg2); }
+
+    .timeline {
+      position: relative;
+      max-width: 780px; margin: 0 auto;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 100px; top: 0; bottom: 0;
+      width: 1px; background: var(--border);
+    }
+    .tl-item {
+      display: grid; grid-template-columns: 100px 1fr;
+      gap: 0; margin-bottom: 8px; position: relative;
+    }
+    .tl-item.break { opacity: 0.75; }
+    .tl-time {
+      font-size: 13px; font-weight: 600; color: var(--muted);
+      padding-top: 22px; padding-right: 24px;
+      text-align: right; letter-spacing: 0.02em;
+      line-height: 1;
+    }
+    .tl-content {
+      padding: 18px 24px 18px 28px;
+      position: relative;
+    }
+    .tl-content::before {
+      content: '';
+      position: absolute; left: -5px; top: 26px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg2);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+    }
+    .tl-item.break .tl-content::before { background: #D97706; }
+    .tl-item.close .tl-content::before { background: var(--cta); }
+    .tl-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .tl-tag.keynote { color: #B45309; }
+    .tl-tag.panel { color: #6D28D9; }
+    .tl-tag.talk { color: var(--accent); }
+    .tl-tag.lightning { color: #059669; }
+    .tl-tag.networking { color: #DB2777; }
+    .tl-tag.break-tag { color: #B45309; opacity: 0.7; }
+    .tl-title {
+      font-size: 16px; font-weight: 600; margin-bottom: 4px; color: var(--text);
+    }
+    .tl-speaker {
+      font-size: 13px; color: var(--muted);
+    }
+
+    /* ─── PRICING ────────────────────────────────────── */
+    #pricing { padding: 120px 0; background: var(--bg); }
+
+    .pricing-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      max-width: 860px; margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      position: relative; overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .pricing-card.featured {
+      border-color: var(--accent);
+      border-width: 1.5px;
+    }
+    .pricing-card.featured::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--cta));
+    }
+
+    .popular-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(90deg, var(--accent), var(--cta));
+      color: #ffffff;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 5px 12px; border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    .price-label {
+      font-size: 13px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+    }
+    .price-amount {
+      font-family: 'Cormorant Garamond', serif; font-weight: 800;
+      font-size: 64px; line-height: 1; letter-spacing: -0.02em;
+      margin-bottom: 6px; color: var(--text);
+    }
+    .price-sub {
+      font-size: 13px; color: var(--muted); margin-bottom: 28px;
+    }
+    .price-features { list-style: none; margin-bottom: 32px; }
+    .price-features li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 14px; color: var(--muted); padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .price-features li:last-child { border-bottom: none; }
+    .price-features li .chk {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(5,150,105,0.1); border: 1px solid rgba(5,150,105,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: var(--cta); font-weight: 700; flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .pricing-guarantee {
+      text-align: center; margin-top: 40px;
+      font-size: 13px; color: var(--muted);
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .pricing-guarantee .sep { opacity: 0.4; }
+
+    /* ─── TESTIMONIAL ────────────────────────────────── */
+    #testimonial {
+      padding: 120px 0;
+      background: var(--bg2);
+    }
+
+    .testimonial-wrap {
+      max-width: 820px; margin: 0 auto; text-align: center;
+    }
+    .quote-mark {
+      font-family: 'Cormorant Garamond', serif; font-size: 120px; line-height: 0.6;
+      color: rgba(37,99,235,0.15); margin-bottom: 24px; display: block;
+    }
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: clamp(22px, 3.5vw, 34px); font-weight: 700;
+      line-height: 1.4; color: var(--text);
+      margin-bottom: 32px;
+    }
+    .quote-author {
+      font-size: 15px; font-weight: 600; color: var(--muted);
+    }
+    .quote-author span { color: var(--text); }
+
+    .trust-logos {
+      margin-top: 64px; text-align: center;
+    }
+    .trust-logos p {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 20px;
+      opacity: 0.7;
+    }
+    .trust-logo-row {
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    }
+    .trust-logo {
+      padding: 8px 20px; border-radius: 100px;
+      background: #ffffff; border: 1px solid var(--border);
+      font-size: 13px; font-weight: 600; color: var(--muted);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ─── FAQ ────────────────────────────────────────── */
+    #faq { padding: 120px 0; background: var(--bg); }
+
+    .faq-list { max-width: 720px; margin: 0 auto; }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-q {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 0; cursor: pointer;
+      font-size: 17px; font-weight: 600; color: var(--text);
+      transition: color 0.2s;
+      gap: 16px;
+      list-style: none;
+      user-select: none;
+    }
+    .faq-q:hover { color: var(--accent); }
+    .faq-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(17,17,17,0.05); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+      transition: transform 0.3s ease, background 0.3s ease;
+      color: var(--muted);
+    }
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      background: rgba(37,99,235,0.08);
+      border-color: rgba(37,99,235,0.2);
+      color: var(--accent);
+    }
+    .faq-a {
+      overflow: hidden; max-height: 0;
+      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
+      font-size: 15px; color: var(--muted); line-height: 1.7;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding-bottom: 20px; }
+
+    /* ─── FINAL CTA ──────────────────────────────────── */
+    #final-cta {
+      padding: 120px 24px; text-align: center;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    #final-cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(17,17,17,0.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
+      -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent);
+      pointer-events: none;
+    }
+    .final-cta-inner { position: relative; z-index: 1; }
+    .final-cta-eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+    }
+    .final-cta-sub {
+      font-size: 18px; color: var(--muted); margin-top: 16px; margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
+    footer {
+      padding: 48px 0;
+      background: #111111;
+      border-top: 1px solid #111111;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif; font-weight: 800;
+      font-size: 18px; color: #ffffff; text-decoration: none;
+    }
+    .footer-logo span { color: var(--accent); }
+    .footer-org {
+      font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 4px;
+    }
+    .footer-links {
+      display: flex; gap: 24px; list-style: none;
+    }
+    .footer-links a {
+      font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: rgba(255,255,255,0.75); }
+    .footer-copy {
+      font-size: 13px; color: rgba(255,255,255,0.3);
+    }
+
+    /* ─── Reveal animations ──────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.revealed {
+      opacity: 1; transform: none;
+    }
+    .reveal-delay-1 { transition-delay: 0.08s; }
+    .reveal-delay-2 { transition-delay: 0.16s; }
+    .reveal-delay-3 { transition-delay: 0.24s; }
+    .reveal-delay-4 { transition-delay: 0.32s; }
+
+    /* ─── Responsive ─────────────────────────────────── */
+    @media (max-width: 900px) {
+      .about-grid, .speakers-grid, .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      .speakers-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 600px) {
+      .speakers-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .cd-num { font-size: 28px; }
+      .cd-box { min-width: 66px; padding: 12px 14px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .timeline::before { left: 70px; }
+      .tl-item { grid-template-columns: 70px 1fr; }
+      .tl-time { font-size: 11px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Urgency Bar -->
+  <div class="urgency-bar">
+    📋 <strong>Only 200 seats available</strong> — March 10, 2026 · Live Online
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">AI UX <span>Summit</span></a>
+      <ul class="nav-links">
+        <li><a href="#speakers">Speakers</a></li>
+        <li><a href="#agenda">Agenda</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="#pricing" class="btn btn-cta" style="padding:10px 22px;font-size:14px;">Register Now</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-dots"></div>
+
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <div class="dot"></div>
+        🎓 March 10, 2026 &nbsp;·&nbsp; Live Online &nbsp;·&nbsp; 15 Expert Speakers
+      </div>
+
+      <h1 class="display display-lg hero-headline">
+        The AI skills every designer<br/>needs to master in 2026.
+      </h1>
+
+      <p class="hero-sub">
+        A focused one-day summit with 15 real practitioners from Apple, Netflix &amp; Google. No theory — just frameworks you'll use the very next week.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#pricing" class="btn btn-cta btn-lg">Register Now — From $299 →</a>
+        <a href="#agenda" class="btn btn-outline btn-lg">View the Agenda</a>
+      </div>
+
+      <div class="hero-social">
+        <div class="avatar-stack">
+          <div class="av" style="background:linear-gradient(135deg,#5B6EF5,#7C3AFF);">A</div>
+          <div class="av" style="background:linear-gradient(135deg,#E50914,#FF6B6B);">M</div>
+          <div class="av" style="background:linear-gradient(135deg,#FF7A59,#FF4C00);">K</div>
+          <div class="av" style="background:linear-gradient(135deg,#009473,#00C49F);">P</div>
+          <div class="av" style="background:linear-gradient(135deg,#0A66C2,#0088CC);">J</div>
+          <div class="av" style="background:linear-gradient(135deg,#86BC25,#5D9900);">C</div>
+        </div>
+        <div class="social-text">
+          <strong>2,400+</strong> designers registered
+        </div>
+        <div class="social-divider"></div>
+        <div class="stars">★★★★★</div>
+        <div class="social-text"><strong>4.9/5</strong> average rating</div>
+      </div>
+
+      <div class="hero-companies">
+        <p>Designers from these companies are attending</p>
+        <div class="logo-badges">
+          <span class="logo-badge">Stripe</span>
+          <span class="logo-badge">Meta</span>
+          <span class="logo-badge">Airbnb</span>
+          <span class="logo-badge">Amazon</span>
+          <span class="logo-badge">Disney</span>
+          <span class="logo-badge">Microsoft</span>
+          <span class="logo-badge">Google</span>
+          <span class="logo-badge">Spotify</span>
+        </div>
+      </div>
+
+      <div class="countdown-wrap">
+        <div class="countdown-label">Event starts in</div>
+        <div class="countdown">
+          <div class="cd-box">
+            <div class="cd-num" id="cd-days">00</div>
+            <div class="cd-unit">Days</div>
+          </div>
+          <div class="cd-box">
+            <div class="cd-num" id="cd-hours">00</div>
+            <div class="cd-unit">Hours</div>
+          </div>
+          <div class="cd-box">
+            <div class="cd-num" id="cd-mins">00</div>
+            <div class="cd-unit">Minutes</div>
+          </div>
+          <div class="cd-box">
+            <div class="cd-num" id="cd-secs">00</div>
+            <div class="cd-unit">Seconds</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE STRIP -->
+  <div id="strip">
+    <div class="marquee-track" id="marqueeTrack">
+      <!-- items generated by JS -->
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div>
+          <span class="section-label reveal">What You'll Learn</span>
+          <h2 class="display display-sm reveal reveal-delay-1" style="margin-bottom:40px;">Walk away with skills,<br/>not slides.</h2>
+
+          <div class="learn-item reveal reveal-delay-2">
+            <div class="learn-icon">🧠</div>
+            <div class="learn-text">
+              <h4>How to build AI-native design systems</h4>
+              <p>Go beyond retrofitting — learn to design systems that treat AI outputs as first-class components, from error states to confidence UIs.</p>
+            </div>
+          </div>
+          <div class="learn-item reveal reveal-delay-3">
+            <div class="learn-icon">🤖</div>
+            <div class="learn-text">
+              <h4>Designing agents, copilots &amp; conversational flows</h4>
+              <p>Real frameworks from LinkedIn, Apple, and Slack for crafting AI interactions that feel trustworthy, legible, and human.</p>
+            </div>
+          </div>
+          <div class="learn-item reveal">
+            <div class="learn-icon">⚡</div>
+            <div class="learn-text">
+              <h4>Accelerating your workflow with AI tools</h4>
+              <p>How top designers at Netflix, HubSpot, and Google are using AI to move faster without sacrificing craft or strategy.</p>
+            </div>
+          </div>
+          <div class="learn-item reveal">
+            <div class="learn-icon">🎯</div>
+            <div class="learn-text">
+              <h4>Positioning yourself as an AI-fluent design leader</h4>
+              <p>The mindsets and skills that separate designers who thrive in the AI era from those who feel left behind.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-2">
+          <div class="event-card">
+            <div style="margin-bottom:24px;">
+              <div class="section-label" style="margin-bottom:8px;">Event Details</div>
+            </div>
+            <div class="event-detail">
+              <div class="event-detail-icon">📅</div>
+              <div class="event-detail-content">
+                <div class="event-detail-label">Date</div>
+                <div class="event-detail-value">Tuesday, March 10, 2026</div>
+              </div>
+            </div>
+            <div class="event-detail">
+              <div class="event-detail-icon">🕐</div>
+              <div class="event-detail-content">
+                <div class="event-detail-label">Time</div>
+                <div class="event-detail-value">12:00 PM – 4:15 PM ET</div>
+              </div>
+            </div>
+            <div class="event-detail">
+              <div class="event-detail-icon">🌍</div>
+              <div class="event-detail-content">
+                <div class="event-detail-label">Time Zones</div>
+                <div class="event-detail-value">9 AM PT · 5 PM GMT · 6 PM CET</div>
+              </div>
+            </div>
+            <div class="event-detail">
+              <div class="event-detail-icon">💻</div>
+              <div class="event-detail-content">
+                <div class="event-detail-label">Format</div>
+                <div class="event-detail-value">Live Online — Zoom + Networking Rooms</div>
+              </div>
+            </div>
+            <div class="event-detail">
+              <div class="event-detail-icon">⏱</div>
+              <div class="event-detail-content">
+                <div class="event-detail-label">Duration</div>
+                <div class="event-detail-value">4 hours 15 minutes</div>
+              </div>
+            </div>
+            <div class="event-detail">
+              <div class="event-detail-icon">🏢</div>
+              <div class="event-detail-content">
+                <div class="event-detail-label">Organizer</div>
+                <div class="event-detail-value">CoFi.so</div>
+              </div>
+            </div>
+
+            <div class="includes-title">What's Included</div>
+            <ul class="checklist">
+              <li>Live access to all 15 talks + panel</li>
+              <li>90-day recording access for all sessions</li>
+              <li>Speaker slide decks &amp; resources</li>
+              <li>Live Q&amp;A with speakers</li>
+              <li>Breakout networking rooms</li>
+              <li>Certificate of completion</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPEAKERS -->
+  <section id="speakers">
+    <div class="container" style="padding-top:120px;padding-bottom:120px;">
+      <div class="section-head">
+        <span class="section-label reveal">Speakers</span>
+        <h2 class="display display-md reveal reveal-delay-1">Meet the Speakers</h2>
+        <p class="reveal reveal-delay-2">15 practitioners from the world's most innovative companies, sharing real work and real insights.</p>
+      </div>
+
+      <div class="speakers-grid">
+
+        <div class="speaker-card reveal">
+          <div class="speaker-avatar av-1"></div>
+          <div class="speaker-name">Ary Aranguiz</div>
+          <div class="speaker-title">Founder &amp; CEO</div>
+          <div class="speaker-company co-aiready">The AI Ready Business</div>
+          <div class="speaker-tag"><span>Speaking on:</span> AI and the Future of Design Practice</div>
+        </div>
+
+        <div class="speaker-card reveal reveal-delay-1">
+          <div class="speaker-avatar av-2"></div>
+          <div class="speaker-name">Michael Tsirakis</div>
+          <div class="speaker-title">Senior Product Designer</div>
+          <div class="speaker-company co-netflix">Netflix</div>
+          <div class="speaker-tag"><span>Speaking on:</span> Designing for AI at Netflix</div>
+        </div>
+
+        <div class="speaker-card reveal reveal-delay-2">
+          <div class="speaker-avatar av-3"></div>
+          <div class="speaker-name">Alyshia Perri</div>
+          <div class="speaker-title">Principal AI Designer</div>
+          <div class="speaker-company co-hubspot">HubSpot</div>
+          <div class="speaker-tag"><span>Speaking on:</span> HubSpot's AI Design System</div>
+        </div>
+
+        <div class="speaker-card reveal">
+          <div class="speaker-avatar av-4"></div>
+          <div class="speaker-name">Akanksha Bansal</div>
+          <div class="speaker-title">Senior Staff Designer</div>
+          <div class="speaker-company co-bnsf">BNSF</div>
+          <div class="speaker-tag"><span>Speaking on:</span> AI in Enterprise Design</div>
+        </div>
+
+        <div class="speaker-card reveal reveal-delay-1">
+          <div class="speaker-avatar av-5"></div>
+          <div class="speaker-name">Peipei Wang</div>
+          <div class="speaker-title">Principal Designer</div>
+          <div class="speaker-company co-linkedin">LinkedIn</div>
+          <div class="speaker-tag"><span>Speaking on:</span> AI Tools in Production</div>
+        </div>
+
+        <div class="speaker-card reveal reveal-delay-2">
+          <div class="speaker-avatar av-6"></div>
+          <div class="speaker-name">Edwin Delgado</div>
+          <div class="speaker-title">Lead Designer</div>
+          <div class="speaker-company co-clickup">ClickUp</div>
+          <div class="speaker-tag"><span>Speaking on:</span> Lightning Talk: AI-First Product Design</div>
+        </div>
+
+        <div class="speaker-card reveal">
+          <div class="speaker-avatar av-7"></div>
+          <div class="speaker-name">Kelly Dern</div>
+          <div class="speaker-title">Senior Staff Product Designer</div>
+          <div class="speaker-company co-sofi">SoFi</div>
+          <div class="speaker-tag"><span>Speaking on:</span> Lightning Talk: Responsible AI UX</div>
+        </div>
+
+        <div class="speaker-card reveal reveal-delay-1">
+          <div class="speaker-avatar av-8"></div>
+          <div class="speaker-name">Danielle Peterson</div>
+          <div class="speaker-title">Senior Product Designer</div>
+          <div class="speaker-company co-sofi">SoFi</div>
+          <div class="speaker-tag"><span>Speaking on:</span> Designing Trust in Financial AI</div>
+        </div>
+
+        <div class="speaker-card reveal reveal-delay-2">
+          <div class="speaker-avatar av-9"></div>
+          <div class="speaker-name">Golbie Azizi</div>
+          <div class="speaker-title">Lead Product Designer</div>
+          <div class="speaker-company co-deloitte">Deloitte</div>
+          <div class="speaker-tag"><span>Speaking on:</span> AI at Scale: Consulting Design</div>
+        </div>
+
+        <div class="speaker-card reveal">
+          <div class="speaker-avatar av-10"></div>
+          <div class="speaker-name">Maria G Vasilieva</div>
+          <div class="speaker-title">Lead Designer, Cloud Data</div>
+          <div class="speaker-company co-ebay">eBay</div>
+          <div class="speaker-tag"><span>Speaking on:</span> Data-Driven AI Design Decisions</div>
+        </div>
+
+        <div class="speaker-card reveal reveal-delay-1">
+          <div class="speaker-avatar av-11"></div>
+          <div class="speaker-name">Johny Vino</div>
+          <div class="speaker-title">Senior Product Designer</div>
+          <div class="speaker-company co-apple">Apple</div>
+          <div class="speaker-tag"><span>Speaking on:</span> AI Tools in Production</div>
+        </div>
+
+        <div class="speaker-card reveal reveal-delay-2">
+          <div class="speaker-avatar av-12"></div>
+          <div class="speaker-name">Joey Primiani</div>
+          <div class="speaker-title">Senior Product Designer</div>
+          <div class="speaker-company co-linkedin">LinkedIn</div>
+          <div class="speaker-tag"><span>Speaking on:</span> Designing Agents &amp; Copilots</div>
+        </div>
+
+        <div class="speaker-card reveal">
+          <div class="speaker-avatar av-13"></div>
+          <div class="speaker-name">Cathy Fang</div>
+          <div class="speaker-title">Principal UX Designer</div>
+          <div class="speaker-company co-autodesk">Autodesk</div>
+          <div class="speaker-tag"><span>Speaking on:</span> AI &amp; Creative Tools UX</div>
+        </div>
+
+        <div class="speaker-card reveal reveal-delay-1">
+          <div class="speaker-avatar av-14"></div>
+          <div class="speaker-name">Andrea Dulko</div>
+          <div class="speaker-title">Design Lead</div>
+          <div class="speaker-company co-google">Google Cloud AI</div>
+          <div class="speaker-tag"><span>Speaking on:</span> AI Tools in Production</div>
+        </div>
+
+        <div class="speaker-card reveal reveal-delay-2">
+          <div class="speaker-avatar av-15"></div>
+          <div class="speaker-name">Pratik Mall</div>
+          <div class="speaker-title">Lead Designer</div>
+          <div class="speaker-company co-slack">Slack</div>
+          <div class="speaker-tag"><span>Speaking on:</span> Lightning Talk: Slack's AI UX Approach</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- AGENDA -->
+  <section id="agenda">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label reveal">Agenda</span>
+        <h2 class="display display-md reveal reveal-delay-1">4 hours.<br/>15 world-class speakers.</h2>
+        <p class="reveal reveal-delay-2">March 10, 2026 · 12:00 PM – 4:15 PM ET</p>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="tl-time">12:00 PM</div>
+          <div class="tl-content">
+            <div class="tl-title">Opening &amp; Welcome</div>
+            <div class="tl-speaker">CoFi.so team</div>
+          </div>
+        </div>
+        <div class="tl-item reveal reveal-delay-1">
+          <div class="tl-time">12:15 PM</div>
+          <div class="tl-content">
+            <div class="tl-tag keynote">Keynote</div>
+            <div class="tl-title">"AI and the Future of Design Practice"</div>
+            <div class="tl-speaker">Ary Aranguiz — The AI Ready Business</div>
+          </div>
+        </div>
+        <div class="tl-item reveal reveal-delay-2">
+          <div class="tl-time">12:45 PM</div>
+          <div class="tl-content">
+            <div class="tl-tag talk">Talk</div>
+            <div class="tl-title">"Designing for AI at Netflix"</div>
+            <div class="tl-speaker">Michael Tsirakis — Netflix</div>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-time">1:15 PM</div>
+          <div class="tl-content">
+            <div class="tl-tag talk">Talk</div>
+            <div class="tl-title">"HubSpot's AI Design System"</div>
+            <div class="tl-speaker">Alyshia Perri — HubSpot</div>
+          </div>
+        </div>
+        <div class="tl-item break reveal reveal-delay-1">
+          <div class="tl-time">1:45 PM</div>
+          <div class="tl-content">
+            <div class="tl-tag break-tag">Break</div>
+            <div class="tl-title">☕ Coffee Break</div>
+            <div class="tl-speaker">15 minutes</div>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-time">2:00 PM</div>
+          <div class="tl-content">
+            <div class="tl-tag panel">Panel</div>
+            <div class="tl-title">"AI Tools in Production"</div>
+            <div class="tl-speaker">Peipei Wang (LinkedIn) · Johny Vino (Apple) · Andrea Dulko (Google Cloud AI)</div>
+          </div>
+        </div>
+        <div class="tl-item reveal reveal-delay-1">
+          <div class="tl-time">2:45 PM</div>
+          <div class="tl-content">
+            <div class="tl-tag talk">Talk</div>
+            <div class="tl-title">"Designing Agents &amp; Copilots"</div>
+            <div class="tl-speaker">Joey Primiani — LinkedIn</div>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-time">3:15 PM</div>
+          <div class="tl-content">
+            <div class="tl-tag lightning">Lightning Talks</div>
+            <div class="tl-title">3 Rapid-Fire Sessions</div>
+            <div class="tl-speaker">Kelly Dern (SoFi) · Edwin Delgado (ClickUp) · Pratik Mall (Slack)</div>
+          </div>
+        </div>
+        <div class="tl-item reveal reveal-delay-1">
+          <div class="tl-time">3:45 PM</div>
+          <div class="tl-content">
+            <div class="tl-tag networking">Networking</div>
+            <div class="tl-title">Breakout Networking Rooms</div>
+            <div class="tl-speaker">Meet fellow designers by interest &amp; role</div>
+          </div>
+        </div>
+        <div class="tl-item close reveal">
+          <div class="tl-time">4:15 PM</div>
+          <div class="tl-content">
+            <div class="tl-title">Closing &amp; What's Next</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="container" style="padding-top:120px;padding-bottom:120px;">
+      <div class="section-head">
+        <span class="section-label reveal">Pricing</span>
+        <h2 class="display display-md reveal reveal-delay-1">Simple, transparent pricing.</h2>
+        <p class="reveal reveal-delay-2">One-time access. Lifetime value. 30-day money-back guarantee.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Solo -->
+        <div class="pricing-card reveal">
+          <div class="price-label">Solo Ticket</div>
+          <div class="price-amount">$299</div>
+          <div class="price-sub">One seat · Full access</div>
+
+          <ul class="price-features">
+            <li><span class="chk">✓</span> Live access to all 15 talks &amp; panel</li>
+            <li><span class="chk">✓</span> 90-day on-demand recording access</li>
+            <li><span class="chk">✓</span> Speaker slides &amp; resource pack</li>
+            <li><span class="chk">✓</span> Live Q&amp;A participation</li>
+            <li><span class="chk">✓</span> Certificate of completion</li>
+          </ul>
+
+          <a href="#" class="btn btn-cta" style="width:100%;justify-content:center;font-size:16px;padding:16px;">
+            Get Solo Ticket →
+          </a>
+        </div>
+
+        <!-- Team -->
+        <div class="pricing-card featured reveal reveal-delay-1">
+          <div class="popular-badge">⭐ Most Popular</div>
+          <div class="price-label">Team Tickets</div>
+          <div class="price-amount" style="color:var(--accent);">$1,999</div>
+          <div class="price-sub">Up to 10 seats &nbsp;·&nbsp; <strong style="color:var(--cta);">$199/person — save $100/seat</strong></div>
+
+          <ul class="price-features">
+            <li><span class="chk">✓</span> Everything in Solo, × 10 seats</li>
+            <li><span class="chk">✓</span> Team worksheet &amp; discussion guide</li>
+            <li><span class="chk">✓</span> Group breakout room access</li>
+            <li><span class="chk">✓</span> Team Q&amp;A session with a speaker</li>
+            <li><span class="chk">✓</span> Invoicing available on request</li>
+            <li><span class="chk">✓</span> Certificate for every team member</li>
+          </ul>
+
+          <a href="#" class="btn btn-cta" style="width:100%;justify-content:center;font-size:16px;padding:16px;">
+            Get Team Tickets →
+          </a>
+        </div>
+      </div>
+
+      <div class="pricing-guarantee reveal" style="margin-top:36px;">
+        🔒 Secure checkout via Stripe
+        <span class="sep">·</span>
+        30-day money-back guarantee
+        <span class="sep">·</span>
+        Instant access on purchase
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section id="testimonial">
+    <div class="container">
+      <div class="testimonial-wrap">
+        <span class="quote-mark reveal">"</span>
+        <blockquote class="quote-text reveal reveal-delay-1">
+          This summit shifted my perspective from 'AI will take my job' to 'How can I use AI to improve my work?' — immediately actionable insights.
+        </blockquote>
+        <div class="quote-author reveal reveal-delay-2">
+          — <span>Andrew Haglund</span>, John Deere
+        </div>
+
+        <div class="trust-logos reveal reveal-delay-3">
+          <p>Trusted by designers at</p>
+          <div class="trust-logo-row">
+            <span class="trust-logo">Netflix</span>
+            <span class="trust-logo">Apple</span>
+            <span class="trust-logo">Google</span>
+            <span class="trust-logo">LinkedIn</span>
+            <span class="trust-logo">Microsoft</span>
+            <span class="trust-logo">Spotify</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-label reveal">FAQ</span>
+        <h2 class="display display-sm reveal reveal-delay-1">Common questions.</h2>
+      </div>
+
+      <div class="faq-list">
+
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>Is this recorded?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-a">
+            Yes — all registrants receive on-demand recording access for 90 days after the event. You'll be able to rewatch any session, any time.
+          </div>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-1">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>What time zone is the event in?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-a">
+            The summit runs 12:00 PM – 4:15 PM Eastern Time (ET). That's 9:00 AM PT · 5:00 PM GMT · 6:00 PM CET. The recording is available afterward regardless of your time zone.
+          </div>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-2">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>Can I expense this ticket?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-a">
+            Absolutely. You'll receive a full receipt immediately after purchase that you can submit for reimbursement. The team ticket option is specifically designed for professional development budgets.
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>What if I can't attend live?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-a">
+            No problem. The full recording will be sent to all registrants within 24 hours of the event ending. You won't miss a thing.
+          </div>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-1">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span>Who is this summit for?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-a">
+            AI UX Summit is designed for UX and product designers, design managers, design leaders, and founders who want to understand how AI is changing design practice — and how to stay ahead. No engineering background required.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section id="final-cta">
+    <div class="final-cta-inner">
+      <div class="final-cta-eyebrow">March 10, 2026 · Live Online · Limited Seats</div>
+      <h2 class="display display-md reveal" style="max-width:700px;margin:0 auto 16px;">
+        Ready to lead in the AI era?
+      </h2>
+      <p class="final-cta-sub reveal reveal-delay-1">
+        15 expert talks. 4 hours. Real work from Apple, Netflix &amp; Google.
+      </p>
+      <div class="reveal reveal-delay-2" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <a href="#pricing" class="btn btn-cta btn-lg">
+          Register Now — From $299 →
+        </a>
+        <a href="#speakers" class="btn btn-outline btn-lg">
+          See All Speakers
+        </a>
+      </div>
+      <div class="reveal reveal-delay-3" style="margin-top:24px;font-size:13px;color:var(--muted);">
+        🔒 30-day money-back guarantee · Registration closes March 9
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <a href="#hero" class="footer-logo">AI UX <span>Summit</span></a>
+          <div class="footer-org">Organized by CoFi.so</div>
+        </div>
+        <ul class="footer-links">
+          <li><a href="#speakers">Speakers</a></li>
+          <li><a href="#agenda">Agenda</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="footer-copy">© 2026 CoFi.so · All rights reserved</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Sticky Nav on Scroll ────────────────────────────────────
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ─── Countdown Timer ─────────────────────────────────────────
+    function updateCountdown() {
+      // March 10, 2026 12:00 PM ET = UTC-5 in winter = 17:00 UTC
+      const target = new Date('2026-03-10T17:00:00Z');
+      const now = new Date();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        document.getElementById('cd-days').textContent = '00';
+        document.getElementById('cd-hours').textContent = '00';
+        document.getElementById('cd-mins').textContent = '00';
+        document.getElementById('cd-secs').textContent = '00';
+        return;
+      }
+
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      const secs = Math.floor((diff % 60000) / 1000);
+
+      document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+      document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ─── Marquee Strip ───────────────────────────────────────────
+    const companies = ['Stripe','Netflix','Google','Apple','Meta','Airbnb','Amazon','Disney','Spotify','Microsoft','LinkedIn','HubSpot','Deloitte','Slack','Autodesk','eBay','ClickUp','SoFi'];
+    const track = document.getElementById('marqueeTrack');
+    const makeItems = () => companies.map(c => `
+      <div class="marquee-item">
+        <span>${c}</span><span class="marquee-dot"></span>
+      </div>`).join('');
+    // Duplicate for seamless loop
+    track.innerHTML = makeItems() + makeItems();
+
+    // ─── Scroll Reveal ───────────────────────────────────────────
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('revealed');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => io.observe(el));
+
+    // ─── FAQ Toggle ──────────────────────────────────────────────
+    function toggleFaq(el) {
+      const item = el.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+
+    // ─── Speaker Images from aiuxsummit.com ─────────────────────
+    const SPEAKER_IMGS = ['https://aiuxsummit.com/images/ary.png','https://aiuxsummit.com/images/michael.jpeg','https://aiuxsummit.com/images/alyshia.jpeg','https://aiuxsummit.com/images/akanksha.jpeg','https://aiuxsummit.com/images/peipei.png','https://aiuxsummit.com/images/edwin.jpeg','https://aiuxsummit.com/images/kelly.jpeg','https://aiuxsummit.com/images/danielle.jpeg','https://aiuxsummit.com/images/golbie.jpeg','https://aiuxsummit.com/images/maria.jpeg','https://aiuxsummit.com/images/johny.jpeg','https://aiuxsummit.com/images/joey.jpeg','https://aiuxsummit.com/images/cathy.jpeg','https://aiuxsummit.com/images/andrea.jpeg','https://aiuxsummit.com/images/pratik.jpeg'];
+    document.querySelectorAll('.speaker-avatar').forEach((el,i)=>{if(!SPEAKER_IMGS[i])return;const img=document.createElement('img');img.src=SPEAKER_IMGS[i];img.alt='';img.style.cssText='width:100%;height:100%;object-fit:cover;display:block;';el.appendChild(img);});
+
+    // A/B tracking
+    (function(){
+      const variant='B';
+      try{ localStorage.setItem('ab_variant',variant); }catch(e){}
+      document.querySelectorAll('a.btn').forEach(btn=>{
+        btn.addEventListener('click',function(){
+          try{ const events=JSON.parse(localStorage.getItem('ab_events')||'[]'); events.push({variant,event:'cta_click',label:this.textContent.trim(),ts:Date.now()}); localStorage.setItem('ab_events',JSON.stringify(events)); }catch(e){}
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
