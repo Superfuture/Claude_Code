@@ -868,18 +868,66 @@ document.addEventListener('click',e=>{
   ];
   let fbIdx=0;
 
-  function handleSend(){
+  // ── CLAUDE API ──
+  // Add your Anthropic API key here for AI-powered responses.
+  // Get one at console.anthropic.com. Leave empty to use keyword fallbacks.
+  const ANTHROPIC_KEY = '';
+
+  const SYSTEM = `You are Joey Primiani's 8-bit pixel avatar chatbot on his portfolio site. Speak as Joey in first person.
+Keep ALL replies SHORT (max 2 sentences, max 90 chars total), ALL CAPS, energetic pixel-art energy. Use ★ or ♥ sparingly.
+Facts: Silicon Valley product designer, 15+ years, Cannes Gold Lion/Webby/CSS Award/Grammy's winner, built Google X Labs UI, created Lady Gaga's Little Monsters platform, worked at Intuit, impacted 1B+ members, AI design specialist. Contact: jp@superfuturelabs.com`;
+
+  function exprFromText(t){
+    const l=t.toLowerCase();
+    if(/award|cannes|webby|grammy|lion/.test(l))return'sunglasses';
+    if(/hire|collab|email|contact|work with/.test(l))return'wink';
+    if(/!/.test(t))return'surprised';
+    return'normal';
+  }
+
+  async function askClaude(msg){
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'x-api-key':ANTHROPIC_KEY,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true',
+        'content-type':'application/json'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5',
+        max_tokens:80,
+        system:SYSTEM,
+        messages:[{role:'user',content:msg}]
+      })
+    });
+    if(!r.ok)throw new Error(r.status);
+    const d=await r.json();
+    return d.content[0].text.trim().toUpperCase().slice(0,120);
+  }
+
+  async function handleSend(){
     const raw=input.value.trim();
     if(!raw||!window._joeyRespond)return;
-    const q=' '+raw.toLowerCase()+' ';
-    let found=null;
-    for(const r of RESPONSES){
-      if(r.keys.some(k=>q.includes(k))){found=r;break;}
-    }
-    if(found){window._joeyRespond(found.reply,found.expr);}
-    else{window._joeyRespond(FALLBACKS[fbIdx%FALLBACKS.length],null);fbIdx++;}
     input.value='';
     input.focus();
+
+    // Try Claude API first
+    if(ANTHROPIC_KEY){
+      window._joeyRespond('THINKING... ★',null);
+      try{
+        const reply=await askClaude(raw);
+        window._joeyRespond(reply,exprFromText(reply));
+        return;
+      }catch(e){/* fall through to keywords */}
+    }
+
+    // Keyword fallback
+    const q=' '+raw.toLowerCase()+' ';
+    let found=null;
+    for(const r of RESPONSES){if(r.keys.some(k=>q.includes(k))){found=r;break;}}
+    if(found){window._joeyRespond(found.reply,found.expr);}
+    else{window._joeyRespond(FALLBACKS[fbIdx%FALLBACKS.length],null);fbIdx++;}
   }
 
   btn.addEventListener('click',handleSend);
