@@ -1,63 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Cortex · Settings</title>
-  <link rel="stylesheet" href="/pages/css/main.css">
-  <link rel="stylesheet" href="/pages/css/services.css">
-  <link rel="stylesheet" href="/pages/css/button.css">
-  <link rel="stylesheet" href="/pages/css/lightbox.css">
-  <link rel="stylesheet" href="/pages/css/tokeninput.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/pages/css/settings-redesign.css">
-</head>
-<body>
-
-  <div id="settings-wrap">
-
-    <!-- Header -->
-    <header id="settings-header">
-      <img src="/images/weareone.png" alt="Cortex" id="settings-logo">
-      <div id="settings-header-text">
-        <h1>Cortex</h1>
-        <p>Choose which networks appear in your pie menu</p>
-      </div>
-    </header>
-
-    <!-- Service grid -->
-    <div id="settings-grid-label">Your Networks</div>
-    <ul id="services"></ul>
-
-    <!-- How to use -->
-    <div id="settings-hint">
-      <div class="hint-icon">✦</div>
-      <div class="hint-text">
-        <strong>How to use</strong>
-        Long-press any selected text or image on any page to open your sharing menu.
-      </div>
-    </div>
-
-  </div>
-
-  <script src="/libs/basic.js"></script>
-  <script src="/libs/underscore.js"></script>
-  <script src="/libs/jquery.js"></script>
-  <script src="/libs/jquery.mousetracing.js"></script>
-  <script src="/libs/jquery.lightbox.js"></script>
-  <script src="/libs/jquery.tokeninput.js"></script>
-  <script src="/libs/jquery.tooltip.js"></script>
-  <script src="/libs/oauth.js"></script>
-  <script src="/libs/oauth.client.js"></script>
-  <script src="/services/service.js"></script>
-  <script src="/services/twitter.js"></script>
-  <script src="/services/tumblr.js"></script>
-  <script src="/services/instapaper.js"></script>
-  <script src="/services/pocket.js"></script>
-  <script src="/services/gmail.js"></script>
-  <script src="/services/services.js"></script>
-  <script src="/pages/js/main.js"></script>
-  <script src="/pages/js/services-list.js"></script>
-  <script src="/pages/js/settings.js"></script>
-
-</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Cortex | Connect</title>
+		<link rel="stylesheet" type="text/css" href="/pages/css/main.css" />
+		<link rel="stylesheet" type="text/css" href="/pages/css/services.css" />
+		<link rel="stylesheet" type="text/css" href="/pages/css/button.css" />
+		<link rel="stylesheet" type="text/css" href="/pages/css/lightbox.css" />
+		<link rel="stylesheet" type="text/css" href="/pages/css/tokeninput.css" />
+	</head>
+	<body>
+		<div id="container">
+			<!-- <a id="switch-view" href="/pages/history.htm"></a> -->
+			<div class="stepBox">
+				<ul id="services"></ul>
+			</div>
+			<div class="clear"></div>
+			<div id="settings-hint">
+				<span class="hint-icon">✦</span>
+				<div class="hint-text">
+					<strong>How to use</strong>
+					Long-press any selected text or image on any page to open your sharing menu.
+				</div>
+			</div>
+			<div id="fb-root"></div>
+		</div>
+		<script type="text/javascript" src="/libs/basic.js"></script>
+		<script type="text/javascript" src="/libs/underscore.js"></script>
+		<script type="text/javascript" src="/libs/jquery.js"></script>
+		<script type="text/javascript" src="/libs/jquery.mousetracing.js"></script>
+		<script type="text/javascript" src="/libs/jquery.lightbox.js"></script>
+		<script type="text/javascript" src="/libs/jquery.tokeninput.js"></script>
+		<script type="text/javascript" src="/libs/jquery.tooltip.js"></script>
+		<script type="text/javascript" src="/libs/oauth.js"></script>
+		<script type="text/javascript" src="/libs/oauth.client.js"></script>
+		<script type="text/javascript" src="/services/service.js"></script>
+		<script type="text/javascript" src="/services/twitter.js"></script>
+		<script type="text/javascript" src="/services/tumblr.js"></script>
+		<script type="text/javascript" src="/services/instapaper.js"></script>
+		<script type="text/javascript" src="/services/pocket.js"></script>
+		<script type="text/javascript" src="/services/gmail.js"></script>
+		<script type="text/javascript" src="/services/services.js"></script>
+		<script type="text/javascript" src="/pages/js/main.js"></script>
+		<script type="text/javascript" src="/pages/js/services-list.js"></script>
+		<script type="text/javascript" src="/pages/js/settings.js"></script>
+	</body>
 </html>

@@ -1,26 +1,52 @@
 /* Buttons */
 a.connect, a.pick-friends, a.save, a.next {
 	display:block;
-	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#FEFEFE), to(#E7E7E6));
 	-webkit-border-radius:5px;
 	border:solid 1px #ccc;
-	padding:3px 0px;
-	color:black;
+	padding:5px 0px;
 	text-align:center;
 	width:100px;
 	margin:0 auto;
 	margin-bottom:10px;
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: opacity 0.15s, background 0.15s, color 0.15s;
+}
+
+/* Add — gradient */
+.disconnected a.connect {
+	background: linear-gradient(135deg, #FF1368 0%, #FF5533 52%, #FF8C00 100%);
+	color: #fff;
+	border-color: transparent;
+}
+
+.disconnected a.connect:hover {
+	opacity: 0.85;
+	text-decoration: none;
+}
+
+/* Remove — subtle gray */
+.connected a.connect {
+	background: #f5f5f5;
+	color: #999;
+	border-color: #e0e0e0;
+}
+
+.connected a.connect:hover {
+	background: #fff0f0;
+	color: #e53935;
+	border-color: #ffcdd2;
+	text-decoration: none;
 }
 
 .connect:active:not(.disabled), .pick-friends:active:not(.disabled), .save:active:not(.disabled), .next:active:not(.disabled) {
-	background:-webkit-gradient(linear, 0% 100%, 0% 0%, from(#FEFEFE), to(#E7E7E6));
-}
-
-.connect:hover, .pick-friends:hover, .save:hover, .next:hover {
-	text-decoration:none;
+	opacity: 0.7;
 }
 
 .connect.disabled, .pick-friends.disabled, .save.disabled {
-	color:#999;
-	cursor:default;
+	background: #f5f5f5 !important;
+	color: #bbb !important;
+	border-color: #e0e0e0 !important;
+	cursor: default;
 }

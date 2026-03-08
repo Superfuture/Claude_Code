@@ -1,5 +1,5 @@
 #services {
-	display:block; 
+	display:block;
 	list-style:none;
 	margin-top:-15px;
 }
@@ -28,22 +28,43 @@
 	margin-top:30px;
 	cursor:pointer;
 	position: relative;
+	border-radius: 10px;
+	padding: 8px 0 4px;
+	transition: background 0.15s;
+}
+
+/* Connected state — subtle warm tint */
+#services > li.connected {
+	background: rgba(255, 85, 51, 0.06);
+}
+
+/* Connected checkmark */
+#services > li.connected::after {
+	content: '✓';
+	position: absolute;
+	top: 6px;
+	right: 8px;
+	font-size: 10px;
+	font-weight: 800;
+	color: #FF5533;
+}
+
+#services > li img {
+	display:block;
+	width:100px;
+	height:100px;
+	margin:6px auto 12px;
+	border-radius: 20px;
+	object-fit: cover;
+}
+
+#services > li#twitter img {
+	border-radius: 0 20px 20px 20px;
 }
 
 .service-label {
 	display: none;
 }
-
-#services > li img {
-	display:block;
-	width:59px;
-	margin:6px auto 15px;
-}
-
-#services > li#twitter img {
-	border-radius: 0 8px 8px 8px;
-}
-
 
 #services .service-name {
 	font-size: 14px;
@@ -109,4 +130,42 @@
 	background:#131313;
 	padding:4px 0;
 	-webkit-border-radius:5px;
+}
+
+/* How to use hint */
+#settings-hint {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	margin: 24px auto 0;
+	width: 640px;
+	padding: 14px 18px;
+	background: #fff8f5;
+	border: 1px solid rgba(255,85,51,.15);
+	border-radius: 10px;
+	clear: both;
+}
+
+.hint-icon {
+	font-size: 14px;
+	color: #FF5533;
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
+.hint-text {
+	font-size: 13px;
+	color: #888;
+	line-height: 1.6;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+.hint-text strong {
+	display: block;
+	color: #555;
+	font-weight: 700;
+	margin-bottom: 2px;
+	font-size: 11px;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
 }
