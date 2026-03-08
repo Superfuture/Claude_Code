@@ -1041,23 +1041,34 @@ document.head.appendChild(style);
 // ── POST MODAL ──
 let _postImgDataUrl = null;
 
-let _selectedTool = null;
+let _selectedTools = new Set();
 
 function selectTool(btn) {
-  _selectedTool = btn.dataset.tool;
-  document.querySelectorAll('#tool-pills button').forEach(b => {
-    b.style.background = 'rgba(255,255,255,0.04)';
-    b.style.borderColor = 'rgba(255,255,255,0.1)';
-    b.style.color = '#9B9DAD';
+  const tool = btn.dataset.tool;
+  if (_selectedTools.has(tool)) {
+    _selectedTools.delete(tool);
+    btn.style.background = 'rgba(255,255,255,0.04)';
+    btn.style.borderColor = 'rgba(255,255,255,0.1)';
+    btn.style.color = '#9B9DAD';
+  } else {
+    _selectedTools.add(tool);
+    btn.style.background = 'rgba(107,78,255,0.18)';
+    btn.style.borderColor = 'rgba(107,78,255,0.5)';
+    btn.style.color = '#9B8AFF';
+  }
+}
+
+function expandTools(btn) {
+  btn.remove();
+  document.querySelectorAll('#tool-pills button[style*="display:none"]').forEach(b => {
+    b.style.display = '';
+    b.style.cssText = 'padding:5px 10px;border-radius:20px;font-family:\'DM Sans\',sans-serif;font-size:10px;font-weight:500;cursor:pointer;transition:all 0.15s;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#9B9DAD;';
   });
-  btn.style.background = 'rgba(107,78,255,0.18)';
-  btn.style.borderColor = 'rgba(107,78,255,0.5)';
-  btn.style.color = '#9B8AFF';
 }
 
 function showPostModal() {
   _postImgDataUrl = null;
-  _selectedTool = null;
+  _selectedTools = new Set();
   const overlay = document.createElement('div');
   overlay.id = 'post-overlay';
   overlay.style.cssText = `position:absolute;inset:0;background:rgba(0,0,0,0.72);z-index:200;
@@ -1081,11 +1092,12 @@ function showPostModal() {
         <div style="margin-bottom:10px;">
           <div style="font-family:'DM Sans',sans-serif;font-size:10px;color:#4A4D60;letter-spacing:0.08em;margin-bottom:7px;">AI TOOL USED</div>
           <div style="display:flex;flex-wrap:wrap;gap:6px;" id="tool-pills">
-            ${['Midjourney','DALL·E 3','Stable Diffusion','Adobe Firefly','Runway ML','Sora','Ideogram','Claude','Claude Code','Subframe','Magic Patterns','Nano Banana','Framer AI','v0','Galileo AI','Uizard','Pika','Kling AI'].map((t,i) =>
-              `<button onclick="selectTool(this)" data-tool="${t}" style="padding:5px 10px;border-radius:20px;
-              font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;cursor:pointer;transition:all 0.15s;
-              background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#9B9DAD;">${t}</button>`
-            ).join('')}
+            ${(function(){
+              const all=['Midjourney','DALL·E 3','Stable Diffusion','Adobe Firefly','Runway ML','Sora','Ideogram','Claude','Claude Code','Subframe','Magic Patterns','Nano Banana','Framer AI','v0','Galileo AI','Uizard','Pika','Kling AI'];
+              const vis=all.slice(0,8); const hid=all.slice(8);
+              const pill=(t,hidden)=>`<button onclick="selectTool(this)" data-tool="${t}" ${hidden?'style="display:none;"':''} style="${hidden?'display:none;':''}padding:5px 10px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;cursor:pointer;transition:all 0.15s;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#9B9DAD;">${t}</button>`;
+              return vis.map(t=>pill(t,false)).join('')+(hid.length?`<button id="more-tools-btn" onclick="expandTools(this)" style="padding:5px 10px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;cursor:pointer;transition:all 0.15s;background:rgba(107,78,255,0.07);border:1px solid rgba(107,78,255,0.35);color:#9B8AFF;">+${hid.length} more</button>`:'')+hid.map(t=>pill(t,true)).join('');
+            })()
           </div>
         </div>
         <textarea id="post-desc" placeholder="Describe your work and process..." style="width:100%;background:rgba(255,255,255,0.04);
@@ -1158,7 +1170,7 @@ function submitPost() {
             <div class="meta">@jp · just now</div>
           </div>
         </div>
-        <span class="badge" style="color:#9B8AFF;border-color:rgba(107,78,255,0.3);background:rgba(107,78,255,0.08);">${_selectedTool || 'New ✦'}</span>
+        <span class="badge" style="color:#9B8AFF;border-color:rgba(107,78,255,0.3);background:rgba(107,78,255,0.08);">${_selectedTools.size ? [..._selectedTools].join(' · ') : 'New ✦'}</span>
       </div>
       ${imgHtml}
       <div class="card-body">
@@ -1385,25 +1397,33 @@ function sendComment(input, cardIdx) {
 (function() {
   const nav = document.querySelector('.bottom-nav');
   const app = document.getElementById('app');
+  const _cache = new Map(); // img.src -> brightness value
 
-  // Sample brightness of an image's bottom portion
-  function imgBrightness(img) {
-    try {
-      const c = document.createElement('canvas');
-      c.width = 16; c.height = 8;
-      const ctx = c.getContext('2d');
-      // sample bottom 30% of image (most likely to be behind nav as you scroll)
-      const sy = img.naturalHeight * 0.7;
-      const sh = img.naturalHeight * 0.3;
-      ctx.drawImage(img, 0, sy, img.naturalWidth, sh, 0, 0, 16, 8);
-      const d = ctx.getImageData(0, 0, 16, 8).data;
-      let sum = 0;
-      for (let i = 0; i < d.length; i += 4) sum += 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
-      return sum / (d.length / 4);
-    } catch(e) { return null; }
+  // Load image with CORS headers (bypasses tainted-canvas problem) and compute brightness
+  function precompute(imgEl) {
+    const src = imgEl.src || imgEl.currentSrc;
+    if (!src || _cache.has(src)) return;
+    _cache.set(src, null); // mark pending
+    const tmp = new Image();
+    tmp.crossOrigin = 'anonymous';
+    tmp.onload = function() {
+      try {
+        const c = document.createElement('canvas');
+        c.width = 12; c.height = 6;
+        const ctx = c.getContext('2d');
+        // sample the bottom third (the part most likely to be behind the nav)
+        ctx.drawImage(tmp, 0, tmp.naturalHeight * 0.65, tmp.naturalWidth, tmp.naturalHeight * 0.35, 0, 0, 12, 6);
+        const d = ctx.getImageData(0, 0, 12, 6).data;
+        let sum = 0;
+        for (let i = 0; i < d.length; i += 4) sum += 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+        _cache.set(src, sum / (d.length / 4));
+      } catch(e) { _cache.set(src, 100); }
+      update();
+    };
+    tmp.onerror = () => _cache.set(src, null);
+    tmp.src = src;
   }
 
-  // Check background color brightness
   function colorBrightness(el) {
     const bg = getComputedStyle(el).backgroundColor;
     const m = bg.match(/[\d.]+/g);
@@ -1414,19 +1434,21 @@ function sendComment(input, cardIdx) {
   }
 
   function update() {
-    // Temporarily disable pointer events on nav so elementFromPoint sees content behind it
     nav.style.pointerEvents = 'none';
     const navRect = nav.getBoundingClientRect();
-    const sampleY = navRect.top + 8;
-    const sampleXs = [0.15, 0.35, 0.5, 0.65, 0.85].map(f => navRect.left + navRect.width * f);
+    const sampleY = navRect.top + 10;
+    const sampleXs = [0.1, 0.3, 0.5, 0.7, 0.9].map(f => navRect.left + navRect.width * f);
 
     let totalB = 0, n = 0;
     for (const x of sampleXs) {
       let el = document.elementFromPoint(x, sampleY);
       while (el && el !== document.body) {
-        if (el.tagName === 'IMG' && el.complete && el.naturalWidth) {
-          const b = imgBrightness(el);
-          if (b !== null) { totalB += b; n++; break; }
+        if (el.tagName === 'IMG') {
+          const src = el.src || el.currentSrc;
+          if (src && !_cache.has(src)) precompute(el);
+          const b = _cache.get(src);
+          if (b !== null && b !== undefined) { totalB += b; n++; }
+          break;
         }
         const b = colorBrightness(el);
         if (b !== null && b > 1) { totalB += b; n++; break; }
@@ -1434,8 +1456,14 @@ function sendComment(input, cardIdx) {
       }
     }
     nav.style.pointerEvents = '';
-    nav.classList.toggle('nav-light', n > 0 && totalB / n > 130);
+    nav.classList.toggle('nav-light', n > 0 && totalB / n > 128);
   }
+
+  // Pre-compute all card images eagerly
+  document.querySelectorAll('.card-img img, .explore-card img').forEach(img => {
+    if (img.complete && img.naturalWidth) precompute(img);
+    else img.addEventListener('load', () => precompute(img), { once: true });
+  });
 
   let ticking = false;
   app.addEventListener('scroll', () => {
@@ -1443,7 +1471,7 @@ function sendComment(input, cardIdx) {
     ticking = true;
     requestAnimationFrame(() => { update(); ticking = false; });
   });
-  setTimeout(update, 500); // initial check after images settle
+  setTimeout(update, 800);
 })();
 </script>
 </body>
