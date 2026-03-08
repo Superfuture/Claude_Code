@@ -320,6 +320,7 @@ footer{
   flex:1;background:#050510;border:3px solid var(--l3);border-right:0;
   color:var(--l3);font-family:var(--px);font-size:7px;
   padding:10px 12px;outline:none;letter-spacing:.05em;min-width:0;
+  caret-color:var(--l2);
 }
 #hero-chat-input::placeholder{color:rgba(0,255,255,.3);}
 #hero-chat-input:focus{border-color:var(--l2);box-shadow:0 0 14px rgba(0,255,255,.25);}
@@ -329,7 +330,31 @@ footer{
   cursor:pointer;flex-shrink:0;transition:background .1s,color .1s;
 }
 #hero-chat-send:hover{background:#000;color:var(--l3);}
-@media(max-width:600px){#hero-chat{width:240px;}}
+
+/* mobile chat reply bubble — shows Joey's response near the input */
+#mobile-chat-reply{
+  display:none;
+  margin-top:10px;
+  background:#fff;border:3px solid #0a0a1a;box-shadow:4px 4px 0 #0a0a1a;
+  padding:10px 16px;font-family:var(--px);font-size:8px;color:#0a0a1a;
+  letter-spacing:.05em;line-height:1.8;text-align:left;
+  max-width:90vw;width:320px;white-space:normal;
+  animation:fadeInUp .2s ease;
+}
+#mobile-chat-reply::before{
+  content:'JOEY ▶';display:block;font-size:6px;
+  color:var(--acc);margin-bottom:6px;letter-spacing:.1em;
+}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:600px){
+  body{cursor:auto;}
+  #hero-chat{width:calc(100vw - 48px);max-width:none;}
+  #hero-chat-input{font-size:14px;padding:14px 14px;}
+  #hero-chat-send{font-size:14px;padding:0 20px;min-height:48px;}
+  #mobile-chat-reply{display:none;width:calc(100vw - 48px);}
+  #mobile-chat-reply.visible{display:block;}
+}
 
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
@@ -369,9 +394,10 @@ footer{
       <div class="crt-lines"></div>
     </div>
     <div id="hero-chat">
-      <input type="text" id="hero-chat-input" placeholder="> TALK TO JOEY..." maxlength="60" autocomplete="off">
+      <input type="text" id="hero-chat-input" placeholder="> TALK TO JOEY..." maxlength="60" autocomplete="off" autocapitalize="none">
       <button id="hero-chat-send">▶</button>
     </div>
+    <div id="mobile-chat-reply"></div>
   </div>
   <div style="position:relative;z-index:2;width:100%;max-width:900px;margin:0 auto;padding:0 24px;">
     <div class="hero-badge">★ PLAYER ONE ★</div>
@@ -969,6 +995,13 @@ Facts: Silicon Valley product designer, 15+ years, Cannes Gold Lion/Webby/CSS Aw
     return d.content[0].text.trim().toUpperCase().slice(0,120);
   }
 
+  const mobileReply=document.getElementById('mobile-chat-reply');
+  function showMobileReply(msg){
+    if(!mobileReply)return;
+    mobileReply.textContent=msg;
+    mobileReply.classList.add('visible');
+  }
+
   async function handleSend(){
     const raw=input.value.trim();
     if(!raw||!window._joeyRespond)return;
@@ -978,9 +1011,11 @@ Facts: Silicon Valley product designer, 15+ years, Cannes Gold Lion/Webby/CSS Aw
     // Try Claude API first
     if(ANTHROPIC_KEY){
       window._joeyRespond('THINKING... ★',null);
+      showMobileReply('THINKING... ★');
       try{
         const reply=await askClaude(raw);
         window._joeyRespond(reply,exprFromText(reply));
+        showMobileReply(reply);
         return;
       }catch(e){/* fall through to keywords */}
     }
@@ -989,8 +1024,11 @@ Facts: Silicon Valley product designer, 15+ years, Cannes Gold Lion/Webby/CSS Aw
     const q=' '+raw.toLowerCase()+' ';
     let found=null;
     for(const r of RESPONSES){if(r.keys.some(k=>q.includes(k))){found=r;break;}}
-    if(found){window._joeyRespond(found.reply,found.expr);}
-    else{window._joeyRespond(FALLBACKS[fbIdx%FALLBACKS.length],null);fbIdx++;}
+    const reply=found?found.reply:FALLBACKS[fbIdx%FALLBACKS.length];
+    const expr=found?found.expr:null;
+    if(!found)fbIdx++;
+    window._joeyRespond(reply,expr);
+    showMobileReply(reply);
   }
 
   btn.addEventListener('click',handleSend);
