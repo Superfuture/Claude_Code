@@ -33,9 +33,9 @@
 	transition: background 0.15s;
 }
 
-/* Connected state — subtle warm tint */
+/* Connected state */
 #services > li.connected {
-	background: rgba(255, 85, 51, 0.06);
+	background: transparent;
 }
 
 /* Connected checkmark */
