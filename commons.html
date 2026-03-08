@@ -1097,7 +1097,7 @@ function showPostModal() {
               const vis=all.slice(0,8); const hid=all.slice(8);
               const pill=(t,hidden)=>`<button onclick="selectTool(this)" data-tool="${t}" ${hidden?'style="display:none;"':''} style="${hidden?'display:none;':''}padding:5px 10px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;cursor:pointer;transition:all 0.15s;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#9B9DAD;">${t}</button>`;
               return vis.map(t=>pill(t,false)).join('')+(hid.length?`<button id="more-tools-btn" onclick="expandTools(this)" style="padding:5px 10px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;cursor:pointer;transition:all 0.15s;background:rgba(107,78,255,0.07);border:1px solid rgba(107,78,255,0.35);color:#9B8AFF;">+${hid.length} more</button>`:'')+hid.map(t=>pill(t,true)).join('');
-            })()
+            })()}
           </div>
         </div>
         <textarea id="post-desc" placeholder="Describe your work and process..." style="width:100%;background:rgba(255,255,255,0.04);
