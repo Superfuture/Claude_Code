@@ -1,3 +1,11 @@
+#settings-title {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 22px;
+	font-weight: 700;
+	color: #111;
+	margin-bottom: 20px;
+}
+
 #services {
 	display:block;
 	list-style:none;
