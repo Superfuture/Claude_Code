@@ -20,7 +20,7 @@ $.fn.extend({
   		// Locate center bottom of link
   		var pos = $(this).offset();
   		pos.left += $(this).width() / 2,
-  		pos.top -= tooltip.height() - 15;
+  		pos.top -= tooltip.height() - 5;
 
       var width = tooltip.width();
 
