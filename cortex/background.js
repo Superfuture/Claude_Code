@@ -4,6 +4,7 @@ importScripts(
 	"/services/service.js",
 	"/services/urlshortener.js",
 	"/services/twitter.js",
+	"/services/facebook.js",
 	"/services/tumblr.js",
 	"/services/gmail.js",
 	"/services/instapaper.js",

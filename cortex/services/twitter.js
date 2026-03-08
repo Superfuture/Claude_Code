@@ -34,7 +34,9 @@ Twitter.prototype.requiresShortUrl = true;
 Twitter.prototype.maxLength = 140;
 
 Twitter.prototype.connect = function(popup, success, error) {
-	this.oauthClient.authorize(popup, success, error);
+	this.data.connected = true;
+	this.saveData();
+	success();
 };
 
 Twitter.prototype.finishConnecting = function(data) {
@@ -42,31 +44,20 @@ Twitter.prototype.finishConnecting = function(data) {
 };
 
 Twitter.prototype.disconnect = function() {
-	delete this.data.oauth;
+	this.data = {};
 	this.saveData();
 };
 
 Twitter.prototype.isConnected = async function() {
 	await this.loadData();
-	return this.data.oauth !== undefined && this.data.oauth.isAuthorized;
+	return this.data.connected === true || (this.data.oauth !== undefined && this.data.oauth.isAuthorized);
 };
 
 Twitter.prototype.post = function(options) {
-	//Build tweet from custom message or document title and shortened URL
-	var tweet = (options.message || options.title) + ' ' + options.shortUrl;
-	
-	this.oauthClient.request({
-		action: 'https://api.twitter.com/1.1/statuses/update.json',
-		dataType: 'json',
-		parameters: { status: tweet },
-		success: function(response) {
-			options.success({
-				linkToPost: 'https://x.com/' + response.user.screen_name + '/status/' + response.id_str,
-				_id: response.id_str
-			});
-		},
-		error: options.error
-	});
+	var text = encodeURIComponent((options.message || options.title || '') + ' ' + (options.shortUrl || options.link || ''));
+	var url = 'https://x.com/intent/tweet?text=' + text;
+	chrome.tabs.create({ url: url });
+	options.success({ linkToPost: 'https://x.com' });
 };
 
 Twitter.prototype.preparePost = function(options, callback) {

@@ -25,15 +25,7 @@ Facebook.prototype.isConnected = async function() {
 };
 
 Facebook.prototype.post = function(options) {
-	var shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(options.link);
-
-	var win = window.open(shareUrl, 'facebook-share', 'width=600,height=400,left=200,top=100');
-
-	// Poll for window close to call success
-	var poll = setInterval(function() {
-		if (!win || win.closed) {
-			clearInterval(poll);
-			options.success({ linkToPost: 'https://www.facebook.com' });
-		}
-	}, 500);
+	var shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(options.link || options.shortUrl || '');
+	chrome.tabs.create({ url: shareUrl });
+	options.success({ linkToPost: 'https://www.facebook.com' });
 };
