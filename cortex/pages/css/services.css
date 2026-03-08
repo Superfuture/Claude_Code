@@ -51,6 +51,14 @@
 	margin:6px auto 15px;
 }
 
+#services > li#twitter img {
+	border-radius: 0 8px 8px 8px;
+}
+
+#services > li#twitter .service-label {
+	display: none;
+}
+
 #services .service-name {
 	font-size: 14px;
 	font-weight: normal;
