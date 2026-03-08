@@ -49,14 +49,25 @@ nav {
   letter-spacing: -0.01em;
   color: var(--black);
   text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
-.nav-mark {
-  width: 24px;
-  height: 24px;
+/* ── LOGO MARKS ──────────────────────────────── */
+.logo-marks-section {
+  border-bottom: 1px solid var(--border);
+  padding: 50px 0 10px;
+}
+
+.logo-marks-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  gap: 8px;
+}
+
+.logo-mark {
+  width: 150px;
+  height: 150px;
   display: block;
 }
 
@@ -497,17 +508,21 @@ footer {
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">
-    <img src="frame-and-form/logo-left.svg" alt="Frame" class="nav-mark">
-    <img src="frame-and-form/logo-right.svg" alt="Form" class="nav-mark">
-    <span>Frame &amp; Form</span>
-  </a>
+  <a href="#" class="nav-logo">Frame &amp; Form</a>
   <ul class="nav-links">
     <li><a href="#work">Our Work</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#connect">Connect</a></li>
   </ul>
 </nav>
+
+<!-- LOGO MARKS -->
+<div class="logo-marks-section">
+  <div class="logo-marks-inner">
+    <img src="frame-and-form/logo-left.svg" alt="Frame mark" class="logo-mark">
+    <img src="frame-and-form/logo-right.svg" alt="Form mark" class="logo-mark">
+  </div>
+</div>
 
 <!-- INTRO -->
 <section class="intro">
