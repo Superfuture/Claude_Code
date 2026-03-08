@@ -174,55 +174,48 @@ nav {
 
 .card-img {
   aspect-ratio: 4 / 3;
-  position: relative;
   overflow: hidden;
+  transition: filter 0.4s ease;
 }
 
-.card-img::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: inherit;
-  transition: transform 0.5s ease;
+.project-card:hover .card-img {
+  filter: brightness(0.96);
 }
 
-.project-card:hover .card-img::after {
-  transform: scale(1.02);
-}
-
-.img-a { background: #F5F5F5; }
-.img-b { background: #EBEBEB; }
-.img-c { background: #E0E0E0; }
-
-/* Subtle textured placeholders */
-.img-a { background: linear-gradient(135deg, #F8F8F8 0%, #EEEEEE 100%); }
-.img-b { background: linear-gradient(135deg, #EFEFEF 0%, #E4E4E4 100%); }
-.img-c { background: linear-gradient(135deg, #E8E8E8 0%, #D8D8D8 100%); }
+.img-a { background: #F2F2F2; }
+.img-b { background: #E8E8E8; }
+.img-c { background: #DEDEDE; }
 
 /* Unique per-project tints */
-.proj-1 .img-a { background: linear-gradient(140deg, #F0EEF5 0%, #E3DFF0 100%); }
-.proj-1 .img-b { background: linear-gradient(140deg, #EDE8F2 0%, #DDD6EA 100%); }
-.proj-1 .img-c { background: linear-gradient(140deg, #E8E2EE 0%, #D4CCE2 100%); }
+/* Redo — cool slate */
+.proj-1 .img-a { background: #DDE0E8; }
+.proj-1 .img-b { background: #CDD2DE; }
+.proj-1 .img-c { background: #BFC5D4; }
 
-.proj-2 .img-a { background: linear-gradient(140deg, #F0F0F0 0%, #E2E2E2 100%); }
-.proj-2 .img-b { background: linear-gradient(140deg, #EBEBEB 0%, #DCDCDC 100%); }
-.proj-2 .img-c { background: linear-gradient(140deg, #E4E4E4 0%, #D4D4D4 100%); }
+/* Titan — warm charcoal */
+.proj-2 .img-a { background: #DCDCDC; }
+.proj-2 .img-b { background: #CECECE; }
+.proj-2 .img-c { background: #BFBFBF; }
 
-.proj-3 .img-a { background: linear-gradient(140deg, #EDF2EE 0%, #DEEAE0 100%); }
-.proj-3 .img-b { background: linear-gradient(140deg, #EAF0EB 0%, #DAE6DC 100%); }
-.proj-3 .img-c { background: linear-gradient(140deg, #E4EDE5 0%, #D3E2D5 100%); }
+/* Farm Global — sage green */
+.proj-3 .img-a { background: #D5DDD5; }
+.proj-3 .img-b { background: #C6D1C6; }
+.proj-3 .img-c { background: #B8C4B9; }
 
-.proj-4 .img-a { background: linear-gradient(140deg, #F2EDE8 0%, #E8DDD4 100%); }
-.proj-4 .img-b { background: linear-gradient(140deg, #EEEAE4 0%, #E4D8CE 100%); }
-.proj-4 .img-c { background: linear-gradient(140deg, #E8E2DC 0%, #DDD0C8 100%); }
+/* Anders — warm sand */
+.proj-4 .img-a { background: #DDD8D0; }
+.proj-4 .img-b { background: #D0CAC0; }
+.proj-4 .img-c { background: #C4BCB1; }
 
-.proj-5 .img-a { background: linear-gradient(140deg, #EFEFEF 0%, #E0E0E0 100%); }
-.proj-5 .img-b { background: linear-gradient(140deg, #EAEAEA 0%, #D8D8D8 100%); }
-.proj-5 .img-c { background: linear-gradient(140deg, #E4E4E4 0%, #D2D2D2 100%); }
+/* Club — neutral */
+.proj-5 .img-a { background: #DADADA; }
+.proj-5 .img-b { background: #CBCBCB; }
+.proj-5 .img-c { background: #BBBBBB; }
 
-.proj-6 .img-a { background: linear-gradient(140deg, #F0EEE8 0%, #E8E2D4 100%); }
-.proj-6 .img-b { background: linear-gradient(140deg, #EDE9E2 0%, #E2DACF 100%); }
-.proj-6 .img-c { background: linear-gradient(140deg, #E8E4DC 0%, #DCD4C8 100%); }
+/* Véloce — warm cream */
+.proj-6 .img-a { background: #DDD9D0; }
+.proj-6 .img-b { background: #D0CBBf; }
+.proj-6 .img-c { background: #C4BFAB; }
 
 /* Card meta */
 .card-meta {
