@@ -28,13 +28,13 @@ a.connect, a.pick-friends, a.save, a.next {
 
 /* Remove — no background */
 .connected a.connect {
-	background: transparent;
+	background: transparent !important;
 	color: #bbb;
 	border-color: #e0e0e0;
 }
 
 .connected a.connect:hover {
-	background: transparent;
+	background: transparent !important;
 	color: #e53935;
 	border-color: #ffcdd2;
 	text-decoration: none;
