@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frame & Form — Design Agency</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #111111;
+  --mid: #888888;
+  --light: #BBBBBB;
+  --border: #E5E5E5;
+  --bg: #FFFFFF;
+  --ff: 'Instrument Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--ff);
+  background: var(--bg);
+  color: var(--black);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── NAV ─────────────────────────────────────── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  height: 46px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--black);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--mid);
+  text-decoration: none;
+  letter-spacing: 0;
+  transition: color 0.15s;
+}
+
+.nav-links a:hover { color: var(--black); }
+
+/* ── INTRO ───────────────────────────────────── */
+.intro {
+  padding: 120px 40px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.intro-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--light);
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.intro-label::after {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--light);
+}
+
+.intro-headline {
+  font-size: clamp(42px, 7vw, 105px);
+  font-weight: 300;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: var(--black);
+  max-width: 1100px;
+}
+
+.intro-headline em {
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* ── DIVIDER ─────────────────────────────────── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── OUR WORK ────────────────────────────────── */
+.work-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.work-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 56px 0 48px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--light);
+}
+
+.work-count {
+  font-size: 12px;
+  color: var(--light);
+  letter-spacing: 0.04em;
+}
+
+/* Project cards */
+.project-card {
+  border-top: 1px solid var(--border);
+  padding: 56px 0;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.project-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.project-card:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+/* 3-image strip */
+.card-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 36px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.card-img {
+  aspect-ratio: 4 / 3;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  transition: transform 0.5s ease;
+}
+
+.project-card:hover .card-img::after {
+  transform: scale(1.02);
+}
+
+.img-a { background: #F5F5F5; }
+.img-b { background: #EBEBEB; }
+.img-c { background: #E0E0E0; }
+
+/* Subtle textured placeholders */
+.img-a { background: linear-gradient(135deg, #F8F8F8 0%, #EEEEEE 100%); }
+.img-b { background: linear-gradient(135deg, #EFEFEF 0%, #E4E4E4 100%); }
+.img-c { background: linear-gradient(135deg, #E8E8E8 0%, #D8D8D8 100%); }
+
+/* Unique per-project tints */
+.proj-1 .img-a { background: linear-gradient(140deg, #F0EEF5 0%, #E3DFF0 100%); }
+.proj-1 .img-b { background: linear-gradient(140deg, #EDE8F2 0%, #DDD6EA 100%); }
+.proj-1 .img-c { background: linear-gradient(140deg, #E8E2EE 0%, #D4CCE2 100%); }
+
+.proj-2 .img-a { background: linear-gradient(140deg, #F0F0F0 0%, #E2E2E2 100%); }
+.proj-2 .img-b { background: linear-gradient(140deg, #EBEBEB 0%, #DCDCDC 100%); }
+.proj-2 .img-c { background: linear-gradient(140deg, #E4E4E4 0%, #D4D4D4 100%); }
+
+.proj-3 .img-a { background: linear-gradient(140deg, #EDF2EE 0%, #DEEAE0 100%); }
+.proj-3 .img-b { background: linear-gradient(140deg, #EAF0EB 0%, #DAE6DC 100%); }
+.proj-3 .img-c { background: linear-gradient(140deg, #E4EDE5 0%, #D3E2D5 100%); }
+
+.proj-4 .img-a { background: linear-gradient(140deg, #F2EDE8 0%, #E8DDD4 100%); }
+.proj-4 .img-b { background: linear-gradient(140deg, #EEEAE4 0%, #E4D8CE 100%); }
+.proj-4 .img-c { background: linear-gradient(140deg, #E8E2DC 0%, #DDD0C8 100%); }
+
+.proj-5 .img-a { background: linear-gradient(140deg, #EFEFEF 0%, #E0E0E0 100%); }
+.proj-5 .img-b { background: linear-gradient(140deg, #EAEAEA 0%, #D8D8D8 100%); }
+.proj-5 .img-c { background: linear-gradient(140deg, #E4E4E4 0%, #D2D2D2 100%); }
+
+.proj-6 .img-a { background: linear-gradient(140deg, #F0EEE8 0%, #E8E2D4 100%); }
+.proj-6 .img-b { background: linear-gradient(140deg, #EDE9E2 0%, #E2DACF 100%); }
+.proj-6 .img-c { background: linear-gradient(140deg, #E8E4DC 0%, #DCD4C8 100%); }
+
+/* Card meta */
+.card-meta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: start;
+}
+
+.card-meta-left {}
+
+.card-project-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--light);
+  margin-bottom: 12px;
+}
+
+.card-title {
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--black);
+  margin-bottom: 8px;
+}
+
+.card-subtitle {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--mid);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+.card-desc {
+  font-size: 15px;
+  font-weight: 400;
+  color: #999;
+  line-height: 1.65;
+  max-width: 560px;
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--black);
+  text-decoration: none;
+  letter-spacing: 0;
+  margin-top: 24px;
+  padding-bottom: 1px;
+  border-bottom: 1px solid var(--black);
+  transition: opacity 0.15s, gap 0.2s;
+}
+
+.card-link:hover {
+  opacity: 0.5;
+  gap: 10px;
+}
+
+.card-num {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--light);
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+/* ── STATS ───────────────────────────────────── */
+.stats-section {
+  padding: 100px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stats-headline {
+  font-size: clamp(28px, 3.8vw, 52px);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--black);
+  max-width: 780px;
+  margin-bottom: 72px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--border);
+  margin-bottom: 56px;
+}
+
+.stat-item {
+  padding: 40px 0 40px;
+  border-right: 1px solid var(--border);
+}
+
+.stat-item:last-child { border-right: none; }
+
+.stat-num {
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--black);
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--mid);
+  letter-spacing: 0;
+}
+
+.about-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--black);
+  text-decoration: none;
+  padding-bottom: 1px;
+  border-bottom: 1px solid var(--black);
+  transition: opacity 0.15s, gap 0.2s;
+}
+
+.about-link:hover { opacity: 0.5; gap: 10px; }
+
+/* ── CONNECT ─────────────────────────────────── */
+.connect-section {
+  border-top: 1px solid var(--border);
+  padding: 100px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.connect-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.connect-headline {
+  font-size: clamp(28px, 3.8vw, 52px);
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--black);
+  max-width: 680px;
+}
+
+.connect-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: var(--black);
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border-radius: 2px;
+  white-space: nowrap;
+  transition: opacity 0.15s, gap 0.2s;
+  flex-shrink: 0;
+}
+
+.connect-cta:hover { opacity: 0.75; gap: 14px; }
+
+/* ── FOOTER ──────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 60px 40px 40px;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-logo {
+  font-size: clamp(36px, 6vw, 80px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--black);
+  margin-bottom: 60px;
+  line-height: 1;
+}
+
+.footer-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+  margin-bottom: 60px;
+}
+
+.footer-col-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--light);
+  margin-bottom: 16px;
+}
+
+.footer-col p,
+.footer-col a {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--mid);
+  line-height: 1.8;
+  text-decoration: none;
+  display: block;
+  transition: color 0.15s;
+}
+
+.footer-col a:hover { color: var(--black); }
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: var(--light);
+  letter-spacing: 0.02em;
+}
+
+.footer-tag {
+  font-size: 12px;
+  color: var(--light);
+  letter-spacing: 0.02em;
+}
+
+/* ── RESPONSIVE ──────────────────────────────── */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { gap: 20px; }
+
+  .intro { padding: 72px 20px 56px; }
+
+  .work-section, .stats-section, .connect-section { padding-left: 20px; padding-right: 20px; }
+
+  .card-meta { grid-template-columns: 1fr; }
+  .card-num { display: none; }
+
+  .stats-row { grid-template-columns: 1fr; }
+  .stat-item { border-right: none; border-bottom: 1px solid var(--border); padding: 28px 0; }
+  .stat-item:last-child { border-bottom: none; }
+
+  .footer-cols { grid-template-columns: 1fr; gap: 32px; }
+  footer { padding: 48px 20px 32px; }
+}
+
+@media (max-width: 480px) {
+  .nav-logo { font-size: 14px; }
+  .nav-links a { font-size: 13px; }
+  .card-images { gap: 4px; }
+  .connect-inner { flex-direction: column; align-items: flex-start; }
+  .footer-bottom { flex-direction: column; gap: 8px; align-items: flex-start; }
+}
+
+/* ── SCROLL REVEAL ───────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Frame &amp; Form</a>
+  <ul class="nav-links">
+    <li><a href="#work">Our Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#connect">Connect</a></li>
+  </ul>
+</nav>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="intro-label">Design Agency</div>
+  <h1 class="intro-headline">Frame &amp; Form specialize in crafting the <em>visual language</em> of your digital brand.</h1>
+</section>
+
+<div class="divider"></div>
+
+<!-- OUR WORK -->
+<section class="work-section" id="work">
+  <div class="work-header">
+    <span class="section-label">Our Work</span>
+    <span class="work-count">06 projects</span>
+  </div>
+
+  <!-- Project 1: Redo -->
+  <article class="project-card proj-1">
+    <div class="card-images">
+      <div class="card-img img-a"></div>
+      <div class="card-img img-b"></div>
+      <div class="card-img img-c"></div>
+    </div>
+    <div class="card-meta">
+      <div class="card-meta-left">
+        <div class="card-project-label">Project</div>
+        <h2 class="card-title">Redo</h2>
+        <div class="card-subtitle">Digital Rebrand</div>
+        <p class="card-desc">A comprehensive digital identity overhaul that modernized Redo's visual presence across all digital touchpoints.</p>
+        <a href="#" class="card-link">See Project →</a>
+      </div>
+      <div class="card-num">01</div>
+    </div>
+  </article>
+
+  <!-- Project 2: Titan -->
+  <article class="project-card proj-2">
+    <div class="card-images">
+      <div class="card-img img-a"></div>
+      <div class="card-img img-b"></div>
+      <div class="card-img img-c"></div>
+    </div>
+    <div class="card-meta">
+      <div class="card-meta-left">
+        <div class="card-project-label">Project</div>
+        <h2 class="card-title">Titan</h2>
+        <div class="card-subtitle">Launch Campaign</div>
+        <p class="card-desc">An integrated launch campaign that introduced Titan to the market with bold visual storytelling.</p>
+        <a href="#" class="card-link">See Project →</a>
+      </div>
+      <div class="card-num">02</div>
+    </div>
+  </article>
+
+  <!-- Project 3: Farm Global -->
+  <article class="project-card proj-3">
+    <div class="card-images">
+      <div class="card-img img-a"></div>
+      <div class="card-img img-b"></div>
+      <div class="card-img img-c"></div>
+    </div>
+    <div class="card-meta">
+      <div class="card-meta-left">
+        <div class="card-project-label">Project</div>
+        <h2 class="card-title">Farm Global</h2>
+        <div class="card-subtitle">Website</div>
+        <p class="card-desc">A fresh, conversion-focused website design that connects Farm Global's sustainable mission with modern audiences.</p>
+        <a href="#" class="card-link">See Project →</a>
+      </div>
+      <div class="card-num">03</div>
+    </div>
+  </article>
+
+  <!-- Project 4: Anders -->
+  <article class="project-card proj-4">
+    <div class="card-images">
+      <div class="card-img img-a"></div>
+      <div class="card-img img-b"></div>
+      <div class="card-img img-c"></div>
+    </div>
+    <div class="card-meta">
+      <div class="card-meta-left">
+        <div class="card-project-label">Project</div>
+        <h2 class="card-title">Anders</h2>
+        <div class="card-subtitle">Furniture Catalog</div>
+        <p class="card-desc">An elegant product catalog that showcases Anders' handcrafted furniture with editorial photography direction.</p>
+        <a href="#" class="card-link">See Project →</a>
+      </div>
+      <div class="card-num">04</div>
+    </div>
+  </article>
+
+  <!-- Project 5: Club -->
+  <article class="project-card proj-5">
+    <div class="card-images">
+      <div class="card-img img-a"></div>
+      <div class="card-img img-b"></div>
+      <div class="card-img img-c"></div>
+    </div>
+    <div class="card-meta">
+      <div class="card-meta-left">
+        <div class="card-project-label">Project</div>
+        <h2 class="card-title">Club</h2>
+        <div class="card-subtitle">Brand Identity</div>
+        <p class="card-desc">A distinctive brand identity system that captures the exclusive yet welcoming essence of Club's community.</p>
+        <a href="#" class="card-link">See Project →</a>
+      </div>
+      <div class="card-num">05</div>
+    </div>
+  </article>
+
+  <!-- Project 6: Véloce -->
+  <article class="project-card proj-6">
+    <div class="card-images">
+      <div class="card-img img-a"></div>
+      <div class="card-img img-b"></div>
+      <div class="card-img img-c"></div>
+    </div>
+    <div class="card-meta">
+      <div class="card-meta-left">
+        <div class="card-project-label">Project</div>
+        <h2 class="card-title">Véloce</h2>
+        <div class="card-subtitle">Packaging</div>
+        <p class="card-desc">Premium packaging design for Véloce's artisan coffee line, blending Italian heritage with contemporary minimalism.</p>
+        <a href="#" class="card-link">See Project →</a>
+      </div>
+      <div class="card-num">06</div>
+    </div>
+  </article>
+
+</section>
+
+<!-- STATS -->
+<section class="stats-section" id="about">
+  <p class="stats-headline reveal">Frame &amp; Form craft visual strategies that elevate your brand.</p>
+  <div class="stats-row">
+    <div class="stat-item reveal">
+      <div class="stat-num">1M+</div>
+      <div class="stat-label">impressions reached</div>
+    </div>
+    <div class="stat-item reveal" style="padding-left: 48px;">
+      <div class="stat-num">36</div>
+      <div class="stat-label">projects completed</div>
+    </div>
+    <div class="stat-item reveal" style="padding-left: 48px;">
+      <div class="stat-num">100+</div>
+      <div class="stat-label">brands elevated</div>
+    </div>
+  </div>
+  <a href="#" class="about-link reveal">About →</a>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONNECT -->
+<section class="connect-section" id="connect">
+  <div class="connect-inner">
+    <h2 class="connect-headline reveal">Connect with us to explore your project's potential.</h2>
+    <a href="mailto:hello@figma.com" class="connect-cta reveal">Get in touch →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Frame &amp; Form</div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-label">Office</div>
+        <p>15 Candyland Lane</p>
+        <p>San Francisco, CA</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-label">Contact</div>
+        <a href="tel:6465554567">(646) 555-4567</a>
+        <a href="mailto:hello@figma.com">hello@figma.com</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-label">Social</div>
+        <a href="#">Instagram</a>
+        <a href="#">Behance</a>
+        <a href="#">Spotify</a>
+        <a href="#">LinkedIn</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Frame &amp; Form. All rights reserved.</span>
+      <span class="footer-tag">Design &amp; Brand Agency</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal for project cards and other elements
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.project-card').forEach((el, i) => {
+  el.style.transitionDelay = '0s';
+  observer.observe(el);
+});
+
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  observer.observe(el);
+});
+
+// Stagger stat items
+document.querySelectorAll('.stat-item.reveal').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.1) + 's';
+});
+</script>
+
+</body>
+</html>
