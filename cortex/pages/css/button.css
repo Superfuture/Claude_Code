@@ -32,6 +32,7 @@ a.connect, a.pick-friends, a.save, a.next {
 	background: transparent !important;
 	color: #bbb;
 	border-color: #e0e0e0;
+	border-radius: 99px !important;
 }
 
 .connected a.connect:hover {
