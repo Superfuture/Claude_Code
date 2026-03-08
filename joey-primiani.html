@@ -373,8 +373,8 @@ footer{
 
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
-  .stats-grid{display:flex;flex-direction:column;padding:0;}
-  .stat{border-right:none;border-bottom:4px solid var(--l2);flex:0 0 100px;height:100px;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .stats-grid{display:flex!important;flex-direction:column!important;padding:0!important;}
+  .stat{border-right:none!important;border-bottom:4px solid var(--l2);flex:0 0 100px!important;height:100px!important;min-height:100px!important;max-height:100px!important;padding:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;}
   .stat:last-child{border-bottom:none;}
   .stat-val{font-size:clamp(16px,7vw,24px);}
   .stat-lbl{font-size:6px;}
