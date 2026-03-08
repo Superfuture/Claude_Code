@@ -117,8 +117,8 @@
 
     /* ─── NAV ────────────────────────────────────────── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      padding: 18px 0;
+      position: fixed; top: 40px; left: 0; right: 0; z-index: 1000;
+      padding: 14px 0;
       background: rgba(8,9,15,0.4);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -159,7 +159,7 @@
     #hero {
       min-height: 100vh;
       display: flex; flex-direction: column; justify-content: center;
-      padding-top: 100px; padding-bottom: 80px;
+      padding-top: 140px; padding-bottom: 80px;
       overflow: hidden;
     }
 
@@ -464,12 +464,16 @@
     .speaker-card:hover::before { opacity: 1; }
 
     .speaker-avatar {
-      width: 56px; height: 56px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 18px;
-      color: var(--white); margin-bottom: 16px;
+      width: 80px; height: 80px; border-radius: 4px;
+      display: block; overflow: hidden;
+      margin-bottom: 16px;
       position: relative; z-index: 1;
       flex-shrink: 0;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+    .speaker-avatar svg {
+      display: block; width: 100%; height: 100%;
     }
     .speaker-name {
       font-size: 16px; font-weight: 700; margin-bottom: 4px;
@@ -802,7 +806,8 @@
       border-bottom: 1px solid rgba(245,166,35,0.2);
       padding: 10px 24px; text-align: center;
       font-size: 13px; font-weight: 500; color: rgba(245,166,35,0.9);
-      position: relative; z-index: 1001;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1002;
+      height: 40px; display: flex; align-items: center; justify-content: center;
     }
     .urgency-bar strong { font-weight: 700; }
 
@@ -1051,7 +1056,7 @@
       <div class="speakers-grid">
 
         <div class="speaker-card reveal">
-          <div class="speaker-avatar av-1">AA</div>
+          <div class="speaker-avatar av-1"></div>
           <div class="speaker-name">Ary Aranguiz</div>
           <div class="speaker-title">Founder & CEO</div>
           <div class="speaker-company co-aiready">The AI Ready Business</div>
@@ -1059,7 +1064,7 @@
         </div>
 
         <div class="speaker-card reveal reveal-delay-1">
-          <div class="speaker-avatar av-2">MT</div>
+          <div class="speaker-avatar av-2"></div>
           <div class="speaker-name">Michael Tsirakis</div>
           <div class="speaker-title">Senior Product Designer</div>
           <div class="speaker-company co-netflix">Netflix</div>
@@ -1067,7 +1072,7 @@
         </div>
 
         <div class="speaker-card reveal reveal-delay-2">
-          <div class="speaker-avatar av-3">AP</div>
+          <div class="speaker-avatar av-3"></div>
           <div class="speaker-name">Alyshia Perri</div>
           <div class="speaker-title">Principal AI Designer</div>
           <div class="speaker-company co-hubspot">HubSpot</div>
@@ -1075,7 +1080,7 @@
         </div>
 
         <div class="speaker-card reveal">
-          <div class="speaker-avatar av-4">AB</div>
+          <div class="speaker-avatar av-4"></div>
           <div class="speaker-name">Akanksha Bansal</div>
           <div class="speaker-title">Senior Staff Designer</div>
           <div class="speaker-company co-bnsf">BNSF</div>
@@ -1083,7 +1088,7 @@
         </div>
 
         <div class="speaker-card reveal reveal-delay-1">
-          <div class="speaker-avatar av-5">PW</div>
+          <div class="speaker-avatar av-5"></div>
           <div class="speaker-name">Peipei Wang</div>
           <div class="speaker-title">Principal Designer</div>
           <div class="speaker-company co-linkedin">LinkedIn</div>
@@ -1091,7 +1096,7 @@
         </div>
 
         <div class="speaker-card reveal reveal-delay-2">
-          <div class="speaker-avatar av-6">ED</div>
+          <div class="speaker-avatar av-6"></div>
           <div class="speaker-name">Edwin Delgado</div>
           <div class="speaker-title">Lead Designer</div>
           <div class="speaker-company co-clickup">ClickUp</div>
@@ -1099,7 +1104,7 @@
         </div>
 
         <div class="speaker-card reveal">
-          <div class="speaker-avatar av-7">KD</div>
+          <div class="speaker-avatar av-7"></div>
           <div class="speaker-name">Kelly Dern</div>
           <div class="speaker-title">Senior Staff Product Designer</div>
           <div class="speaker-company co-sofi">SoFi</div>
@@ -1107,7 +1112,7 @@
         </div>
 
         <div class="speaker-card reveal reveal-delay-1">
-          <div class="speaker-avatar av-8">DP</div>
+          <div class="speaker-avatar av-8"></div>
           <div class="speaker-name">Danielle Peterson</div>
           <div class="speaker-title">Senior Product Designer</div>
           <div class="speaker-company co-sofi">SoFi</div>
@@ -1115,7 +1120,7 @@
         </div>
 
         <div class="speaker-card reveal reveal-delay-2">
-          <div class="speaker-avatar av-9">GA</div>
+          <div class="speaker-avatar av-9"></div>
           <div class="speaker-name">Golbie Azizi</div>
           <div class="speaker-title">Lead Product Designer</div>
           <div class="speaker-company co-deloitte">Deloitte</div>
@@ -1123,7 +1128,7 @@
         </div>
 
         <div class="speaker-card reveal">
-          <div class="speaker-avatar av-10">MV</div>
+          <div class="speaker-avatar av-10"></div>
           <div class="speaker-name">Maria G Vasilieva</div>
           <div class="speaker-title">Lead Designer, Cloud Data</div>
           <div class="speaker-company co-ebay">eBay</div>
