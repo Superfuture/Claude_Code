@@ -244,8 +244,12 @@ function Cortex() {
 						options: options
 					}, function(response) {
 						if (response && !response.success) { console.error(response.error); } else if (response) {
-							//Play sound
-							new Audio(cortexUrl('/sounds/swoosh.mp3')).play()
+							//Play sound (if enabled)
+							chrome.storage.local.get(['soundEnabled'], function(result) {
+								if (result.soundEnabled !== false) {
+									new Audio(cortexUrl('/sounds/swoosh.mp3')).play();
+								}
+							});
 						}
 					});
 				});

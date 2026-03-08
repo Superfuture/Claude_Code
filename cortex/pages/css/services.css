@@ -138,6 +138,75 @@
 	-webkit-border-radius:5px;
 }
 
+/* Sound toggle */
+#sound-toggle-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 12px auto 0;
+	width: 640px;
+	padding: 14px 18px;
+	background: #fff8f5;
+	border: 1px solid rgba(255,85,51,.15);
+	border-radius: 10px;
+}
+
+#sound-toggle-label strong {
+	display: block;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+	color: #555;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+#sound-toggle-label span {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	color: #999;
+}
+
+.toggle-switch {
+	position: relative;
+	display: inline-block;
+	width: 44px;
+	height: 24px;
+	flex-shrink: 0;
+}
+
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+.toggle-track {
+	position: absolute;
+	inset: 0;
+	background: #ddd;
+	border-radius: 99px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.toggle-track::before {
+	content: '';
+	position: absolute;
+	width: 18px;
+	height: 18px;
+	left: 3px;
+	top: 3px;
+	background: #fff;
+	border-radius: 50%;
+	transition: transform 0.2s;
+	box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+
+.toggle-switch input:checked + .toggle-track {
+	background: linear-gradient(135deg, #FF1368, #FF5533);
+}
+
+.toggle-switch input:checked + .toggle-track::before {
+	transform: translateX(20px);
+}
+
 /* How to use hint */
 #settings-hint {
 	display: flex;
