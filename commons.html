@@ -991,46 +991,44 @@ style.textContent = '@keyframes fadeUp{from{opacity:0;transform:translateX(-50%)
 document.head.appendChild(style);
 
 // ── POST MODAL ──
+let _postImgDataUrl = null;
+
 function showPostModal() {
+  _postImgDataUrl = null;
   const overlay = document.createElement('div');
+  overlay.id = 'post-overlay';
   overlay.style.cssText = `position:absolute;inset:0;background:rgba(0,0,0,0.72);z-index:200;
     display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(8px);
     -webkit-backdrop-filter:blur(8px);border-radius:51px;overflow:hidden;`;
   overlay.innerHTML = `
     <div style="background:#0E1118;border:1px solid rgba(255,255,255,0.09);border-radius:24px 24px 0 0;
-      padding:8px 0 0;width:100%;font-family:'Syne',sans-serif;
-      box-shadow:0 -8px 40px rgba(0,0,0,0.6);">
+      padding:8px 0 0;width:100%;font-family:'Syne',sans-serif;box-shadow:0 -8px 40px rgba(0,0,0,0.6);">
       <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 16px;"></div>
       <div style="padding:0 20px 28px;">
         <div style="font-size:15px;font-weight:700;color:#EEEEF2;margin-bottom:14px;letter-spacing:0.04em;">✦ New Post</div>
-
-        <!-- Image upload zone -->
         <label id="img-upload-label" style="display:flex;flex-direction:column;align-items:center;justify-content:center;
           width:100%;height:96px;border:1.5px dashed rgba(107,78,255,0.4);border-radius:12px;
           background:rgba(107,78,255,0.05);cursor:pointer;margin-bottom:10px;transition:all 0.15s;
-          color:#9B8AFF;font-family:'DM Sans',sans-serif;font-size:11px;gap:6px;overflow:hidden;"
-          onmouseenter="this.style.borderColor='rgba(107,78,255,0.7)'"
-          onmouseleave="this.style.borderColor='rgba(107,78,255,0.4)'">
+          color:#9B8AFF;font-family:'DM Sans',sans-serif;font-size:11px;gap:6px;overflow:hidden;position:relative;">
           <input type="file" accept="image/*" style="display:none;" id="post-img-input" onchange="previewPostImg(this)">
           <span id="img-upload-icon" style="font-size:22px;line-height:1;">⊕</span>
           <span id="img-upload-txt">Upload image</span>
-          <img id="img-preview" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;" />
+          <img id="img-preview" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" />
         </label>
-
-        <textarea placeholder="Describe your work and process..." style="width:100%;background:rgba(255,255,255,0.04);
+        <textarea id="post-desc" placeholder="Describe your work and process..." style="width:100%;background:rgba(255,255,255,0.04);
           border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:11px 12px;color:#EEEEF2;
           font-family:'DM Sans',sans-serif;font-size:12px;resize:none;height:60px;outline:none;
           margin-bottom:8px;display:block;-webkit-user-select:text;"></textarea>
-        <input placeholder="↳ Paste your AI prompt..." style="width:100%;background:rgba(107,78,255,0.06);
+        <input id="post-prompt" placeholder="↳ Paste your AI prompt..." style="width:100%;background:rgba(107,78,255,0.06);
           border:1px solid rgba(107,78,255,0.25);border-radius:10px;padding:9px 12px;color:#EEEEF2;
           font-family:'SF Mono','Fira Code',monospace;font-size:10px;outline:none;margin-bottom:14px;display:block;">
         <div style="display:flex;gap:8px;">
-          <button onclick="this.closest('[style*=absolute]').remove()" style="flex:1;padding:10px;
+          <button onclick="document.getElementById('post-overlay').remove()" style="flex:1;padding:10px;
             background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;
             color:#6B7280;font-family:'Syne',sans-serif;font-size:11px;font-weight:600;cursor:pointer;">Cancel</button>
-          <button onclick="this.closest('[style*=absolute]').remove()" style="flex:2;padding:10px;
+          <button id="post-submit-btn" onclick="submitPost()" style="flex:2;padding:10px;
             background:#6B4EFF;border:none;border-radius:10px;color:#fff;font-family:'Syne',sans-serif;
-            font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.06em;">Post ✦</button>
+            font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.06em;position:relative;overflow:hidden;transition:all 0.2s;">Post ✦</button>
         </div>
       </div>
     </div>`;
@@ -1042,19 +1040,174 @@ function previewPostImg(input) {
   if (!input.files || !input.files[0]) return;
   const reader = new FileReader();
   reader.onload = e => {
-    const label = document.getElementById('img-upload-label');
-    const preview = document.getElementById('img-preview');
-    const icon = document.getElementById('img-upload-icon');
-    const txt = document.getElementById('img-upload-txt');
-    preview.src = e.target.result;
-    preview.style.display = 'block';
-    icon.style.display = 'none';
-    txt.style.display = 'none';
-    label.style.position = 'relative';
-    label.style.padding = '0';
+    _postImgDataUrl = e.target.result;
+    document.getElementById('img-preview').src = e.target.result;
+    document.getElementById('img-preview').style.display = 'block';
+    document.getElementById('img-upload-icon').style.display = 'none';
+    document.getElementById('img-upload-txt').style.display = 'none';
   };
   reader.readAsDataURL(input.files[0]);
 }
+
+function submitPost() {
+  const desc = document.getElementById('post-desc').value.trim();
+  const prompt = document.getElementById('post-prompt').value.trim();
+  const btn = document.getElementById('post-submit-btn');
+
+  // Button loading state
+  btn.textContent = '';
+  btn.style.background = '#5038CC';
+  btn.innerHTML = `<span style="display:inline-block;animation:spin 0.6s linear infinite;font-size:13px;">◌</span>`;
+
+  const doPost = () => {
+    // Build the card HTML
+    const imgHtml = _postImgDataUrl
+      ? `<div class="card-img"><img src="${_postImgDataUrl}" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`
+      : '';
+    const promptHtml = prompt
+      ? `<div class="prompt"><div class="prompt-lbl">↳ Prompt</div><div class="prompt-txt">${prompt}</div></div>`
+      : '';
+    const descHtml = desc
+      ? `<div class="process">${desc}</div>`
+      : `<div class="process">Just shipped ✦</div>`;
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.cssText = `opacity:0;transform:translateY(-20px) scale(0.97);transition:opacity 0.45s cubic-bezier(.22,1,.36,1),transform 0.45s cubic-bezier(.22,1,.36,1);`;
+    card.innerHTML = `
+      <div class="card-head">
+        <div class="user">
+          <div class="av" style="background:linear-gradient(135deg,#6B4EFF,#F72585);font-size:0;padding:0;overflow:hidden;">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=JoeyPrimiani&backgroundColor=1a1a2e" style="width:100%;height:100%;object-fit:cover;display:block;image-rendering:pixelated">
+          </div>
+          <div class="user-info">
+            <div class="name">Joey Primiani</div>
+            <div class="meta">@jp · just now</div>
+          </div>
+        </div>
+        <span class="badge" style="color:#9B8AFF;border-color:rgba(107,78,255,0.3);background:rgba(107,78,255,0.08);">New ✦</span>
+      </div>
+      ${imgHtml}
+      <div class="card-body">
+        <div class="card-title">${desc || 'Untitled Work'}</div>
+        ${promptHtml}
+        ${descHtml}
+        <div class="tags"><span class="tag">#commons</span><span class="tag">#aidesign</span></div>
+      </div>
+      <div class="card-foot">
+        <button class="upvote on" onclick="vote(this)"><span class="arr">▲</span><span class="n">1</span></button>
+        <button class="act">💬 <span>0</span></button>
+        <div class="sp"></div>
+        <button class="ico" onclick="toggleSave(this)">🔖</button>
+        <button class="ico" onclick="share()">↗</button>
+      </div>`;
+
+    // Insert at top of HOT feed
+    const feed = document.getElementById('tab-hot');
+    feed.insertBefore(card, feed.firstChild);
+
+    // Remove overlay
+    const overlay = document.getElementById('post-overlay');
+    if (overlay) overlay.remove();
+
+    // Navigate to home / HOT tab
+    showScreen('home', document.querySelector('[data-screen=home]'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector('[data-tab=hot]').classList.add('active');
+    document.getElementById('tab-hot').classList.add('active');
+
+    // Scroll to top
+    setTimeout(() => document.getElementById('app').scrollTo({ top: 0, behavior: 'smooth' }), 50);
+
+    // Animate card in
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0) scale(1)';
+    }));
+
+    // Confetti burst from the card
+    setTimeout(() => burstConfetti(card), 100);
+  };
+
+  // Small delay for the loading spin, then post
+  setTimeout(doPost, 700);
+}
+
+// ── CONFETTI BURST ──
+function burstConfetti(anchor) {
+  const phone = document.querySelector('.phone-screen');
+  const rect = anchor.getBoundingClientRect();
+  const phoneRect = phone.getBoundingClientRect();
+  const cx = rect.left - phoneRect.left + rect.width / 2;
+  const cy = rect.top - phoneRect.top + 40;
+
+  const colors = ['#6B4EFF','#9B8AFF','#F72585','#06D6A0','#FFB703','#fff'];
+  const particles = [];
+
+  for (let i = 0; i < 28; i++) {
+    const el = document.createElement('div');
+    const size = 4 + Math.random() * 5;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const angle = (Math.PI * 2 * i) / 28 + (Math.random() - 0.5) * 0.5;
+    const speed = 60 + Math.random() * 80;
+    el.style.cssText = `position:absolute;width:${size}px;height:${size}px;
+      background:${color};border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
+      left:${cx}px;top:${cy}px;z-index:300;pointer-events:none;`;
+    phone.appendChild(el);
+    particles.push({ el, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - 60,
+      x: cx, y: cy, alpha: 1, rot: Math.random() * 360 });
+  }
+
+  let frame = 0;
+  function tick() {
+    frame++;
+    let alive = false;
+    particles.forEach(p => {
+      p.x += p.vx * 0.05;
+      p.y += p.vy * 0.05;
+      p.vy += 3;
+      p.alpha -= 0.025;
+      p.rot += 6;
+      if (p.alpha > 0) {
+        alive = true;
+        p.el.style.left = p.x + 'px';
+        p.el.style.top = p.y + 'px';
+        p.el.style.opacity = p.alpha;
+        p.el.style.transform = `rotate(${p.rot}deg)`;
+      } else {
+        p.el.remove();
+      }
+    });
+    if (alive) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  // "Posted!" toast inside phone
+  const toast = document.createElement('div');
+  toast.style.cssText = `position:absolute;top:80px;left:50%;transform:translateX(-50%) translateY(-6px);
+    background:linear-gradient(135deg,#6B4EFF,#9B8AFF);color:#fff;
+    font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;
+    padding:10px 22px;border-radius:20px;z-index:400;
+    box-shadow:0 4px 24px rgba(107,78,255,0.6);pointer-events:none;
+    opacity:0;transition:opacity 0.2s,transform 0.2s;`;
+  toast.textContent = '✦ Posted!';
+  phone.appendChild(toast);
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+  }));
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-50%) translateY(-8px)';
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
+}
+
+// spin keyframe for post button loader
+const _spinStyle = document.createElement('style');
+_spinStyle.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+document.head.appendChild(_spinStyle);
 </script>
 </body>
 </html>
