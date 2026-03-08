@@ -163,9 +163,12 @@ $.fn.listCortexServices = async function(options) {
 	
 	forEachIn(services, async function() {
 		var html = '';
-		html += '<li id="' + this.name.toLowerCase() + '" class="clearfix ' + (await this.isConnected() ? 'connected' : 'disconnected') + '">' +
+		var iconName = this.name.toLowerCase();
+		var hdSrc = '/images/icons/' + iconName + '_hd.svg';
+		var fallbackSrc = '/images/icons/' + iconName + '_32.png';
+		html += '<li id="' + iconName + '" class="clearfix ' + (await this.isConnected() ? 'connected' : 'disconnected') + '">' +
 					'<span class="service-label">' + this.name + '</span>' +
-					'<img src="/images/icons/' + this.name.toLowerCase() + '_32.png" ' +
+					'<img src="' + hdSrc + '" onerror="this.src=\'' + fallbackSrc + '\'" ' +
 					     'alt="' + this.name + '" title="' + this.name + '" />'+
 						'<a class="connect" href="#">' + (await this.isConnected() ? 'Remove' : 'Add') + '</a>';
 			
