@@ -423,18 +423,8 @@ if (isTestMode) {
     localStorage.setItem('ab_variant', pick);
   } catch(e){}
 
-  // Show router overlay
-  const router = document.getElementById('router');
-  router.classList.add('active');
-  document.getElementById('router-letter').textContent = pick;
-  document.getElementById('router-letter').style.color = v.color;
-  document.getElementById('router-name').textContent = v.name + ' — ' + v.hypothesis;
-
-  // Animate progress bar then redirect
-  const fill = document.getElementById('router-progress');
-  fill.style.background = v.color;
-  setTimeout(() => { fill.style.width = '100%'; }, 50);
-  setTimeout(() => { location.href = v.file; }, 1100);
+  // Immediately redirect
+  location.href = v.file;
 }
 
 // ── Analytics engine ──────────────────────────────────────────────────────────
