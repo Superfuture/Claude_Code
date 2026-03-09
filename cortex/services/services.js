@@ -1,10 +1,13 @@
 var services = {
+	Gmail: new Gmail(),
+	Tumblr: new Tumblr(),
 	Twitter: new Twitter(),
 	Facebook: new Facebook(),
-	Tumblr: new Tumblr(),
 	Instapaper: new Instapaper(),
-	Pocket: new Pocket(),
-	Gmail: new Gmail()
+	Pinterest: new Pinterest(),
+	LinkedIn: new LinkedIn(),
+	Reddit: new Reddit(),
+	Slack: new Slack()
 };
 
 

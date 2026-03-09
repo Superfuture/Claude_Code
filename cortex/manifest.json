@@ -57,14 +57,18 @@
 		"resources": [
 			"sounds/swoosh.mp3",
 			"images/bgbar.jpg",
+			"images/icons/clipboard.png",
 			"images/icons/facebook-friends.png",
 			"images/icons/facebook.png",
 			"images/icons/facebook_hd.svg",
 			"images/icons/gmail.png",
 			"images/icons/instapaper.png",
+			"images/icons/linkedin.png",
 			"images/icons/pinterest.png",
 			"images/icons/pocket.png",
+			"images/icons/reddit.png",
 			"images/icons/sharetoall.png",
+			"images/icons/slack.png",
 			"images/icons/tumblr.png",
 			"images/icons/twitter.png",
 			"images/rainbow.png"

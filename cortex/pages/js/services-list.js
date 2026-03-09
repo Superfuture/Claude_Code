@@ -20,7 +20,7 @@ $.fn.listCortexServices = async function(options) {
 		var li = $(this).closest('li'), button = li.find('.connect');
 			
 		//Get service
-		var serviceName = li.attr('id')[0].toUpperCase() + li.attr('id').substr(1);
+		var serviceName = li.data('service') || (li.attr('id')[0].toUpperCase() + li.attr('id').substr(1));
 		var service = services[serviceName];
 		
 		if (!await service.isConnected()) { //Connect
@@ -124,7 +124,7 @@ $.fn.listCortexServices = async function(options) {
 		li.append('<div class="friend-picker">' +
 						'<h3>Pick ' + service.name + ' friends to share via wall post</h3>' +
 						'<input type="text" class="search" />' +
-						'<a class="save" href="#">Save<a>' +
+						'<a class="save" href="#">Save</a>' +
 						'</div>');
 
 		//Let service load the list of friends
@@ -144,7 +144,7 @@ $.fn.listCortexServices = async function(options) {
 			li.find('.save').click(function() {
 				service.data.bestFriends = li.find('.search').tokenInput('get').map(function() {
 					var friendId = this.id;
-					var friend = friends.find(function() { return this.id == friendId; });
+					var friend = friends.find(function(f) { return f.id == friendId; });
 					
 					if (friend) return [ friend ];
 					else return [ ];
@@ -161,24 +161,40 @@ $.fn.listCortexServices = async function(options) {
 
 	var that = this;
 	
+	var serviceIcons = {
+		twitter:    'https://pbs.twimg.com/profile_images/1683325380441128960/yRsRRjGO_400x400.jpg',
+		facebook:   'https://www.google.com/s2/favicons?domain=facebook.com&sz=256',
+		tumblr:     'https://www.google.com/s2/favicons?domain=tumblr.com&sz=256',
+		gmail:      'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico',
+		instapaper: 'https://www.google.com/s2/favicons?domain=instapaper.com&sz=256',
+		pinterest:  'https://www.google.com/s2/favicons?domain=pinterest.com&sz=256',
+		linkedin:   'https://www.google.com/s2/favicons?domain=linkedin.com&sz=256',
+		reddit:     'https://www.google.com/s2/favicons?domain=reddit.com&sz=256',
+		slack:      'https://www.google.com/s2/favicons?domain=slack.com&sz=256'
+	};
+
 	forEachIn(services, async function() {
 		var html = '';
 		var iconName = this.name.toLowerCase();
-		var hdSrc = '/images/icons/' + iconName + '_hd.svg';
-		var fallbackSrc = '/images/icons/' + iconName + '_32.png';
-		html += '<li id="' + iconName + '" class="clearfix ' + (await this.isConnected() ? 'connected' : 'disconnected') + '">' +
+		var iconSrc = serviceIcons[iconName] || ('https://www.google.com/s2/favicons?domain=' + iconName + '.com&sz=256');
+		html += '<li id="' + iconName + '" data-service="' + this.name + '" class="clearfix ' + (await this.isConnected() ? 'connected' : 'disconnected') + '">' +
 					'<span class="service-label">' + this.name + '</span>' +
-					'<img src="' + hdSrc + '" onerror="this.src=\'' + fallbackSrc + '\'" ' +
+					'<img src="' + iconSrc + '" ' +
 					     'alt="' + this.name + '" title="' + this.name + '" />'+
 						'<a class="connect" href="#">' + (await this.isConnected() ? 'Remove' : 'Add') + '</a>';
 			
-		if (this.authenticate)
+		if (this.authenticate) {
+			var userPlaceholder = (this.authPlaceholders && this.authPlaceholders.username) || 'Username';
+			var pwPlaceholder   = (this.authPlaceholders && 'password' in this.authPlaceholders)
+				? this.authPlaceholders.password
+				: 'Password';
 			html += '<div class="auth">' +
 							  '<h3>Connect to ' + this.name + ':</h3>' +
-							  '<input type="text" class="username" placeholder="Username" />' +
-							  '<input type="password" class="password" placeholder="Password" />' + 
+							  '<input type="text" class="username" placeholder="' + userPlaceholder + '" />' +
+							  (pwPlaceholder !== null ? '<input type="password" class="password" placeholder="' + pwPlaceholder + '" />' : '') +
 							  '<a class="connect" href="#">Add</a>' +
 							'</div>';
+		}
 
 		html += '</li>';
 				
@@ -186,9 +202,9 @@ $.fn.listCortexServices = async function(options) {
 			.click(toggleConnect)
 			.tooltip(this.name, ':not(#lightbox):not(#lightbox *)');
 				
-		if (this.loadFriends) 
+		if (this.loadFriends)
 	   	$('<li id="' + this.name.toLowerCase() + '-friends">' +
-					'<img src="/images/icons/' + this.name.toLowerCase() + '-friends_32.png" ' +
+					'<img src="' + (serviceIcons[this.name.toLowerCase()] || ('/images/icons/' + this.name.toLowerCase() + '-friends_32.png')) + '" ' +
 							'alt="' + this.name + ' Friends" title ="' + this.name + ' Friends" />' +
 						'<a class="pick-friends" href="#">Pick friends</a>' +
 				'</li>')

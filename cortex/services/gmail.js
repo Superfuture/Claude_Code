@@ -35,10 +35,48 @@ Gmail.prototype.connect = function(popup, success, error) {
 };
 
 Gmail.prototype.finishConnecting = function(token) {
-
 	this.data.token = token;
 	this.saveData();
-	this.getUserEmail(this.data)
+	this.getUserEmail(this.data);
+	this.loadContacts();
+};
+
+Gmail.prototype.loadContacts = function(success, error) {
+	var that = this;
+
+	chrome.identity.getAuthToken({ interactive: false }, function(token) {
+		if (chrome.runtime.lastError || !token) {
+			if (error) error();
+			return;
+		}
+
+		fetch('https://people.googleapis.com/v1/people/me/connections?personFields=names,emailAddresses&pageSize=1000', {
+			headers: { 'Authorization': 'Bearer ' + token }
+		})
+		.then(function(res) { return res.json(); })
+		.then(function(res) {
+			var contacts = [];
+			if (res.connections) {
+				res.connections.forEach(function(person) {
+					var name = person.names && person.names[0] ? person.names[0].displayName : '';
+					if (person.emailAddresses) {
+						person.emailAddresses.forEach(function(emailObj) {
+							if (emailObj.value) {
+								contacts.push({ title: name || emailObj.value, email: emailObj.value });
+							}
+						});
+					}
+				});
+			}
+			that.data.contacts = contacts;
+			that.saveData();
+			if (success) success(contacts);
+		})
+		.catch(function(err) {
+			console.error('Failed to load contacts:', err);
+			if (error) error(err);
+		});
+	});
 };
 
 Gmail.prototype.disconnect = function() {
@@ -72,7 +110,7 @@ Gmail.prototype.getUserEmail = async function(data) {
 };
 Gmail.prototype.post = function(options) {
 	var that = this;
-		
+
 	function escapeEmail(text) {
 		return escapeFrom(text).replace(/,/g, '')
 	}
@@ -85,36 +123,71 @@ Gmail.prototype.post = function(options) {
 				   .replace(/</g, '')
 				   .replace(/>/g, '');
 	}
-		
-	var message = 'From: ' + escapeEmail(this.data.userEmail) + '\r\n' +
-		'To: ' + escapeFrom(options.recipients) + '\r\n' +
-		'Subject: ' + escapeEmail(options.title) + '\r\n\r\n' + // TODO: Escape
-		options.message + '\r\n' +
-		options.link + '\r\n\r\n' +
-		'Sent from my Cortex';
 
-	var requestBody = JSON.stringify({ raw: btoa(unescape(encodeURIComponent(message))).replace(/\+/g, '-').replace(/\//g, '_') });
-	const url = 'https://www.googleapis.com/gmail/v1/users/me/messages/send?access_token=' + this.data.token
-	
-	fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			'Accept': 'application/json',
-		},
-		body: requestBody
-	}).then(async (res) => {
-		res = await res.json(); 
-		if(!res.error) {
-			options.success({
-				linkToPost: 'https://mail.google.com/mail/u/0/#sent/' + res.id
-			})
-		} else {
+	function mimeEncodeSubject(text) {
+		if (/[^\x00-\x7F]/.test(text))
+			return '=?UTF-8?B?' + btoa(unescape(encodeURIComponent(text))) + '?=';
+		return text;
+	}
+
+	function sendWithToken(token) {
+		var body = '<p>' + (options.message || '') + '</p>' +
+			'<p><a href="' + (options.link || '') + '">' + (options.link || '') + '</a></p>' +
+			'<p>Sent from my <a href="http://cortexapp.com">Cortex</a></p>';
+
+		var message = (that.data.userEmail ? 'From: ' + escapeEmail(that.data.userEmail) + '\r\n' : '') +
+			'To: ' + escapeFrom(options.recipients || '') + '\r\n' +
+			'Subject: ' + mimeEncodeSubject(escapeEmail(options.title || '')) + '\r\n' +
+			'Content-Type: text/html; charset=UTF-8\r\n\r\n' +
+			body;
+
+		var requestBody = JSON.stringify({ raw: btoa(unescape(encodeURIComponent(message))).replace(/\+/g, '-').replace(/\//g, '_') });
+
+		fetch('https://www.googleapis.com/gmail/v1/users/me/messages/send', {
+			method: 'POST',
+			headers: {
+				'Authorization': 'Bearer ' + token,
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: requestBody
+		}).then(async (res) => {
+			var json = await res.json();
+			if (!json.error) {
+				options.success({
+					linkToPost: 'https://mail.google.com/mail/u/0/#sent/' + json.id
+				});
+			} else {
+				console.error('Gmail API error:', JSON.stringify(json.error));
+				options.error('Could not send email');
+			}
+		}).catch((err) => {
+			console.error('Gmail fetch error:', err);
 			options.error('Could not send email');
+		});
+	}
+
+	// Reload data first (service worker may have restarted and lost in-memory state)
+	that.loadData().then(function() {
+		function tryWithToken(token) {
+			that.data.token = token;
+			that.saveData();
+			sendWithToken(token);
 		}
-	}).catch((err) => {
-		options.error('Could not send email');
-	})
+
+		chrome.identity.getAuthToken({ interactive: false }, function(token) {
+			if (!chrome.runtime.lastError && token) return tryWithToken(token);
+
+			// Silent refresh failed — try interactive auth
+			chrome.identity.getAuthToken({ interactive: true }, function(token2) {
+				if (chrome.runtime.lastError || !token2) {
+					options.error('Could not send email');
+					return;
+				}
+				tryWithToken(token2);
+			});
+		});
+	});
 };
 
 function parse(str) {

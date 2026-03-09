@@ -27,9 +27,10 @@ function Tumblr() {
 	
 		//Migrate to newer API: replace blog url by hostname
 		if (this.data.url !== undefined) {
-			this.data.blog = /^https?:\/\/([\w.\-_]+)\//.exec(this.data.url)[1];
+			var urlMatch = /^https?:\/\/([\w.\-_]+)\//.exec(this.data.url);
+			if (urlMatch) this.data.blog = urlMatch[1];
 			delete this.data.url;
-	
+
 			this.saveData();
 		}
 	})
@@ -53,7 +54,8 @@ Tumblr.prototype.connect = function(popup, success, error) {
 					return blog.primary === true;
 				}).url;
 
-				that.data.blog = /^https?:\/\/([\w.\-_]+)\//.exec(blogUrl)[1];
+				var blogMatch = /^https?:\/\/([\w.\-_]+)\//.exec(blogUrl);
+				that.data.blog = blogMatch ? blogMatch[1] : blogUrl;
 				
 				that.saveData();
 				success();

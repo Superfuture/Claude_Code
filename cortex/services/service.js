@@ -20,6 +20,7 @@ Service.prototype.readLocalStorage = async function(key) {
 	const readLocalStorage = async (key) => {
 		return new Promise((resolve, reject) => {
 			chrome.storage.local.get([key], function (result) {
+				if (chrome.runtime.lastError || !result) { resolve(undefined); return; }
 				resolve(result[key]);
 			});
 		});

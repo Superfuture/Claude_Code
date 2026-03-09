@@ -28,44 +28,57 @@ function Cortex() {
 		document.addEventListener('keyup', this.onKeyPress, true);
 		document.addEventListener('keypress', this.onKeyPress, true);
 
-		$(function() {
-			//Attempt to place pie menu above flash elements
-			$('embed').attr('wmode', 'opaque').wrap('<div>').unwrap();
+		var domInitialized = false;
 
-			//Create  elements
+		function loadAndBuildPieMenu() {
+			safelySendMessage({ action: 'get-services-and-friends' }, function(response) {
+				if (response) that.buildPieMenu(response.services);
+			});
+		}
+
+		// Create overlay and other DOM elements lazily — called on first long-press
+		// or at DOMContentLoaded, whichever comes first.
+		function initDom() {
+			if (domInitialized || !document.body) return;
+			domInitialized = true;
+
 			that.overlay = $('<div id="cortex-overlay" />').appendTo($('body')).hide();
 			that.focus = $('<img id="cortex-focus" crossorigin="anonymous" />').appendTo($('body')).hide();
 			that.rainbow = $('<div id="cortex-rainbow" />').appendTo($('body')).hide();
 			that.popupContainer = $('<div id="cortex-popups" />').appendTo($('body'));
 			that.popups = { };
-		
-			function loadAndBuildPieMenu() {
-				safelySendMessage({ action: 'get-services-and-friends' }, function(response) {
-					if (response) that.buildPieMenu(response.services);
-				});
-			};
+
+			that.overlay.mouseup(function() {
+				if (!$('#the-social-comment').is(':visible'))
+					that.onCompletion(undefined, false);
+			});
 
 			loadAndBuildPieMenu();
+		}
 
-			$(document).longclick(500, function() {
-				if (!that.overlay.is(':visible')) that.onActivation.call(this);
-			}, function(e) {
-				//Activation filters
-				return document.documentElement.clientWidth - e.clientX > 2 &&
-					document.documentElement.clientHeight - e.clientY > 2 &&
-					(!that.overlay.is(':visible')) &&
-					e.target.nodeName != 'INPUT' &&
-					e.target.nodeName != 'TEXTAREA' &&
-					e.target.nodeName != 'SELECT' &&
-					e.target.nodeName != 'EMBED' &&
-					e.target.nodeName != 'OBJECT' &&
-					!e.ctrlKey;
-			});
+		// Register longclick immediately — before DOMContentLoaded — so Cortex can
+		// activate even while the page is still loading.
+		$(document).longclick(500, function() {
+			initDom();
+			if (that.overlay && !that.overlay.is(':visible')) that.onActivation.call(this);
+		}, function(e) {
+			//Activation filters
+			return document.documentElement.clientWidth - e.clientX > 2 &&
+				document.documentElement.clientHeight - e.clientY > 2 &&
+				(!that.overlay || !that.overlay.is(':visible')) &&
+				e.target.nodeName != 'INPUT' &&
+				e.target.nodeName != 'TEXTAREA' &&
+				e.target.nodeName != 'SELECT' &&
+				e.target.nodeName != 'EMBED' &&
+				e.target.nodeName != 'OBJECT' &&
+				!e.ctrlKey;
+		});
 
-			that.overlay.mouseup(function() { 
-				if (!$('#the-social-comment').is(':visible'))
-					that.onCompletion(undefined, false); 
-			});
+		$(function() {
+			//Attempt to place pie menu above flash elements
+			$('embed').attr('wmode', 'opaque').wrap('<div>').unwrap();
+
+			initDom(); // No-op if already initialized by an early long-press
 
 			//Popup notifications / update pie menu on change
 			chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -73,7 +86,6 @@ function Cortex() {
 				else if (request.action == 'update-pie') loadAndBuildPieMenu();
 				sendResponse(true);
 			});
-				
 		});
 	}
 	
@@ -92,7 +104,7 @@ function Cortex() {
 			var slice = {
 				type: 'service',
 				service: service,
-				image: cortexUrl('/images/icons/' + name.toLowerCase() + '.png'),
+				image: service.icon || cortexUrl('/images/icons/' + name.toLowerCase() + '.png'),
 				backgroundColor: service.background,
 				backgroundColorOnHover: new $.Color(service.background).toHSL().adjust([0, 0, -0.3]).fix().toHEX()
 			};
@@ -382,7 +394,7 @@ function Cortex() {
 				if (search == '') return dropDown.hide(); 
 				
 				//Take contacts from Gmail
-				var contacts = that.services.Gmail.contacts;
+				var contacts = (that.services.Gmail && that.services.Gmail.contacts) ? that.services.Gmail.contacts : [];
 				
 				//Regex escaping function
 				RegExp.escape = function(text) {
@@ -662,10 +674,12 @@ function Cortex() {
 		}
 
 		//Look for existing popup
-		var popup = this.popups[post.id];
+		var popupKey = (post.service || '') + (post.date || '');
+		var popup = this.popups[popupKey];
 
-		//Create popup if not found, otherwise update message
-		if (!popup) popup = this.popups[post.id] = createPopup(message, post.image || post.thumbnail);
+		//Create popup if not found, faded out, or removed from DOM — otherwise update message
+		if (!popup || !popup.element.closest('body').length || popup.element.css('opacity') == '0')
+			popup = this.popups[popupKey] = createPopup(message, post.image || post.thumbnail);
 		else popup.element.find('h1').text(message);
 		//Add buttons
 		if (status == 'success') {

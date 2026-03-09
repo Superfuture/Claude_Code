@@ -8,7 +8,10 @@ importScripts(
 	"/services/tumblr.js",
 	"/services/gmail.js",
 	"/services/instapaper.js",
-	"/services/pocket.js",
+	"/services/pinterest.js",
+	"/services/linkedin.js",
+	"/services/reddit.js",
+	"/services/slack.js",
 	"/services/services.js"
 );
 var setupTab = false;
@@ -17,7 +20,7 @@ async function checkSetupCompleted() {
 	const readLocalStorage = async (key) => {
 		return new Promise((resolve, reject) => {
 			chrome.storage.local.get([key], function (result) {
-				if (result[key] === undefined) {
+				if (chrome.runtime.lastError || !result || result[key] === undefined) {
 					resolve(false);
 				} else {
 					resolve(true);
@@ -36,6 +39,11 @@ async function init() {
 		chrome.action.setPopup({ popup: '/pages/history.htm?popup' });
 	} else {
 		showSetup();
+	}
+
+	// Refresh Gmail contacts on startup if connected but contacts not yet loaded
+	if (services.Gmail && await services.Gmail.isConnected() && !services.Gmail.data.contacts) {
+		services.Gmail.loadContacts();
 	}
 }
 async function showSetup() {
@@ -64,6 +72,7 @@ async function readLocalStorage(key) {
 	const readLocalStorage = async (key) => {
 		return new Promise((resolve, reject) => {
 			chrome.storage.local.get([key], function (result) {
+				if (chrome.runtime.lastError || !result) { resolve(undefined); return; }
 				resolve(result[key]);
 			});
 		});
@@ -161,7 +170,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			getHistroyThenRespond(request.count, request.search, request.minId, request.maxId, sendResponse)
 		  break;
 		case 'get-extension-uri':
-			sendResponse({ uri:  chrome.runtime.getURL() });
+			sendResponse({ uri: chrome.runtime.getURL('') });
 			break;
 		case 'finish-connecting':
 			services[request.service].finishConnecting(request.data);
