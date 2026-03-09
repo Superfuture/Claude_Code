@@ -4,6 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>A/B Test — AI UX Summit 2026</title>
+  <script>
+    // Runs before any DOM paint — instant redirect, zero flash
+    (function(){
+      if(location.search.indexOf('test')!==-1){
+        var keys=['A','B','C','D'];
+        var files=['summitnew.html','summitnew-b.html','summitnew-c.html','summitnew-d.html'];
+        var i=Math.floor(Math.random()*4);
+        try{localStorage.setItem('ab_variant',keys[i]);var ev=JSON.parse(localStorage.getItem('ab_events')||'[]');ev.push({variant:keys[i],event:'assign',label:'assigned',ts:Date.now()});localStorage.setItem('ab_events',JSON.stringify(ev));}catch(e){}
+        location.replace(files[i]);
+      }
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
@@ -406,26 +418,6 @@ const VARIANT_KEYS = ['A','B','C','D'];
 // If URL has ?test, assign a variant and redirect
 // If URL has ?dashboard (or no param), show the dashboard
 // Plain load → show dashboard by default
-const params = new URLSearchParams(location.search);
-const isTestMode = params.has('test');
-const isDashboard = !isTestMode; // default to dashboard
-
-if (isTestMode) {
-  // Assign variant
-  const pick = VARIANT_KEYS[Math.floor(Math.random() * 4)];
-  const v = VARIANTS[pick];
-
-  // Record assignment
-  try {
-    const events = JSON.parse(localStorage.getItem('ab_events') || '[]');
-    events.push({ variant: pick, event: 'assign', label: 'assigned', ts: Date.now() });
-    localStorage.setItem('ab_events', JSON.stringify(events));
-    localStorage.setItem('ab_variant', pick);
-  } catch(e){}
-
-  // Immediately redirect
-  location.href = v.file;
-}
 
 // ── Analytics engine ──────────────────────────────────────────────────────────
 function getEvents() {
@@ -623,10 +615,8 @@ function resetData() {
 }
 
 // ── Live polling ─────────────────────────────────────────────────────────────
-if (isDashboard) {
-  render();
-  setInterval(render, 2000); // re-render every 2s for live updates
-}
+render();
+setInterval(render, 2000);
 </script>
 </body>
 </html>
