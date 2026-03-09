@@ -1533,10 +1533,14 @@
     (function(){
       const variant='A';
       try{ localStorage.setItem('ab_variant',variant); }catch(e){}
-      document.querySelectorAll('a.btn, a[href="#pricing"]').forEach(btn=>{
-        btn.addEventListener('click',function(){
-          try{ const events=JSON.parse(localStorage.getItem('ab_events')||'[]'); events.push({variant,event:'cta_click',label:this.textContent.trim().slice(0,40),ts:Date.now()}); localStorage.setItem('ab_events',JSON.stringify(events)); }catch(e){}
-        });
+      document.addEventListener('click',function(e){
+        const el=e.target.closest('a,button');
+        if(!el) return;
+        const cls=el.className||'';
+        const href=el.getAttribute('href')||'';
+        if(cls.includes('btn')||href==='#'||href.includes('pricing')){
+          try{const evs=JSON.parse(localStorage.getItem('ab_events')||'[]');evs.push({variant,event:'cta_click',label:el.textContent.trim().slice(0,50),ts:Date.now()});localStorage.setItem('ab_events',JSON.stringify(evs));}catch(ex){}
+        }
       });
     })();
 
