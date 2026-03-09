@@ -1529,6 +1529,17 @@
       if (!isOpen) item.classList.add('open');
     }
 
+    // ─── A/B Tracking ────────────────────────────────────────────
+    (function(){
+      const variant='A';
+      try{ localStorage.setItem('ab_variant',variant); }catch(e){}
+      document.querySelectorAll('a.btn, a[href="#pricing"]').forEach(btn=>{
+        btn.addEventListener('click',function(){
+          try{ const events=JSON.parse(localStorage.getItem('ab_events')||'[]'); events.push({variant,event:'cta_click',label:this.textContent.trim().slice(0,40),ts:Date.now()}); localStorage.setItem('ab_events',JSON.stringify(events)); }catch(e){}
+        });
+      });
+    })();
+
     // ─── Speaker Images from aiuxsummit.com ─────────────────────
     const SPEAKER_IMGS = [
       'https://aiuxsummit.com/images/ary.png',
