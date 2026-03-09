@@ -42,7 +42,7 @@ $.fn.listCortexServices = async function(options) {
 			}
 
 			if (service.authenticate) { //Direct authentication using username/password
-				lightbox = li.find('.auth').showInLightbox({ width: 300, height: 200 });
+				lightbox = li.find('.auth').showInLightbox({ width: 300, height: 215 });
 				li.find('.auth .connect').click(completeAuthentication);
 				li.find('.username, .password').val('').keydown(function(e) {
 					if (e.keyCode == 13) completeAuthentication();

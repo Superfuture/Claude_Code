@@ -176,9 +176,17 @@ function Pie(innerR, outerR, items) {
 			bottom: Math.max(center.y + outerR, box.top + box.height)
 		};
 		
+		//Clamp paper to viewport so it never extends off-screen
+		var vw = document.documentElement.clientWidth;
+		var vh = document.documentElement.clientHeight;
+		paperBounds.left = Math.max(0, paperBounds.left);
+		paperBounds.top = Math.max(0, paperBounds.top);
+		paperBounds.right = Math.min(vw, paperBounds.right);
+		paperBounds.bottom = Math.min(vh, paperBounds.bottom);
+
 		paperBounds.width = paperBounds.right - paperBounds.left;
 		paperBounds.height = paperBounds.bottom - paperBounds.top;
-					
+
 		this.center = center;
 		center = this.centerOnPaper = { x: center.x - paperBounds.left, y: center.y - paperBounds.top };
 		

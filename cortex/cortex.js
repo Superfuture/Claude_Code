@@ -613,7 +613,8 @@ function Cortex() {
 			};
 
 			//Create popup element
-			popup.element = $('<div class="cortex-popup"><div class="cortex-popup-body"><h1>' + message + '</h1></div></div>');
+			popup.element = $('<div class="cortex-popup"><div class="cortex-popup-bar"></div><div class="cortex-popup-body"><h1>' + message + '</h1></div></div>');
+			popup.element.find('.cortex-popup-bar').css('background-image', 'url(' + cortexUrl('/images/bgbar.jpg') + ')');
 
 			//Add thumbnail
 			if (thumbnail)

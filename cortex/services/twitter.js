@@ -29,7 +29,7 @@ function Twitter() {
 
 Twitter.prototype = new Service('Twitter');
 
-Twitter.prototype.background = '#95e4e8';
+Twitter.prototype.background = '#000000';
 Twitter.prototype.requiresShortUrl = true;
 Twitter.prototype.maxLength = 140;
 
