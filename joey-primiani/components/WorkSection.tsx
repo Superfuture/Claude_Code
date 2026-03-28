@@ -11,8 +11,8 @@ const container = {
 }
 
 export default function WorkSection() {
-  // Show first 3 on the home page
-  const featured = projects.slice(0, 3)
+  // Show first 3 non-Official projects on the home page
+  const featured = projects.filter(p => p.slug !== 'official').slice(0, 3)
 
   return (
     <div className="relative z-10 flex flex-col h-full px-10 py-20 md:px-16">
@@ -26,7 +26,7 @@ export default function WorkSection() {
           className="text-xs tracking-[0.2em] uppercase"
           style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}
         >
-          Selected Work
+          Featured Work
         </motion.h2>
 
         <motion.div
