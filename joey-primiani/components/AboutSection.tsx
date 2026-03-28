@@ -94,8 +94,8 @@ export default function AboutSection() {
             {quotes.map(({ quote, source }) => (
               <div key={source}>
                 <p
-                  className="text-sm italic mb-1"
-                  style={{ color: 'var(--fg)', fontFamily: 'var(--font-serif)' }}
+                  className="italic mb-1"
+                  style={{ color: 'var(--fg)', fontFamily: 'var(--font-serif)', fontSize: 'clamp(15px, 1.4vw, 18px)' }}
                 >
                   &ldquo;{quote}&rdquo;
                 </p>
@@ -165,8 +165,8 @@ export default function AboutSection() {
             {credentials.map((c) => (
               <li
                 key={c}
-                className="flex items-center gap-3 text-xs tracking-wide"
-                style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}
+                className="flex items-center gap-3 tracking-wide"
+                style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontSize: '13px' }}
               >
                 <span style={{ color: 'var(--accent)' }}>—</span>
                 {c}

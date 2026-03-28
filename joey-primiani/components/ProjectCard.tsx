@@ -48,13 +48,13 @@ export default function ProjectCard({ project, compact = false }: ProjectCardPro
             }}
           />
           {/* Dim the photo so gradient shows through */}
-          <div className="absolute inset-0" style={{ background: 'rgba(5,5,5,0.55)' }} />
+          <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.3)' }} />
 
           {/* Gradient overlay */}
           <div
             className="absolute inset-0"
             style={{
-              background: 'linear-gradient(to top, rgba(5,5,5,0.9) 0%, transparent 60%)',
+              background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%)',
             }}
           />
 

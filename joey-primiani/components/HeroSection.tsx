@@ -17,7 +17,7 @@ const item = {
     opacity: 1,
     y: 0,
     skewY: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const },
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
   },
 }
 
@@ -43,7 +43,8 @@ export default function HeroSection() {
               className="block leading-none tracking-tight"
               style={{
                 fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(3.5rem, 10vw, 9rem)',
+                fontSize: 'clamp(4.5rem, 13vw, 12rem)',
+                lineHeight: 0.92,
                 color: 'var(--fg)',
               }}
             >
@@ -61,8 +62,8 @@ export default function HeroSection() {
         className="mt-8 flex items-center gap-8"
       >
         <p
-          className="text-sm tracking-[0.15em] uppercase"
-          style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }}
+          className="tracking-[0.22em] uppercase"
+          style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', fontSize: '11px', letterSpacing: '0.22em' }}
         >
           Forbes 30 Under 30 &nbsp;·&nbsp; Founder &nbsp;·&nbsp; San Francisco
         </p>

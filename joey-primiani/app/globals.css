@@ -2,23 +2,21 @@
 
 /* ─── Design tokens ─────────────────────────────────────────── */
 :root {
-  --bg:           #050505;
-  --surface:      #0D0D0D;
-  --border:       #1A1A1A;
-  --fg:           #FFFFFF;
-  --muted:        #888888;
-  --accent:       #00D4FF;
-  --accent-glow:  rgba(0, 212, 255, 0.12);
+  --bg:           #0A0A0A;
+  --surface:      #111111;
+  --border:       #222222;
+  --fg:           #F5F5F5;
+  --muted:        #666666;
+  --accent:       #F0EAE0;
 }
 
 .light {
-  --bg:           #F5F5F5;
+  --bg:           #F7F5F2;
   --surface:      #FFFFFF;
-  --border:       #E0E0E0;
+  --border:       #E0DCDA;
   --fg:           #0A0A0A;
-  --muted:        #666666;
-  --accent:       #0077AA;
-  --accent-glow:  rgba(0, 119, 170, 0.10);
+  --muted:        #888888;
+  --accent:       #111111;
 }
 
 @theme inline {
@@ -28,10 +26,9 @@
   --color-fg:           var(--fg);
   --color-muted:        var(--muted);
   --color-accent:       var(--accent);
-  --color-accent-glow:  var(--accent-glow);
 
   --font-serif: var(--font-playfair), Georgia, 'Times New Roman', serif;
-  --font-sans:  var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-sans:  var(--font-dm-sans), system-ui, -apple-system, sans-serif;
 }
 
 /* ─── Base ──────────────────────────────────────────────────── */
@@ -43,11 +40,10 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 /* ─── Scrollbar hide ────────────────────────────────────────── */
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 
 /* ─── Selection + Focus ─────────────────────────────────────── */
-::selection { background: var(--accent); color: #000; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--fg); color: var(--bg); }
+:focus-visible { outline: 1px solid var(--fg); outline-offset: 3px; }
