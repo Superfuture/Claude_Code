@@ -62,7 +62,7 @@ export default function HeroSection() {
       >
         <p
           className="text-sm tracking-[0.15em] uppercase"
-          style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}
+          style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }}
         >
           Forbes 30 Under 30 &nbsp;·&nbsp; Founder &nbsp;·&nbsp; San Francisco
         </p>
