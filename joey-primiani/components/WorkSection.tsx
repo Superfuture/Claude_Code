@@ -52,7 +52,8 @@ export default function WorkSection() {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true }}
-        className="flex-1 flex flex-col gap-4 overflow-hidden"
+        className="flex-1 flex flex-col overflow-hidden"
+        style={{ borderTop: '1px solid var(--border)' }}
       >
         {featured.map((project) => (
           <ProjectCard key={project.slug} project={project} compact />

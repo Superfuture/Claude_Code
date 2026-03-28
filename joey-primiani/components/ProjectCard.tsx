@@ -4,21 +4,71 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Project } from '@/lib/projects'
 
-// Unique gradient per project slug — shows when no photo is present
-const gradients: Record<string, string> = {
-  official:         'linear-gradient(135deg, #0a1628 0%, #0d2640 50%, #091520 100%)',
-  'google-x':       'linear-gradient(135deg, #0f1f0f 0%, #1a3a1a 50%, #0a150a 100%)',
-  'little-monsters': 'linear-gradient(135deg, #1a0a28 0%, #2d1040 50%, #100820 100%)',
-  linkedin:         'linear-gradient(135deg, #0a1828 0%, #0d2a40 50%, #081218 100%)',
-  intuit:           'linear-gradient(135deg, #1a0f0a 0%, #3a1f10 50%, #150b08 100%)',
-}
-
 interface ProjectCardProps {
   project: Project
   compact?: boolean
 }
 
 export default function ProjectCard({ project, compact = false }: ProjectCardProps) {
+  if (compact) {
+    return (
+      <motion.div
+        variants={{
+          hidden: { opacity: 0, y: 16 },
+          show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const } },
+        }}
+      >
+        <Link href={`/work/${project.slug}`}>
+          <div
+            className="group flex items-center justify-between py-5 transition-colors duration-200"
+            style={{ borderBottom: '1px solid var(--border)' }}
+          >
+            <div className="flex items-baseline gap-8">
+              <span
+                style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--muted)', letterSpacing: '0.08em', minWidth: '24px' }}
+              >
+                {project.index}
+              </span>
+              <h3
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(1.1rem, 2vw, 1.4rem)',
+                  color: 'var(--fg)',
+                  fontWeight: 400,
+                  letterSpacing: '-0.01em',
+                }}
+              >
+                {project.title}
+                {project.subtitle && (
+                  <span style={{ color: 'var(--muted)', fontStyle: 'italic' }}> — {project.subtitle}</span>
+                )}
+              </h3>
+            </div>
+            <div className="flex items-center gap-8">
+              <span
+                className="hidden md:block"
+                style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+              >
+                {project.category}
+              </span>
+              <span
+                style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', color: 'var(--muted)' }}
+              >
+                {project.year}
+              </span>
+              <span
+                className="transition-transform duration-300 group-hover:translate-x-1"
+                style={{ color: 'var(--fg)', fontSize: '16px' }}
+              >
+                →
+              </span>
+            </div>
+          </div>
+        </Link>
+      </motion.div>
+    )
+  }
+
   return (
     <motion.div
       variants={{
@@ -26,86 +76,58 @@ export default function ProjectCard({ project, compact = false }: ProjectCardPro
         show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } },
       }}
     >
-      <Link href={`/work/${project.slug}`} data-cursor="view">
+      <Link href={`/work/${project.slug}`}>
         <div
-          className={`group relative overflow-hidden flex items-end justify-between p-6 transition-all duration-500 ${
-            compact ? 'h-20' : 'h-64 md:h-80'
-          }`}
+          className="group relative overflow-hidden flex items-end justify-between p-8 transition-all duration-500 h-72 md:h-96"
           style={{ border: '1px solid var(--border)' }}
         >
-          {/* Background: gradient + photo via CSS (silently degrades if file missing) */}
+          {/* Background photo */}
           <div
             className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
             style={{
-              background: gradients[project.slug] ?? 'var(--surface)',
-              backgroundImage: [
-                `url(${project.heroImage})`,
-                gradients[project.slug] ?? 'var(--surface)',
-              ].join(', '),
-              backgroundSize: 'cover, cover',
-              backgroundPosition: 'center, center',
-              opacity: 1,
+              backgroundImage: `url(${project.heroImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
             }}
           />
-          {/* Dim the photo so gradient shows through */}
-          <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.3)' }} />
+          <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.42)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 55%)' }} />
 
-          {/* Gradient overlay */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%)',
-            }}
-          />
-
-          {/* Content */}
           <div className="relative z-10 flex items-end justify-between w-full">
-            <div className="flex items-center gap-6">
-              <span
-                className="text-xs tracking-[0.1em] tabular-nums"
-                style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}
+            <div>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: '8px' }}>
+                {project.index} — {project.category}
+              </p>
+              <h3
+                style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(1.5rem, 3vw, 2.5rem)',
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.02em',
+                }}
               >
-                {project.index}
-              </span>
-              <div>
-                <h3
-                  className="font-serif leading-tight"
-                  style={{
-                    fontFamily: 'var(--font-serif)',
-                    fontSize: compact ? '1rem' : '1.5rem',
-                    color: 'var(--fg)',
-                  }}
-                >
-                  {project.title}
-                  {project.subtitle && (
-                    <span style={{ color: 'var(--muted)' }}> — {project.subtitle}</span>
-                  )}
-                </h3>
-                {!compact && (
-                  <p
-                    className="text-xs mt-1 tracking-wide"
-                    style={{ color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}
-                  >
-                    {project.role} &nbsp;·&nbsp; {project.year}
-                  </p>
+                {project.title}
+                {project.subtitle && (
+                  <span style={{ color: 'rgba(255,255,255,0.6)', fontStyle: 'italic' }}> — {project.subtitle}</span>
                 )}
-              </div>
+              </h3>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginTop: '6px' }}>
+                {project.role} · {project.year}
+              </p>
             </div>
-
-            {/* Arrow */}
             <span
-              className="text-xl transition-transform duration-300 group-hover:translate-x-1"
-              style={{ color: 'var(--accent)' }}
-              aria-hidden
+              className="transition-transform duration-300 group-hover:translate-x-1"
+              style={{ color: '#ffffff', fontSize: '20px' }}
             >
               →
             </span>
           </div>
 
-          {/* Accent line on hover */}
           <div
             className="absolute bottom-0 left-0 h-px w-0 group-hover:w-full transition-all duration-500"
-            style={{ background: 'var(--accent)' }}
+            style={{ background: 'rgba(255,255,255,0.4)' }}
           />
         </div>
       </Link>
