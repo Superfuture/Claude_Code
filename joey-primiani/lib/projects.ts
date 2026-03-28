@@ -55,14 +55,13 @@ export const projects: Project[] = [
     title: 'Little Monsters',
     subtitle: 'Lady Gaga',
     year: 2012,
-    category: 'Product Design',
-    role: 'Product Designer',
-    description: "A creative social network for Lady Gaga's global fan community.",
+    category: 'Co-Founder · Product',
+    role: 'Co-Founder · Product Designer',
+    description: "Co-founded Lady Gaga's superfan social platform — a creative community for millions.",
     longDescription:
-      "Designed Little Monsters — Lady Gaga's super-fan social network — a creative online community where fans share, create, and inspire one another. The platform gave millions of passionate fans a home built specifically for their culture, moving fan community from comment sections to a purpose-built creative space.",
-    // Concert crowd silhouette — Adi Rahman / Unsplash
+      "Co-founded Little Monsters with Lady Gaga — a purpose-built creative community for her global superfan base. Designed a platform that treated fans as artists, not audience: tools for remixing art, one-click merch, live translated chat, and direct access to Gaga herself. Built before fan platforms were a category.",
     heroImage:
-      'https://images.unsplash.com/photo-1533544514075-0269c5f5a4be?w=1920&q=85&fit=crop&auto=format',
+      'https://storage.googleapis.com/pr-newsroom-wp/1/2025/03/lady-gaga-little-monster-press-conference-spotify-12-1024x683.jpg',
     tags: ['Social', 'Community', 'Fan Tech'],
   },
   {

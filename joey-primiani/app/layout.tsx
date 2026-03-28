@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import { Analytics } from '@vercel/analytics/react'
-import Cursor from '@/components/Cursor'
 import Nav from '@/components/Nav'
 import './globals.css'
 
@@ -22,22 +21,42 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Joey Primiani',
+    default: 'Joey Primiani — Designer, Engineer, Founder',
     template: '%s — Joey Primiani',
   },
   description:
-    'Designer. Engineer. Builder. Forbes 30 Under 30. Founder of Official. Previously Google X, LinkedIn, Lady Gaga Little Monsters, Intuit.',
+    'Joey Primiani — Designer, engineer, and entrepreneur. Forbes 30 Under 30. Founder of Official. Previously Google X, LinkedIn, Lady Gaga Little Monsters, Intuit.',
+  keywords: [
+    'Joey Primiani',
+    'product designer',
+    'Forbes 30 Under 30',
+    'Official',
+    'Google X',
+    'LinkedIn',
+    'Little Monsters',
+    'Lady Gaga',
+    'Intuit',
+    'founder',
+    'UX design',
+    'startup',
+  ],
   metadataBase: new URL('https://joeyprimiani.com'),
+  alternates: { canonical: 'https://joeyprimiani.com' },
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://joeyprimiani.com',
     siteName: 'Joey Primiani',
+    title: 'Joey Primiani — Designer, Engineer, Founder',
+    description:
+      'Forbes 30 Under 30. Founder of Official. Previously Google X, LinkedIn, Lady Gaga Little Monsters, Intuit.',
     images: [{ url: '/og.png', width: 1200, height: 630, alt: 'Joey Primiani' }],
   },
   twitter: {
     card: 'summary_large_image',
     creator: '@jp',
+    title: 'Joey Primiani — Designer, Engineer, Founder',
+    description: 'Forbes 30 Under 30. Founder of Official. Previously Google X, LinkedIn, Lady Gaga Little Monsters.',
     images: ['/og.png'],
   },
   robots: { index: true, follow: true },
@@ -48,14 +67,22 @@ const jsonLd = {
   '@type': 'Person',
   name: 'Joey Primiani',
   url: 'https://joeyprimiani.com',
+  image: 'https://joeyprimiani.com/og.png',
   sameAs: [
     'https://twitter.com/jp',
     'https://linkedin.com/in/jprim',
     'https://official.com',
   ],
   jobTitle: 'Founder & CEO',
-  worksFor: { '@type': 'Organization', name: 'Official' },
-  description: 'Designer, engineer, and entrepreneur. Forbes 30 Under 30.',
+  worksFor: { '@type': 'Organization', name: 'Official', url: 'https://official.com' },
+  description: 'Designer, engineer, and entrepreneur. Forbes 30 Under 30. Co-founded Lady Gaga\'s Little Monsters fan platform. Previously Google X, LinkedIn, Intuit.',
+  award: 'Forbes 30 Under 30',
+  alumniOf: [
+    { '@type': 'Organization', name: 'Google X' },
+    { '@type': 'Organization', name: 'LinkedIn' },
+    { '@type': 'Organization', name: 'Intuit' },
+  ],
+  knowsAbout: ['Product Design', 'UX Design', 'Software Engineering', 'Startups', 'Fan Platforms'],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -71,7 +98,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
-          <Cursor />
           <Nav />
           {children}
         </ThemeProvider>
