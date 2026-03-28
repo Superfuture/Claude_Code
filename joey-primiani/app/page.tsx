@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import Loader from '@/components/Loader'
 import HeroSection from '@/components/HeroSection'
@@ -11,6 +11,14 @@ const ParticleHero = dynamic(() => import('@/components/ParticleHero'), { ssr: f
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false)
+
+  // Handle /#about hash navigation (snap-scroll container needs manual scroll)
+  useEffect(() => {
+    if (window.location.hash === '#about') {
+      const el = document.getElementById('about')
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [loaded])
 
   return (
     <>
