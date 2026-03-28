@@ -281,7 +281,7 @@ export default function LittleMonstersCase() {
         /* Lightbox */
         .lm-lb {
           position: fixed; inset: 0; z-index: 2000;
-          background: rgba(5,5,5,0.97);
+          background: rgba(10,10,10,0.97);
           display: flex; align-items: center; justify-content: center;
           backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
           animation: lmLbIn 0.3s ease forwards;
@@ -301,7 +301,7 @@ export default function LittleMonstersCase() {
           text-align: center; max-width: 560px; line-height: 1.6;
         }
         .lm-lb-label { color: var(--accent); margin-right: 8px; }
-        .lm-lb-counter { font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+        .lm-lb-counter { font-family: var(--font-sans); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); opacity: 0.5; }
         .lm-lb-close {
           position: fixed; top: 28px; right: 36px;
           background: none; border: 1px solid var(--border); cursor: pointer;
@@ -405,8 +405,7 @@ export default function LittleMonstersCase() {
             animation: 'lm-heroScale 14s ease-out forwards',
           }}
         />
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #050505 0%, rgba(5,5,5,0.72) 42%, rgba(5,5,5,0.22) 100%)' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 15% 90%, rgba(0,212,255,0.07) 0%, transparent 55%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #0A0A0A 0%, rgba(10,10,10,0.72) 42%, rgba(10,10,10,0.22) 100%)' }} />
 
         <div
           style={{
@@ -451,7 +450,7 @@ export default function LittleMonstersCase() {
             opacity: 0, animation: 'lm-fadeUp 0.6s ease 0.9s forwards',
           }}>
             {['Lady Gaga', '2011–2012', 'littlemonsters.com'].map((t) => (
-              <span key={t} style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)' }}>{t}</span>
+              <span key={t} style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--muted)' }}>{t}</span>
             ))}
           </div>
         </div>
@@ -496,7 +495,7 @@ export default function LittleMonstersCase() {
             <h2 data-lm-reveal style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(26px, 3.6vw, 50px)', fontWeight: 700, lineHeight: 1.12, color: 'var(--fg)', marginBottom: '32px', maxWidth: '700px' }}>
               Co-founded a creative social platform with Lady Gaga — before fan platforms were a category.
             </h2>
-            <p data-lm-reveal data-lm-delay="2" style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(16px, 1.8vw, 20px)', lineHeight: 1.72, color: 'rgba(255,255,255,0.65)', maxWidth: '640px' }}>
+            <p data-lm-reveal data-lm-delay="2" style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(16px, 1.8vw, 20px)', lineHeight: 1.72, color: 'var(--muted)', maxWidth: '640px' }}>
               In 2011, I co-founded Little Monsters with Lady Gaga — a purpose-built creative community for her global superfan base. Inspired by what DeviantArt did for my own creative development, I designed a platform that treated fans as artists, not audience. A place to share, create, and inspire — where fan art was fine art, and belonging was the product.
             </p>
           </div>
@@ -743,7 +742,7 @@ export default function LittleMonstersCase() {
               <h2 data-lm-reveal style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: 'clamp(40px, 7.5vw, 88px)', fontWeight: 900, lineHeight: 0.95, letterSpacing: '-0.025em', color: 'var(--fg)', marginBottom: '40px' }}>
                 Fan art<br />= fine art.
               </h2>
-              <p data-lm-reveal data-lm-delay="2" style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(16px, 1.8vw, 20px)', lineHeight: 1.72, color: 'rgba(255,255,255,0.62)', maxWidth: '600px', margin: 0 }}>
+              <p data-lm-reveal data-lm-delay="2" style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(16px, 1.8vw, 20px)', lineHeight: 1.72, color: 'var(--muted)', maxWidth: '600px', margin: 0 }}>
                 DeviantArt shaped who I am as a designer. I wanted to build for the next generation of young creatives what DeviantArt did for mine — a special place that takes their work seriously, that builds infrastructure for passion, and that proves creativity is a legitimate path. Little Monsters was that platform. And it worked.
               </p>
             </div>
