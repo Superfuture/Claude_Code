@@ -656,7 +656,8 @@ export default function LittleMonstersCase() {
           CULTURAL IMPACT
       ═══════════════════════════════════════ */}
       <section style={{ maxWidth: '1200px', margin: '0 auto', padding: 'clamp(80px, 13vh, 144px) clamp(24px, 6vw, 80px)' }}>
-        <p data-lm-reveal style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '64px' }}>Cultural Impact</p>
+        <p data-lm-reveal style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '20px' }}>Cultural Impact</p>
+        <h2 data-lm-reveal data-lm-delay="1" style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(36px, 6vw, 80px)', fontWeight: 900, lineHeight: 0.95, letterSpacing: '-0.02em', color: 'var(--fg)', marginBottom: '64px' }}>Impact.</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '48px 64px' }}>
           {cultural.map((item, i) => (
             <div key={item.title} data-lm-reveal data-lm-delay={String((i % 2) + 1)}>
