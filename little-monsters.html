@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Little Monsters — Lady Gaga Fan Platform · Joey Primiani</title>
+<meta name="description" content="Joey Primiani co-founded and designed Little Monsters — Lady Gaga's superfan social platform. A purpose-built creative community for millions, built before fan platforms were a category. Forbes 30 Under 30." />
+<meta name="keywords" content="Little Monsters, Lady Gaga, fan platform, Joey Primiani, social network, Forbes 30 Under 30, product design, co-founder, Backplane" />
+<meta name="author" content="Joey Primiani" />
+<link rel="canonical" href="https://joeyprimiani.com/work/little-monsters" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://joeyprimiani.com/work/little-monsters" />
+<meta property="og:title" content="Little Monsters — Lady Gaga Fan Platform · Joey Primiani" />
+<meta property="og:description" content="Co-founded and designed Little Monsters — Lady Gaga's creative community for millions of superfans. Built before fan platforms were a category." />
+<meta property="og:image" content="https://storage.googleapis.com/pr-newsroom-wp/1/2025/03/lady-gaga-little-monster-press-conference-spotify-12-1024x683.jpg" />
+<meta property="og:site_name" content="Joey Primiani" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="@jp" />
+<meta name="twitter:title" content="Little Monsters — Lady Gaga Fan Platform · Joey Primiani" />
+<meta name="twitter:description" content="Co-founded Lady Gaga's superfan social platform. Forbes 30 Under 30." />
+<meta name="twitter:image" content="https://storage.googleapis.com/pr-newsroom-wp/1/2025/03/lady-gaga-little-monster-press-conference-spotify-12-1024x683.jpg" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Little Monsters — Lady Gaga Fan Platform",
+  "url": "https://joeyprimiani.com/work/little-monsters",
+  "description": "Case study by Joey Primiani on co-founding Little Monsters, Lady Gaga's superfan creative community.",
+  "author": {
+    "@type": "Person",
+    "name": "Joey Primiani",
+    "url": "https://joeyprimiani.com",
+    "award": "Forbes 30 Under 30"
+  },
+  "about": {
+    "@type": "SoftwareApplication",
+    "name": "Little Monsters",
+    "applicationCategory": "SocialNetworkingApplication",
+    "description": "Lady Gaga's official superfan social platform — a creative community for millions of Little Monsters worldwide.",
+    "dateCreated": "2012"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ── Tokens ── */
+  :root {
+    --bg:      #0A0A0A;
+    --surface: #111111;
+    --border:  #222222;
+    --fg:      #F5F5F5;
+    --muted:   #666666;
+    --accent:  #F0EAE0;
+    --serif:   'Playfair Display', Georgia, serif;
+    --sans:    'DM Sans', system-ui, sans-serif;
+  }
+
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; }
+  ::selection { background: var(--accent); color: #000; }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes heroScale {
+    from { transform: scale(1.06); }
+    to   { transform: scale(1); }
+  }
+  @keyframes scrollLine {
+    0%   { transform: scaleY(0); transform-origin: top; }
+    50%  { transform: scaleY(1); transform-origin: top; }
+    51%  { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ── Scroll reveal ── */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
+  [data-reveal].visible { opacity: 1; transform: translateY(0); }
+  [data-delay="1"] { transition-delay: 0.08s; }
+  [data-delay="2"] { transition-delay: 0.16s; }
+  [data-delay="3"] { transition-delay: 0.24s; }
+  [data-delay="4"] { transition-delay: 0.32s; }
+  [data-delay="5"] { transition-delay: 0.40s; }
+  [data-delay="6"] { transition-delay: 0.48s; }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px clamp(32px, 6vw, 64px);
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s ease;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.88);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: var(--serif); font-size: 14px; font-weight: 700;
+    letter-spacing: 0.05em; text-decoration: none; color: var(--fg);
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--fg); }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative; height: 100svh; min-height: 640px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://storage.googleapis.com/pr-newsroom-wp/1/2025/03/lady-gaga-little-monster-press-conference-spotify-12-1024x683.jpg');
+    background-size: cover; background-position: center 25%;
+    filter: saturate(0.65) brightness(0.9);
+    animation: heroScale 14s ease-out forwards;
+  }
+  .hero-grad {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, #0A0A0A 0%, rgba(10,10,10,0.72) 42%, rgba(10,10,10,0.22) 100%);
+  }
+  .hero-watermark {
+    position: absolute; top: -0.05em; right: -0.04em;
+    font-family: var(--serif); font-size: clamp(160px, 28vw, 400px);
+    font-weight: 900; color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.055);
+    line-height: 1; user-select: none; pointer-events: none;
+    letter-spacing: -0.04em;
+  }
+  .hero-back {
+    position: absolute; top: 92px; left: clamp(24px, 6vw, 80px);
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
+    transition: color 0.2s;
+  }
+  .hero-back:hover { color: var(--fg); }
+  .hero-content {
+    position: relative; z-index: 10;
+    padding: 0 clamp(24px, 6vw, 80px) clamp(52px, 9vh, 88px);
+  }
+  .hero-role {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.45s forwards;
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(60px, 13vw, 164px);
+    font-weight: 900; line-height: 0.87; letter-spacing: -0.025em;
+    opacity: 0; animation: fadeUp 0.9s ease 0.65s forwards;
+  }
+  .hero-title .solid { display: block; color: var(--fg); }
+  .hero-title .outline {
+    display: block; color: transparent;
+    -webkit-text-stroke: 2px rgba(255,255,255,0.88);
+    font-style: italic;
+  }
+  .hero-meta {
+    margin-top: 32px; display: flex; flex-wrap: wrap; gap: 8px 28px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.9s forwards;
+  }
+  .hero-meta span {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: rgba(255,255,255,0.38);
+  }
+  .hero-scroll {
+    position: absolute; bottom: 32px; right: clamp(24px, 6vw, 80px);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    opacity: 0; animation: fadeUp 0.6s ease 1.2s forwards;
+  }
+  .hero-scroll span {
+    font-family: var(--sans); font-size: 9px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--muted); writing-mode: vertical-rl;
+  }
+  .hero-scroll-line {
+    width: 1px; height: 52px; background: var(--muted);
+    animation: scrollLine 2s ease-in-out 1.5s infinite;
+  }
+
+  /* ── Ticker ── */
+  .ticker-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 13px 0; background: var(--surface);
+  }
+  .ticker-track {
+    display: flex; width: max-content;
+    animation: ticker 28s linear infinite;
+  }
+  .ticker-item {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--muted);
+    padding: 0 28px; white-space: nowrap;
+  }
+  .ticker-dot { color: var(--accent); margin: 0 6px; opacity: 0.7; }
+
+  /* ── Section util ── */
+  .section { max-width: 1200px; margin: 0 auto; padding: clamp(80px, 13vh, 144px) clamp(24px, 6vw, 80px); }
+  .section-sm { max-width: 1200px; margin: 0 auto; padding: clamp(64px, 10vh, 112px) clamp(24px, 6vw, 80px); }
+  .rule { max-width: 1200px; margin: 0 auto; padding: 0 clamp(24px, 6vw, 80px); }
+  .rule hr { border: none; border-top: 1px solid var(--border); }
+  .label {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 40px;
+  }
+  .label-sm { margin-bottom: 14px; }
+  .accent-bar { width: 24px; height: 1px; background: var(--accent); }
+  .accent-bar-short { width: 16px; height: 2px; background: var(--accent); margin-bottom: 20px; opacity: 0.6; }
+
+  /* ── Brief ── */
+  .two-col {
+    display: grid; grid-template-columns: minmax(160px, 240px) 1fr;
+    gap: 64px; align-items: start;
+  }
+  .brief-h2 {
+    font-family: var(--serif); font-size: clamp(26px, 3.6vw, 50px);
+    font-weight: 700; line-height: 1.12; color: var(--fg);
+    margin-bottom: 32px; max-width: 700px;
+  }
+  .brief-p {
+    font-family: var(--serif); font-size: clamp(16px, 1.8vw, 20px);
+    line-height: 1.72; color: rgba(255,255,255,0.65); max-width: 640px;
+  }
+
+  /* ── Problem ── */
+  .problem-h2 {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(44px, 9vw, 110px); font-weight: 900;
+    line-height: 0.95; letter-spacing: -0.025em;
+    color: var(--fg); max-width: 900px; margin-bottom: 52px;
+  }
+  .problem-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px; max-width: 820px;
+  }
+  .problem-grid p {
+    font-family: var(--sans); font-size: 15px; line-height: 1.72; color: var(--muted);
+  }
+
+  /* ── Sketches ── */
+  .sketches-wrap { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .sketches-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 32px; flex-wrap: wrap; gap: 12px;
+  }
+  .sketches-title { font-family: var(--serif); font-size: clamp(20px, 2.5vw, 28px); font-weight: 700; color: var(--fg); }
+  .sketches-caption { font-family: var(--sans); font-size: 13px; color: var(--muted); max-width: 320px; text-align: right; line-height: 1.6; }
+  .sketch-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+  }
+  .sketch-grid .sketch-item { overflow: hidden; }
+  .sketch-grid img { width: 100%; height: clamp(300px, 42vh, 520px); object-fit: cover; object-position: top; cursor: pointer; }
+
+  /* ── Features ── */
+  .features-wrap { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .features-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; flex-wrap: wrap; gap: 24px; }
+  .features-h2 { font-family: var(--serif); font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: var(--fg); line-height: 1.1; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); border: 1px solid var(--border); }
+  .feature-card {
+    padding: 40px 32px;
+    border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    background: var(--bg); transition: background 0.3s;
+  }
+  .feature-card:hover { background: var(--surface); }
+  .feature-n { font-family: var(--sans); font-size: 11px; letter-spacing: 0.22em; color: var(--accent); display: block; margin-bottom: 18px; }
+  .feature-title { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--fg); margin-bottom: 12px; line-height: 1.2; }
+  .feature-body { font-family: var(--sans); font-size: 14px; line-height: 1.72; color: var(--muted); }
+
+  /* ── Product gallery ── */
+  .gallery-section { padding-top: clamp(80px, 13vh, 144px); padding-bottom: clamp(80px, 13vh, 144px); border-bottom: 1px solid var(--border); }
+  .gallery-header { max-width: 1200px; margin: 0 auto; padding: 0 clamp(24px, 6vw, 80px); margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; }
+  .gallery-h2 { font-family: var(--serif); font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: var(--fg); line-height: 1.1; }
+  .gallery-hint { font-family: var(--sans); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .gallery-track {
+    overflow-x: auto; display: flex; gap: 12px;
+    scroll-snap-type: x mandatory;
+    -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .gallery-track::-webkit-scrollbar { display: none; }
+  .gallery-item { flex-shrink: 0; display: flex; flex-direction: column; gap: 12px; scroll-snap-align: start; }
+  .gallery-img {
+    height: 460px; width: auto; max-width: 680px;
+    object-fit: cover; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    cursor: pointer;
+  }
+  .gallery-img:hover { transform: scale(1.025); }
+  .gallery-label { font-family: var(--sans); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .gallery-spacer { flex-shrink: 0; width: clamp(24px, 6vw, 80px); }
+
+  /* ── Lightbox ── */
+  .lb {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(10,10,10,0.97);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.35s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .lb.open { opacity: 1; pointer-events: all; }
+  .lb-img {
+    max-width: min(90vw, 1200px); max-height: 82vh;
+    object-fit: contain;
+    box-shadow: 0 48px 140px rgba(0,0,0,0.9);
+    border: 1px solid var(--border);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    display: block;
+  }
+  .lb.open .lb-img { transform: scale(1); }
+  .lb-body { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .lb-caption { font-family: var(--sans); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); text-align: center; max-width: 560px; line-height: 1.6; }
+  .lb-label { color: var(--accent); margin-right: 8px; }
+  .lb-close {
+    position: fixed; top: 28px; right: 36px;
+    background: none; border: 1px solid var(--border); cursor: pointer;
+    font-family: var(--sans); font-size: 10px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted);
+    padding: 8px 16px; transition: all 0.2s; border-radius: 2px;
+  }
+  .lb-close:hover { color: var(--fg); border-color: var(--fg); }
+  .lb-arrow {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    font-family: var(--sans); font-size: 24px; color: var(--muted);
+    padding: 24px; transition: color 0.2s; line-height: 1;
+    user-select: none;
+  }
+  .lb-arrow:hover { color: var(--fg); }
+  .lb-prev { left: 12px; }
+  .lb-next { right: 12px; }
+  .lb-counter { font-family: var(--sans); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
+  @media (max-width: 680px) {
+    .lb-arrow { display: none; }
+    .lb-close { top: 16px; right: 16px; }
+  }
+
+  /* ── Stats ── */
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .stat-cell { padding: clamp(40px, 7vh, 80px) 0; }
+  .stat-cell:not(:last-child) { border-right: 1px solid var(--border); }
+  .stat-cell:not(:first-child) { padding-left: clamp(28px, 4vw, 60px); }
+  .stat-value { font-family: var(--serif); font-size: clamp(40px, 8vw, 92px); font-weight: 900; color: var(--fg); line-height: 1; letter-spacing: -0.025em; margin-bottom: 14px; }
+  .stat-label { font-family: var(--sans); font-size: 13px; letter-spacing: 0.04em; color: var(--muted); line-height: 1.5; white-space: pre-line; }
+
+  /* ── Quote ── */
+  .quote-wrap { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .quote-inner { max-width: 880px; margin: 0 auto; padding: clamp(80px, 15vh, 168px) clamp(24px, 6vw, 80px); text-align: center; }
+  .quote-mark { font-family: var(--serif); font-size: clamp(64px, 10vw, 120px); line-height: 0.6; color: var(--accent); opacity: 0.3; margin-bottom: 24px; user-select: none; }
+  .quote-text { font-family: var(--serif); font-style: italic; font-size: clamp(22px, 3.2vw, 38px); font-weight: 400; line-height: 1.42; color: var(--fg); margin-bottom: 36px; }
+  .quote-attr { font-family: var(--sans); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
+
+  /* ── Cultural ── */
+  .cultural-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 48px 64px; }
+  .cultural-title { font-family: var(--serif); font-size: clamp(20px, 2.2vw, 26px); font-weight: 700; color: var(--fg); margin-bottom: 14px; line-height: 1.2; }
+  .cultural-body { font-family: var(--sans); font-size: 14px; line-height: 1.72; color: var(--muted); }
+
+  /* ── Fan art ── */
+  .fanart-wrap { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .fanart-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; margin-bottom: 40px; }
+  .fanart-h2 { font-family: var(--serif); font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: var(--fg); line-height: 1.1; }
+  .fanart-caption { font-family: var(--sans); font-size: 13px; color: var(--muted); max-width: 280px; text-align: right; line-height: 1.6; }
+  .masonry { columns: 3; column-gap: 4px; max-width: 1200px; margin: 0 auto; padding: 0 clamp(24px, 6vw, 80px); }
+  .masonry img { width: 100%; margin-bottom: 4px; break-inside: avoid; transition: opacity 0.3s; }
+  .masonry img:hover { opacity: 0.82; }
+  .fanart-spacer { height: clamp(48px, 8vh, 80px); }
+
+  /* ── Press ── */
+  .press-wrap { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .press-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0; }
+  .press-link {
+    text-decoration: none; display: flex; flex-direction: column; gap: 6px;
+    padding: 24px 40px 24px 0;
+    border-bottom: 1px solid var(--border);
+    transition: opacity 0.2s;
+  }
+  .press-link:hover { opacity: 0.6; }
+  .press-outlet { font-family: var(--serif); font-size: clamp(22px, 3vw, 32px); font-weight: 900; color: var(--fg); letter-spacing: -0.01em; }
+  .press-desc { font-family: var(--sans); font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+  /* ── Philosophy ── */
+  .philosophy-wrap { background: var(--surface); border-top: 1px solid var(--border); }
+  .philosophy-h2 {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(40px, 7.5vw, 88px); font-weight: 900;
+    line-height: 0.95; letter-spacing: -0.025em; color: var(--fg); margin-bottom: 40px;
+  }
+  .philosophy-p { font-family: var(--serif); font-size: clamp(16px, 1.8vw, 20px); line-height: 1.72; color: rgba(255,255,255,0.62); max-width: 600px; }
+
+  /* ── Prev/Next ── */
+  .prevnext { max-width: 1200px; margin: 0 auto; padding: clamp(48px, 8vh, 96px) clamp(24px, 6vw, 80px); }
+  .prevnext-inner { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 48px; }
+  .prevnext a { text-decoration: none; display: flex; flex-direction: column; gap: 6px; transition: opacity 0.2s; }
+  .prevnext a:hover { opacity: 0.55; }
+  .prevnext .pn-label { font-family: var(--sans); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .prevnext .pn-title { font-family: var(--serif); font-size: 18px; color: var(--fg); }
+  .prevnext .next { align-items: flex-end; }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .press-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+  @media (max-width: 680px) {
+    .two-col { grid-template-columns: 1fr !important; gap: 24px !important; }
+    .sketch-grid { grid-template-columns: 1fr !important; }
+    .stats-row { grid-template-columns: 1fr !important; }
+    .stat-cell { border-right: none !important; padding-left: 0 !important; border-bottom: 1px solid var(--border); }
+    .stat-cell:last-child { border-bottom: none; }
+    .masonry { columns: 2 !important; }
+    .gallery-img { height: 280px !important; }
+    .gallery-hint { display: none; }
+    .hero-scroll { display: none; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 480px) {
+    .masonry { columns: 1 !important; }
+    .press-grid { grid-template-columns: 1fr !important; }
+    .gallery-img { height: 220px !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <a href="joey-primiani-site.html" class="nav-logo">Joey Primiani</a>
+  <div class="nav-links">
+    <a href="joey-primiani-site.html">Work</a>
+    <a href="joey-primiani-site.html#about">About</a>
+    <a href="mailto:jprimiani@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grad"></div>
+  <div class="hero-watermark">03</div>
+  <a href="joey-primiani-site.html" class="hero-back">← Work</a>
+
+  <div class="hero-content">
+    <p class="hero-role">Co-Founder · Product Designer</p>
+    <h1 class="hero-title">
+      <span class="solid">Little</span>
+      <span class="outline">Monsters.com</span>
+    </h1>
+    <div class="hero-meta">
+      <span>Lady Gaga</span>
+      <span>2011–2012</span>
+      <span>littlemonsters.com</span>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     TICKER
+══════════════════════════════════════ -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <!-- doubled for seamless loop -->
+    <span class="ticker-item">Fan Art = Fine Art<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Lady Gaga<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Co-Founded 2011<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Creative Community<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Love & Acceptance<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Social Network<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">littlemonsters.com<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Cultural Impact<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Lives Changed<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Superfan Platform<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Fan Art = Fine Art<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Lady Gaga<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Co-Founded 2011<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Creative Community<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Love & Acceptance<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Social Network<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">littlemonsters.com<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Cultural Impact<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Lives Changed<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Superfan Platform<span class="ticker-dot">·</span></span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     THE BRIEF
+══════════════════════════════════════ -->
+<section class="section">
+  <div class="two-col">
+    <div data-reveal>
+      <p class="label label-sm">The Brief</p>
+      <div class="accent-bar"></div>
+    </div>
+    <div>
+      <h2 class="brief-h2" data-reveal>
+        Co-founded a creative social platform with Lady Gaga — before fan platforms were a category.
+      </h2>
+      <p class="brief-p" data-reveal data-delay="2">
+        In 2011, I co-founded Little Monsters with Lady Gaga — a purpose-built creative community for her global superfan base. Inspired by what DeviantArt did for my own creative development, I designed a platform that treated fans as artists, not audience. A place to share, create, and inspire — where fan art was fine art, and belonging was the product.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="rule"><hr /></div>
+
+<!-- ══════════════════════════════════════
+     THE PROBLEM
+══════════════════════════════════════ -->
+<section class="section">
+  <p class="label" data-reveal>The Problem</p>
+  <h2 class="problem-h2" data-reveal>Fans had no<br>real home.</h2>
+  <div class="problem-grid" data-reveal data-delay="2">
+    <p>In 2011, fan communities lived in comment sections, Facebook groups, and scattered forums. They had no dedicated creative infrastructure — no tools, no identity, no sense of permanence.</p>
+    <p>Little Monsters was built to change that. Not just a social network, but a creative platform purpose-built for one of the world's most passionate fan communities — with tools, culture, and a philosophy to match their energy.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SKETCH GALLERY
+══════════════════════════════════════ -->
+<div class="sketches-wrap">
+  <div class="section-sm">
+    <div class="sketches-header">
+      <div data-reveal>
+        <p class="label label-sm" style="margin-bottom:8px">Origin · 2011</p>
+        <p class="sketches-title">From whiteboard to world.</p>
+      </div>
+      <p class="sketches-caption" data-reveal data-delay="2">The first sketches, age 22. Built for myself, as a Little Monster.</p>
+    </div>
+  </div>
+  <div class="sketch-grid">
+    <div class="sketch-item" data-reveal data-delay="1">
+      <img src="https://assets.dunked.com/assets/prod/117833/p1bbc96apj1addi2313ii1hpnu4u3.jpeg" alt="Whiteboard Sketches, 2011" data-caption="The original whiteboard sketches — hand-drawn concepts for what would become LittleMonsters.com" loading="lazy" />
+    </div>
+    <div class="sketch-item" data-reveal data-delay="2">
+      <img src="https://assets.dunked.com/assets/prod/117833/p1bbi623jhjdk12c81rsua8d1gm23.jpg" alt="First Visual Design Concepts" data-caption="Early visual explorations, age 22. Built for myself, as a Little Monster." loading="lazy" />
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     FEATURES
+══════════════════════════════════════ -->
+<div class="features-wrap">
+  <div class="section">
+    <div class="features-header">
+      <div>
+        <p class="label label-sm" data-reveal>What We Built</p>
+        <h2 class="features-h2" data-reveal>Six tools.<br>One culture.</h2>
+      </div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card" data-reveal data-delay="1">
+        <span class="feature-n">01</span>
+        <h3 class="feature-title">Creative Studio</h3>
+        <p class="feature-body">"Inspired by" remixing — fans built on each other's art, creating collaborative chains of creativity that spanned the globe.</p>
+      </div>
+      <div class="feature-card" data-reveal data-delay="2">
+        <span class="feature-n">02</span>
+        <h3 class="feature-title">Live Translation</h3>
+        <p class="feature-body">Real-time community chat via Google Translate — a fan in Tokyo and one in São Paulo, connected without friction.</p>
+      </div>
+      <div class="feature-card" data-reveal data-delay="3">
+        <span class="feature-n">03</span>
+        <h3 class="feature-title">One-Click Merch</h3>
+        <p class="feature-body">Fan artwork on apparel in minutes, inspired by Threadless. Your creation could ship to the world the same day.</p>
+      </div>
+      <div class="feature-card" data-reveal data-delay="4">
+        <span class="feature-n">04</span>
+        <h3 class="feature-title">Monster Map</h3>
+        <p class="feature-body">Location-based fan discovery for concert meetups — turning strangers in a venue into community before the first song.</p>
+      </div>
+      <div class="feature-card" data-reveal data-delay="5">
+        <span class="feature-n">05</span>
+        <h3 class="feature-title">Monstervisions</h3>
+        <p class="feature-body">Exclusive behind-the-scenes from Gaga — VIP access that felt genuinely personal, not broadcast. The real Gaga, for her real fans.</p>
+      </div>
+      <div class="feature-card" data-reveal data-delay="6">
+        <span class="feature-n">06</span>
+        <h3 class="feature-title">Webcam Drops</h3>
+        <p class="feature-body">Instant content from webcam to community. Zero friction between creative impulse and published post.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PRODUCT GALLERY
+══════════════════════════════════════ -->
+<div class="gallery-section">
+  <div class="gallery-header">
+    <div>
+      <p class="label label-sm" data-reveal>The Platform</p>
+      <h2 class="gallery-h2" data-reveal>Every screen,<br>designed with purpose.</h2>
+    </div>
+    <p class="gallery-hint" data-reveal>← Scroll to explore →</p>
+  </div>
+  <div class="gallery-track">
+    <div class="gallery-item" style="padding-left:clamp(24px,6vw,80px)">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bba6c1vgqpv1oda1g0k6d9g5p1p.png" alt="Homepage" data-caption="Fan-submitted artwork surfaces to the top — the more you create, the more you're seen by Gaga herself" loading="lazy" />
+      <span class="gallery-label">Homepage</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bba63p7i1595m541rbs1k441oht8.png" alt="Live Chat" data-caption="Real-time chatroom for Gaga and her monsters — translated live via Google into any language, zero friction" loading="lazy" />
+      <span class="gallery-label">Live Chat</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bba63p7lhihnsm17tbrbtpnut.png" alt="Mother Monster" data-caption="Lady Gaga's official profile — Monster #00001, joined May 4, 2011. She was present, not just a mascot" loading="lazy" />
+      <span class="gallery-label">Mother Monster</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bba97aiv13bq56s1ruc1m09hv43.png" alt="Profile" data-caption="Your superfan identity — showcase your creative work, passions, and story to the entire community" loading="lazy" />
+      <span class="gallery-label">Profile</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bba63p7i15u5f2f1i8m1qvl17na.png" alt="Edit Profile" data-caption="Personalize your online superfan persona — username, location, profession, and bio. JoeyP, Palo Alto CA, Designer" loading="lazy" />
+      <span class="gallery-label">Edit Profile</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bba63p7i1g7e198vo37rac1s075.png" alt="Avatar Picker" data-caption="Choose from Gaga's most iconic looks as your fan avatar — your identity within the community" loading="lazy" />
+      <span class="gallery-label">Avatar Picker</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bba63p7jvqu10au1ag31r4s1kf0h.png" alt="Remix Studio" data-caption="Remix any artwork with built-in drawing tools — text, shapes, brushes, and color. Fan creativity as a first-class feature" loading="lazy" />
+      <span class="gallery-label">Remix Studio</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bba63p7k8n3139cs0b1h5f1vntp.png" alt="Color Studio" data-caption="Full color picker for artistic remixing — every fan a creator, every post a canvas" loading="lazy" />
+      <span class="gallery-label">Color Studio</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bba63p7j1ff91daq1qqbc7s13ng.png" alt="Merch" data-caption="One-click fan art on apparel — your creation ships to monsters worldwide the same day it's made" loading="lazy" />
+      <span class="gallery-label">Merch</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bba63p7k1nij1ql01irs1c514d7o.png" alt='"Inspired By"' data-caption="The inspiration tree — track how creative ideas branch and evolve as they travel through the community" loading="lazy" />
+      <span class="gallery-label">"Inspired By"</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bbnus4nhnptc6r1v6nsjn1tf36.png" alt="Webcam Drops" data-caption="Instant webcam-to-community content — zero friction between creative impulse and published post" loading="lazy" />
+      <span class="gallery-label">Webcam Drops</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bbnus4ni5eoknm162l1ksk5518.png" alt="Translation" data-caption="Real-time translation — a fan in Tokyo and one in São Paulo, talking directly with no friction whatsoever" loading="lazy" />
+      <span class="gallery-label">Translation</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bbl7rkjp1frd1otp3mrost1ljs42.png" alt="Fan Merch" data-caption="Superfan-designed merchandise increased concert sales by 30% — fans as the ultimate taste-makers" loading="lazy" />
+      <span class="gallery-label">Fan Merch</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bbl7rkjodan1hje1cors4ioce41.png" alt="Community Feed" data-caption="When Gaga hearted your post — the moment that made every Little Monster's day unforgettable" loading="lazy" />
+      <span class="gallery-label">Community Feed</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bbc97paq1vmmqbbgm78e1rv95.png" alt="Profile Page" data-caption="Fan identity on full display — creative work, community stats, and connections across the platform" loading="lazy" />
+      <span class="gallery-label">Profile Page</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bbc983aukro1tic1sgb11atqkc7.png" alt="Creator's Profile" data-caption="Joey Primiani's own profile on the platform he built. Lady Gaga commented: 'hey i love you!! our creator!!! tell all the fans this is your baby'" loading="lazy" />
+      <span class="gallery-label">Creator's Profile</span>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="https://assets.dunked.com/assets/prod/117833/p1bba63p7ka81d4r10ti1ihcfk2k.png" alt="Explore" data-caption="Discover artwork, fans, events, and moments happening across the Little Monsters universe in real time" loading="lazy" />
+      <span class="gallery-label">Explore</span>
+    </div>
+    <div class="gallery-spacer"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     IMPACT STATS
+══════════════════════════════════════ -->
+<section class="section">
+  <p class="label" data-reveal>Impact</p>
+  <div class="stats-row">
+    <div class="stat-cell" data-reveal data-delay="1">
+      <p class="stat-value">+30%</p>
+      <p class="stat-label">Concert merchandise
+sales increase</p>
+    </div>
+    <div class="stat-cell" data-reveal data-delay="2">
+      <p class="stat-value">2011</p>
+      <p class="stat-label">Built before fan
+platforms existed</p>
+    </div>
+    <div class="stat-cell" data-reveal data-delay="3">
+      <p class="stat-value">Lives</p>
+      <p class="stat-label">Changed — especially
+for LGBTQ+ youth</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     PULL QUOTE
+══════════════════════════════════════ -->
+<div class="quote-wrap">
+  <div class="quote-inner">
+    <div class="quote-mark" data-reveal>"</div>
+    <blockquote data-reveal>
+      <p class="quote-text">This isn't a social network. It's a place of love and acceptance — where every fan is also a creator, and every creation matters.</p>
+      <footer class="quote-attr">Joey Primiani, Co-Founder</footer>
+    </blockquote>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CULTURAL IMPACT
+══════════════════════════════════════ -->
+<section class="section">
+  <p class="label" data-reveal style="margin-bottom:20px">Cultural</p>
+  <h2 data-reveal data-delay="1" style="font-family:var(--serif);font-size:clamp(36px,6vw,80px);font-weight:900;line-height:0.95;letter-spacing:-0.02em;color:var(--fg);margin-bottom:64px">Impact.</h2>
+  <div class="cultural-grid">
+    <div data-reveal data-delay="1">
+      <div class="accent-bar-short"></div>
+      <h3 class="cultural-title">An inclusive safe space</h3>
+      <p class="cultural-body">The platform became a lifeline for LGBTQ+ youth, bullied teenagers, and young people battling anxiety and depression. A space built around love and acceptance that existed nowhere else for its community.</p>
+    </div>
+    <div data-reveal data-delay="2">
+      <div class="accent-bar-short"></div>
+      <h3 class="cultural-title">Launching creative careers</h3>
+      <p class="cultural-body">Artists like Helen Green gained global recognition through the platform — her fan art caught Gaga's eye and opened doors to Haus of Gaga collaboration. Little Monsters turned fans into professionals.</p>
+    </div>
+    <div data-reveal data-delay="1">
+      <div class="accent-bar-short"></div>
+      <h3 class="cultural-title">Artist–fan reinvented</h3>
+      <p class="cultural-body">Gaga participated in chatrooms, shared Monstervisions — raw, personal content — and responded directly to fan art. This wasn't broadcasting to an audience. It was being present with a community.</p>
+    </div>
+    <div data-reveal data-delay="2">
+      <div class="accent-bar-short"></div>
+      <h3 class="cultural-title">Fan art as fine art</h3>
+      <p class="cultural-body">The central philosophy: fan creativity deserves to be treated with the same reverence as fine art. We imagined these works eventually exhibited at MoMA or the Louvre. That belief shaped every product decision.</p>
+    </div>
+    <div data-reveal data-delay="1">
+      <div class="accent-bar-short"></div>
+      <h3 class="cultural-title">The Body Revolution</h3>
+      <p class="cultural-body">Gaga posted a single message about body acceptance. The community responded with an outpouring of personal stories — fans embracing their scars, their weight, their differences. It became a movement that helped people battling eating disorders, depression, and anxiety feel seen.</p>
+    </div>
+    <div data-reveal data-delay="2">
+      <div class="accent-bar-short"></div>
+      <h3 class="cultural-title">No borders, one community</h3>
+      <p class="cultural-body">Real-time Google Translate in the chatrooms meant a fan in Tokyo and one in São Paulo could talk directly — no friction, no barrier. The platform became genuinely global in a way no fan community had been before. Language was no longer a wall. Creativity was the common language.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FAN ART GALLERY
+══════════════════════════════════════ -->
+<div class="fanart-wrap">
+  <div class="section-sm">
+    <div class="fanart-header">
+      <div>
+        <p class="label label-sm" data-reveal>Fan Art = Fine Art</p>
+        <h2 class="fanart-h2" data-reveal>What the community created.</h2>
+      </div>
+      <p class="fanart-caption" data-reveal>Artwork by Helen Green, Iggy Proof, DendaReloaded, and community artists worldwide.</p>
+    </div>
+  </div>
+  <div class="masonry">
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bba6gobs1ro9kn6cclch18pu1r.png" alt="Community artwork" loading="lazy" />
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bba6hv5g14s41t1r5m61rrp1n5021.jpg" alt="Helen Green artwork" loading="lazy" />
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bbdv3dpu1atu10cj81m1ohc57h9.png" alt="DendaReloaded artwork" loading="lazy" />
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bbcac5fs1lt5uogj181rqd4fk5.png" alt="N.Gwinner artwork" loading="lazy" />
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bbdqr8b8dbontm1o1j1cii6h83.jpg" alt="Helen Green artwork" loading="lazy" />
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bba6lujeipu1ii31vqv1unq1ghf9.jpg" alt="Helen Green artwork" loading="lazy" />
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bba6ns7c6hh167at5un6np79f.jpg" alt="Helen Green artwork" loading="lazy" />
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bba6mqa61qbr6ldjvm1p311d84d.png" alt="Helen Green artwork" loading="lazy" />
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bba6hh1cinp1n9g1t17fok158r1t.png" alt="Helen Green artwork" loading="lazy" />
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bba6hplmmdtab877e1utu5du1v.jpg" alt="Iggy Proof artwork" loading="lazy" />
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bba6k2ms13jb18a24li33v1dgn7.jpg" alt="Helen Green artwork" loading="lazy" />
+    <img src="https://assets.dunked.com/assets/prod/117833/p1bbq7mb9616tatged3712rt52g3.jpg" alt="Helen Green artwork" loading="lazy" />
+  </div>
+  <div class="fanart-spacer"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PRESS
+══════════════════════════════════════ -->
+<div class="press-wrap">
+  <div class="section-sm">
+    <p class="label" data-reveal>As Covered By</p>
+    <div class="press-grid">
+      <a class="press-link" href="http://www.wired.co.uk/article/troy-carter" target="_blank" rel="noopener" data-reveal data-delay="1">
+        <span class="press-outlet">WIRED</span>
+        <span class="press-desc">The inside story of how Little Monsters launched ↗</span>
+      </a>
+      <a class="press-link" href="https://techcrunch.com/2012/01/20/first-look-backplane-the-lady-gaga-backed-community-platform-with-all-star-investors-invites/" target="_blank" rel="noopener" data-reveal data-delay="2">
+        <span class="press-outlet">TechCrunch</span>
+        <span class="press-desc">First look: Backplane, the Lady Gaga-backed community platform ↗</span>
+      </a>
+      <a class="press-link" href="https://www.rollingstone.com/culture/culture-news/lady-gaga-launches-social-network-for-little-monsters-backplane-ceo-talks-online-fan-identity-191943/" target="_blank" rel="noopener" data-reveal data-delay="3">
+        <span class="press-outlet">Rolling Stone</span>
+        <span class="press-desc">Lady Gaga launches social network for Little Monsters ↗</span>
+      </a>
+      <a class="press-link" href="https://www.fastcompany.com/3034586/what-lady-gaga-can-teach-you-about-creating-a-following" target="_blank" rel="noopener" data-reveal data-delay="1">
+        <span class="press-outlet">Fast Company</span>
+        <span class="press-desc">What Lady Gaga can teach you about creating a following ↗</span>
+      </a>
+      <a class="press-link" href="https://www.cnn.com/2012/02/08/tech/social-media/lady-gaga-social-little-monsters" target="_blank" rel="noopener" data-reveal data-delay="2">
+        <span class="press-outlet">CNN</span>
+        <span class="press-desc">Lady Gaga launches social site Little Monsters ↗</span>
+      </a>
+      <a class="press-link" href="https://abcnews.go.com/blogs/technology/2012/07/lady-gagas-little-monsters-social-network-launches" target="_blank" rel="noopener" data-reveal data-delay="3">
+        <span class="press-outlet">ABC News</span>
+        <span class="press-desc">Lady Gaga's Little Monsters social network launches ↗</span>
+      </a>
+      <a class="press-link" href="https://www.nme.com/news/music/lady-gaga-276-1268750" target="_blank" rel="noopener" data-reveal data-delay="1">
+        <span class="press-outlet">NME</span>
+        <span class="press-desc">Lady Gaga launches social network for Little Monsters ↗</span>
+      </a>
+      <a class="press-link" href="https://content.time.com/time/magazine/article/0,9171,2071124,00.html" target="_blank" rel="noopener" data-reveal data-delay="2">
+        <span class="press-outlet">TIME</span>
+        <span class="press-desc">Monsters Inc. — inside Lady Gaga's Little Monsters community ↗</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PHILOSOPHY CLOSER
+══════════════════════════════════════ -->
+<div class="philosophy-wrap">
+  <div class="section">
+    <div class="two-col">
+      <div data-reveal>
+        <p class="label label-sm">Design Philosophy</p>
+        <div class="accent-bar"></div>
+      </div>
+      <div>
+        <h2 class="philosophy-h2" data-reveal>Fan art<br>= fine art.</h2>
+        <p class="philosophy-p" data-reveal data-delay="2">
+          DeviantArt shaped who I am as a designer. I wanted to build for the next generation of young creatives what DeviantArt did for mine — a special place that takes their work seriously, that builds infrastructure for passion, and that proves creativity is a legitimate path. Little Monsters was that platform. And it worked.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PREV / NEXT
+══════════════════════════════════════ -->
+<div class="prevnext">
+  <div class="prevnext-inner">
+    <a href="superfuture.html">
+      <span class="pn-label">← Previous</span>
+      <span class="pn-title">Superfuture</span>
+    </a>
+    <a href="google-x.html" class="next">
+      <span class="pn-label">Next →</span>
+      <span class="pn-title">Google X</span>
+    </a>
+  </div>
+</div>
+
+<!-- ── Lightbox ── -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lb-close" id="lb-close" aria-label="Close">✕ Close</button>
+  <button class="lb-arrow lb-prev" id="lb-prev" aria-label="Previous">&#8592;</button>
+  <div class="lb-body">
+    <img class="lb-img" id="lb-img" src="" alt="" />
+    <p class="lb-caption"><span class="lb-label" id="lb-label"></span><span id="lb-caption-text"></span></p>
+    <p class="lb-counter" id="lb-counter"></p>
+  </div>
+  <button class="lb-arrow lb-next" id="lb-next" aria-label="Next">&#8594;</button>
+</div>
+
+<script>
+  // ── Scroll reveal ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
+  document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el))
+
+  // ── Lightbox ──
+  const lb        = document.getElementById('lb')
+  const lbImg     = document.getElementById('lb-img')
+  const lbLabel   = document.getElementById('lb-label')
+  const lbCaption = document.getElementById('lb-caption-text')
+  const lbCounter = document.getElementById('lb-counter')
+  const lbClose   = document.getElementById('lb-close')
+  const lbPrev    = document.getElementById('lb-prev')
+  const lbNext    = document.getElementById('lb-next')
+
+  let lbItems   = []
+  let lbCurrent = 0
+
+  function openLb(items, index) {
+    lbItems   = items
+    lbCurrent = index
+    const item = lbItems[lbCurrent]
+    lbImg.src  = item.src
+    lbImg.alt  = item.alt || ''
+    lbLabel.textContent   = item.label ? item.label + ' — ' : ''
+    lbCaption.textContent = item.caption || ''
+    lbCounter.textContent = (lbCurrent + 1) + ' / ' + lbItems.length
+    lb.classList.add('open')
+    document.body.style.overflow = 'hidden'
+  }
+
+  function closeLb() {
+    lb.classList.remove('open')
+    document.body.style.overflow = ''
+    setTimeout(() => { lbImg.src = '' }, 350)
+  }
+
+  function showPrev() { openLb(lbItems, (lbCurrent - 1 + lbItems.length) % lbItems.length) }
+  function showNext() { openLb(lbItems, (lbCurrent + 1) % lbItems.length) }
+
+  // Gallery images
+  const galleryEls = document.querySelectorAll('.gallery-img')
+  const galleryItems = Array.from(galleryEls).map(img => ({
+    src: img.src, alt: img.alt, label: img.alt, caption: img.dataset.caption || ''
+  }))
+  galleryEls.forEach((img, i) => img.addEventListener('click', () => openLb(galleryItems, i)))
+
+  // Fan art images — clickable masonry
+  const artEls = document.querySelectorAll('.masonry img')
+  const artItems = Array.from(artEls).map((img, i) => ({
+    src: img.src, alt: img.alt || ('Fan Art ' + (i + 1)),
+    label: 'Fan Art', caption: ''
+  }))
+  artEls.forEach(img => img.style.cursor = 'pointer')
+  artEls.forEach((img, i) => img.addEventListener('click', () => openLb(artItems, i)))
+
+  // Sketch images — clickable
+  const sketchEls = document.querySelectorAll('.sketch-item img')
+  const sketchItems = Array.from(sketchEls).map(img => ({
+    src: img.src, alt: img.alt, label: img.alt, caption: img.dataset.caption || ''
+  }))
+  sketchEls.forEach((img, i) => img.addEventListener('click', () => openLb(sketchItems, i)))
+
+  lbClose.addEventListener('click', closeLb)
+  lbPrev.addEventListener('click', (e) => { e.stopPropagation(); showPrev() })
+  lbNext.addEventListener('click', (e) => { e.stopPropagation(); showNext() })
+
+  lb.addEventListener('click', (e) => { if (e.target === lb) closeLb() })
+
+  document.addEventListener('keydown', (e) => {
+    if (!lb.classList.contains('open')) return
+    if (e.key === 'Escape') closeLb()
+    if (e.key === 'ArrowLeft')  showPrev()
+    if (e.key === 'ArrowRight') showNext()
+  })
+
+  // Touch swipe support
+  let touchStartX = 0
+  lb.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX }, { passive: true })
+  lb.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX
+    if (Math.abs(dx) > 50) dx < 0 ? showNext() : showPrev()
+  })
+
+  // Nav scroll background
+  const nav = document.querySelector('nav')
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60)
+  }, { passive: true })
+</script>
+</body>
+</html>

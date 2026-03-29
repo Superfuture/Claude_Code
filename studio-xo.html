@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Studio XO — Wearable Tech · Joey Primiani</title>
+<meta name="description" content="Joey Primiani was Creative Technologist at Studio XO — the world's leading fashion-technology studio, dressing Lady Gaga and will.i.am in smart garments that blurred the line between clothing and computing." />
+<meta name="keywords" content="Studio XO, wearable tech, Joey Primiani, creative technologist, Lady Gaga, will.i.am, smart garments, fashion technology, interactive fashion" />
+<meta name="author" content="Joey Primiani" />
+<link rel="canonical" href="https://joeyprimiani.com/work/studio-xo" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://joeyprimiani.com/work/studio-xo" />
+<meta property="og:title" content="Studio XO — Wearable Tech · Joey Primiani" />
+<meta property="og:description" content="Creative Technologist at Studio XO — designing interactive systems that brought smart garments to life on stage and screen." />
+<meta property="og:image" content="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920&q=85&fit=crop&auto=format" />
+<meta property="og:site_name" content="Joey Primiani" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="@jp" />
+<meta name="twitter:title" content="Studio XO — Wearable Tech · Joey Primiani" />
+<meta name="twitter:description" content="Creative Technologist at Studio XO. Fashion, technology, Lady Gaga, will.i.am. 2013." />
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920&q=85&fit=crop&auto=format" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Studio XO — Wearable Tech",
+  "url": "https://joeyprimiani.com/work/studio-xo",
+  "description": "Case study by Joey Primiani on his work as Creative Technologist at Studio XO.",
+  "author": {
+    "@type": "Person",
+    "name": "Joey Primiani",
+    "url": "https://joeyprimiani.com"
+  },
+  "about": {
+    "@type": "Organization",
+    "name": "Studio XO",
+    "description": "The world's leading fashion-technology studio — dressing artists like Lady Gaga and will.i.am in smart garments.",
+    "foundingDate": "2013"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ── Tokens ── */
+  :root {
+    --bg:      #0A0A0A;
+    --surface: #111111;
+    --border:  #222222;
+    --fg:      #F5F5F5;
+    --muted:   #666666;
+    --accent:  #F0EAE0;
+    --serif:   'Playfair Display', Georgia, serif;
+    --sans:    'DM Sans', system-ui, sans-serif;
+  }
+
+  /* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; }
+  ::selection { background: var(--accent); color: #000; }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes heroScale {
+    from { transform: scale(1.06); }
+    to   { transform: scale(1); }
+  }
+  @keyframes scrollLine {
+    0%   { transform: scaleY(0); transform-origin: top; }
+    50%  { transform: scaleY(1); transform-origin: top; }
+    51%  { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ── Scroll reveal ── */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
+  [data-reveal].visible { opacity: 1; transform: translateY(0); }
+  [data-delay="1"] { transition-delay: 0.08s; }
+  [data-delay="2"] { transition-delay: 0.16s; }
+  [data-delay="3"] { transition-delay: 0.24s; }
+  [data-delay="4"] { transition-delay: 0.32s; }
+  [data-delay="5"] { transition-delay: 0.40s; }
+  [data-delay="6"] { transition-delay: 0.48s; }
+
+  /* ── Nav ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px clamp(32px, 6vw, 64px);
+    background: transparent;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s ease;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.88);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: var(--serif); font-size: 14px; font-weight: 700;
+    letter-spacing: 0.05em; text-decoration: none; color: var(--fg);
+  }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--fg); }
+
+  /* ── Hero ── */
+  .hero {
+    position: relative; height: 100svh; min-height: 640px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920&q=85&fit=crop&auto=format');
+    background-size: cover; background-position: center center;
+    filter: saturate(0.65) brightness(0.9);
+    animation: heroScale 14s ease-out forwards;
+  }
+  .hero-grad {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, #0A0A0A 0%, rgba(10,10,10,0.72) 42%, rgba(10,10,10,0.22) 100%);
+  }
+  .hero-watermark {
+    position: absolute; top: -0.05em; right: -0.04em;
+    font-family: var(--serif); font-size: clamp(160px, 28vw, 400px);
+    font-weight: 900; color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.055);
+    line-height: 1; user-select: none; pointer-events: none;
+    letter-spacing: -0.04em;
+  }
+  .hero-back {
+    position: absolute; top: 92px; left: clamp(24px, 6vw, 80px);
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted); text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
+    transition: color 0.2s;
+  }
+  .hero-back:hover { color: var(--fg); }
+  .hero-content {
+    position: relative; z-index: 10;
+    padding: 0 clamp(24px, 6vw, 80px) clamp(52px, 9vh, 88px);
+  }
+  .hero-role {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.45s forwards;
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(60px, 13vw, 164px);
+    font-weight: 900; line-height: 0.87; letter-spacing: -0.025em;
+    opacity: 0; animation: fadeUp 0.9s ease 0.65s forwards;
+  }
+  .hero-title .solid { display: block; color: var(--fg); }
+  .hero-title .outline {
+    display: block; color: transparent;
+    -webkit-text-stroke: 2px rgba(255,255,255,0.88);
+    font-style: italic;
+  }
+  .hero-meta {
+    margin-top: 32px; display: flex; flex-wrap: wrap; gap: 8px 28px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.9s forwards;
+  }
+  .hero-meta span {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: rgba(255,255,255,0.38);
+  }
+  .hero-scroll {
+    position: absolute; bottom: 32px; right: clamp(24px, 6vw, 80px);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    opacity: 0; animation: fadeUp 0.6s ease 1.2s forwards;
+  }
+  .hero-scroll span {
+    font-family: var(--sans); font-size: 9px; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--muted); writing-mode: vertical-rl;
+  }
+  .hero-scroll-line {
+    width: 1px; height: 52px; background: var(--muted);
+    animation: scrollLine 2s ease-in-out 1.5s infinite;
+  }
+
+  /* ── Ticker ── */
+  .ticker-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 13px 0; background: var(--surface);
+  }
+  .ticker-track {
+    display: flex; width: max-content;
+    animation: ticker 28s linear infinite;
+  }
+  .ticker-item {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--muted);
+    padding: 0 28px; white-space: nowrap;
+  }
+  .ticker-dot { color: var(--accent); margin: 0 6px; opacity: 0.7; }
+
+  /* ── Section util ── */
+  .section { max-width: 1200px; margin: 0 auto; padding: clamp(80px, 13vh, 144px) clamp(24px, 6vw, 80px); }
+  .section-sm { max-width: 1200px; margin: 0 auto; padding: clamp(64px, 10vh, 112px) clamp(24px, 6vw, 80px); }
+  .rule { max-width: 1200px; margin: 0 auto; padding: 0 clamp(24px, 6vw, 80px); }
+  .rule hr { border: none; border-top: 1px solid var(--border); }
+  .label {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 40px;
+  }
+  .label-sm { margin-bottom: 14px; }
+  .accent-bar { width: 24px; height: 1px; background: var(--accent); }
+  .accent-bar-short { width: 16px; height: 2px; background: var(--accent); margin-bottom: 20px; opacity: 0.6; }
+
+  /* ── Brief ── */
+  .two-col {
+    display: grid; grid-template-columns: minmax(160px, 240px) 1fr;
+    gap: 64px; align-items: start;
+  }
+  .brief-h2 {
+    font-family: var(--serif); font-size: clamp(26px, 3.6vw, 50px);
+    font-weight: 700; line-height: 1.12; color: var(--fg);
+    margin-bottom: 32px; max-width: 700px;
+  }
+  .brief-p {
+    font-family: var(--serif); font-size: clamp(16px, 1.8vw, 20px);
+    line-height: 1.72; color: rgba(255,255,255,0.65); max-width: 640px;
+  }
+
+  /* ── Problem ── */
+  .problem-h2 {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(44px, 9vw, 110px); font-weight: 900;
+    line-height: 0.95; letter-spacing: -0.025em;
+    color: var(--fg); max-width: 900px; margin-bottom: 52px;
+  }
+  .problem-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px; max-width: 820px;
+  }
+  .problem-grid p {
+    font-family: var(--sans); font-size: 15px; line-height: 1.72; color: var(--muted);
+  }
+
+  /* ── Features ── */
+  .features-wrap { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .features-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; flex-wrap: wrap; gap: 24px; }
+  .features-h2 { font-family: var(--serif); font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: var(--fg); line-height: 1.1; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); border: 1px solid var(--border); }
+  .feature-card {
+    padding: 40px 32px;
+    border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    background: var(--bg); transition: background 0.3s;
+  }
+  .feature-card:hover { background: var(--surface); }
+  .feature-n { font-family: var(--sans); font-size: 11px; letter-spacing: 0.22em; color: var(--accent); display: block; margin-bottom: 18px; }
+  .feature-title { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--fg); margin-bottom: 12px; line-height: 1.2; }
+  .feature-body { font-family: var(--sans); font-size: 14px; line-height: 1.72; color: var(--muted); }
+
+  /* ── Stats ── */
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .stat-cell { padding: clamp(40px, 7vh, 80px) 0; }
+  .stat-cell:not(:last-child) { border-right: 1px solid var(--border); }
+  .stat-cell:not(:first-child) { padding-left: clamp(28px, 4vw, 60px); }
+  .stat-value { font-family: var(--serif); font-size: clamp(40px, 8vw, 92px); font-weight: 900; color: var(--fg); line-height: 1; letter-spacing: -0.025em; margin-bottom: 14px; }
+  .stat-label { font-family: var(--sans); font-size: 13px; letter-spacing: 0.04em; color: var(--muted); line-height: 1.5; white-space: pre-line; }
+
+  /* ── Quote ── */
+  .quote-wrap { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .quote-inner { max-width: 880px; margin: 0 auto; padding: clamp(80px, 15vh, 168px) clamp(24px, 6vw, 80px); text-align: center; }
+  .quote-mark { font-family: var(--serif); font-size: clamp(64px, 10vw, 120px); line-height: 0.6; color: var(--accent); opacity: 0.3; margin-bottom: 24px; user-select: none; }
+  .quote-text { font-family: var(--serif); font-style: italic; font-size: clamp(22px, 3.2vw, 38px); font-weight: 400; line-height: 1.42; color: var(--fg); margin-bottom: 36px; }
+  .quote-attr { font-family: var(--sans); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
+
+  /* ── Philosophy ── */
+  .philosophy-wrap { background: var(--surface); border-top: 1px solid var(--border); }
+  .philosophy-h2 {
+    font-family: var(--serif); font-style: italic;
+    font-size: clamp(40px, 7.5vw, 88px); font-weight: 900;
+    line-height: 0.95; letter-spacing: -0.025em; color: var(--fg); margin-bottom: 40px;
+  }
+  .philosophy-p { font-family: var(--serif); font-size: clamp(16px, 1.8vw, 20px); line-height: 1.72; color: rgba(255,255,255,0.62); max-width: 600px; }
+
+  /* ── Prev/Next ── */
+  .prevnext { max-width: 1200px; margin: 0 auto; padding: clamp(48px, 8vh, 96px) clamp(24px, 6vw, 80px); }
+  .prevnext-inner { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 48px; }
+  .prevnext a { text-decoration: none; display: flex; flex-direction: column; gap: 6px; transition: opacity 0.2s; }
+  .prevnext a:hover { opacity: 0.55; }
+  .prevnext .pn-label { font-family: var(--sans); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .prevnext .pn-title { font-family: var(--serif); font-size: 18px; color: var(--fg); }
+  .prevnext .next { align-items: flex-end; }
+
+  /* ── Responsive ── */
+  @media (max-width: 680px) {
+    .two-col { grid-template-columns: 1fr !important; gap: 24px !important; }
+    .stats-row { grid-template-columns: 1fr !important; }
+    .stat-cell { border-right: none !important; padding-left: 0 !important; border-bottom: 1px solid var(--border); }
+    .stat-cell:last-child { border-bottom: none; }
+    .hero-scroll { display: none; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <a href="joey-primiani-site.html" class="nav-logo">Joey Primiani</a>
+  <div class="nav-links">
+    <a href="joey-primiani-site.html">Work</a>
+    <a href="joey-primiani-site.html#about">About</a>
+    <a href="mailto:jprimiani@gmail.com">Contact</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grad"></div>
+  <div class="hero-watermark">06</div>
+  <a href="joey-primiani-site.html" class="hero-back">← Work</a>
+
+  <div class="hero-content">
+    <p class="hero-role">Creative Technologist</p>
+    <h1 class="hero-title">
+      <span class="solid">Studio XO</span>
+      <span class="outline">Wearables.</span>
+    </h1>
+    <div class="hero-meta">
+      <span>Studio XO</span>
+      <span>2013</span>
+      <span>studio-xo.com</span>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     TICKER
+══════════════════════════════════════ -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <!-- doubled for seamless loop -->
+    <span class="ticker-item">Creative Technologist<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Wearable Tech<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Studio XO<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Fashion &amp; Technology<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Smart Garments<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Interactive Fashion<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Lady Gaga<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">will.i.am<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Joey Primiani<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">2013<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Creative Technologist<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Wearable Tech<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Studio XO<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Fashion &amp; Technology<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Smart Garments<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Interactive Fashion<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Lady Gaga<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">will.i.am<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">Joey Primiani<span class="ticker-dot">·</span></span>
+    <span class="ticker-item">2013<span class="ticker-dot">·</span></span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     THE BRIEF
+══════════════════════════════════════ -->
+<section class="section">
+  <div class="two-col">
+    <div data-reveal>
+      <p class="label label-sm">The Brief</p>
+      <div class="accent-bar"></div>
+    </div>
+    <div>
+      <h2 class="brief-h2" data-reveal>
+        Creative technologist at the intersection of fashion, music, and emerging technology.
+      </h2>
+      <p class="brief-p" data-reveal data-delay="2">
+        Studio XO was the world's leading fashion-technology studio — dressing artists like Lady Gaga and will.i.am in garments that blurred the line between clothing and computing. As Creative Technologist, I designed the interactive systems and experience layers that brought smart garments to life on stage and screen.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="rule"><hr /></div>
+
+<!-- ══════════════════════════════════════
+     THE PROBLEM
+══════════════════════════════════════ -->
+<section class="section">
+  <p class="label" data-reveal>The Problem</p>
+  <h2 class="problem-h2" data-reveal>Fashion and tech<br>spoke different<br>languages.</h2>
+  <div class="problem-grid" data-reveal data-delay="2">
+    <p>Fashion designers think in materials, silhouette, and emotion. Engineers think in protocols, power, and tolerances. Bridging that gap required a new kind of creative practice.</p>
+    <p>Most wearable tech at the time looked like tech wearing fashion, not fashion that happened to be technological. The challenge was making the technology disappear into the garment.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FEATURES
+══════════════════════════════════════ -->
+<div class="features-wrap">
+  <div class="section">
+    <div class="features-header">
+      <div>
+        <p class="label label-sm" data-reveal>What We Built</p>
+        <h2 class="features-h2" data-reveal>Four disciplines.<br>One garment.</h2>
+      </div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card" data-reveal data-delay="1">
+        <span class="feature-n">01</span>
+        <h3 class="feature-title">Interactive Garments</h3>
+        <p class="feature-body">Designed the interaction logic for light-reactive and sensor-driven garments — choreographing technology to respond to sound, movement, and crowd energy.</p>
+      </div>
+      <div class="feature-card" data-reveal data-delay="2">
+        <span class="feature-n">02</span>
+        <h3 class="feature-title">Stage Systems</h3>
+        <p class="feature-body">Built real-time performance systems that allowed garments to sync with stage lighting rigs, music BPM, and live sensor data.</p>
+      </div>
+      <div class="feature-card" data-reveal data-delay="3">
+        <span class="feature-n">03</span>
+        <h3 class="feature-title">Prototyping Pipeline</h3>
+        <p class="feature-body">Established the studio's rapid prototyping workflow — bridging physical fabrication with embedded electronics and custom firmware.</p>
+      </div>
+      <div class="feature-card" data-reveal data-delay="4">
+        <span class="feature-n">04</span>
+        <h3 class="feature-title">Creative Direction</h3>
+        <p class="feature-body">Collaborated with artists and directors to translate performance concepts into technically feasible wearable experiences.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     IMPACT STATS
+══════════════════════════════════════ -->
+<section class="section">
+  <p class="label" data-reveal>Impact</p>
+  <div class="stats-row">
+    <div class="stat-cell" data-reveal data-delay="1">
+      <p class="stat-value">12+</p>
+      <p class="stat-label">Performance pieces
+for major artists</p>
+    </div>
+    <div class="stat-cell" data-reveal data-delay="2">
+      <p class="stat-value">3</p>
+      <p class="stat-label">World tours
+outfitted</p>
+    </div>
+    <div class="stat-cell" data-reveal data-delay="3">
+      <p class="stat-value">0</p>
+      <p class="stat-label">Malfunctions
+on stage</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     PULL QUOTE
+══════════════════════════════════════ -->
+<div class="quote-wrap">
+  <div class="quote-inner">
+    <div class="quote-mark" data-reveal>"</div>
+    <blockquote data-reveal>
+      <p class="quote-text">The garment is the interface. Every seam, every LED, every sensor is a design decision that the audience feels even if they can't name it.</p>
+      <footer class="quote-attr">Joey Primiani · Studio XO, 2013</footer>
+    </blockquote>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PHILOSOPHY CLOSER
+══════════════════════════════════════ -->
+<div class="philosophy-wrap">
+  <div class="section">
+    <div class="two-col">
+      <div data-reveal>
+        <p class="label label-sm">Design Philosophy</p>
+        <div class="accent-bar"></div>
+      </div>
+      <div>
+        <h2 class="philosophy-h2" data-reveal>The body<br>as canvas.</h2>
+        <p class="philosophy-p" data-reveal data-delay="2">
+          Wearable technology only works when it disappears — when the audience sees performance, not product. At Studio XO, the design challenge was to make technology feel as natural as fabric: responsive, expressive, and invisible until it wasn't.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PREV / NEXT
+══════════════════════════════════════ -->
+<div class="prevnext">
+  <div class="prevnext-inner">
+    <a href="intuit.html">
+      <span class="pn-label">← Previous</span>
+      <span class="pn-title">Intuit</span>
+    </a>
+    <a href="superfuture.html" class="next">
+      <span class="pn-label">Next →</span>
+      <span class="pn-title">Superfuture</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  // ── Scroll reveal ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' })
+  document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el))
+
+  // ── Nav scroll background ──
+  const nav = document.querySelector('nav')
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60)
+  }, { passive: true })
+</script>
+</body>
+</html>
