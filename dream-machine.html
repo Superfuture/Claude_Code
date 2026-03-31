@@ -989,10 +989,9 @@ function extractKw(text) {
 }
 
 function getImageUrl(text) {
-  const kws = extractKw(text);
-  const q = kws.length ? kws.join(',') : 'inspiration';
-  const lock = Math.floor(Math.random() * 9000) + 1000;
-  return `https://loremflickr.com/700/700/${encodeURIComponent(q)}?lock=${lock}`;
+  const seed = [...text].reduce((a,c) => a + c.charCodeAt(0), 0) % 99999;
+  const prompt = encodeURIComponent(text + ', cinematic photography, beautiful, vivid');
+  return `https://image.pollinations.ai/prompt/${prompt}?width=700&height=700&seed=${seed}&nologo=true&model=flux`;
 }
 
 function getPortraitUrl(seed) {
@@ -1371,7 +1370,7 @@ function renderDiscoverGrid() {
       const lock = realIdx * 100 + ti * 37 + 500;
       const src = (d.isReal && dr.imageUrl)
         ? dr.imageUrl
-        : `https://loremflickr.com/300/300/${encodeURIComponent(dr.img||'dream')}?lock=${lock}`;
+        : `https://image.pollinations.ai/prompt/${encodeURIComponent((dr.text||dr.img||'dream') + ', cinematic')}?width=300&height=300&seed=${lock}&nologo=true&model=flux`;
       tiles.innerHTML += `
         <div class="dreamer-tile">
           <img src="${src}" alt="${dr.text}" loading="lazy" onerror="this.style.display='none'">
@@ -1447,7 +1446,7 @@ function renderOtherProfile(person) {
     const lock = fi * 100 + i * 41 + 200;
     const src = (person.isReal && dream.imageUrl)
       ? dream.imageUrl
-      : `https://loremflickr.com/700/700/${encodeURIComponent(dream.img||extractKw(dream.text).join(',')||'dream')}?lock=${lock}`;
+      : `https://image.pollinations.ai/prompt/${encodeURIComponent((dream.text||'dream') + ', cinematic photography, beautiful')}?width=700&height=700&seed=${lock}&nologo=true&model=flux`;
     tile.className = 'dream-tile';
     tile.style.animationDelay = `${i * 0.07}s`;
     tile.style.cursor = 'pointer';
@@ -1855,7 +1854,7 @@ async function renderDreamPage(dream, isCompleted) {
     const imgDiv = document.createElement('div');
     imgDiv.className = 'achievement-image';
     imgDiv.innerHTML = `
-      <img src="https://loremflickr.com/600/300/${encodeURIComponent(q)}?lock=${p*99+seed%50}" alt="${dream.text}" loading="lazy">
+      <img src="https://image.pollinations.ai/prompt/${encodeURIComponent(q + ', cinematic, beautiful')}?width=600&height=300&seed=${p*99+seed%50}&nologo=true&model=flux" alt="${dream.text}" loading="lazy">
       <div class="achievement-caption">${captions[p]}</div>`;
 
     const likesDiv = document.createElement('div');
