@@ -1866,9 +1866,7 @@ function showToast(msg) {
 
       hideVeil();
       const action = pendingAction; pendingAction = null;
-      const isNewSignup = localDreams.length > 0; // came from onboarding flow
-      if (action === 'profile' || isNewSignup) {
-        // After first sign-up, show profile so they can fill it out
+      if (action === 'profile') {
         renderProfile(); showScreen('screen-profile');
       } else if (dreams.length > 0) {
         showBoard();
