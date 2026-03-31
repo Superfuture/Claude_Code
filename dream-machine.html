@@ -748,7 +748,7 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
       <span class="logo-name">DreamMachine</span>
     </div>
     <div class="nav-right">
-      <div class="nav-avatar" id="nav-av-home" onclick="showProfile()" title="Your profile"></div>
+
     </div>
   </nav>
   <div class="home-body">
@@ -784,7 +784,7 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
         Share vision board
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
       </button>
-      <div class="nav-avatar" id="nav-av-board" onclick="showProfile()" title="Your profile"></div>
+
     </div>
   </nav>
   <p class="board-label" id="board-label"></p>
@@ -807,7 +807,7 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
         Share vision board
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
       </button>
-      <div class="nav-avatar" id="nav-av-discover" onclick="showProfile()" title="Your profile"></div>
+
     </div>
   </nav>
   <div class="discover-grid" id="discover-grid"></div>
@@ -822,7 +822,7 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
     </div>
     <div class="nav-right">
       <button class="btn-outline" id="other-profile-back" onclick="showDiscover()">← Discover</button>
-      <div class="nav-avatar" id="nav-av-other" onclick="showProfile()" title="Your profile"></div>
+
     </div>
   </nav>
   <div class="profile-section" id="other-profile-section"></div>
@@ -840,7 +840,7 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
     </div>
     <div class="nav-right">
       <button class="btn-outline" id="dream-back-btn" onclick="showBoard()">← My Board</button>
-      <div class="nav-avatar" id="nav-av-dream" onclick="showProfile()" title="Your profile"></div>
+
     </div>
   </nav>
   <div class="dream-page">
@@ -1155,19 +1155,7 @@ homeInput.addEventListener('keydown', async function(e) {
   await addDream(text);
   this.value = ''; this.classList.remove('typed');
   homeCursor.style.cssText = '';
-
-  // Append to home dream list
-  const list = document.getElementById('home-dream-list');
-  const item = document.createElement('div');
-  item.className = 'home-dream-item';
-  item.innerHTML = `<div class="home-dream-dot"></div><span class="home-dream-text">${text}</span>`;
-  list.appendChild(item);
-
-  // Update hint + show board button
-  document.getElementById('home-hint').innerHTML = 'Add another dream, or';
-  document.getElementById('home-see-board').classList.add('visible');
-
-  setTimeout(() => this.focus(), 60);
+  showBoard();
 });
 
 /* ══════════════════════════════════
