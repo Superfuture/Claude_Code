@@ -867,7 +867,7 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
       <span class="logo-name">DreamMachine</span>
     </div>
     <div class="nav-right">
-      <button class="btn-outline" onclick="showBoard()">← edit board</button>
+      <button class="nav-tab" onclick="showDiscover()">Discover</button>
       <button class="btn-outline" onclick="doSignOut()">Sign out</button>
     </div>
   </nav>
@@ -1130,7 +1130,10 @@ function goHome() {
   showScreen('screen-home');
   setTimeout(() => homeInput.focus(), 400);
 }
-function showBoard()    { renderBoardGrid(); showScreen('screen-board'); }
+function showBoard() {
+  if (currentUser) { renderProfile(); showScreen('screen-profile'); }
+  else { renderBoardGrid(); showScreen('screen-board'); }
+}
 function showDiscover() { renderDiscover();  showScreen('screen-discover'); }
 function showProfile() {
   if (!currentUser) {
@@ -1509,8 +1512,6 @@ function makeProfileTile(dream, i) {
   const tile = document.createElement('div');
   tile.className = 'dream-tile' + (dream.imageUrl ? '' : ' placeholder');
   tile.style.animationDelay = `${i * 0.07}s`;
-  tile.style.cursor = 'pointer';
-  tile.title = dream.completed ? 'Unmark as achieved' : 'Mark as achieved ✓';
 
   let html = '';
   if (dream.imageUrl) {
@@ -1522,24 +1523,19 @@ function makeProfileTile(dream, i) {
     img.onload = img.onerror = () => { const s = document.getElementById(sid); if (s) s.style.display='none'; };
     img.src = dream.imageUrl;
   }
-  html += `<div class="tile-check" style="opacity:${dream.completed?1:0};transition:opacity .2s" id="vtc-${dream.id}">
-    <svg viewBox="0 0 13 13" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"><polyline points="2,6.5 5,10 11,3"/></svg>
-  </div>`;
+  html += `<button class="tile-edit-btn" onclick="openEditor('${dream.id}',event)">
+    <svg viewBox="0 0 14 14" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5l2 2L4 12H2v-2z"/></svg>Edit
+  </button>`;
+  if (dream.completed) html += `<div class="tile-check"><svg viewBox="0 0 13 13"><polyline points="2,6.5 5,10 11,3"/></svg></div>`;
   html += `<div class="tile-text">${dream.text}</div>`;
   tile.innerHTML = html;
 
-  tile.addEventListener('mouseenter', () => { const tc = tile.querySelector('.tile-check'); if (tc) tc.style.opacity='1'; });
-  tile.addEventListener('mouseleave', () => { const tc = tile.querySelector('.tile-check'); if (tc) tc.style.opacity=dream.completed?'1':'0'; });
-  tile.addEventListener('click', async () => {
-    dream.completed = !dream.completed;
-    tile.title = dream.completed ? 'Unmark as achieved' : 'Mark as achieved ✓';
-    const tc = tile.querySelector('.tile-check');
-    if (tc) tc.style.opacity = dream.completed ? '1' : '0';
-    const done = dreams.filter(d => d.completed).length;
-    const statsEl = document.getElementById('profile-stats-el');
-    if (statsEl) statsEl.innerHTML = `<strong>${myFollowerCount.toLocaleString()}</strong> followers<span class="sep">·</span><strong>${myFollowingCount}</strong> following<span class="sep">·</span><strong>${done}</strong> achieved<span class="sep">·</span><strong>${dreams.length}</strong> manifesting`;
-    showToast(dream.completed ? '✓ Dream achieved!' : 'Unmarked');
-    if (currentUser) await sb.from('dreams').update({ completed: dream.completed }).eq('id', dream.id);
+  tile.style.cursor = 'pointer';
+  tile.title = 'See who shares this dream';
+  tile.addEventListener('click', e => {
+    if (e.target.closest('.tile-edit-btn')) return;
+    const idx = dreams.findIndex(d => d.id === dream.id);
+    showDreamPage(idx);
   });
   return tile;
 }
@@ -1658,7 +1654,9 @@ async function applyEdit() {
   const dataUrl = document.getElementById('editor-canvas').toDataURL('image/jpeg',0.9);
   const dream = dreams.find(d => d.id === ed.dreamId);
   if (dream) {
-    dream.imageUrl = dataUrl; renderBoardGrid(); showToast('Image updated ✓');
+    dream.imageUrl = dataUrl;
+    if (currentUser) renderProfile(); else renderBoardGrid();
+    showToast('Image updated ✓');
     if (currentUser) await sb.from('dreams').update({ image_url: dataUrl }).eq('id', dream.id);
   }
   closeEditor();
