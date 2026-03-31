@@ -1127,10 +1127,7 @@ function goHome() {
   showScreen('screen-home');
   setTimeout(() => homeInput.focus(), 400);
 }
-function showBoard() {
-  if (currentUser) { renderProfile(); showScreen('screen-profile'); }
-  else { renderBoardGrid(); showScreen('screen-board'); }
-}
+function showBoard() { renderProfile(); showScreen('screen-profile'); }
 function showDiscover() { renderDiscover();  showScreen('screen-discover'); }
 function showProfile() {
   renderProfile(); showScreen('screen-profile');
