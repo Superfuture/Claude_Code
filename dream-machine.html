@@ -280,11 +280,24 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
 /* ══════════════════════════
    DISCOVER
 ══════════════════════════ */
+.discover-sort {
+  display: flex; gap: 8px; padding: 0 48px 24px; align-items: center;
+}
+.sort-tab {
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  padding: 8px 18px; border-radius: 40px; border: 2px solid var(--mid);
+  background: #fff; color: var(--gray); cursor: pointer; transition: all .18s;
+}
+.sort-tab:hover { border-color: var(--black); color: var(--black); }
+.sort-tab.active { background: var(--black); color: #fff; border-color: var(--black); }
 .discover-grid {
   display: grid; grid-template-columns: repeat(auto-fill,minmax(340px,1fr));
-  gap: 32px; padding: 8px 48px 80px;
+  gap: 32px; padding: 0 48px 80px;
 }
-@media(max-width:620px){.discover-grid{padding:8px 24px 80px;grid-template-columns:1fr}}
+@media(max-width:620px){
+  .discover-sort { padding: 0 24px 20px; }
+  .discover-grid{padding:0 24px 80px;grid-template-columns:1fr}
+}
 .dreamer-card {
   border: 1.5px solid var(--mid); border-radius: 20px; overflow: hidden;
   transition: border-color .2s, box-shadow .2s;
@@ -340,15 +353,16 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
   font-family: var(--font); font-size: 28px; font-weight: 700; line-height: 1.2;
   border: none; outline: none; background: transparent; cursor: pointer;
   border-bottom: 1.5px dashed transparent; transition: border-color .2s;
+  max-width: 100%;
 }
-.profile-name:focus { border-bottom-color: var(--gray); cursor: text; }
+.profile-name:hover, .profile-name:focus { border-bottom-color: var(--gray); cursor: text; }
 .profile-bio-input {
   font-family: var(--font); font-size: 18px; color: var(--black);
-  border: none; outline: none; background: transparent; width: 100%;
+  border: none; outline: none; background: transparent;
   border-bottom: 1.5px dashed transparent; transition: border-color .2s;
-  margin-bottom: 8px; cursor: pointer;
+  margin-bottom: 8px; cursor: pointer; max-width: 100%; display: block;
 }
-.profile-bio-input:focus { border-bottom-color: var(--gray); cursor: text; }
+.profile-bio-input:hover, .profile-bio-input:focus { border-bottom-color: var(--gray); cursor: text; }
 .profile-stats { font-family: var(--font); font-size: 17px; color: var(--black); }
 .profile-stats strong { font-weight: 700; }
 .profile-stats .sep { color: #ccc; margin: 0 5px; }
@@ -477,10 +491,7 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
    DREAM PAGE
 ══════════════════════════ */
 .dream-page { padding: 0 48px 80px; position: relative; }
-.dream-page-rail {
-  position: absolute; left: 130px; top: 0; bottom: 0;
-  width: 1.5px; background: var(--light); pointer-events: none;
-}
+.dream-page-rail { display: none; }
 .dream-page-bar { height: 6px; background: var(--black); border-radius: 4px; margin: 0 0 32px; }
 .dream-page-title {
   font-family: var(--font); font-weight: 700;
@@ -810,6 +821,11 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
 
     </div>
   </nav>
+  <div class="discover-sort" id="discover-sort">
+    <button class="sort-tab active" onclick="setDiscoverSort('hot',this)">🔥 Hot</button>
+    <button class="sort-tab" onclick="setDiscoverSort('new',this)">✨ New</button>
+    <button class="sort-tab" onclick="setDiscoverSort('top',this)">👑 Top</button>
+  </div>
   <div class="discover-grid" id="discover-grid"></div>
 </div>
 
@@ -1247,19 +1263,42 @@ function makeBoardTile(dream, i) {
    DISCOVER
 ══════════════════════════════════ */
 const MOCK_DISCOVER = [
-  { name:'Maya Chen',   bio:'28 · Designer from NYC',       photoUrl:'https://i.pravatar.cc/100?img=47', following:false, followers:1240, following_ct:88,  dreams:[{text:'Design a typeface',img:'typography,design',completed:true},{text:'Live in Tokyo',img:'tokyo,japan',completed:false},{text:'Exhibit at MoMA',img:'museum,art',completed:false},{text:'Write a design book',img:'books,writing',completed:false},{text:'Build a creative studio',img:'studio,creative',completed:false},{text:'Speak at a conference',img:'conference,stage',completed:true}]},
-  { name:'Ravi Patel',  bio:'32 · Engineer from London',    photoUrl:'https://i.pravatar.cc/100?img=12', following:false, followers:542,  following_ct:210, dreams:[{text:'Build a startup',img:'startup,office',completed:false},{text:'Hike Patagonia',img:'patagonia,mountains',completed:true},{text:'Learn to surf',img:'surfing,ocean',completed:false},{text:'Publish open source code',img:'code,developer',completed:true},{text:'Live off the grid',img:'cabin,nature',completed:false},{text:'Climb a volcano',img:'volcano,adventure',completed:false}]},
-  { name:'Sofia Neves', bio:'25 · Writer from Lisbon',      photoUrl:'https://i.pravatar.cc/100?img=25', following:true,  followers:3100, following_ct:45,  dreams:[{text:'Publish my novel',img:'books,writing',completed:false},{text:'Road trip America',img:'roadtrip,highway',completed:true},{text:'Learn to cook',img:'cooking,kitchen',completed:false},{text:'Live by the ocean',img:'ocean,coast',completed:false},{text:'Write a screenplay',img:'cinema,script',completed:false},{text:'Spend a month in silence',img:'meditation,silence',completed:false}]},
-  { name:'James Liu',   bio:'30 · Filmmaker from LA',       photoUrl:'https://i.pravatar.cc/100?img=33', following:false, followers:890,  following_ct:130, dreams:[{text:'Direct a feature film',img:'cinema,director',completed:false},{text:'See the Northern Lights',img:'aurora,norway',completed:true},{text:'Master Italian',img:'italy,rome',completed:false},{text:'Win a film festival',img:'festival,film',completed:false},{text:'Score a film',img:'music,orchestra',completed:false},{text:'Build a production company',img:'business,studio',completed:false}]},
-  { name:'Amara Osei',  bio:'27 · Photographer from Accra', photoUrl:'https://i.pravatar.cc/100?img=9',  following:false, followers:6700, following_ct:200, dreams:[{text:'Shoot for Vogue',img:'fashion,editorial',completed:false},{text:'Safari in Kenya',img:'safari,africa',completed:true},{text:'Open a gallery',img:'gallery,art',completed:false},{text:'Photograph every continent',img:'travel,world',completed:false},{text:'Teach photography',img:'teaching,camera',completed:false},{text:'Publish a photo book',img:'books,photography',completed:false}]},
-  { name:'Lena Bauer',  bio:'31 · Chef from Berlin',        photoUrl:'https://i.pravatar.cc/100?img=44', following:false, followers:2200, following_ct:77,  dreams:[{text:'Earn a Michelin star',img:'restaurant,fine+dining',completed:false},{text:'Farm in Tuscany',img:'tuscany,farm',completed:false},{text:'Run a marathon',img:'marathon,running',completed:true},{text:'Write a cookbook',img:'cookbook,food',completed:false},{text:'Open a bakery',img:'bakery,bread',completed:false},{text:'Cook in Japan',img:'japan,food',completed:false}]},
-  { name:'Kai Nakamura', bio:'26 · Musician from Osaka',     photoUrl:'https://i.pravatar.cc/100?img=15', following:false, followers:4100, following_ct:160, dreams:[{text:'Play at Coachella',img:'coachella,festival',completed:false},{text:'Record an album in Tokyo',img:'recording,studio',completed:false},{text:'Learn to produce beats',img:'music,producer',completed:true},{text:'Score a film',img:'cinema,music',completed:false},{text:'Collaborate with idol',img:'music,collaboration',completed:false},{text:'Busk in Paris',img:'paris,street',completed:false}]},
-  { name:'Priya Sharma', bio:'29 · Architect from Mumbai',   photoUrl:'https://i.pravatar.cc/100?img=56', following:false, followers:980,  following_ct:95,  dreams:[{text:'Design a museum',img:'museum,architecture',completed:false},{text:'Live in Barcelona',img:'barcelona,architecture',completed:false},{text:'Build a tiny house',img:'tiny+house,design',completed:true},{text:'Study at the Bauhaus',img:'bauhaus,art',completed:false},{text:'See every Zaha Hadid building',img:'architecture,modern',completed:false},{text:'Publish in Dezeen',img:'design,magazine',completed:false}]},
-  { name:'Marco Rossi',  bio:'34 · Surfer from Lisbon',      photoUrl:'https://i.pravatar.cc/100?img=68', following:false, followers:1550, following_ct:42,  dreams:[{text:'Surf Pipeline in Hawaii',img:'surfing,hawaii',completed:false},{text:'Cross the Atlantic',img:'sailing,ocean',completed:false},{text:'Open a surf school',img:'surfing,school',completed:true},{text:'Dive the Great Barrier Reef',img:'reef,diving',completed:false},{text:'Live on a sailboat',img:'sailboat,ocean',completed:false},{text:'Compete in a big wave contest',img:'surfing,waves',completed:false}]},
-  { name:'Zoe Williams', bio:'23 · Artist from Melbourne',   photoUrl:'https://i.pravatar.cc/100?img=38', following:false, followers:7200, following_ct:310, dreams:[{text:'Show at the Tate Modern',img:'tate,gallery',completed:false},{text:'Paint a mural in NYC',img:'mural,newyork',completed:true},{text:'Artist residency in Iceland',img:'iceland,art',completed:false},{text:'Collaborate with a fashion house',img:'fashion,art',completed:false},{text:'Learn glassblowing',img:'glassblowing,craft',completed:false},{text:'Build a studio in the woods',img:'studio,forest',completed:false}]},
+  { name:'Maya Chen',   bio:'28 · Designer from NYC',       photoUrl:'https://i.pravatar.cc/100?img=47', following:false, followers:1240, following_ct:88,  createdAt:Date.now()-86400000*10,  dreams:[{text:'Design a typeface',img:'typography,design',completed:true},{text:'Live in Tokyo',img:'tokyo,japan',completed:false},{text:'Exhibit at MoMA',img:'museum,art',completed:false},{text:'Write a design book',img:'books,writing',completed:false},{text:'Build a creative studio',img:'studio,creative',completed:false},{text:'Speak at a conference',img:'conference,stage',completed:true}]},
+  { name:'Ravi Patel',  bio:'32 · Engineer from London',    photoUrl:'https://i.pravatar.cc/100?img=12', following:false, followers:542,  following_ct:210, createdAt:Date.now()-86400000*7,   dreams:[{text:'Build a startup',img:'startup,office',completed:false},{text:'Hike Patagonia',img:'patagonia,mountains',completed:true},{text:'Learn to surf',img:'surfing,ocean',completed:false},{text:'Publish open source code',img:'code,developer',completed:true},{text:'Live off the grid',img:'cabin,nature',completed:false},{text:'Climb a volcano',img:'volcano,adventure',completed:false}]},
+  { name:'Sofia Neves', bio:'25 · Writer from Lisbon',      photoUrl:'https://i.pravatar.cc/100?img=25', following:true,  followers:3100, following_ct:45,  createdAt:Date.now()-86400000*5,   dreams:[{text:'Publish my novel',img:'books,writing',completed:false},{text:'Road trip America',img:'roadtrip,highway',completed:true},{text:'Learn to cook',img:'cooking,kitchen',completed:false},{text:'Live by the ocean',img:'ocean,coast',completed:false},{text:'Write a screenplay',img:'cinema,script',completed:false},{text:'Spend a month in silence',img:'meditation,silence',completed:false}]},
+  { name:'James Liu',   bio:'30 · Filmmaker from LA',       photoUrl:'https://i.pravatar.cc/100?img=33', following:false, followers:890,  following_ct:130, createdAt:Date.now()-86400000*14,  dreams:[{text:'Direct a feature film',img:'cinema,director',completed:false},{text:'See the Northern Lights',img:'aurora,norway',completed:true},{text:'Master Italian',img:'italy,rome',completed:false},{text:'Win a film festival',img:'festival,film',completed:false},{text:'Score a film',img:'music,orchestra',completed:false},{text:'Build a production company',img:'business,studio',completed:false}]},
+  { name:'Amara Osei',  bio:'27 · Photographer from Accra', photoUrl:'https://i.pravatar.cc/100?img=9',  following:false, followers:6700, following_ct:200, createdAt:Date.now()-86400000*4,   dreams:[{text:'Shoot for Vogue',img:'fashion,editorial',completed:false},{text:'Safari in Kenya',img:'safari,africa',completed:true},{text:'Open a gallery',img:'gallery,art',completed:false},{text:'Photograph every continent',img:'travel,world',completed:false},{text:'Teach photography',img:'teaching,camera',completed:false},{text:'Publish a photo book',img:'books,photography',completed:false}]},
+  { name:'Lena Bauer',  bio:'31 · Chef from Berlin',        photoUrl:'https://i.pravatar.cc/100?img=44', following:false, followers:2200, following_ct:77,  createdAt:Date.now()-86400000*6,   dreams:[{text:'Earn a Michelin star',img:'restaurant,fine+dining',completed:false},{text:'Farm in Tuscany',img:'tuscany,farm',completed:false},{text:'Run a marathon',img:'marathon,running',completed:true},{text:'Write a cookbook',img:'cookbook,food',completed:false},{text:'Open a bakery',img:'bakery,bread',completed:false},{text:'Cook in Japan',img:'japan,food',completed:false}]},
+  { name:'Kai Nakamura', bio:'26 · Musician from Osaka',     photoUrl:'https://i.pravatar.cc/100?img=15', following:false, followers:4100, following_ct:160, createdAt:Date.now()-86400000*8,   dreams:[{text:'Play at Coachella',img:'coachella,festival',completed:false},{text:'Record an album in Tokyo',img:'recording,studio',completed:false},{text:'Learn to produce beats',img:'music,producer',completed:true},{text:'Score a film',img:'cinema,music',completed:false},{text:'Collaborate with idol',img:'music,collaboration',completed:false},{text:'Busk in Paris',img:'paris,street',completed:false}]},
+  { name:'Priya Sharma', bio:'29 · Architect from Mumbai',   photoUrl:'https://i.pravatar.cc/100?img=56', following:false, followers:980,  following_ct:95,  createdAt:Date.now()-86400000*12,  dreams:[{text:'Design a museum',img:'museum,architecture',completed:false},{text:'Live in Barcelona',img:'barcelona,architecture',completed:false},{text:'Build a tiny house',img:'tiny+house,design',completed:true},{text:'Study at the Bauhaus',img:'bauhaus,art',completed:false},{text:'See every Zaha Hadid building',img:'architecture,modern',completed:false},{text:'Publish in Dezeen',img:'design,magazine',completed:false}]},
+  { name:'Marco Rossi',  bio:'34 · Surfer from Lisbon',      photoUrl:'https://i.pravatar.cc/100?img=68', following:false, followers:1550, following_ct:42,  createdAt:Date.now()-86400000*9,   dreams:[{text:'Surf Pipeline in Hawaii',img:'surfing,hawaii',completed:false},{text:'Cross the Atlantic',img:'sailing,ocean',completed:false},{text:'Open a surf school',img:'surfing,school',completed:true},{text:'Dive the Great Barrier Reef',img:'reef,diving',completed:false},{text:'Live on a sailboat',img:'sailboat,ocean',completed:false},{text:'Compete in a big wave contest',img:'surfing,waves',completed:false}]},
+  { name:'Zoe Williams', bio:'23 · Artist from Melbourne',   photoUrl:'https://i.pravatar.cc/100?img=38', following:false, followers:7200, following_ct:310, createdAt:Date.now()-86400000*2,   dreams:[{text:'Show at the Tate Modern',img:'tate,gallery',completed:false},{text:'Paint a mural in NYC',img:'mural,newyork',completed:true},{text:'Artist residency in Iceland',img:'iceland,art',completed:false},{text:'Collaborate with a fashion house',img:'fashion,art',completed:false},{text:'Learn glassblowing',img:'glassblowing,craft',completed:false},{text:'Build a studio in the woods',img:'studio,forest',completed:false}]},
+  { name:'Diego Herrera',bio:'28 · Dancer from Buenos Aires', photoUrl:'https://i.pravatar.cc/100?img=52', following:false, followers:3300, following_ct:180, createdAt:Date.now()-86400000*0.5, dreams:[{text:'Perform at Lincoln Center',img:'ballet,stage',completed:false},{text:'Tour through Europe',img:'dance,europe',completed:false},{text:'Open a dance school',img:'dance,school',completed:true},{text:'Choreograph a music video',img:'choreography,music',completed:false},{text:'Learn flamenco in Seville',img:'flamenco,spain',completed:false},{text:'Collaborate with a runway show',img:'fashion,runway',completed:false}]},
+  { name:'Nadia Okonkwo',bio:'30 · Scientist from Lagos',     photoUrl:'https://i.pravatar.cc/100?img=20', following:false, followers:1800, following_ct:65,  createdAt:Date.now()-86400000*1,   dreams:[{text:'Publish in Nature',img:'science,research',completed:false},{text:'Give a TED Talk',img:'tedtalk,stage',completed:false},{text:'Travel to Antarctica',img:'antarctica,ice',completed:true},{text:'Start a biotech company',img:'biotech,lab',completed:false},{text:'Win a science prize',img:'award,science',completed:false},{text:'Build a lab in Africa',img:'africa,laboratory',completed:false}]},
+  { name:'Sam Torres',   bio:'27 · Skater from LA',           photoUrl:'https://i.pravatar.cc/100?img=60', following:false, followers:9100, following_ct:400, createdAt:Date.now()-86400000*3,   dreams:[{text:'Skate the X Games',img:'skateboarding,xgames',completed:false},{text:'Design a shoe collab',img:'sneakers,design',completed:true},{text:'Film a skate video',img:'skateboarding,film',completed:false},{text:'Open a skate park',img:'skatepark,community',completed:false},{text:'Travel to skate Tokyo',img:'tokyo,skateboarding',completed:false},{text:'Start a streetwear brand',img:'streetwear,fashion',completed:false}]},
+  { name:'Elif Yıldız',  bio:'26 · Poet from Istanbul',       photoUrl:'https://i.pravatar.cc/100?img=29', following:false, followers:2600, following_ct:120, createdAt:Date.now()-86400000*0.2, dreams:[{text:'Publish a poetry collection',img:'poetry,books',completed:false},{text:'Perform at a literary festival',img:'festival,literature',completed:true},{text:'Write a play',img:'theatre,stage',completed:false},{text:'Translate my work into 5 languages',img:'translation,books',completed:false},{text:'Live in a lighthouse',img:'lighthouse,ocean',completed:false},{text:'Build a writers retreat',img:'cabin,writing',completed:false}]},
 ];
 
 let discoverProfiles = [...MOCK_DISCOVER];
+let discoverSort = 'hot';
+
+function setDiscoverSort(sort, btn) {
+  discoverSort = sort;
+  document.querySelectorAll('.sort-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDiscoverGrid();
+}
+
+function sortedProfiles() {
+  const p = [...discoverProfiles];
+  if (discoverSort === 'new') return p.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+  if (discoverSort === 'top') return p.sort((a,b) => (b.followers||0) - (a.followers||0));
+  // hot = followers weighted by recency
+  return p.sort((a,b) => {
+    const age = t => (Date.now() - (t.createdAt||0)) / 86400000 + 1;
+    return (b.followers||0) / age(b) - (a.followers||0) / age(a);
+  });
+}
 
 async function renderDiscover() {
   // Merge in real Supabase users
@@ -1289,11 +1328,16 @@ async function renderDiscover() {
     } catch(e) { /* use mock */ }
   }
 
+  renderDiscoverGrid();
+}
+
+function renderDiscoverGrid() {
   const grid = document.getElementById('discover-grid');
   grid.innerHTML = '';
 
-  discoverProfiles.forEach((d, di) => {
+  sortedProfiles().forEach((d, di) => {
     if (!d.dreams || d.dreams.length === 0) return;
+    const realIdx = discoverProfiles.indexOf(d);
     const card = document.createElement('div');
     card.className = 'dreamer-card';
 
@@ -1304,7 +1348,7 @@ async function renderDiscover() {
     const header = document.createElement('div');
     header.className = 'dreamer-card-header';
     header.style.cursor = 'pointer';
-    header.onclick = () => showOtherProfile(di);
+    header.onclick = () => showOtherProfile(realIdx);
     header.innerHTML = `
       ${avHtml}
       <div>
@@ -1313,7 +1357,7 @@ async function renderDiscover() {
       </div>
       <div class="dreamer-follow" onclick="event.stopPropagation()">
         <button class="btn-filled" style="${d.following?'background:#22c55e;border-color:#22c55e':''}"
-          onclick="toggleDiscoverFollow(this,${di})">
+          onclick="toggleDiscoverFollow(this,${realIdx})">
           ${d.following ? '✓ Following' : '+ Follow'}
         </button>
       </div>`;
@@ -1322,9 +1366,9 @@ async function renderDiscover() {
     const tiles = document.createElement('div');
     tiles.className = 'dreamer-tiles';
     tiles.style.cursor = 'pointer';
-    tiles.onclick = () => showOtherProfile(di);
+    tiles.onclick = () => showOtherProfile(realIdx);
     d.dreams.slice(0,3).forEach((dr, ti) => {
-      const lock = di * 100 + ti * 37 + 500;
+      const lock = realIdx * 100 + ti * 37 + 500;
       const src = (d.isReal && dr.imageUrl)
         ? dr.imageUrl
         : `https://loremflickr.com/300/300/${encodeURIComponent(dr.img||'dream')}?lock=${lock}`;
