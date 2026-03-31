@@ -561,6 +561,90 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
   .dreamer-av-more{width:52px;height:52px;font-size:12px}
 }
 
+/* ══════════════════════════
+   MOBILE RESPONSIVE
+══════════════════════════ */
+@media(max-width:768px){
+  /* Nav */
+  .nav { padding: 18px 20px 14px; }
+  .logo-name { font-size: 17px; }
+  .logo-circle { width: 32px; height: 32px; }
+  .nav-right { gap: 6px; }
+  .btn-filled, .btn-outline { padding: 7px 12px; font-size: 13px; }
+  .btn-filled svg { display: none; }
+  .nav-avatar { width: 32px; height: 32px; font-size: 13px; }
+
+  /* Home */
+  .left-rail { display: none; }
+  .input-zone { padding: 0 20px; }
+  .dream-input { font-size: clamp(28px,8vw,44px); }
+  .cursor-bar { height: 38px; }
+
+  /* Auth */
+  .auth-card { padding: 0 28px; }
+  .auth-title { font-size: clamp(32px,8vw,46px); }
+  .auth-subtitle { font-size: 15px; margin-bottom: 28px; }
+  .auth-input { font-size: 16px; }
+  .auth-submit { font-size: 16px; padding: 14px; }
+
+  /* Board */
+  .board-label { padding: 4px 20px 0; font-size: clamp(20px,5vw,32px); }
+  .board-grid { padding: 16px 20px 24px; gap: 10px; grid-template-columns: repeat(2,1fr); }
+  .board-bottom { padding: 0 20px 60px; }
+  .tile-text { font-size: 13px; bottom: 12px; left: 12px; right: 12px; }
+  .tile-check { width: 26px; height: 26px; top: 10px; right: 10px; }
+  .tile-check svg { width: 10px; height: 10px; }
+
+  /* Profile */
+  .profile-section { padding: 0 20px 20px; gap: 16px; }
+  .profile-divider { margin: 0 20px 20px; }
+  .profile-photo-wrap { width: 80px; height: 80px; font-size: 30px; }
+  .profile-name { font-size: 20px; }
+  .profile-bio-input { font-size: 14px; }
+  .profile-stats { font-size: 13px; }
+  .vision-grid { padding: 0 20px 80px; gap: 10px; grid-template-columns: repeat(2,1fr); }
+  .profile-actions { margin-left: 0; }
+
+  /* Discover */
+  .discover-grid { padding: 8px 20px 80px; gap: 20px; }
+
+  /* Dream page */
+  .dream-page { padding: 0 20px 80px; }
+  .dream-page-title { font-size: clamp(32px,9vw,54px); }
+  .dream-sharers-count, .made-real-count { font-size: 17px; }
+  .dreamer-av { width: 48px; height: 48px; }
+  .dreamer-av-more { width: 48px; height: 48px; font-size: 12px; }
+  .achievement-post { flex-wrap: wrap; }
+  .achievement-avatar { width: 56px; height: 56px; }
+  .achievement-name { width: 56px; font-size: 11px; padding: 6px 8px 0; }
+  .achievement-image { min-height: 140px; }
+
+  /* Other profile */
+  .other-profile-photo { width: 80px; height: 80px; font-size: 32px; }
+  .other-profile-name { font-size: 20px; }
+  .other-profile-bio { font-size: 14px; }
+  .other-profile-stats { font-size: 13px; }
+  .vision-grid#other-vision-grid { padding: 0 20px 80px; }
+
+  /* Editor modal */
+  .editor-body { flex-direction: column; }
+  .editor-canvas-bg, #editor-canvas { width: 280px; height: 280px; }
+  .editor-controls { width: 100%; border-left: none; border-top: 1.5px solid var(--mid); flex-direction: row; flex-wrap: wrap; gap: 12px; padding: 14px 16px; }
+  .editor-controls > div { flex: 1; min-width: 120px; }
+
+  /* Overlay */
+  .overlay-inner { padding: 0 20px; }
+  .overlay-close { right: 20px; }
+}
+
+@media(max-width:420px){
+  .board-grid { grid-template-columns: 1fr; }
+  .vision-grid { grid-template-columns: 1fr; }
+  .vision-grid#other-vision-grid { grid-template-columns: 1fr; }
+  /* Hide discover button in board nav on very small screens */
+  #screen-board .nav-right .nav-tab { display: none; }
+}
+
 /* ── Toast ── */
 .toast {
   position: fixed; bottom: 52px; left: 50%;
@@ -847,6 +931,7 @@ let dreams = [];
 let profile = { name: 'Dreamer', bio: 'Dreamer from Earth', photoSrc: null };
 let myFollowerCount = 0;
 let myFollowingCount = 0;
+let pendingDream = null; // dream typed before auth
 
 /* ══════════════════════════════════
    IMAGE HELPERS
@@ -1015,6 +1100,17 @@ homeInput.addEventListener('keydown', async function(e) {
   if (e.key !== 'Enter') return;
   const text = this.value.trim();
   if (!text) { showToast('Type your dream first'); return; }
+
+  if (!currentUser) {
+    pendingDream = text;
+    setAuthMode('signup');
+    document.getElementById('auth-title').textContent = 'Save your dream.';
+    document.getElementById('auth-subtitle').textContent = `Create an account to manifest "${text}" and connect with others who share it.`;
+    showScreen('screen-auth');
+    setTimeout(() => document.getElementById('auth-name').focus(), 400);
+    return;
+  }
+
   await addDream(text);
   this.value = ''; this.classList.remove('typed');
   homeCursor.style.cssText = '';
@@ -1698,13 +1794,23 @@ function showToast(msg) {
       currentUser = session.user;
       await loadUserData();
       hideVeil();
-      if (dreams.length > 0) showBoard();
-      else { showScreen('screen-home'); setTimeout(() => homeInput.focus(), 400); }
+      if (pendingDream) {
+        const text = pendingDream; pendingDream = null;
+        await addDream(text);
+        homeInput.value = ''; homeInput.classList.remove('typed');
+        homeCursor.style.cssText = '';
+        showBoard();
+      } else if (dreams.length > 0) {
+        showBoard();
+      } else {
+        showScreen('screen-home'); setTimeout(() => homeInput.focus(), 400);
+      }
     } else if (event === 'SIGNED_OUT') {
       currentUser = null; dreams = [];
       profile = { name:'Dreamer', bio:'Dreamer from Earth', photoSrc:null };
-      showScreen('screen-auth');
+      showScreen('screen-home');
       hideVeil();
+      setTimeout(() => homeInput.focus(), 400);
     }
   });
 
@@ -1716,8 +1822,9 @@ function showToast(msg) {
     if (dreams.length > 0) showBoard();
     else { showScreen('screen-home'); setTimeout(() => homeInput.focus(), 400); }
   } else {
-    showScreen('screen-auth');
+    showScreen('screen-home');
     hideVeil();
+    setTimeout(() => homeInput.focus(), 400);
   }
 
   // Auth keyboard shortcuts
