@@ -1243,7 +1243,7 @@ function makeBoardTile(dream, i) {
     img.src = dream.imageUrl;
   }
   html += `<button class="tile-edit-btn" onclick="openEditor('${dream.id}',event)">
-    <svg viewBox="0 0 14 14" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5l2 2L4 12H2v-2z"/></svg>Edit
+    <svg viewBox="0 0 14 14" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5l2 2L4 12H2v-2z"/></svg>Edit image
   </button>`;
   if (dream.completed) html += `<div class="tile-check"><svg viewBox="0 0 13 13"><polyline points="2,6.5 5,10 11,3"/></svg></div>`;
   html += `<div class="tile-text">${dream.text}</div>`;
@@ -1584,7 +1584,7 @@ function makeProfileTile(dream, i) {
     img.src = dream.imageUrl;
   }
   html += `<button class="tile-edit-btn" onclick="openEditor('${dream.id}',event)">
-    <svg viewBox="0 0 14 14" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5l2 2L4 12H2v-2z"/></svg>Edit
+    <svg viewBox="0 0 14 14" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5l2 2L4 12H2v-2z"/></svg>Edit image
   </button>`;
   if (dream.completed) html += `<div class="tile-check"><svg viewBox="0 0 13 13"><polyline points="2,6.5 5,10 11,3"/></svg></div>`;
   html += `<div class="tile-text">${dream.text}</div>`;
