@@ -1389,6 +1389,12 @@ function toggleDiscoverFollow(btn, idx) {
   btn.textContent = f ? '✓ Following' : '+ Follow';
   btn.style.cssText = f ? 'background:#22c55e;border-color:#22c55e' : '';
   showToast(f ? `Following ${discoverProfiles[idx].name}` : `Unfollowed ${discoverProfiles[idx].name}`);
+  myFollowingCount = Math.max(0, myFollowingCount + (f ? 1 : -1));
+  const statsEl = document.getElementById('profile-stats-el');
+  if (statsEl) {
+    const done = dreams.filter(d => d.completed).length;
+    statsEl.innerHTML = `<strong>${myFollowerCount.toLocaleString()}</strong> followers<span class="sep">·</span><strong>${myFollowingCount}</strong> following<span class="sep">·</span><strong>${done}</strong> achieved<span class="sep">·</span><strong>${dreams.length}</strong> manifesting`;
+  }
   if (currentUser && discoverProfiles[idx].id) {
     if (f) sb.from('follows').insert({ follower_id: currentUser.id, following_id: discoverProfiles[idx].id }).then(()=>{});
     else   sb.from('follows').delete().eq('follower_id', currentUser.id).eq('following_id', discoverProfiles[idx].id).then(()=>{});
