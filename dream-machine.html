@@ -998,18 +998,21 @@ function getImageUrl(text) {
 }
 
 async function fetchPexelsImage(text) {
-  const kw = extractKw(text).slice(0,3).join(' ') || text;
   const seed = [...text].reduce((a,c) => a + c.charCodeAt(0), 0);
-  try {
-    const res = await fetch(
-      `https://api.pexels.com/v1/search?query=${encodeURIComponent(kw)}&per_page=10&page=${(seed%4)+1}&orientation=square`,
-      { headers: { Authorization: PEXELS_KEY } }
-    );
-    const data = await res.json();
-    if (data.photos && data.photos.length > 0) {
-      return data.photos[seed % data.photos.length].src.large;
-    }
-  } catch(e) {}
+  // Try full dream text first, fall back to keywords
+  const queries = [text, extractKw(text).join(' ')].filter(Boolean);
+  for (const q of queries) {
+    try {
+      const res = await fetch(
+        `https://api.pexels.com/v1/search?query=${encodeURIComponent(q)}&per_page=15&page=1&orientation=landscape`,
+        { headers: { Authorization: PEXELS_KEY } }
+      );
+      const data = await res.json();
+      if (data.photos && data.photos.length > 0) {
+        return data.photos[seed % data.photos.length].src.large2x;
+      }
+    } catch(e) {}
+  }
   return null;
 }
 
