@@ -866,10 +866,7 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
       <div class="logo-circle"></div>
       <span class="logo-name">DreamMachine</span>
     </div>
-    <div class="nav-right">
-      <button class="nav-tab" onclick="showDiscover()">Discover</button>
-      <button class="btn-outline" onclick="doSignOut()">Sign out</button>
-    </div>
+    <div class="nav-right" id="profile-nav-right"></div>
   </nav>
   <div class="profile-section" id="profile-section"></div>
   <div class="profile-divider"></div>
@@ -1136,16 +1133,16 @@ function showBoard() {
 }
 function showDiscover() { renderDiscover();  showScreen('screen-discover'); }
 function showProfile() {
-  if (!currentUser) {
-    pendingAction = 'profile';
-    setAuthMode('signup');
-    document.getElementById('auth-title').textContent = 'Save your vision board.';
-    document.getElementById('auth-subtitle').textContent = 'Create an account to keep your dreams and share your board with the world.';
-    showScreen('screen-auth');
-    setTimeout(() => document.getElementById('auth-name').focus(), 400);
-    return;
-  }
   renderProfile(); showScreen('screen-profile');
+}
+
+function triggerShareSignup() {
+  pendingAction = 'profile';
+  setAuthMode('signup');
+  document.getElementById('auth-title').textContent = 'Share your vision board.';
+  document.getElementById('auth-subtitle').textContent = 'Create an account to save your dreams and share your board with the world.';
+  showScreen('screen-auth');
+  setTimeout(() => document.getElementById('auth-name').focus(), 400);
 }
 
 /* ══════════════════════════════════
@@ -1167,7 +1164,7 @@ homeInput.addEventListener('keydown', async function(e) {
   await addDream(text);
   this.value = ''; this.classList.remove('typed');
   homeCursor.style.cssText = '';
-  showBoard();
+  showProfile();
 });
 
 /* ══════════════════════════════════
@@ -1250,12 +1247,12 @@ function makeBoardTile(dream, i) {
    DISCOVER
 ══════════════════════════════════ */
 const MOCK_DISCOVER = [
-  { name:'Maya Chen',   bio:'28 · Designer from NYC',       emoji:'🌸', following:false, followers:1240, following_ct:88,  dreams:[{text:'Design a typeface',img:'typography,design',completed:true},{text:'Live in Tokyo',img:'tokyo,japan',completed:false},{text:'Exhibit at MoMA',img:'museum,art',completed:false},{text:'Write a design book',img:'books,writing',completed:false},{text:'Build a creative studio',img:'studio,creative',completed:false},{text:'Speak at a conference',img:'conference,stage',completed:true}]},
-  { name:'Ravi Patel',  bio:'32 · Engineer from London',    emoji:'⚡', following:false, followers:542,  following_ct:210, dreams:[{text:'Build a startup',img:'startup,office',completed:false},{text:'Hike Patagonia',img:'patagonia,mountains',completed:true},{text:'Learn to surf',img:'surfing,ocean',completed:false},{text:'Publish open source code',img:'code,developer',completed:true},{text:'Live off the grid',img:'cabin,nature',completed:false},{text:'Climb a volcano',img:'volcano,adventure',completed:false}]},
-  { name:'Sofia Neves', bio:'25 · Writer from Lisbon',      emoji:'🌊', following:true,  followers:3100, following_ct:45,  dreams:[{text:'Publish my novel',img:'books,writing',completed:false},{text:'Road trip America',img:'roadtrip,highway',completed:true},{text:'Learn to cook',img:'cooking,kitchen',completed:false},{text:'Live by the ocean',img:'ocean,coast',completed:false},{text:'Write a screenplay',img:'cinema,script',completed:false},{text:'Spend a month in silence',img:'meditation,silence',completed:false}]},
-  { name:'James Liu',   bio:'30 · Filmmaker from LA',       emoji:'🎬', following:false, followers:890,  following_ct:130, dreams:[{text:'Direct a feature film',img:'cinema,director',completed:false},{text:'See the Northern Lights',img:'aurora,norway',completed:true},{text:'Master Italian',img:'italy,rome',completed:false},{text:'Win a film festival',img:'festival,film',completed:false},{text:'Score a film',img:'music,orchestra',completed:false},{text:'Build a production company',img:'business,studio',completed:false}]},
-  { name:'Amara Osei',  bio:'27 · Photographer from Accra', emoji:'📷', following:false, followers:6700, following_ct:200, dreams:[{text:'Shoot for Vogue',img:'fashion,editorial',completed:false},{text:'Safari in Kenya',img:'safari,africa',completed:true},{text:'Open a gallery',img:'gallery,art',completed:false},{text:'Photograph every continent',img:'travel,world',completed:false},{text:'Teach photography',img:'teaching,camera',completed:false},{text:'Publish a photo book',img:'books,photography',completed:false}]},
-  { name:'Lena Bauer',  bio:'31 · Chef from Berlin',        emoji:'🍳', following:false, followers:2200, following_ct:77,  dreams:[{text:'Earn a Michelin star',img:'restaurant,fine+dining',completed:false},{text:'Farm in Tuscany',img:'tuscany,farm',completed:false},{text:'Run a marathon',img:'marathon,running',completed:true},{text:'Write a cookbook',img:'cookbook,food',completed:false},{text:'Open a bakery',img:'bakery,bread',completed:false},{text:'Cook in Japan',img:'japan,food',completed:false}]},
+  { name:'Maya Chen',   bio:'28 · Designer from NYC',       photoUrl:'https://i.pravatar.cc/100?img=47', following:false, followers:1240, following_ct:88,  dreams:[{text:'Design a typeface',img:'typography,design',completed:true},{text:'Live in Tokyo',img:'tokyo,japan',completed:false},{text:'Exhibit at MoMA',img:'museum,art',completed:false},{text:'Write a design book',img:'books,writing',completed:false},{text:'Build a creative studio',img:'studio,creative',completed:false},{text:'Speak at a conference',img:'conference,stage',completed:true}]},
+  { name:'Ravi Patel',  bio:'32 · Engineer from London',    photoUrl:'https://i.pravatar.cc/100?img=12', following:false, followers:542,  following_ct:210, dreams:[{text:'Build a startup',img:'startup,office',completed:false},{text:'Hike Patagonia',img:'patagonia,mountains',completed:true},{text:'Learn to surf',img:'surfing,ocean',completed:false},{text:'Publish open source code',img:'code,developer',completed:true},{text:'Live off the grid',img:'cabin,nature',completed:false},{text:'Climb a volcano',img:'volcano,adventure',completed:false}]},
+  { name:'Sofia Neves', bio:'25 · Writer from Lisbon',      photoUrl:'https://i.pravatar.cc/100?img=25', following:true,  followers:3100, following_ct:45,  dreams:[{text:'Publish my novel',img:'books,writing',completed:false},{text:'Road trip America',img:'roadtrip,highway',completed:true},{text:'Learn to cook',img:'cooking,kitchen',completed:false},{text:'Live by the ocean',img:'ocean,coast',completed:false},{text:'Write a screenplay',img:'cinema,script',completed:false},{text:'Spend a month in silence',img:'meditation,silence',completed:false}]},
+  { name:'James Liu',   bio:'30 · Filmmaker from LA',       photoUrl:'https://i.pravatar.cc/100?img=33', following:false, followers:890,  following_ct:130, dreams:[{text:'Direct a feature film',img:'cinema,director',completed:false},{text:'See the Northern Lights',img:'aurora,norway',completed:true},{text:'Master Italian',img:'italy,rome',completed:false},{text:'Win a film festival',img:'festival,film',completed:false},{text:'Score a film',img:'music,orchestra',completed:false},{text:'Build a production company',img:'business,studio',completed:false}]},
+  { name:'Amara Osei',  bio:'27 · Photographer from Accra', photoUrl:'https://i.pravatar.cc/100?img=9',  following:false, followers:6700, following_ct:200, dreams:[{text:'Shoot for Vogue',img:'fashion,editorial',completed:false},{text:'Safari in Kenya',img:'safari,africa',completed:true},{text:'Open a gallery',img:'gallery,art',completed:false},{text:'Photograph every continent',img:'travel,world',completed:false},{text:'Teach photography',img:'teaching,camera',completed:false},{text:'Publish a photo book',img:'books,photography',completed:false}]},
+  { name:'Lena Bauer',  bio:'31 · Chef from Berlin',        photoUrl:'https://i.pravatar.cc/100?img=44', following:false, followers:2200, following_ct:77,  dreams:[{text:'Earn a Michelin star',img:'restaurant,fine+dining',completed:false},{text:'Farm in Tuscany',img:'tuscany,farm',completed:false},{text:'Run a marathon',img:'marathon,running',completed:true},{text:'Write a cookbook',img:'cookbook,food',completed:false},{text:'Open a bakery',img:'bakery,bread',completed:false},{text:'Cook in Japan',img:'japan,food',completed:false}]},
 ];
 
 let discoverProfiles = [...MOCK_DISCOVER];
@@ -1448,6 +1445,20 @@ function scheduleProfileSave() {
 }
 
 function renderProfile() {
+  // Update nav based on auth state
+  const navRight = document.getElementById('profile-nav-right');
+  if (currentUser) {
+    navRight.innerHTML = `
+      <button class="nav-tab" onclick="showDiscover()">Discover</button>
+      <button class="btn-outline" onclick="doSignOut()">Sign out</button>`;
+  } else {
+    navRight.innerHTML = `
+      <button class="btn-filled" onclick="triggerShareSignup()">
+        Share vision board
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </button>`;
+  }
+
   const section = document.getElementById('profile-section');
   const done    = dreams.filter(d => d.completed).length;
 
@@ -1480,10 +1491,16 @@ function renderProfile() {
       </div>
     </div>
     <div class="profile-actions">
-      <button class="btn-filled" onclick="copyShareLink()">
-        Share board
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
-      </button>
+      ${currentUser
+        ? `<button class="btn-filled" onclick="copyShareLink()">
+            Share board
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+           </button>`
+        : `<button class="btn-filled" onclick="triggerShareSignup()" style="background:var(--black)">
+            Save &amp; share board
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+           </button>`
+      }
     </div>`;
 
   const vgrid = document.getElementById('vision-grid');
