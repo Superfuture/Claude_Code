@@ -1453,6 +1453,7 @@ function renderProfile() {
       <button class="btn-outline" onclick="doSignOut()">Sign out</button>`;
   } else {
     navRight.innerHTML = `
+      <button class="nav-tab" onclick="showDiscover()">Discover</button>
       <button class="btn-filled" onclick="triggerShareSignup()">
         Share vision board
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
@@ -1490,18 +1491,12 @@ function renderProfile() {
         <strong>${dreams.length}</strong> manifesting
       </div>
     </div>
-    <div class="profile-actions">
-      ${currentUser
-        ? `<button class="btn-filled" onclick="copyShareLink()">
-            Share board
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
-           </button>`
-        : `<button class="btn-filled" onclick="triggerShareSignup()" style="background:var(--black)">
-            Save &amp; share board
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
-           </button>`
-      }
-    </div>`;
+    ${currentUser ? `<div class="profile-actions">
+      <button class="btn-filled" onclick="copyShareLink()">
+        Share board
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
+      </button>
+    </div>` : ''}`;
 
   const vgrid = document.getElementById('vision-grid');
   vgrid.innerHTML = '';
