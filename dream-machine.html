@@ -781,7 +781,7 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
     <div class="nav-right">
       <button class="nav-tab" onclick="showDiscover()">Discover</button>
       <button class="btn-filled" onclick="showProfile()">
-        Share vision board
+        Save vision board
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
       </button>
 
@@ -804,7 +804,7 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
     <div class="nav-right">
       <button class="nav-tab" onclick="showBoard()">My Board</button>
       <button class="btn-filled" onclick="showProfile()">
-        Share vision board
+        Save vision board
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
       </button>
 
@@ -1139,7 +1139,7 @@ function showProfile() {
 function triggerShareSignup() {
   pendingAction = 'profile';
   setAuthMode('signup');
-  document.getElementById('auth-title').textContent = 'Share your vision board.';
+  document.getElementById('auth-title').textContent = 'Save your vision board.';
   document.getElementById('auth-subtitle').textContent = 'Create an account to save your dreams and share your board with the world.';
   showScreen('screen-auth');
   setTimeout(() => document.getElementById('auth-name').focus(), 400);
@@ -1455,7 +1455,7 @@ function renderProfile() {
     navRight.innerHTML = `
       <button class="nav-tab" onclick="showDiscover()">Discover</button>
       <button class="btn-filled" onclick="triggerShareSignup()">
-        Share vision board
+        Save vision board
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6h8M6 2l4 4-4 4"/></svg>
       </button>`;
   }
