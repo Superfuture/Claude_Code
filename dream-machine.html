@@ -931,7 +931,7 @@ let dreams = [];
 let profile = { name: 'Dreamer', bio: 'Dreamer from Earth', photoSrc: null };
 let myFollowerCount = 0;
 let myFollowingCount = 0;
-let pendingDream = null; // dream typed before auth
+let pendingAction = null; // action to resume after auth ('profile')
 
 /* ══════════════════════════════════
    IMAGE HELPERS
@@ -1082,7 +1082,18 @@ function showScreen(id) {
 function goHome()       { showScreen('screen-home'); setTimeout(() => homeInput.focus(), 400); }
 function showBoard()    { renderBoardGrid(); showScreen('screen-board'); }
 function showDiscover() { renderDiscover();  showScreen('screen-discover'); }
-function showProfile()  { renderProfile();   showScreen('screen-profile'); }
+function showProfile() {
+  if (!currentUser) {
+    pendingAction = 'profile';
+    setAuthMode('signup');
+    document.getElementById('auth-title').textContent = 'Save your vision board.';
+    document.getElementById('auth-subtitle').textContent = 'Create an account to keep your dreams and share your board with the world.';
+    showScreen('screen-auth');
+    setTimeout(() => document.getElementById('auth-name').focus(), 400);
+    return;
+  }
+  renderProfile(); showScreen('screen-profile');
+}
 
 /* ══════════════════════════════════
    HOME INPUT
@@ -1100,17 +1111,6 @@ homeInput.addEventListener('keydown', async function(e) {
   if (e.key !== 'Enter') return;
   const text = this.value.trim();
   if (!text) { showToast('Type your dream first'); return; }
-
-  if (!currentUser) {
-    pendingDream = text;
-    setAuthMode('signup');
-    document.getElementById('auth-title').textContent = 'Save your dream.';
-    document.getElementById('auth-subtitle').textContent = `Create an account to manifest "${text}" and connect with others who share it.`;
-    showScreen('screen-auth');
-    setTimeout(() => document.getElementById('auth-name').focus(), 400);
-    return;
-  }
-
   await addDream(text);
   this.value = ''; this.classList.remove('typed');
   homeCursor.style.cssText = '';
@@ -1792,14 +1792,29 @@ function showToast(msg) {
   sb.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session) {
       currentUser = session.user;
+
+      // Capture any locally-built dreams before loadUserData overwrites the array
+      const localDreams = dreams.filter(d => String(d.id).startsWith('tmp-'));
+
       await loadUserData();
+
+      // Flush local dreams to Supabase (new signup path)
+      for (const ld of localDreams) {
+        if (!dreams.find(d => d.text === ld.text)) {
+          const { data } = await sb.from('dreams').insert({
+            user_id: currentUser.id,
+            text: ld.text,
+            image_url: ld.imageUrl,
+            completed: ld.completed
+          }).select().single();
+          if (data) dreams.unshift({ id: data.id, text: ld.text, imageUrl: ld.imageUrl, completed: ld.completed });
+        }
+      }
+
       hideVeil();
-      if (pendingDream) {
-        const text = pendingDream; pendingDream = null;
-        await addDream(text);
-        homeInput.value = ''; homeInput.classList.remove('typed');
-        homeCursor.style.cssText = '';
-        showBoard();
+      const action = pendingAction; pendingAction = null;
+      if (action === 'profile') {
+        renderProfile(); showScreen('screen-profile');
       } else if (dreams.length > 0) {
         showBoard();
       } else {
