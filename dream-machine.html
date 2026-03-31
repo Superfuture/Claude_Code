@@ -1028,7 +1028,17 @@ async function handleAuthSubmit() {
           id: data.user.id,
           name: name || email.split('@')[0],
           bio: 'Dreamer from Earth'
-        });
+        }).catch(() => {});
+      }
+      // If email confirmation is enabled, session will be null — sign in directly
+      if (!data.session) {
+        const { error: signInErr } = await sb.auth.signInWithPassword({ email, password });
+        if (signInErr) {
+          btn.disabled = false;
+          btn.textContent = 'Create account';
+          errEl.textContent = 'Account created! Check your email to confirm, then sign in.';
+          return;
+        }
       }
     } else {
       const { error } = await sb.auth.signInWithPassword({ email, password });
@@ -1117,7 +1127,6 @@ function goHome() {
   document.getElementById('home-dream-list').innerHTML = '';
   document.getElementById('home-see-board').classList.remove('visible');
   document.getElementById('home-hint').innerHTML = 'Press <kbd>Enter</kbd> to add your dream →';
-  if (!currentUser) dreams = [];
   showScreen('screen-home');
   setTimeout(() => homeInput.focus(), 400);
 }
