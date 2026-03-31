@@ -1209,7 +1209,7 @@ function renderBoardGrid() {
 
   const add = document.createElement('div');
   add.className = 'tile-add';
-  add.onclick = openAddOverlay;
+  add.onclick = () => openAddOverlay();
   add.innerHTML = `<div class="tile-add-plus">+</div><div class="tile-add-label">add a dream</div>`;
   grid.appendChild(add);
 }
