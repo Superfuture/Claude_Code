@@ -988,11 +988,29 @@ function extractKw(text) {
   return text.toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).filter(w => w.length > 2 && !STOP.has(w)).slice(0, 2);
 }
 
+const PEXELS_KEY = 'ZQmZJ4lPBPKrCbqQY850AOiBMF6xsZoyD2ZP1obG2SQe9My9Y6O0awQt';
+
 function getImageUrl(text) {
   const kws = extractKw(text);
   const q = kws.length ? kws.join(',') : 'dream,inspiration';
   const seed = [...text].reduce((a,c) => a + c.charCodeAt(0), 0) % 9999;
   return `https://loremflickr.com/700/700/${encodeURIComponent(q)}?lock=${seed}`;
+}
+
+async function fetchPexelsImage(text) {
+  const kw = extractKw(text).slice(0,3).join(' ') || text;
+  const seed = [...text].reduce((a,c) => a + c.charCodeAt(0), 0);
+  try {
+    const res = await fetch(
+      `https://api.pexels.com/v1/search?query=${encodeURIComponent(kw)}&per_page=10&page=${(seed%4)+1}&orientation=square`,
+      { headers: { Authorization: PEXELS_KEY } }
+    );
+    const data = await res.json();
+    if (data.photos && data.photos.length > 0) {
+      return data.photos[seed % data.photos.length].src.large;
+    }
+  } catch(e) {}
+  return null;
 }
 
 function getPortraitUrl(seed) {
@@ -1187,19 +1205,30 @@ homeInput.addEventListener('keydown', async function(e) {
    DREAMS
 ══════════════════════════════════ */
 async function addDream(text) {
-  const imageUrl = getImageUrl(text);
-  const newDream = { id: 'tmp-' + Date.now(), text, imageUrl, completed: false };
+  const placeholderUrl = getImageUrl(text);
+  const newDream = { id: 'tmp-' + Date.now(), text, imageUrl: placeholderUrl, completed: false };
   dreams.unshift(newDream);
 
   if (currentUser) {
     const { data, error } = await sb.from('dreams').insert({
       user_id:   currentUser.id,
       text,
-      image_url: imageUrl,
+      image_url: placeholderUrl,
       completed: false
     }).select().single();
     if (data && !error) newDream.id = data.id;
   }
+
+  // Fetch high-quality Pexels image in background
+  fetchPexelsImage(text).then(async url => {
+    if (!url) return;
+    newDream.imageUrl = url;
+    if (currentUser && !String(newDream.id).startsWith('tmp-')) {
+      sb.from('dreams').update({ image_url: url }).eq('id', newDream.id).then(()=>{});
+    }
+    if (document.getElementById('screen-profile').classList.contains('active')) renderProfile();
+    else if (document.getElementById('screen-board').classList.contains('active')) renderBoardGrid();
+  });
 }
 
 /* ══════════════════════════════════
