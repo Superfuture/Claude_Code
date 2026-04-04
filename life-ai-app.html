@@ -191,7 +191,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a2e;display:flex;align-item
 .astat-val{font-family:'Fraunces',serif;font-size:17px;font-weight:300;color:var(--teal);margin-bottom:1px}
 .astat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 .add-agent-btn{background:var(--teal);color:white;border:none;border-radius:16px;padding:14px;width:100%;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent}
-.add-agent-sticky{position:sticky;bottom:0;left:0;right:0;padding:12px 20px 16px;background:linear-gradient(transparent,var(--bg) 40%);flex-shrink:0;margin-top:auto}
+.add-agent-sticky{padding:12px 20px 16px;background:linear-gradient(transparent,var(--bg) 40%);flex-shrink:0}
 
 /* ── ADD AGENT BOTTOM SHEET ── */
 .sheet-overlay{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -778,9 +778,9 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a2e;display:flex;align-item
           </div>
         </div>
       </div>
-    </div>
-    <div class="add-agent-sticky">
-      <button class="add-agent-btn" onclick="openSheet()">+ Add New Agent</button>
+      <div class="add-agent-sticky">
+        <button class="add-agent-btn" onclick="openSheet()">+ Add New Agent</button>
+      </div>
     </div>
 
     <!-- ── SCHEDULE ── -->
