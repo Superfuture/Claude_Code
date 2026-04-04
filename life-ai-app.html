@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Life.ai App</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f6f2;--surface:#eeecea;--card:#ffffff;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.04);
+  --text:#141414;--text2:#6b6b72;--muted:#a8a8b0;
+  --teal:#009e7d;--teal-dim:rgba(0,158,125,0.1);
+  --amber:#d4840a;--amber-dim:rgba(212,132,10,0.1);
+  --blue:#4c6ef5;--blue-dim:rgba(76,110,245,0.1);
+  --red:#e03030;--red-dim:rgba(224,48,48,0.1);
+  --green:#2d9e5f;--green-dim:rgba(45,158,95,0.1);
+}
+html,body{height:100%;overflow:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:'DM Sans',sans-serif;background:#1a1a2e;display:flex;align-items:center;justify-content:center}
+
+/* Phone shell */
+.shell{width:390px;height:844px;background:var(--bg);border-radius:54px;overflow:hidden;position:relative;box-shadow:0 0 0 10px #0d0d1a,0 0 0 12px #1e1e30,0 60px 120px rgba(0,0,0,.7);display:flex;flex-direction:column}
+@media(max-width:480px){
+  html,body{background:var(--bg)}
+  .shell{width:100%;width:100vw;height:100vh;height:100svh;height:100dvh;border-radius:0;box-shadow:none}
+  .island{display:none}
+  .statusbar{padding-top:max(20px,env(safe-area-inset-top,20px));padding-left:20px;padding-right:20px}
+  .bottomnav{padding-bottom:max(10px,env(safe-area-inset-bottom,10px));height:auto;padding-top:8px}
+}
+
+/* Island */
+.island{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#0d0d1a;border-radius:22px;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 12px}
+.island-dot{width:11px;height:11px;background:#1a1a2e;border-radius:50%;border:1.5px solid rgba(255,255,255,.06)}
+.island-cam{width:11px;height:11px;border-radius:50%;background:#0a2218;border:2px solid #0d4030;position:relative;display:flex;align-items:center;justify-content:center}
+.island-cam::after{content:'';width:4px;height:4px;background:#0d5038;border-radius:50%}
+
+/* Status bar */
+.statusbar{display:flex;justify-content:space-between;align-items:center;padding:56px 28px 10px;font-size:15px;font-weight:600;letter-spacing:-0.01em;position:relative;z-index:10;flex-shrink:0}
+.sb-r{display:flex;gap:6px;align-items:center}
+.sig-bars{display:flex;gap:2.5px;align-items:flex-end}
+.sig-bars span{width:3.5px;background:var(--text);border-radius:1px;opacity:.85}
+.wifi-icon{font-size:13px;opacity:.8}
+.batt{width:25px;height:12px;border:2px solid rgba(0,0,0,.3);border-radius:3px;position:relative}
+.batt::after{content:'';position:absolute;top:2px;left:2px;width:65%;height:calc(100% - 4px);background:var(--text);border-radius:1px;opacity:.8}
+.batt::before{content:'';position:absolute;top:50%;right:-4px;transform:translateY(-50%);width:2.5px;height:5px;background:rgba(0,0,0,.3);border-radius:0 1px 1px 0}
+
+/* Screens */
+.screens{flex:1;position:relative;overflow:hidden}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);transition:transform .35s cubic-bezier(.4,0,.2,1),opacity .35s;overflow:hidden}
+.screen.hidden{transform:translateX(100%);opacity:0;pointer-events:none}
+.screen.left{transform:translateX(-30%);opacity:0;pointer-events:none}
+
+/* Bottom nav */
+.bottomnav{height:80px;background:rgba(247,246,242,0.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-around;padding-top:10px;flex-shrink:0;position:relative;z-index:50}
+.bnav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px 16px;border-radius:12px;transition:all .2s;min-width:60px}
+.bnav-item.active .bnav-icon{color:var(--teal)}
+.bnav-item.active .bnav-label{color:var(--teal);font-weight:500}
+.bnav-icon{font-size:22px;color:var(--muted);transition:transform .2s}
+.bnav-item:active .bnav-icon{transform:scale(.88)}
+.bnav-label{font-size:10px;color:var(--muted);font-weight:400;letter-spacing:.01em}
+
+/* ── HOME SCREEN ── */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.home-header{padding:16px 24px 0;flex-shrink:0}
+.home-greeting{margin-bottom:4px}
+.home-greeting small{font-size:11px;font-weight:500;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:3px}
+.home-greeting h2{font-family:'Fraunces',serif;font-size:28px;font-weight:300;letter-spacing:-0.02em;line-height:1.2}
+
+.scroll-area{flex:1;overflow-y:auto;padding:16px 20px 20px;-webkit-overflow-scrolling:touch}
+.scroll-area::-webkit-scrollbar{display:none}
+
+/* AI summary card */
+.ai-card{background:linear-gradient(135deg,#014d3c,#007a60);border-radius:20px;padding:20px;margin-bottom:16px;color:white;position:relative;overflow:hidden}
+.ai-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.05);border-radius:50%}
+.ai-card::after{content:'';position:absolute;bottom:-20px;left:40px;width:80px;height:80px;background:rgba(255,255,255,.04);border-radius:50%}
+.ai-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;position:relative;z-index:1}
+.ai-card-label{font-size:10.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.ai-pulse{width:8px;height:8px;background:#4dffc0;border-radius:50%;animation:blink 2s ease-in-out infinite;box-shadow:0 0 8px rgba(77,255,192,.6)}
+.ai-card-title{font-family:'Fraunces',serif;font-size:20px;font-weight:300;line-height:1.3;margin-bottom:12px;position:relative;z-index:1}
+.ai-card-chips{display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:1}
+.chip{background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:11px;padding:5px 11px;border-radius:100px;border:1px solid rgba(255,255,255,.2);font-weight:400}
+
+/* Section header */
+.sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sec-title{font-size:13px;font-weight:500;color:var(--text2);letter-spacing:.02em}
+.sec-link{font-size:12px;color:var(--teal);font-weight:500}
+
+/* Agent cards */
+.agent-row{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.ac{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .15s,box-shadow .15s;-webkit-tap-highlight-color:transparent}
+.ac:active{transform:scale(.98);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.ac-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ac-info{flex:1;min-width:0}
+.ac-name{font-size:15px;font-weight:500;margin-bottom:2px;color:var(--text)}
+.ac-sub{font-size:11.5px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.tag{font-size:10px;padding:4px 9px;border-radius:100px;font-weight:500;white-space:nowrap}
+.tag-ok{background:var(--teal-dim);color:var(--teal)}
+.tag-soon{background:var(--amber-dim);color:var(--amber)}
+.tag-today{background:var(--red-dim);color:var(--red)}
+.ac-date{font-size:11px;color:var(--muted)}
+.ac-live{width:6px;height:6px;background:var(--teal);border-radius:50%;animation:blink 2.5s ease-in-out infinite}
+
+/* Feed / activity */
+.feed-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:20px}
+.feed-head{padding:14px 18px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between}
+.feed-head-title{font-size:13px;font-weight:500;color:var(--text2)}
+.feed-badge{font-size:9.5px;color:var(--teal);font-weight:500;letter-spacing:.08em;text-transform:uppercase;background:var(--teal-dim);padding:3px 8px;border-radius:100px}
+.fitem{padding:13px 18px;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:12px}
+.fitem:last-child{border-bottom:none}
+.fitem-ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.fitem-txt{flex:1}
+.fitem-main{font-size:13px;color:var(--text);margin-bottom:1px;line-height:1.3}
+.fitem-main b{color:var(--teal);font-weight:500}
+.fitem-sub{font-size:11px;color:var(--muted)}
+.fitem-t{font-size:10.5px;color:var(--muted);white-space:nowrap}
+
+/* ── AGENTS SCREEN ── */
+.screen-header{padding:16px 24px 12px;flex-shrink:0}
+.screen-header h2{font-family:'Fraunces',serif;font-size:26px;font-weight:300;letter-spacing:-0.02em}
+.screen-header p{font-size:13px;color:var(--text2);margin-top:3px}
+.search-bar{margin:0 20px 16px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:11px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.search-bar span{font-size:16px;opacity:.4}
+.search-bar input{flex:1;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none}
+.search-bar input::placeholder{color:var(--muted)}
+.agents-list{flex:1;overflow-y:auto;padding:0 20px 20px}
+.agents-list::-webkit-scrollbar{display:none}
+.al-section-title{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin:16px 0 10px}
+.agent-big{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:10px;cursor:pointer;transition:transform .15s;-webkit-tap-highlight-color:transparent}
+.agent-big:active{transform:scale(.99)}
+.agent-big-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.agent-big-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.agent-big-info{flex:1}
+.agent-big-name{font-family:'Fraunces',serif;font-size:19px;font-weight:300;margin-bottom:2px}
+.agent-big-freq{font-size:12px;color:var(--text2)}
+.agent-big-live{display:flex;align-items:center;gap:6px;margin-top:4px}
+.agent-big-live-dot{width:6px;height:6px;background:var(--teal);border-radius:50%;animation:blink 2s infinite}
+.agent-big-live-text{font-size:10.5px;color:var(--teal);font-weight:500}
+.agent-stats{display:flex;gap:0;border-top:1px solid var(--border2);padding-top:14px}
+.astat{flex:1;text-align:center;padding:0 8px;border-right:1px solid var(--border2)}
+.astat:last-child{border-right:none}
+.astat-val{font-family:'Fraunces',serif;font-size:17px;font-weight:300;color:var(--teal);margin-bottom:1px}
+.astat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.add-agent-btn{background:var(--teal);color:white;border:none;border-radius:16px;padding:14px;width:100%;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent}
+
+/* ── SCHEDULE SCREEN ── */
+.cal-header{padding:16px 24px 0;flex-shrink:0}
+.cal-header h2{font-family:'Fraunces',serif;font-size:26px;font-weight:300;letter-spacing:-0.02em;margin-bottom:14px}
+.month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.month-label{font-size:14px;font-weight:500}
+.month-btn{width:32px;height:32px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
+.week-days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:8px}
+.wd{font-size:11px;font-weight:500;color:var(--muted);padding:4px 0;letter-spacing:.03em}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:0 24px;flex-shrink:0}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:13px;cursor:pointer;position:relative;font-weight:400;color:var(--text);-webkit-tap-highlight-color:transparent}
+.cal-day.other{color:var(--muted);opacity:.4}
+.cal-day.today{background:var(--teal);color:white;font-weight:500}
+.cal-day.has-event::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;background:var(--teal);border-radius:50%}
+.cal-day.today.has-event::after{background:white}
+.cal-day.selected{background:var(--teal-dim);color:var(--teal);font-weight:500}
+.schedule-list{flex:1;overflow-y:auto;padding:16px 20px 20px}
+.schedule-list::-webkit-scrollbar{display:none}
+.sched-date-label{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;margin-top:6px}
+.sched-item{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:13px;cursor:pointer}
+.sched-time{font-size:12px;color:var(--muted);min-width:44px;text-align:right;font-family:'DM Sans',monospace;font-variant-numeric:tabular-nums}
+.sched-bar{width:3px;height:38px;border-radius:2px;flex-shrink:0}
+.sched-info{flex:1}
+.sched-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.sched-loc{font-size:11.5px;color:var(--text2)}
+.sched-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sched-tag{font-size:10px;padding:3px 9px;border-radius:100px;font-weight:500}
+
+/* ── SETTINGS / PROFILE ── */
+.profile-top{padding:20px 24px;text-align:center;flex-shrink:0}
+.profile-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--blue));display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:32px;font-weight:300;color:white;margin:0 auto 12px}
+.profile-name{font-family:'Fraunces',serif;font-size:22px;font-weight:300;margin-bottom:2px}
+.profile-sub{font-size:13px;color:var(--text2)}
+.profile-stats{display:flex;justify-content:center;gap:0;margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin:16px 20px 0}
+.pstat{flex:1;text-align:center;border-right:1px solid var(--border2)}
+.pstat:last-child{border-right:none}
+.pstat-num{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:var(--teal)}
+.pstat-label{font-size:10.5px;color:var(--muted);margin-top:2px}
+.settings-list{flex:1;overflow-y:auto;padding:16px 20px 20px}
+.settings-list::-webkit-scrollbar{display:none}
+.setting-group{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:12px}
+.setting-group-label{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:14px 18px 8px;border-bottom:1px solid var(--border2)}
+.setting-item{padding:14px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border2);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.setting-item:last-child{border-bottom:none}
+.setting-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.setting-info{flex:1}
+.setting-name{font-size:14px;color:var(--text);font-weight:400}
+.setting-val{font-size:12px;color:var(--muted);margin-top:1px}
+.setting-arrow{font-size:16px;color:var(--muted)}
+.toggle{width:44px;height:26px;background:var(--teal);border-radius:13px;position:relative;cursor:pointer;flex-shrink:0}
+.toggle::after{content:'';position:absolute;top:3px;right:3px;width:20px;height:20px;background:white;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s}
+.toggle.off{background:var(--border);background-color:#d0d0d8}
+.toggle.off::after{transform:translateX(-18px)}
+
+/* ── ONBOARDING ── */
+.ob-wrap{position:absolute;inset:0;z-index:500;background:var(--bg);display:flex;flex-direction:column;transition:opacity .4s,transform .4s}
+.ob-wrap.ob-out{opacity:0;transform:scale(.96);pointer-events:none}
+.ob-top{padding:56px 24px 0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.ob-dots{display:flex;gap:6px}
+.ob-dot{width:6px;height:6px;border-radius:3px;background:var(--border);transition:width .3s,background .3s}
+.ob-dot.act{width:20px;background:var(--teal)}
+.ob-skip{font-size:13px;color:var(--muted);cursor:pointer;padding:4px 0}
+.ob-body{flex:1;padding:32px 28px 24px;display:flex;flex-direction:column;justify-content:center}
+.ob-icon{width:72px;height:72px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:34px;margin-bottom:28px}
+.ob-title{font-family:'Fraunces',serif;font-size:30px;font-weight:300;letter-spacing:-0.025em;line-height:1.15;margin-bottom:14px}
+.ob-sub{font-size:15px;color:var(--text2);line-height:1.6;font-weight:300;max-width:300px}
+.ob-visual{margin-top:28px}
+.ob-footer{padding:24px 28px;padding-bottom:max(32px,env(safe-area-inset-bottom,32px));flex-shrink:0}
+.ob-btn{width:100%;background:var(--teal);color:#fff;border:none;padding:16px;border-radius:16px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .15s,transform .15s}
+.ob-btn:active{opacity:.88;transform:scale(.98)}
+
+/* step 2 visual — 3x counter */
+.ob-counter-row{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.ob-count-bubble{width:52px;height:52px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--border)}
+.ob-count-bubble.done{background:var(--teal-dim);border-color:rgba(0,158,125,.25)}
+.ob-count-num{font-family:'Fraunces',serif;font-size:18px;font-weight:300;color:var(--teal)}
+.ob-count-lbl{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.ob-arrow{font-size:18px;color:var(--muted)}
+.ob-activate-card{background:var(--card);border:1.5px solid var(--teal);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px}
+.ob-activate-icon{width:44px;height:44px;border-radius:13px;background:var(--teal-dim);display:flex;align-items:center;justify-content:center;font-size:22px}
+.ob-activate-info{flex:1}
+.ob-activate-name{font-size:15px;font-weight:500;color:var(--text)}
+.ob-activate-sub{font-size:12px;color:var(--teal);margin-top:2px;font-weight:500}
+
+/* step 3 — setup form */
+.ob-form{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-top:24px}
+.ob-field{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border2)}
+.ob-field:last-child{border-bottom:none}
+.ob-field-label{font-size:13px;color:var(--text2)}
+.ob-field-val{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text)}
+.ob-field-val .tag{font-size:11px}
+.ob-freq-sel{display:flex;gap:6px;margin-top:18px;flex-wrap:wrap}
+.ob-freq-btn{padding:8px 16px;border-radius:100px;border:1px solid var(--border);background:var(--card);font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.ob-freq-btn.sel{background:var(--teal-dim);border-color:var(--teal);color:var(--teal);font-weight:500}
+
+/* step 4 — success */
+.ob-success-card{background:linear-gradient(135deg,#014d3c,#007a60);border-radius:22px;padding:22px;margin-top:20px;color:white}
+.ob-success-card-top{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.ob-success-icon{width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:26px}
+.ob-success-name{font-family:'Fraunces',serif;font-size:20px;font-weight:300}
+.ob-success-sub{font-size:12px;opacity:.7;margin-top:2px}
+.ob-success-divider{height:1px;background:rgba(255,255,255,.15);margin-bottom:16px}
+.ob-success-row{display:flex;justify-content:space-between;align-items:center}
+.ob-success-label{font-size:11px;opacity:.65;text-transform:uppercase;letter-spacing:.08em}
+.ob-success-val{font-size:15px;font-weight:500}
+.ob-confetti{font-size:32px;margin-bottom:20px}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="island">
+    <div class="island-dot"></div>
+    <div class="island-cam"></div>
+  </div>
+
+  <div class="statusbar">
+    <span>9:41</span>
+    <div class="sb-r">
+      <div class="sig-bars">
+        <span style="height:5px"></span>
+        <span style="height:7px"></span>
+        <span style="height:10px"></span>
+        <span style="height:13px"></span>
+      </div>
+      <span class="wifi-icon">WiFi</span>
+      <div class="batt"></div>
+    </div>
+  </div>
+
+  <!-- ── ONBOARDING ── -->
+  <div class="ob-wrap" id="onboarding">
+
+    <!-- Step 1: Welcome -->
+    <div class="screen" id="ob-1" style="background:var(--bg)">
+      <div class="ob-top">
+        <div class="ob-dots">
+          <div class="ob-dot act" id="dot-1"></div>
+          <div class="ob-dot" id="dot-2"></div>
+          <div class="ob-dot" id="dot-3"></div>
+          <div class="ob-dot" id="dot-4"></div>
+        </div>
+        <div class="ob-skip" onclick="finishOnboarding()">Skip</div>
+      </div>
+      <div class="ob-body">
+        <div class="ob-icon" style="background:var(--teal-dim)">✨</div>
+        <div class="ob-title">Your AI<br>chief of staff.</div>
+        <div class="ob-sub">Life.ai learns your habits and automatically handles every recurring task — haircuts, dentist, dog grooming, and more.</div>
+        <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:14px">
+            <span style="font-size:22px">📅</span>
+            <div>
+              <div style="font-size:14px;font-weight:500;color:var(--text)">Connects to your calendar</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:1px">Google, Apple, Outlook</div>
+            </div>
+            <div style="margin-left:auto;width:8px;height:8px;background:var(--teal);border-radius:50%;animation:blink 2s infinite"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:14px">
+            <span style="font-size:22px">🤖</span>
+            <div>
+              <div style="font-size:14px;font-weight:500;color:var(--text)">Detects your patterns</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:1px">Do it 3× → agent activates</div>
+            </div>
+            <div style="margin-left:auto;width:8px;height:8px;background:var(--teal);border-radius:50%;animation:blink 2.4s infinite"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:14px">
+            <span style="font-size:22px">🔔</span>
+            <div>
+              <div style="font-size:14px;font-weight:500;color:var(--text)">One quiet notification</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:1px">Confirm or go fully autonomous</div>
+            </div>
+            <div style="margin-left:auto;width:8px;height:8px;background:var(--teal);border-radius:50%;animation:blink 2.8s infinite"></div>
+          </div>
+        </div>
+      </div>
+      <div class="ob-footer">
+        <button class="ob-btn" onclick="goOb(2)">Get Started →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Pattern detection -->
+    <div class="screen hidden" id="ob-2" style="background:var(--bg)">
+      <div class="ob-top">
+        <div class="ob-dots">
+          <div class="ob-dot" id="dot2-1"></div>
+          <div class="ob-dot act" id="dot2-2"></div>
+          <div class="ob-dot" id="dot2-3"></div>
+          <div class="ob-dot" id="dot2-4"></div>
+        </div>
+        <div class="ob-skip" onclick="finishOnboarding()">Skip</div>
+      </div>
+      <div class="ob-body">
+        <div class="ob-icon" style="background:rgba(245,166,35,.12)">🔍</div>
+        <div class="ob-title">The 3× Rule</div>
+        <div class="ob-sub">Life.ai watches your calendar. The moment it sees a pattern repeat 3 times, an agent takes over permanently.</div>
+        <div class="ob-visual">
+          <div style="margin-bottom:16px">
+            <div style="font-size:11.5px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Haircut · Floyd's 99</div>
+            <div class="ob-counter-row">
+              <div class="ob-count-bubble done">
+                <div class="ob-count-num">1st</div>
+                <div class="ob-count-lbl">Nov 12</div>
+              </div>
+              <div class="ob-arrow">→</div>
+              <div class="ob-count-bubble done">
+                <div class="ob-count-num">2nd</div>
+                <div class="ob-count-lbl">Dec 18</div>
+              </div>
+              <div class="ob-arrow">→</div>
+              <div class="ob-count-bubble done" style="border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,158,125,.12)">
+                <div class="ob-count-num" style="font-size:15px">3×</div>
+                <div class="ob-count-lbl">Jan 22</div>
+              </div>
+            </div>
+          </div>
+          <div class="ob-activate-card">
+            <div class="ob-activate-icon">✂️</div>
+            <div class="ob-activate-info">
+              <div class="ob-activate-name">Pattern detected</div>
+              <div class="ob-activate-sub">→ Haircut Agent ready to activate</div>
+            </div>
+            <div style="width:8px;height:8px;background:var(--teal);border-radius:50%;animation:blink 1.6s infinite;margin-left:4px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="ob-footer">
+        <button class="ob-btn" onclick="goOb(3)">Set Up My First Agent →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Configure agent -->
+    <div class="screen hidden" id="ob-3" style="background:var(--bg)">
+      <div class="ob-top">
+        <div class="ob-dots">
+          <div class="ob-dot" id="dot3-1"></div>
+          <div class="ob-dot" id="dot3-2"></div>
+          <div class="ob-dot act" id="dot3-3"></div>
+          <div class="ob-dot" id="dot3-4"></div>
+        </div>
+        <div class="ob-skip" onclick="finishOnboarding()">Skip</div>
+      </div>
+      <div class="ob-body" style="justify-content:flex-start;padding-top:24px;overflow-y:auto">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
+          <div class="ob-icon" style="background:var(--teal-dim);margin:0;width:56px;height:56px;border-radius:18px;font-size:26px">✂️</div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px">New Agent</div>
+            <div class="ob-title" style="font-size:24px;margin:0">Haircut</div>
+          </div>
+        </div>
+        <div style="font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.5">We detected you book every <strong style="color:var(--text)">~5 weeks</strong> at <strong style="color:var(--text)">Floyd's 99</strong>. Confirm your preferences.</div>
+
+        <div style="font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Frequency</div>
+        <div class="ob-freq-sel" id="freqSel">
+          <div class="ob-freq-btn" onclick="selFreq(this)">4 weeks</div>
+          <div class="ob-freq-btn sel" onclick="selFreq(this)">5 weeks</div>
+          <div class="ob-freq-btn" onclick="selFreq(this)">6 weeks</div>
+          <div class="ob-freq-btn" onclick="selFreq(this)">Every month</div>
+        </div>
+
+        <div class="ob-form">
+          <div class="ob-field">
+            <div class="ob-field-label">Provider</div>
+            <div class="ob-field-val">Floyd's 99 Barbershop <span style="color:var(--muted)">›</span></div>
+          </div>
+          <div class="ob-field">
+            <div class="ob-field-label">Preferred time</div>
+            <div class="ob-field-val">Afternoons <span style="color:var(--muted)">›</span></div>
+          </div>
+          <div class="ob-field">
+            <div class="ob-field-label">Auto-book</div>
+            <div class="ob-field-val"><div class="toggle" id="autoToggle" onclick="this.classList.toggle('off')"></div></div>
+          </div>
+          <div class="ob-field">
+            <div class="ob-field-label">Notify me</div>
+            <div class="ob-field-val" style="font-size:12px;color:var(--muted)">24h before appointment</div>
+          </div>
+        </div>
+      </div>
+      <div class="ob-footer">
+        <button class="ob-btn" onclick="goOb(4)">Activate Agent ⚡</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Success -->
+    <div class="screen hidden" id="ob-4" style="background:var(--bg)">
+      <div class="ob-top">
+        <div class="ob-dots">
+          <div class="ob-dot" id="dot4-1"></div>
+          <div class="ob-dot" id="dot4-2"></div>
+          <div class="ob-dot" id="dot4-3"></div>
+          <div class="ob-dot act" id="dot4-4"></div>
+        </div>
+        <div class="ob-skip" style="opacity:0;pointer-events:none">Skip</div>
+      </div>
+      <div class="ob-body">
+        <div class="ob-confetti" id="confetti">🎉</div>
+        <div class="ob-title">Agent is live.</div>
+        <div class="ob-sub">Your Haircut Agent just booked your next appointment — no input needed. This is what Life.ai does for everything.</div>
+        <div class="ob-success-card">
+          <div class="ob-success-card-top">
+            <div class="ob-success-icon">✂️</div>
+            <div>
+              <div class="ob-success-name">Haircut Agent</div>
+              <div class="ob-success-sub">Active · Every 5 weeks · Floyd's 99</div>
+            </div>
+            <div style="margin-left:auto;width:8px;height:8px;background:#4dffc0;border-radius:50%;animation:blink 2s infinite"></div>
+          </div>
+          <div class="ob-success-divider"></div>
+          <div class="ob-success-row">
+            <div>
+              <div class="ob-success-label">Next appointment</div>
+              <div class="ob-success-val">Apr 12 · 2:30 PM</div>
+            </div>
+            <div style="text-align:right">
+              <div class="ob-success-label">Status</div>
+              <div class="ob-success-val" style="color:#4dffc0">✓ Booked</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:16px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 18px;font-size:13px;color:var(--text2);line-height:1.5">
+          <strong style="color:var(--text)">Up next:</strong> Connect more agents — dentist, dog grooming, doctor checkup, and more are ready to activate.
+        </div>
+      </div>
+      <div class="ob-footer">
+        <button class="ob-btn" onclick="finishOnboarding()">Enter Life.ai →</button>
+      </div>
+    </div>
+
+  </div><!-- /onboarding -->
+
+  <div class="screens" id="mainScreens" style="display:none">
+
+    <!-- ── HOME ── -->
+    <div class="screen" id="screen-home">
+      <div class="home-header">
+        <div class="home-greeting">
+          <small>Life.ai</small>
+          <h2>Good morning, Joey.</h2>
+        </div>
+      </div>
+      <div class="scroll-area">
+        <div class="ai-card">
+          <div class="ai-card-top">
+            <div class="ai-card-label">AI Summary</div>
+            <div class="ai-pulse"></div>
+          </div>
+          <div class="ai-card-title">I scheduled 3 things<br>while you slept.</div>
+          <div class="ai-card-chips">
+            <div class="chip">✂️ Haircut Apr 12</div>
+            <div class="chip">🐕 Grooming Apr 19</div>
+            <div class="chip">🦷 Dentist Jun 3</div>
+          </div>
+        </div>
+
+        <div class="sec-head">
+          <div class="sec-title">YOUR AGENTS</div>
+          <div class="sec-link" onclick="switchTab('agents')">See all</div>
+        </div>
+        <div class="agent-row">
+          <div class="ac" onclick="switchTab('agents')">
+            <div class="ac-icon" style="background:rgba(0,158,125,.1)">✂️</div>
+            <div class="ac-info">
+              <div class="ac-name">Haircut</div>
+              <div class="ac-sub">Apr 12 · 2:30 PM · Floyd's 99</div>
+            </div>
+            <div class="ac-right">
+              <div class="tag tag-ok">Booked</div>
+              <div class="ac-live"></div>
+            </div>
+          </div>
+          <div class="ac" onclick="switchTab('agents')">
+            <div class="ac-icon" style="background:var(--blue-dim)">🦷</div>
+            <div class="ac-info">
+              <div class="ac-name">Dentist</div>
+              <div class="ac-sub">Jun 3 · 9:00 AM · Dr. Kim</div>
+            </div>
+            <div class="ac-right">
+              <div class="tag tag-ok">Booked</div>
+              <div class="ac-live"></div>
+            </div>
+          </div>
+          <div class="ac" onclick="switchTab('agents')">
+            <div class="ac-icon" style="background:var(--amber-dim)">🐕</div>
+            <div class="ac-info">
+              <div class="ac-name">Dog Grooming</div>
+              <div class="ac-sub">Apr 19 · 10:00 AM · Pampered Pets</div>
+            </div>
+            <div class="ac-right">
+              <div class="tag tag-soon">Apr 19</div>
+              <div class="ac-live"></div>
+            </div>
+          </div>
+          <div class="ac" onclick="switchTab('agents')">
+            <div class="ac-icon" style="background:var(--red-dim)">🩺</div>
+            <div class="ac-info">
+              <div class="ac-name">Doctor Checkup</div>
+              <div class="ac-sub">Aug 15 · Annual · Dr. Patel</div>
+            </div>
+            <div class="ac-right">
+              <div class="tag tag-ok">Booked</div>
+              <div class="ac-live"></div>
+            </div>
+          </div>
+          <div class="ac" onclick="switchTab('agents')">
+            <div class="ac-icon" style="background:rgba(0,158,125,.07)">📱</div>
+            <div class="ac-info">
+              <div class="ac-name">Posts</div>
+              <div class="ac-sub">Today · 3:00 PM · Auto-drafted</div>
+            </div>
+            <div class="ac-right">
+              <div class="tag tag-today">Today</div>
+              <div class="ac-live"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec-head">
+          <div class="sec-title">RECENT ACTIVITY</div>
+          <div class="sec-link">View all</div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-head">
+            <div class="feed-head-title">Agent Activity</div>
+            <div class="feed-badge">● Live</div>
+          </div>
+          <div class="fitem">
+            <div class="fitem-ic" style="background:rgba(0,158,125,.1)">✂️</div>
+            <div class="fitem-txt">
+              <div class="fitem-main">Booked <b>haircut</b> at Floyd's 99</div>
+              <div class="fitem-sub">Apr 12 · 2:30 PM · Confirmed</div>
+            </div>
+            <div class="fitem-t">2m ago</div>
+          </div>
+          <div class="fitem">
+            <div class="fitem-ic" style="background:var(--amber-dim)">🐕</div>
+            <div class="fitem-txt">
+              <div class="fitem-main"><b>Dog grooming</b> scheduled</div>
+              <div class="fitem-sub">Apr 19 · 10:00 AM · Pampered Pets</div>
+            </div>
+            <div class="fitem-t">18m ago</div>
+          </div>
+          <div class="fitem">
+            <div class="fitem-ic" style="background:var(--blue-dim)">📱</div>
+            <div class="fitem-txt">
+              <div class="fitem-main"><b>Instagram post</b> queued</div>
+              <div class="fitem-sub">Today 3:00 PM · Auto-written</div>
+            </div>
+            <div class="fitem-t">1h ago</div>
+          </div>
+          <div class="fitem">
+            <div class="fitem-ic" style="background:var(--blue-dim)">🦷</div>
+            <div class="fitem-txt">
+              <div class="fitem-main"><b>Dentist</b> appointment confirmed</div>
+              <div class="fitem-sub">Jun 3 · 9:00 AM · Dr. Kim</div>
+            </div>
+            <div class="fitem-t">3h ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── AGENTS ── -->
+    <div class="screen hidden" id="screen-agents">
+      <div class="screen-header">
+        <h2>Your Agents</h2>
+        <p>5 active · 2 scheduled today</p>
+      </div>
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" placeholder="Search agents...">
+      </div>
+      <div class="agents-list">
+        <div class="al-section-title">Active Agents</div>
+        <div class="agent-big">
+          <div class="agent-big-top">
+            <div class="agent-big-icon" style="background:rgba(0,158,125,.1)">✂️</div>
+            <div class="agent-big-info">
+              <div class="agent-big-name">Haircut</div>
+              <div class="agent-big-freq">Every 5 weeks · Floyd's 99 Barbershop</div>
+              <div class="agent-big-live">
+                <div class="agent-big-live-dot"></div>
+                <div class="agent-big-live-text">Booked · Apr 12, 2:30 PM</div>
+              </div>
+            </div>
+          </div>
+          <div class="agent-stats">
+            <div class="astat"><div class="astat-val">12</div><div class="astat-label">Times booked</div></div>
+            <div class="astat"><div class="astat-val">5w</div><div class="astat-label">Frequency</div></div>
+            <div class="astat"><div class="astat-val">Apr 12</div><div class="astat-label">Next</div></div>
+          </div>
+        </div>
+        <div class="agent-big">
+          <div class="agent-big-top">
+            <div class="agent-big-icon" style="background:var(--blue-dim)">🦷</div>
+            <div class="agent-big-info">
+              <div class="agent-big-name">Dentist</div>
+              <div class="agent-big-freq">Every 6 months · Dr. Kim</div>
+              <div class="agent-big-live">
+                <div class="agent-big-live-dot"></div>
+                <div class="agent-big-live-text">Booked · Jun 3, 9:00 AM</div>
+              </div>
+            </div>
+          </div>
+          <div class="agent-stats">
+            <div class="astat"><div class="astat-val">4</div><div class="astat-label">Times booked</div></div>
+            <div class="astat"><div class="astat-val">6mo</div><div class="astat-label">Frequency</div></div>
+            <div class="astat"><div class="astat-val">Jun 3</div><div class="astat-label">Next</div></div>
+          </div>
+        </div>
+        <div class="agent-big">
+          <div class="agent-big-top">
+            <div class="agent-big-icon" style="background:var(--amber-dim)">🐕</div>
+            <div class="agent-big-info">
+              <div class="agent-big-name">Dog Grooming</div>
+              <div class="agent-big-freq">Every 8 weeks · Pampered Pets</div>
+              <div class="agent-big-live">
+                <div class="agent-big-live-dot"></div>
+                <div class="agent-big-live-text">Booked · Apr 19, 10:00 AM</div>
+              </div>
+            </div>
+          </div>
+          <div class="agent-stats">
+            <div class="astat"><div class="astat-val">7</div><div class="astat-label">Times booked</div></div>
+            <div class="astat"><div class="astat-val">8w</div><div class="astat-label">Frequency</div></div>
+            <div class="astat"><div class="astat-val">Apr 19</div><div class="astat-label">Next</div></div>
+          </div>
+        </div>
+        <div class="agent-big">
+          <div class="agent-big-top">
+            <div class="agent-big-icon" style="background:var(--red-dim)">🩺</div>
+            <div class="agent-big-info">
+              <div class="agent-big-name">Doctor Checkup</div>
+              <div class="agent-big-freq">Annual · Dr. Patel</div>
+              <div class="agent-big-live">
+                <div class="agent-big-live-dot"></div>
+                <div class="agent-big-live-text">Booked · Aug 15, 11:00 AM</div>
+              </div>
+            </div>
+          </div>
+          <div class="agent-stats">
+            <div class="astat"><div class="astat-val">3</div><div class="astat-label">Times booked</div></div>
+            <div class="astat"><div class="astat-val">1yr</div><div class="astat-label">Frequency</div></div>
+            <div class="astat"><div class="astat-val">Aug 15</div><div class="astat-label">Next</div></div>
+          </div>
+        </div>
+        <div class="agent-big">
+          <div class="agent-big-top">
+            <div class="agent-big-icon" style="background:rgba(0,158,125,.07)">📱</div>
+            <div class="agent-big-info">
+              <div class="agent-big-name">Posts</div>
+              <div class="agent-big-freq">3× per week · Instagram, LinkedIn</div>
+              <div class="agent-big-live">
+                <div class="agent-big-live-dot"></div>
+                <div class="agent-big-live-text">Next · Today 3:00 PM</div>
+              </div>
+            </div>
+          </div>
+          <div class="agent-stats">
+            <div class="astat"><div class="astat-val">47</div><div class="astat-label">Posts made</div></div>
+            <div class="astat"><div class="astat-val">3×/w</div><div class="astat-label">Frequency</div></div>
+            <div class="astat"><div class="astat-val">Today</div><div class="astat-label">Next</div></div>
+          </div>
+        </div>
+        <button class="add-agent-btn">+ Add New Agent</button>
+      </div>
+    </div>
+
+    <!-- ── SCHEDULE ── -->
+    <div class="screen hidden" id="screen-schedule">
+      <div class="cal-header">
+        <h2>Schedule</h2>
+        <div class="month-nav">
+          <div class="month-btn">‹</div>
+          <div class="month-label">April 2025</div>
+          <div class="month-btn">›</div>
+        </div>
+        <div style="padding:0 24px">
+          <div class="week-days">
+            <div class="wd">Su</div><div class="wd">Mo</div><div class="wd">Tu</div>
+            <div class="wd">We</div><div class="wd">Th</div><div class="wd">Fr</div><div class="wd">Sa</div>
+          </div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <div class="schedule-list" id="schedList"></div>
+    </div>
+
+    <!-- ── PROFILE ── -->
+    <div class="screen hidden" id="screen-profile">
+      <div class="scroll-area">
+        <div class="profile-top">
+          <div class="profile-avatar">J</div>
+          <div class="profile-name">Joey Primiani</div>
+          <div class="profile-sub">Member since Jan 2025 · Beta</div>
+        </div>
+        <div class="profile-stats">
+          <div class="pstat"><div class="pstat-num">5</div><div class="pstat-label">Agents</div></div>
+          <div class="pstat"><div class="pstat-num">73</div><div class="pstat-label">Tasks done</div></div>
+          <div class="pstat"><div class="pstat-num">18h</div><div class="pstat-label">Saved</div></div>
+        </div>
+        <div class="settings-list">
+          <div style="height:16px"></div>
+          <div class="setting-group">
+            <div class="setting-group-label">Integrations</div>
+            <div class="setting-item">
+              <div class="setting-icon" style="background:rgba(0,158,125,.1)">📅</div>
+              <div class="setting-info"><div class="setting-name">Google Calendar</div><div class="setting-val">Connected · joey@gmail.com</div></div>
+              <div class="toggle"></div>
+            </div>
+            <div class="setting-item">
+              <div class="setting-icon" style="background:var(--blue-dim)">📱</div>
+              <div class="setting-info"><div class="setting-name">Instagram</div><div class="setting-val">Connected · @joeyprimiani</div></div>
+              <div class="toggle"></div>
+            </div>
+            <div class="setting-item">
+              <div class="setting-icon" style="background:var(--blue-dim)">💼</div>
+              <div class="setting-info"><div class="setting-name">LinkedIn</div><div class="setting-val">Connected · Joey Primiani</div></div>
+              <div class="toggle"></div>
+            </div>
+          </div>
+          <div class="setting-group">
+            <div class="setting-group-label">Preferences</div>
+            <div class="setting-item">
+              <div class="setting-icon" style="background:var(--amber-dim)">🔔</div>
+              <div class="setting-info"><div class="setting-name">Notifications</div><div class="setting-val">Quiet summary · Once daily</div></div>
+              <div class="setting-arrow">›</div>
+            </div>
+            <div class="setting-item">
+              <div class="setting-icon" style="background:rgba(0,158,125,.1)">🤖</div>
+              <div class="setting-info"><div class="setting-name">Autonomous mode</div><div class="setting-val">Book without asking me</div></div>
+              <div class="toggle"></div>
+            </div>
+            <div class="setting-item">
+              <div class="setting-icon" style="background:var(--red-dim)">🔒</div>
+              <div class="setting-info"><div class="setting-name">Privacy & data</div><div class="setting-val">Your data stays yours</div></div>
+              <div class="setting-arrow">›</div>
+            </div>
+          </div>
+          <div class="setting-group">
+            <div class="setting-group-label">The Plugin Rule</div>
+            <div class="setting-item">
+              <div class="setting-icon" style="background:rgba(0,158,125,.1)">⚡</div>
+              <div class="setting-info"><div class="setting-name">Auto-detect patterns</div><div class="setting-val">Activate agent after 3× repeats</div></div>
+              <div class="toggle"></div>
+            </div>
+            <div class="setting-item">
+              <div class="setting-icon" style="background:var(--blue-dim)">📊</div>
+              <div class="setting-info"><div class="setting-name">Pattern threshold</div><div class="setting-val">3 occurrences</div></div>
+              <div class="setting-arrow">›</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottomnav" id="bottomNav" style="display:none">
+    <div class="bnav-item active" id="nav-home" onclick="switchTab('home')">
+      <div class="bnav-icon">⌂</div>
+      <div class="bnav-label">Home</div>
+    </div>
+    <div class="bnav-item" id="nav-agents" onclick="switchTab('agents')">
+      <div class="bnav-icon">⚡</div>
+      <div class="bnav-label">Agents</div>
+    </div>
+    <div class="bnav-item" id="nav-schedule" onclick="switchTab('schedule')">
+      <div class="bnav-icon">📅</div>
+      <div class="bnav-label">Schedule</div>
+    </div>
+    <div class="bnav-item" id="nav-profile" onclick="switchTab('profile')">
+      <div class="bnav-icon">◯</div>
+      <div class="bnav-label">Profile</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── ONBOARDING ──
+let obCurrent = 1;
+
+function goOb(step) {
+  const prev = document.getElementById('ob-' + obCurrent);
+  const next = document.getElementById('ob-' + step);
+  prev.classList.add(step > obCurrent ? 'left' : 'hidden');
+  next.classList.remove('hidden','left');
+  obCurrent = step;
+  if (step === 4) {
+    // animate confetti
+    const c = document.getElementById('confetti');
+    c.style.animation = 'none';
+    setTimeout(() => { c.style.animation = ''; }, 10);
+  }
+}
+
+function selFreq(btn) {
+  document.querySelectorAll('.ob-freq-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+function finishOnboarding() {
+  const ob = document.getElementById('onboarding');
+  ob.classList.add('ob-out');
+  setTimeout(() => {
+    ob.style.display = 'none';
+    document.getElementById('mainScreens').style.display = '';
+    document.getElementById('bottomNav').style.display = '';
+    buildCal(selectedDay);
+    buildSched(selectedDay);
+  }, 400);
+}
+
+// ── MAIN APP ──
+let current = 'home';
+
+function switchTab(tab) {
+  const prev = document.getElementById('screen-' + current);
+  const next = document.getElementById('screen-' + tab);
+  const tabs = ['home','agents','schedule','profile'];
+  const prevIdx = tabs.indexOf(current);
+  const nextIdx = tabs.indexOf(tab);
+  if (current === tab) return;
+  prev.classList.add(nextIdx > prevIdx ? 'left' : 'hidden');
+  prev.classList.remove('left','hidden');
+  if (nextIdx > prevIdx) prev.classList.add('left');
+  else prev.classList.add('hidden');
+  next.classList.remove('hidden','left');
+  document.getElementById('nav-' + current).classList.remove('active');
+  document.getElementById('nav-' + tab).classList.add('active');
+  current = tab;
+}
+
+// Calendar
+const events = {3:'haircut',12:'haircut',19:'grooming',3:'dentist'};
+const eventDays = new Set([3,12,19,26]);
+const grid = document.getElementById('calGrid');
+const schedList = document.getElementById('schedList');
+let selectedDay = 3;
+
+function buildCal(sel) {
+  grid.innerHTML = '';
+  // April 2025 starts on Tuesday (idx 2)
+  for (let i = 0; i < 2; i++) {
+    const d = document.createElement('div');
+    d.className = 'cal-day other';
+    d.textContent = 30 - 1 + i;
+    grid.appendChild(d);
+  }
+  for (let d = 1; d <= 30; d++) {
+    const el = document.createElement('div');
+    el.className = 'cal-day';
+    if (d === 3) el.classList.add('today');
+    if (eventDays.has(d)) el.classList.add('has-event');
+    if (d === sel) el.classList.add('selected');
+    el.textContent = d;
+    el.onclick = () => { selectedDay = d; buildCal(d); buildSched(d); };
+    grid.appendChild(el);
+  }
+  for (let i = 1; i <= 4; i++) {
+    const d = document.createElement('div');
+    d.className = 'cal-day other';
+    d.textContent = i;
+    grid.appendChild(d);
+  }
+}
+
+const schedData = {
+  3: [{time:'9:41',icon:'🩺',bg:'var(--red-dim)',bar:'#e03030',name:'Doctor (Annual)',loc:'Dr. Patel · 11:00 AM',tag:'Booked',tc:'tag-ok'}],
+  12: [{time:'2:30',icon:'✂️',bg:'rgba(0,158,125,.1)',bar:'var(--teal)',name:'Haircut',loc:"Floyd's 99 Barbershop",tag:'Booked',tc:'tag-ok'}],
+  19: [{time:'10:00',icon:'🐕',bg:'var(--amber-dim)',bar:'var(--amber)',name:'Dog Grooming',loc:'Pampered Pets · Mochi',tag:'Soon',tc:'tag-soon'}],
+  26: [{time:'3:00',icon:'📱',bg:'var(--blue-dim)',bar:'var(--blue)',name:'Instagram Post',loc:'Auto-drafted by Life.ai',tag:'Today',tc:'tag-today'}],
+};
+
+function buildSched(day) {
+  const items = schedData[day] || [];
+  if (!items.length) {
+    schedList.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:14px">Nothing scheduled</div>';
+    return;
+  }
+  const label = day === 3 ? 'Today, April 3' : `April ${day}`;
+  schedList.innerHTML = `<div class="sched-date-label">${label}</div>` + items.map(it => `
+    <div class="sched-item">
+      <div class="sched-ico" style="background:${it.bg}">${it.icon}</div>
+      <div class="sched-bar" style="background:${it.bar}"></div>
+      <div class="sched-info">
+        <div class="sched-name">${it.name}</div>
+        <div class="sched-loc">${it.loc}</div>
+      </div>
+      <div class="sched-tag ${it.tc}">${it.tag}</div>
+    </div>`).join('');
+}
+
+</script>
+</body>
+</html>
