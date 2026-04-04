@@ -38,27 +38,43 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a2e;display:flex;align-item
     position:fixed;
     inset:0
   }
-  /* Hide fake status bar — use safe area padding on each screen header instead */
-  .island{display:none}
-  .statusbar{display:none}
-  /* Push each screen's top content below the notch */
-  .home-header{padding-top:calc(18px + env(safe-area-inset-top, 44px))}
-  .screen-header{padding-top:calc(18px + env(safe-area-inset-top, 44px))}
-  .cal-header{padding-top:calc(18px + env(safe-area-inset-top, 44px))}
-  .profile-top{padding-top:calc(24px + env(safe-area-inset-top, 44px))}
-  .ob-top{padding-top:calc(20px + env(safe-area-inset-top, 44px))}
-  /* Bottom nav — sit above home indicator */
-  .bottomnav{
-    height:auto;
-    padding-top:12px;
-    padding-bottom:max(20px, env(safe-area-inset-bottom, 20px))
-  }
-  /* Onboarding footer — same treatment */
-  .ob-footer{
-    padding-bottom:max(28px, env(safe-area-inset-bottom, 28px))
-  }
-  /* Search bar on agents screen */
+  /* Hide fake island + status bar — we're on a real device */
+  .island{display:none!important}
+  .statusbar{display:none!important}
+  /* Push screen content below the real notch */
+  .home-header{padding-top:calc(16px + env(safe-area-inset-top,44px))}
+  .screen-header{padding-top:calc(16px + env(safe-area-inset-top,44px))}
+  .cal-header{padding-top:calc(16px + env(safe-area-inset-top,44px))}
+  .profile-top{padding-top:calc(20px + env(safe-area-inset-top,44px))}
+  /* Bottom nav above home indicator */
+  .bottomnav{height:auto;padding-top:10px;padding-bottom:max(20px,env(safe-area-inset-bottom,20px))}
+  /* Search bar */
   .search-bar{margin:0 16px 12px}
+
+  /* ── ONBOARDING mobile fixes ── */
+  .ob-top{padding-top:calc(16px + env(safe-area-inset-top,44px));padding-bottom:8px}
+  /* Make body scrollable so footer/button is never hidden */
+  .ob-body{
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    justify-content:flex-start;
+    padding:16px 24px 16px
+  }
+  .ob-icon{width:54px;height:54px;border-radius:16px;font-size:26px;margin-bottom:16px}
+  .ob-title{font-size:26px;margin-bottom:10px}
+  .ob-sub{font-size:14px}
+  .ob-visual{margin-top:18px}
+  .ob-footer{
+    flex-shrink:0;
+    padding:16px 24px;
+    padding-bottom:max(24px,env(safe-area-inset-bottom,24px))
+  }
+  /* Tighten feature rows on step 1 */
+  .ob-body > div[style*="margin-top:32px"]{margin-top:16px!important}
+  .ob-body > div[style*="margin-top:32px"] > div{padding:11px 14px!important}
+  /* Step 3 form spacing */
+  .ob-form{margin-top:14px}
+  .ob-freq-sel{margin-top:12px}
 }
 
 /* Island */
