@@ -172,7 +172,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a2e;display:flex;align-item
 .search-bar span{font-size:16px;opacity:.4}
 .search-bar input{flex:1;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none}
 .search-bar input::placeholder{color:var(--muted)}
-.agents-list{flex:1;overflow-y:auto;padding:0 20px 20px}
+.agents-list{flex:1;overflow-y:auto;padding:0 20px 8px}
 .agents-list::-webkit-scrollbar{display:none}
 .al-section-title{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin:16px 0 10px}
 .agent-big{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:10px;cursor:pointer;transition:transform .15s;-webkit-tap-highlight-color:transparent}
@@ -190,7 +190,31 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a2e;display:flex;align-item
 .astat:last-child{border-right:none}
 .astat-val{font-family:'Fraunces',serif;font-size:17px;font-weight:300;color:var(--teal);margin-bottom:1px}
 .astat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.add-agent-btn{background:var(--teal);color:white;border:none;border-radius:16px;padding:14px;width:100%;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent}
+.add-agent-btn{background:var(--teal);color:white;border:none;border-radius:16px;padding:14px;width:100%;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent}
+.add-agent-sticky{position:sticky;bottom:0;left:0;right:0;padding:12px 20px 16px;background:linear-gradient(transparent,var(--bg) 40%);flex-shrink:0;margin-top:auto}
+
+/* ── ADD AGENT BOTTOM SHEET ── */
+.sheet-overlay{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s}
+.sheet-overlay.open{opacity:1;pointer-events:all}
+.sheet{position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-radius:24px 24px 0 0;z-index:601;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);max-height:82%;display:flex;flex-direction:column}
+.sheet.open{transform:translateY(0)}
+.sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 0}
+.sheet-head{padding:16px 22px 12px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border2);flex-shrink:0}
+.sheet-title{font-family:'Fraunces',serif;font-size:20px;font-weight:300}
+.sheet-close{width:30px;height:30px;border-radius:50%;background:var(--surface);border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2)}
+.sheet-body{overflow-y:auto;padding:12px 16px 32px;-webkit-overflow-scrolling:touch}
+.sheet-body::-webkit-scrollbar{display:none}
+.sheet-section{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:10px 6px 8px}
+.agent-option{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:15px 16px;margin-bottom:9px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .2s,transform .15s;-webkit-tap-highlight-color:transparent}
+.agent-option:active{transform:scale(.98)}
+.agent-option.added{border-color:var(--teal);opacity:.6;pointer-events:none}
+.ao-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ao-info{flex:1}
+.ao-name{font-size:15px;font-weight:500;color:var(--text);margin-bottom:2px}
+.ao-desc{font-size:12px;color:var(--text2)}
+.ao-add{width:32px;height:32px;border-radius:50%;background:var(--teal-dim);border:1.5px solid rgba(0,158,125,.25);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--teal);flex-shrink:0;transition:background .2s,transform .15s}
+.agent-option:active .ao-add{transform:scale(.88)}
+.agent-option.added .ao-add{background:var(--teal);color:white;font-size:14px}
 
 /* ── SCHEDULE SCREEN ── */
 .cal-header{padding:16px 24px 0;flex-shrink:0}
@@ -753,8 +777,10 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a2e;display:flex;align-item
             <div class="astat"><div class="astat-val">Today</div><div class="astat-label">Next</div></div>
           </div>
         </div>
-        <button class="add-agent-btn">+ Add New Agent</button>
       </div>
+    </div>
+    <div class="add-agent-sticky">
+      <button class="add-agent-btn" onclick="openSheet()">+ Add New Agent</button>
     </div>
 
     <!-- ── SCHEDULE ── -->
@@ -865,6 +891,115 @@ body{font-family:'DM Sans',sans-serif;background:#1a1a2e;display:flex;align-item
       <div class="bnav-label">Profile</div>
     </div>
   </div>
+
+  <!-- ── ADD AGENT SHEET ── -->
+  <div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()"></div>
+  <div class="sheet" id="agentSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Add an Agent</div>
+      <button class="sheet-close" onclick="closeSheet()">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="sheet-section">Popular</div>
+
+      <div class="agent-option" onclick="addAgent(this)">
+        <div class="ao-icon" style="background:rgba(245,106,14,.1)">🚗</div>
+        <div class="ao-info">
+          <div class="ao-name">Car Wash</div>
+          <div class="ao-desc">Every 3 weeks · Auto-scheduled</div>
+        </div>
+        <div class="ao-add">+</div>
+      </div>
+
+      <div class="agent-option" onclick="addAgent(this)">
+        <div class="ao-icon" style="background:rgba(76,110,245,.1)">💊</div>
+        <div class="ao-info">
+          <div class="ao-name">Prescription Refill</div>
+          <div class="ao-desc">Every 30 days · Auto-ordered</div>
+        </div>
+        <div class="ao-add">+</div>
+      </div>
+
+      <div class="agent-option" onclick="addAgent(this)">
+        <div class="ao-icon" style="background:rgba(45,158,95,.1)">🧘</div>
+        <div class="ao-info">
+          <div class="ao-name">Therapy Session</div>
+          <div class="ao-desc">Weekly · Recurring booking</div>
+        </div>
+        <div class="ao-add">+</div>
+      </div>
+
+      <div class="agent-option" onclick="addAgent(this)">
+        <div class="ao-icon" style="background:rgba(212,132,10,.1)">🧹</div>
+        <div class="ao-info">
+          <div class="ao-name">House Cleaning</div>
+          <div class="ao-desc">Every 2 weeks · Scheduled</div>
+        </div>
+        <div class="ao-add">+</div>
+      </div>
+
+      <div class="sheet-section">Health & Fitness</div>
+
+      <div class="agent-option" onclick="addAgent(this)">
+        <div class="ao-icon" style="background:rgba(76,110,245,.1)">👁️</div>
+        <div class="ao-info">
+          <div class="ao-name">Eye Exam</div>
+          <div class="ao-desc">Annual · Dr. Lee Optometry</div>
+        </div>
+        <div class="ao-add">+</div>
+      </div>
+
+      <div class="agent-option" onclick="addAgent(this)">
+        <div class="ao-icon" style="background:rgba(224,48,48,.1)">💪</div>
+        <div class="ao-info">
+          <div class="ao-name">Gym Membership Renewal</div>
+          <div class="ao-desc">Monthly · Auto-renewed</div>
+        </div>
+        <div class="ao-add">+</div>
+      </div>
+
+      <div class="agent-option" onclick="addAgent(this)">
+        <div class="ao-icon" style="background:rgba(245,106,14,.1)">💆</div>
+        <div class="ao-info">
+          <div class="ao-name">Massage</div>
+          <div class="ao-desc">Every 4 weeks · Wellness boost</div>
+        </div>
+        <div class="ao-add">+</div>
+      </div>
+
+      <div class="sheet-section">Home & Life</div>
+
+      <div class="agent-option" onclick="addAgent(this)">
+        <div class="ao-icon" style="background:rgba(0,158,125,.1)">🛢️</div>
+        <div class="ao-info">
+          <div class="ao-name">Oil Change</div>
+          <div class="ao-desc">Every 5,000 miles · Jiffy Lube</div>
+        </div>
+        <div class="ao-add">+</div>
+      </div>
+
+      <div class="agent-option" onclick="addAgent(this)">
+        <div class="ao-icon" style="background:rgba(212,132,10,.1)">🌿</div>
+        <div class="ao-info">
+          <div class="ao-name">Lawn Care</div>
+          <div class="ao-desc">Weekly in season · Scheduled</div>
+        </div>
+        <div class="ao-add">+</div>
+      </div>
+
+      <div class="agent-option" onclick="addAgent(this)">
+        <div class="ao-icon" style="background:rgba(76,110,245,.1)">📦</div>
+        <div class="ao-info">
+          <div class="ao-name">Grocery Delivery</div>
+          <div class="ao-desc">Weekly · Sunday mornings</div>
+        </div>
+        <div class="ao-add">+</div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -900,6 +1035,22 @@ function finishOnboarding() {
     buildCal(selectedDay);
     buildSched(selectedDay);
   }, 400);
+}
+
+// ── ADD AGENT SHEET ──
+function openSheet(){
+  document.getElementById('sheetOverlay').classList.add('open');
+  document.getElementById('agentSheet').classList.add('open');
+}
+function closeSheet(){
+  document.getElementById('sheetOverlay').classList.remove('open');
+  document.getElementById('agentSheet').classList.remove('open');
+}
+function addAgent(el){
+  if(el.classList.contains('added')) return;
+  el.classList.add('added');
+  el.querySelector('.ao-add').textContent = '✓';
+  setTimeout(closeSheet, 600);
 }
 
 // ── MAIN APP ──
