@@ -1101,13 +1101,17 @@ async function handleAuthSubmit() {
 }
 
 async function doSignOut() {
-  await sb.auth.signOut();
+  try { await sb.auth.signOut(); } catch(e) {}
   currentUser = null;
   dreams = [];
   profile = { name:'Dreamer', bio:'Dreamer from Earth', photoSrc:null };
+  const navRight = document.getElementById('profile-nav-right');
+  if (navRight) navRight.innerHTML = `
+    <button class="nav-tab" onclick="showDiscover()">Discover</button>
+    <button class="btn-filled" onclick="triggerShareSignup()">Save vision board</button>`;
   updateNavAvatars();
   showScreen('screen-home');
-  setTimeout(() => homeInput.focus(), 400);
+  setTimeout(() => { try { homeInput.focus(); } catch(e) {} }, 400);
 }
 
 async function loadUserData() {
