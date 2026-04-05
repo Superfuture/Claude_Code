@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joey Primiani — Entrepreneur & Product Designer</title>
+<meta name="description" content="Joey Primiani is a product designer and entrepreneur. Co-founder of Backplane (Little Monsters), creator of Cortex, Forbes 30 Under 30.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d0b;
+  --bg2:#141412;
+  --bg3:#1c1c19;
+  --text:#f2ede4;
+  --text2:#7a7872;
+  --text3:#3d3d3a;
+  --accent:#c8b89a;
+  --accent2:#e8dfd0;
+  --border:rgba(242,237,228,0.07);
+  --border2:rgba(242,237,228,0.04);
+  --display:'Cormorant Garamond',Georgia,serif;
+  --body:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+}
+html{scroll-behavior:smooth;cursor:none}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+.cursor{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(200,184,154,0.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,opacity .3s}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9997;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 48px;display:flex;align-items:center;justify-content:space-between;transition:background .4s}
+nav.scrolled{background:rgba(13,13,11,0.88);backdrop-filter:blur(16px)}
+.nav-logo{font-family:var(--display);font-size:18px;font-weight:400;color:var(--text);letter-spacing:.02em;text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:36px}
+.nav-link{font-size:12px;font-weight:400;color:var(--text2);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:color .2s}
+.nav-link:hover{color:var(--text)}
+.nav-cta{font-size:12px;font-weight:500;color:var(--bg);background:var(--accent2);border:none;padding:9px 20px;border-radius:2px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;cursor:none;transition:background .2s,transform .2s}
+.nav-cta:hover{background:var(--text);transform:translateY(-1px)}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 48px 72px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 40%,rgba(200,184,154,0.06) 0%,transparent 60%)}
+.hero-index{position:absolute;top:50%;right:48px;transform:translateY(-50%);font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.15em;writing-mode:vertical-rl}
+.hero-tag{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px;opacity:0;animation:fadeIn .8s ease .2s forwards}
+.hero-title{font-family:var(--display);font-weight:300;font-size:clamp(52px,8vw,112px);line-height:.92;letter-spacing:-.02em;color:var(--text);margin-bottom:40px}
+.hero-title em{font-style:italic;color:var(--accent)}
+.hero-title .line{display:block;overflow:hidden}
+.hero-title .line span{display:block;transform:translateY(100%);animation:slideUp .9s cubic-bezier(0.16,1,0.3,1) forwards}
+.hero-title .line:nth-child(1) span{animation-delay:.3s}
+.hero-title .line:nth-child(2) span{animation-delay:.45s}
+.hero-title .line:nth-child(3) span{animation-delay:.6s}
+.hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;opacity:0;animation:fadeIn .8s ease .9s forwards}
+.hero-desc{max-width:420px;font-size:15px;color:var(--text2);font-weight:300;line-height:1.7}
+.hero-awards{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.hero-award{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.12em;text-align:right}
+.hero-award span{color:var(--accent)}
+
+.marquee-wrap{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 0;overflow:hidden}
+.marquee-track{display:flex;gap:48px;white-space:nowrap;animation:marquee 30s linear infinite}
+.marquee-item{font-family:var(--display);font-style:italic;font-size:14px;color:var(--text3);flex-shrink:0}
+.marquee-dot{color:var(--accent);margin-right:48px}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+section{padding:120px 48px}
+.section-label{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.2em;text-transform:uppercase;margin-bottom:64px}
+.section-label::before{content:'';width:24px;height:1px;background:var(--text3)}
+
+/* Work */
+.work-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.work-item{position:relative;overflow:hidden;background:var(--bg2);cursor:none}
+.work-item.featured{grid-column:span 2}
+.work-img{width:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg3);position:relative}
+.work-item:not(.featured) .work-img{aspect-ratio:16/10}
+.work-item.featured .work-img{aspect-ratio:21/8}
+.work-img-overlay{position:absolute;inset:0;background:rgba(13,13,11,0);transition:background .4s}
+.work-item:hover .work-img-overlay{background:rgba(13,13,11,0.35)}
+
+.img-lm{background:linear-gradient(135deg,#0a0a1a 0%,#0d0d2e 30%,#1a0a2e 60%,#2e0a1e 100%)}
+.img-lm-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.lm-logo{font-family:var(--display);font-size:clamp(48px,8vw,96px);font-weight:300;color:rgba(255,255,255,0.07);letter-spacing:.1em;text-transform:uppercase}
+.lm-pulse{position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(180,100,255,0.08) 0%,transparent 70%);animation:pulse 3s ease infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.3);opacity:1}}
+
+.img-cortex{background:linear-gradient(135deg,#0a1a0a 0%,#0d2e0d 40%,#0a2e1a 100%)}
+.img-folio{background:linear-gradient(135deg,#1a0a0a 0%,#2e1a0a 40%,#3d1a0a 100%)}
+.img-superfuture{background:linear-gradient(135deg,#0a0a0a 0%,#141414 40%,#1a1a16 100%)}
+
+.work-meta{padding:28px 32px 32px}
+.work-tags{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.work-tag{font-family:var(--mono);font-size:9px;font-weight:400;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border);padding:3px 8px;border-radius:1px}
+.work-title{font-family:var(--display);font-size:clamp(22px,2.5vw,32px);font-weight:400;color:var(--text);line-height:1.15;letter-spacing:-.01em;margin-bottom:10px}
+.work-desc{font-size:13px;color:var(--text2);line-height:1.65;max-width:480px}
+.work-stat{display:flex;gap:32px;margin-top:20px;padding-top:20px;border-top:1px solid var(--border2)}
+.work-stat-item{display:flex;flex-direction:column;gap:2px}
+.work-stat-val{font-family:var(--display);font-size:24px;font-weight:300;color:var(--accent)}
+.work-stat-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em}
+
+/* Logos/Press */
+.press-row{border-top:1px solid var(--border);border-left:1px solid var(--border);display:flex;flex-wrap:wrap}
+.press-item{padding:24px 48px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:6px}
+.press-pub{font-family:var(--display);font-size:16px;font-weight:300;color:var(--text3);transition:color .2s}
+.press-item:hover .press-pub{color:var(--text)}
+.press-headline{font-size:11px;color:var(--text3);line-height:1.4;max-width:200px;font-style:italic}
+
+/* About */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.about-intro{font-family:var(--display);font-size:clamp(28px,3.5vw,44px);font-weight:300;line-height:1.2;letter-spacing:-.02em;color:var(--text);margin-bottom:32px}
+.about-intro em{font-style:italic;color:var(--accent)}
+.about-body{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:32px}
+.about-body p+p{margin-top:14px}
+.about-links{display:flex;gap:20px;flex-wrap:wrap}
+.about-link{font-size:12px;font-weight:500;color:var(--text);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:3px;transition:border-color .2s,color .2s}
+.about-link:hover{border-color:var(--accent);color:var(--accent)}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:0}
+.about-stat{background:var(--bg);padding:24px}
+.about-stat-val{font-family:var(--display);font-size:40px;font-weight:300;color:var(--text);letter-spacing:-.02em;line-height:1;margin-bottom:4px}
+.about-stat-label{font-size:11px;color:var(--text2)}
+.timeline{display:flex;flex-direction:column;gap:0;margin-bottom:32px}
+.timeline-item{display:grid;grid-template-columns:64px 1fr;gap:20px;padding:18px 0;border-bottom:1px solid var(--border2)}
+.timeline-item:last-child{border-bottom:none}
+.timeline-year{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.1em;padding-top:3px}
+.timeline-name{font-size:14px;color:var(--text);font-weight:400;margin-bottom:2px}
+.timeline-desc{font-size:12px;color:var(--text3)}
+
+/* Services */
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.service-card{background:var(--bg);padding:40px 32px;transition:background .3s}
+.service-card:hover{background:var(--bg2)}
+.service-num{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.15em;margin-bottom:24px}
+.service-title{font-family:var(--display);font-size:24px;font-weight:400;color:var(--text);letter-spacing:-.01em;margin-bottom:16px;line-height:1.2}
+.service-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:24px}
+.service-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.service-list li{font-size:12px;color:var(--text3);padding-left:14px;position:relative}
+.service-list li::before{content:'—';position:absolute;left:0;color:var(--text3)}
+
+/* Testimonials */
+.testimonials-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.testimonial{background:var(--bg2);padding:44px;transition:background .3s}
+.testimonial:hover{background:var(--bg3)}
+.testimonial-quote{font-family:var(--display);font-size:clamp(17px,2vw,21px);font-weight:300;font-style:italic;color:var(--text);line-height:1.55;letter-spacing:-.01em;margin-bottom:28px}
+.testimonial-author{display:flex;align-items:center;gap:12px}
+.testimonial-avatar{width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:14px;color:var(--text2);flex-shrink:0}
+.testimonial-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.testimonial-role{font-size:10px;color:var(--text3);font-family:var(--mono);letter-spacing:.05em}
+
+/* Contact */
+.contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.contact-title{font-family:var(--display);font-size:clamp(40px,5vw,68px);font-weight:300;line-height:.95;letter-spacing:-.03em;color:var(--text);margin-bottom:24px}
+.contact-title em{font-style:italic;color:var(--accent)}
+.contact-desc{font-size:14px;color:var(--text2);line-height:1.7;max-width:380px;margin-bottom:40px}
+.contact-details{display:flex;flex-direction:column;gap:16px}
+.contact-detail{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--text2)}
+.contact-detail-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.15em;text-transform:uppercase;width:60px;flex-shrink:0}
+.contact-detail a{color:var(--text2);text-decoration:none;transition:color .2s}
+.contact-detail a:hover{color:var(--accent)}
+.contact-form{display:flex;flex-direction:column;gap:0}
+.form-row{border:1px solid var(--border);margin-top:-1px;position:relative}
+.form-label{display:block;padding:16px 20px 0;font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.15em;text-transform:uppercase}
+.form-input,.form-textarea{display:block;width:100%;background:transparent;border:none;outline:none;padding:6px 20px 16px;font-family:var(--body);font-size:14px;color:var(--text);resize:none;cursor:none}
+.form-textarea{min-height:120px}
+.form-row:focus-within{border-color:rgba(200,184,154,0.25);z-index:1;background:rgba(200,184,154,0.015)}
+.form-submit{margin-top:12px;background:var(--accent2);border:none;padding:16px 32px;font-family:var(--body);font-size:13px;font-weight:500;color:var(--bg);letter-spacing:.08em;text-transform:uppercase;cursor:none;transition:background .2s,transform .2s;align-self:flex-start;border-radius:2px}
+.form-submit:hover{background:var(--text);transform:translateY(-1px)}
+
+footer{border-top:1px solid var(--border);padding:32px 48px;display:flex;align-items:center;justify-content:space-between}
+.footer-left{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.1em}
+.footer-right{display:flex;gap:24px}
+.footer-link{font-size:11px;color:var(--text3);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;font-family:var(--mono)}
+.footer-link:hover{color:var(--accent)}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(0.16,1,0.3,1),transform .8s cubic-bezier(0.16,1,0.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+@media(max-width:900px){
+  nav{padding:20px 24px}
+  .nav-links{display:none}
+  .hero{padding:0 24px 56px}
+  section{padding:80px 24px}
+  .work-grid{grid-template-columns:1fr}
+  .work-item.featured{grid-column:span 1}
+  .work-item.featured .work-img{aspect-ratio:16/10}
+  .about-grid{grid-template-columns:1fr}
+  .services-grid{grid-template-columns:1fr}
+  .testimonials-grid{grid-template-columns:1fr}
+  .contact-inner{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:16px;text-align:center;padding:24px}
+  .press-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav id="nav">
+  <a href="#" class="nav-logo">Joey Primiani</a>
+  <div class="nav-links">
+    <a href="#work" class="nav-link">Work</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#services" class="nav-link">Services</a>
+    <a href="#contact" class="nav-link">Contact</a>
+    <a href="mailto:joey@superfuture.com" class="nav-cta">Work Together</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-index">Superfuture Studio · Est. 2016</div>
+  <div class="hero-tag">Entrepreneur · Product Designer · Creative Director</div>
+  <h1 class="hero-title">
+    <span class="line"><span>Building things</span></span>
+    <span class="line"><span>people <em>obsess</em></span></span>
+    <span class="line"><span>over.</span></span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      I design and build consumer products at the intersection of culture and technology. Co-founder of Little Monsters, creator of Cortex, Forbes 30 Under 30.
+    </p>
+    <div class="hero-awards">
+      <div class="hero-award"><span>Forbes</span> 30 Under 30 · Consumer Technology · 2016</div>
+      <div class="hero-award"><span>Fast Company</span> Best Ideas in Interface Design</div>
+      <div class="hero-award"><span>Sequoia · Lady Gaga · Eric Schmidt</span> backed</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Consumer Social</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Product Design</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">AI Products</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Brand Identity</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Community Platforms</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Creative Direction</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">0 → 1 Products</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Consumer Social</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Product Design</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">AI Products</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Brand Identity</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Community Platforms</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">Creative Direction</span><span class="marquee-dot">·</span>
+    <span class="marquee-item">0 → 1 Products</span><span class="marquee-dot">·</span>
+  </div>
+</div>
+
+<!-- WORK -->
+<section id="work">
+  <div class="section-label">Selected Work</div>
+  <div class="work-grid">
+
+    <!-- Little Monsters -->
+    <div class="work-item featured reveal">
+      <div class="work-img img-lm" style="aspect-ratio:21/8">
+        <div class="work-img-overlay"></div>
+        <div class="lm-pulse"></div>
+        <div class="lm-logo">Little Monsters</div>
+      </div>
+      <div class="work-meta">
+        <div class="work-tags">
+          <span class="work-tag">Consumer Social</span>
+          <span class="work-tag">Community Platform</span>
+          <span class="work-tag">Backplane · 2011–2016</span>
+        </div>
+        <div class="work-title">Little Monsters — Lady Gaga's Social Network</div>
+        <div class="work-desc">Co-founded Backplane and designed LittleMonsters.com — Lady Gaga's official fan social network. Backed by Lady Gaga, Eric Schmidt, and Sequoia Capital. Grew to 1 million users and raised $4M+ in funding. Built the community infrastructure that became the blueprint for creator-owned social networks.</div>
+        <div class="work-stat">
+          <div class="work-stat-item">
+            <div class="work-stat-val">1M+</div>
+            <div class="work-stat-label">Users</div>
+          </div>
+          <div class="work-stat-item">
+            <div class="work-stat-val">$4M+</div>
+            <div class="work-stat-label">Raised</div>
+          </div>
+          <div class="work-stat-item">
+            <div class="work-stat-val">Sequoia</div>
+            <div class="work-stat-label">Lead Investor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cortex -->
+    <div class="work-item reveal">
+      <div class="work-img img-cortex" style="aspect-ratio:16/10">
+        <div class="work-img-overlay"></div>
+        <div style="font-family:var(--display);font-size:clamp(40px,6vw,72px);font-style:italic;font-weight:300;color:rgba(242,237,228,0.06)">Cortex</div>
+      </div>
+      <div class="work-meta">
+        <div class="work-tags">
+          <span class="work-tag">Browser Extension</span>
+          <span class="work-tag">Interface Design</span>
+          <span class="work-tag">2011</span>
+        </div>
+        <div class="work-title">Cortex — Chrome Sharing Tool</div>
+        <div class="work-desc">Created Cortex, a Google Chrome extension featuring a circular interface for one-click sharing to Facebook, Twitter, and Tumblr. Fast Company called it "ingenious" and named it one of the best ideas in interface design. Acquired by Backplane as part of the Sequoia round.</div>
+        <div class="work-stat">
+          <div class="work-stat-item">
+            <div class="work-stat-val">Fast Co.</div>
+            <div class="work-stat-label">Best Interface Design</div>
+          </div>
+          <div class="work-stat-item">
+            <div class="work-stat-val">Acquired</div>
+            <div class="work-stat-label">by Backplane</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Folio -->
+    <div class="work-item reveal reveal-delay-1">
+      <div class="work-img img-folio" style="aspect-ratio:16/10">
+        <div class="work-img-overlay"></div>
+        <div style="font-family:var(--display);font-size:clamp(40px,6vw,72px);font-style:italic;font-weight:300;color:rgba(242,237,228,0.06)">Folio</div>
+      </div>
+      <div class="work-meta">
+        <div class="work-tags">
+          <span class="work-tag">Mobile App</span>
+          <span class="work-tag">NFT · Social</span>
+          <span class="work-tag">2022</span>
+        </div>
+        <div class="work-title">Folio — NFT Social Network</div>
+        <div class="work-desc">Co-founded Folio, the first mobile NFT social network, focused on LGBTQ+ and underrepresented artists. Built by the same team behind Little Monsters, applying the same community-first philosophy to the creator economy and digital art.</div>
+        <div class="work-stat">
+          <div class="work-stat-item">
+            <div class="work-stat-val">First</div>
+            <div class="work-stat-label">Mobile NFT Social</div>
+          </div>
+          <div class="work-stat-item">
+            <div class="work-stat-val">LGBTQ+</div>
+            <div class="work-stat-label">Focused Platform</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRESS -->
+<div class="press-row reveal">
+  <div class="press-item">
+    <div class="press-pub">TechCrunch</div>
+    <div class="press-headline">"Lady Gaga-Backed Backplane Raises Over $4M From Sequoia"</div>
+  </div>
+  <div class="press-item">
+    <div class="press-pub">Fast Company</div>
+    <div class="press-headline">"Cortex Solves One of Social Media's Big Problems"</div>
+  </div>
+  <div class="press-item">
+    <div class="press-pub">Forbes</div>
+    <div class="press-headline">30 Under 30 — Consumer Technology 2016</div>
+  </div>
+  <div class="press-item">
+    <div class="press-pub">Business Wire</div>
+    <div class="press-headline">"Folio Launches the First Mobile NFT Social Network"</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" style="padding-top:120px">
+  <div class="section-label">About</div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <div class="about-intro">
+        I build things at the <em>intersection</em> of culture, community, and technology.
+      </div>
+      <div class="about-body">
+        <p>I've spent my career creating digital products that people don't just use — they identify with. From designing Lady Gaga's social network to shipping a Chrome extension that Fast Company called ingenious, I've always been drawn to the hard problem of making technology feel human.</p>
+        <p>Today I run Superfuture, a creative studio focused on experimental digital products and social experiences. I work with a small number of clients on product design, creative direction, and building 0→1 consumer products.</p>
+        <p>I'm a Forbes 30 Under 30 alumnus and have been backed by Sequoia Capital, Lady Gaga, and Eric Schmidt.</p>
+      </div>
+      <div class="about-links">
+        <a href="https://twitter.com" class="about-link">Twitter</a>
+        <a href="https://linkedin.com" class="about-link">LinkedIn</a>
+        <a href="https://dribbble.com" class="about-link">Dribbble</a>
+        <a href="https://superfuture.github.io/Claude_Code/" class="about-link">Superfuture</a>
+      </div>
+    </div>
+    <div class="about-right reveal reveal-delay-2">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">2011</div>
+          <div>
+            <div class="timeline-name">Cortex → Backplane</div>
+            <div class="timeline-desc">Created Cortex, joined Backplane, raised Sequoia round</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2012</div>
+          <div>
+            <div class="timeline-name">Little Monsters launches</div>
+            <div class="timeline-desc">Lady Gaga's social network reaches 1M users</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2016</div>
+          <div>
+            <div class="timeline-name">Forbes 30 Under 30</div>
+            <div class="timeline-desc">Named to Consumer Technology list</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2016</div>
+          <div>
+            <div class="timeline-name">Superfuture founded</div>
+            <div class="timeline-desc">Creative studio for experimental digital products</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2022</div>
+          <div>
+            <div class="timeline-name">Folio launches</div>
+            <div class="timeline-desc">First mobile NFT social network for underrepresented artists</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">Now</div>
+          <div>
+            <div class="timeline-name">Superfuture Consulting</div>
+            <div class="timeline-desc">Product design, AI products, consumer social</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-stats">
+        <div class="about-stat">
+          <div class="about-stat-val">1M+</div>
+          <div class="about-stat-label">Peak users shipped</div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-val">$4M+</div>
+          <div class="about-stat-label">Capital raised</div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-val">3</div>
+          <div class="about-stat-label">Companies co-founded</div>
+        </div>
+        <div class="about-stat">
+          <div class="about-stat-val">30U30</div>
+          <div class="about-stat-label">Forbes, 2016</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">What I Do</div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <div class="service-title">Product Design</div>
+      <div class="service-desc">End-to-end product design for consumer apps and platforms — from concept and strategy through high-fidelity UI and launch. I've taken products from 0 to 1M users.</div>
+      <ul class="service-list">
+        <li>Consumer App Design</li>
+        <li>Community Platforms</li>
+        <li>Mobile-First Products</li>
+        <li>Prototyping & Validation</li>
+        <li>Design Systems</li>
+      </ul>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <div class="service-title">AI Product Design</div>
+      <div class="service-desc">Designing AI-native products that feel intelligent and human at the same time. I help teams figure out what to build with AI and how to make it feel inevitable.</div>
+      <ul class="service-list">
+        <li>AI Product Strategy</li>
+        <li>Agent UX Design</li>
+        <li>Human-AI Interaction</li>
+        <li>Rapid Prototyping</li>
+        <li>Product Direction</li>
+      </ul>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <div class="service-title">Creative Direction</div>
+      <div class="service-desc">Brand, identity, and creative direction for companies that want to stand out. I bring the same sensibility that made Little Monsters culturally resonant to your brand.</div>
+      <ul class="service-list">
+        <li>Brand Strategy</li>
+        <li>Visual Identity</li>
+        <li>Art Direction</li>
+        <li>Launch Campaigns</li>
+        <li>Culture-First Positioning</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section style="padding-top:0">
+  <div class="section-label">What People Say</div>
+  <div class="testimonials-grid">
+    <div class="testimonial reveal">
+      <div class="testimonial-quote">"Joey has a rare ability to see both the cultural moment and the product opportunity simultaneously. Working with him on Backplane was unlike anything else — he just gets how people want to connect."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">BP</div>
+        <div>
+          <div class="testimonial-name">Backplane Co-founder</div>
+          <div class="testimonial-role">Backplane, 2011–2016</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial reveal reveal-delay-2">
+      <div class="testimonial-quote">"The Cortex interface was one of those rare designs that made you wonder why no one had thought of it before. Joey sees interaction problems in a completely different way."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">TC</div>
+        <div>
+          <div class="testimonial-name">Josh Constine</div>
+          <div class="testimonial-role">TechCrunch</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Let's Work Together</div>
+  <div class="contact-inner">
+    <div class="contact-left reveal">
+      <div class="contact-title">Got a big <em>idea?</em></div>
+      <div class="contact-desc">I take on a small number of projects each year. If you're building something ambitious in consumer social, AI, or need a creative partner who's done it before — let's talk.</div>
+      <div class="contact-details">
+        <div class="contact-detail">
+          <span class="contact-detail-label">Email</span>
+          <a href="mailto:joey@superfuture.com">joey@superfuture.com</a>
+        </div>
+        <div class="contact-detail">
+          <span class="contact-detail-label">Based</span>
+          <span>San Francisco Bay Area</span>
+        </div>
+        <div class="contact-detail">
+          <span class="contact-detail-label">Studio</span>
+          <a href="https://superfuture.github.io/Claude_Code/">Superfuture</a>
+        </div>
+      </div>
+    </div>
+    <div class="contact-right reveal reveal-delay-2">
+      <form class="contact-form" onsubmit="return false">
+        <div class="form-row">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-input" placeholder="Your name">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" placeholder="your@company.com">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Project</label>
+          <input type="text" class="form-input" placeholder="What are you building?">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Budget</label>
+          <input type="text" class="form-input" placeholder="Rough range">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" placeholder="Tell me about the problem you're solving..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Message →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">© 2025 Joey Primiani / Superfuture — All rights reserved</div>
+  <div class="footer-right">
+    <a href="https://twitter.com" class="footer-link">Twitter</a>
+    <a href="https://dribbble.com" class="footer-link">Dribbble</a>
+    <a href="https://linkedin.com" class="footer-link">LinkedIn</a>
+    <a href="https://superfuture.github.io/Claude_Code/" class="footer-link">Superfuture</a>
+  </div>
+</footer>
+
+<script>
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'});
+function animateRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animateRing)}
+animateRing();
+document.querySelectorAll('a,button,.work-item,.service-card,.testimonial').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='40px';cursor.style.height='40px';cursor.style.background='rgba(200,184,154,0.2)';ring.style.width='60px';ring.style.height='60px';ring.style.opacity='0'});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';cursor.style.background='var(--accent)';ring.style.width='36px';ring.style.height='36px';ring.style.opacity='1'});
+});
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>40));
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}})});
+</script>
+</body>
+</html>
