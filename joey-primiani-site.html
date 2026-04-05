@@ -236,10 +236,10 @@ a.press-pub:hover{color:var(--dim)}
 @media(max-width:480px){
   .wrap{padding:40px 20px 80px}
   body{font-size:13px}
-  .row{flex-wrap:wrap;gap:4px}
-  .row-left{flex:1 1 100%}
-  .row-right{flex:1 1 100%;justify-content:flex-start}
-  .row-sub{white-space:normal;overflow:visible;text-overflow:unset}
+  .row{flex-wrap:nowrap;gap:8px}
+  .row-left{flex:1;min-width:0}
+  .row-right{flex-shrink:0}
+  .row-sub{display:none}
   .press-row{flex-wrap:wrap;gap:4px}
   .press-pub{min-width:unset;width:100%}
   .press-line{width:100%}
