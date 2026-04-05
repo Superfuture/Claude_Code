@@ -1102,6 +1102,12 @@ async function handleAuthSubmit() {
 
 async function doSignOut() {
   await sb.auth.signOut();
+  currentUser = null;
+  dreams = [];
+  profile = { name:'Dreamer', bio:'Dreamer from Earth', photoSrc:null };
+  updateNav();
+  showScreen('screen-home');
+  setTimeout(() => homeInput.focus(), 400);
 }
 
 async function loadUserData() {
