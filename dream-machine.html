@@ -1620,7 +1620,6 @@ function copyShareLink() {
 
 async function deleteDream(id, e) {
   e.stopPropagation();
-  if (!confirm('Delete this dream?')) return;
   dreams = dreams.filter(d => String(d.id) !== String(id));
   if (currentUser && !String(id).startsWith('tmp-')) {
     await sb.from('dreams').delete().eq('id', id);
