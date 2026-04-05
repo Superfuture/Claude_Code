@@ -1046,11 +1046,52 @@ function closeSheet(){
   document.getElementById('sheetOverlay').classList.remove('open');
   document.getElementById('agentSheet').classList.remove('open');
 }
+const agentDetails = {
+  'Car Wash':            {icon:'🚗',bg:'rgba(245,106,14,.1)', freq:'Every 3 weeks',    next:'Apr 24',  times:0, stat2:'3w'},
+  'Prescription Refill': {icon:'💊',bg:'rgba(76,110,245,.1)', freq:'Every 30 days',    next:'May 1',   times:0, stat2:'30d'},
+  'Therapy Session':     {icon:'🧘',bg:'rgba(45,158,95,.1)',  freq:'Weekly',           next:'Apr 10',  times:0, stat2:'1w'},
+  'House Cleaning':      {icon:'🧹',bg:'rgba(212,132,10,.1)', freq:'Every 2 weeks',    next:'Apr 17',  times:0, stat2:'2w'},
+  'Eye Exam':            {icon:'👁️',bg:'rgba(76,110,245,.1)', freq:'Annual',           next:'Jan 2026',times:0, stat2:'1yr'},
+  'Gym Membership Renewal':{icon:'💪',bg:'rgba(224,48,48,.1)',freq:'Monthly',          next:'May 1',   times:0, stat2:'1mo'},
+  'Massage':             {icon:'💆',bg:'rgba(245,106,14,.1)', freq:'Every 4 weeks',    next:'Apr 30',  times:0, stat2:'4w'},
+  'Oil Change':          {icon:'🛢️',bg:'rgba(0,158,125,.1)', freq:'Every 5,000 miles', next:'Jun 1',  times:0, stat2:'5kmi'},
+  'Lawn Care':           {icon:'🌿',bg:'rgba(212,132,10,.1)', freq:'Weekly in season', next:'Apr 8',   times:0, stat2:'1w'},
+  'Grocery Delivery':    {icon:'📦',bg:'rgba(76,110,245,.1)', freq:'Weekly',           next:'Sun 10am',times:0, stat2:'1w'},
+};
+
 function addAgent(el){
   if(el.classList.contains('added')) return;
+  const name = el.querySelector('.ao-name').textContent;
+  const d = agentDetails[name] || {icon:'⚡',bg:'rgba(0,158,125,.1)',freq:'Custom',next:'TBD',times:0,stat2:'—'};
+
+  // Build and inject agent card into the agents list
+  const list = document.querySelector('.agents-list');
+  const card = document.createElement('div');
+  card.className = 'agent-big';
+  card.style.animation = 'agentIn .35s ease forwards';
+  card.innerHTML = `
+    <div class="agent-big-top">
+      <div class="agent-big-icon" style="background:${d.bg}">${d.icon}</div>
+      <div class="agent-big-info">
+        <div class="agent-big-name">${name}</div>
+        <div class="agent-big-freq">${d.freq}</div>
+        <div class="agent-big-live">
+          <div class="agent-big-live-dot"></div>
+          <div class="agent-big-live-text">Active · Next ${d.next}</div>
+        </div>
+      </div>
+    </div>
+    <div class="agent-stats">
+      <div class="astat"><div class="astat-val">0</div><div class="astat-label">Times booked</div></div>
+      <div class="astat"><div class="astat-val">${d.stat2}</div><div class="astat-label">Frequency</div></div>
+      <div class="astat"><div class="astat-val">${d.next}</div><div class="astat-label">Next</div></div>
+    </div>`;
+  list.appendChild(card);
+
+  // Mark as added in sheet
   el.classList.add('added');
   el.querySelector('.ao-add').textContent = '✓';
-  setTimeout(closeSheet, 600);
+  setTimeout(closeSheet, 500);
 }
 
 // ── MAIN APP ──
