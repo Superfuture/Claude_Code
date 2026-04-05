@@ -256,6 +256,18 @@ body { background: #fff; font-family: var(--font); color: var(--black); overflow
 .dream-tile:hover .tile-edit-btn { opacity: 1; }
 .tile-edit-btn:hover { background: rgba(0,0,0,.7); }
 .tile-edit-btn svg { width:12px;height:12px;stroke:currentColor;stroke-width:2;fill:none;flex-shrink:0; }
+.tile-delete-btn {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(0,0,0,.45); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.35); border-radius: 50%;
+  width: 28px; height: 28px; padding: 0;
+  color: #fff; cursor: pointer; z-index: 4;
+  opacity: 0; transition: opacity .2s, background .2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.dream-tile:hover .tile-delete-btn { opacity: 1; }
+.tile-delete-btn:hover { background: rgba(180,0,0,.7); }
+.tile-delete-btn svg { width:13px;height:13px; }
 .tile-add {
   aspect-ratio: 1; border-radius: 22px; border: 2px dashed #ccc;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
@@ -1606,6 +1618,16 @@ function copyShareLink() {
   showToast('Link copied ✓');
 }
 
+async function deleteDream(id, e) {
+  e.stopPropagation();
+  if (!confirm('Delete this dream?')) return;
+  dreams = dreams.filter(d => String(d.id) !== String(id));
+  if (currentUser && !String(id).startsWith('tmp-')) {
+    await sb.from('dreams').delete().eq('id', id);
+  }
+  renderProfile();
+}
+
 function makeProfileTile(dream, i) {
   const tile = document.createElement('div');
   tile.className = 'dream-tile' + (dream.imageUrl ? '' : ' placeholder');
@@ -1623,6 +1645,9 @@ function makeProfileTile(dream, i) {
   }
   html += `<button class="tile-edit-btn" onclick="openEditor('${dream.id}',event)">
     <svg viewBox="0 0 14 14" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5l2 2L4 12H2v-2z"/></svg>Edit image
+  </button>
+  <button class="tile-delete-btn" onclick="deleteDream('${dream.id}',event)">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h10M5 4V2.5h4V4M5.5 6.5v4M8.5 6.5v4M3 4l.8 7.5h6.4L11 4"/></svg>
   </button>`;
   if (dream.completed) html += `<div class="tile-check"><svg viewBox="0 0 13 13"><polyline points="2,6.5 5,10 11,3"/></svg></div>`;
   html += `<div class="tile-text">${dream.text}</div>`;
@@ -1631,7 +1656,7 @@ function makeProfileTile(dream, i) {
   tile.style.cursor = 'pointer';
   tile.title = 'See who shares this dream';
   tile.addEventListener('click', e => {
-    if (e.target.closest('.tile-edit-btn')) return;
+    if (e.target.closest('.tile-edit-btn') || e.target.closest('.tile-delete-btn')) return;
     const idx = dreams.findIndex(d => d.id === dream.id);
     showDreamPage(idx);
   });
@@ -1969,6 +1994,7 @@ function showToast(msg) {
     } else if (event === 'SIGNED_OUT') {
       currentUser = null; dreams = [];
       profile = { name:'Dreamer', bio:'Dreamer from Earth', photoSrc:null };
+      updateNav();
       showScreen('screen-home');
       hideVeil();
       setTimeout(() => homeInput.focus(), 400);
