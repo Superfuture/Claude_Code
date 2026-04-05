@@ -14,13 +14,13 @@
 <style>
 
 /* ── Themes ── */
-[data-theme="1"]{--bg:#0f0f0f;--fg:#e8e4dc;--dim:#555;--a:#e8e4dc;--b:#222}
-[data-theme="2"]{--bg:#f5f2eb;--fg:#1a1a1a;--dim:#999;--a:#1a1a1a;--b:#e0dcd4}
-[data-theme="3"]{--bg:#0d1117;--fg:#58a6ff;--dim:#30363d;--a:#58a6ff;--b:#161b22}
-[data-theme="4"]{--bg:#0a0a00;--fg:#c8ff00;--dim:#3a3a00;--a:#c8ff00;--b:#111100}
-[data-theme="5"]{--bg:#1a0a0a;--fg:#ff8fa3;--dim:#4a1a1a;--a:#ff8fa3;--b:#2a0f0f}
-[data-theme="6"]{--bg:#f0ebe0;--fg:#3d2b1f;--dim:#b8a898;--a:#3d2b1f;--b:#e5dfd3}
-[data-theme="7"]{--bg:#0a0f1a;--fg:#a0c4e8;--dim:#1e2d45;--a:#a0c4e8;--b:#0f1825}
+[data-theme="1"]{--bg:#0f0f0f;--fg:#e8e4dc;--dim:#777;--a:#e8e4dc;--b:#2a2a2a}
+[data-theme="2"]{--bg:#f5f2eb;--fg:#1a1a1a;--dim:#888;--a:#1a1a1a;--b:#d8d4cc}
+[data-theme="3"]{--bg:#0d1117;--fg:#58a6ff;--dim:#4a6a8a;--a:#58a6ff;--b:#1e2d3d}
+[data-theme="4"]{--bg:#0a0a00;--fg:#c8ff00;--dim:#5a5a00;--a:#c8ff00;--b:#1a1a00}
+[data-theme="5"]{--bg:#1a0a0a;--fg:#ff8fa3;--dim:#7a3a4a;--a:#ff8fa3;--b:#3a1a22}
+[data-theme="6"]{--bg:#f0ebe0;--fg:#3d2b1f;--dim:#9a8878;--a:#3d2b1f;--b:#ddd8cc}
+[data-theme="7"]{--bg:#0a0f1a;--fg:#a0c4e8;--dim:#3a5a7a;--a:#a0c4e8;--b:#162030}
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -28,8 +28,8 @@ body{
   background:var(--bg);
   color:var(--fg);
   font-family:'IBM Plex Mono',monospace;
-  font-size:13px;
-  line-height:1.7;
+  font-size:14px;
+  line-height:1.8;
   -webkit-font-smoothing:antialiased;
   transition:background .3s,color .3s;
   min-height:100vh;
@@ -39,9 +39,9 @@ a{color:var(--fg);text-decoration:none}
 
 /* ── Layout ── */
 .wrap{
-  max-width:580px;
+  max-width:640px;
   margin:0 auto;
-  padding:64px 24px 96px;
+  padding:72px 32px 112px;
 }
 
 /* ── Header ── */
@@ -78,13 +78,13 @@ a{color:var(--fg);text-decoration:none}
 .theme-btn:hover{color:var(--fg);border-color:var(--dim)}
 
 /* ── Sections ── */
-.sec{margin-bottom:36px}
+.sec{margin-bottom:48px}
 .sec-label{
   font-size:11px;
   font-weight:400;
   color:var(--dim);
-  margin-bottom:12px;
-  letter-spacing:.08em;
+  margin-bottom:16px;
+  letter-spacing:.1em;
   text-transform:uppercase;
 }
 
@@ -94,7 +94,7 @@ a{color:var(--fg);text-decoration:none}
   align-items:baseline;
   justify-content:space-between;
   gap:16px;
-  padding:6px 0;
+  padding:10px 0;
   border-top:1px solid var(--b);
 }
 .row:last-child{border-bottom:1px solid var(--b)}
@@ -106,13 +106,13 @@ a{color:var(--fg);text-decoration:none}
   min-width:0;
 }
 .row-name{
-  font-size:13px;
+  font-size:14px;
   font-weight:400;
   color:var(--fg);
   white-space:nowrap;
 }
 .row-sub{
-  font-size:12px;
+  font-size:13px;
   font-weight:300;
   color:var(--dim);
   overflow:hidden;
@@ -122,11 +122,11 @@ a{color:var(--fg);text-decoration:none}
 .row-right{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:14px;
   flex-shrink:0;
 }
 .row-year{
-  font-size:12px;
+  font-size:13px;
   color:var(--dim);
   white-space:nowrap;
 }
@@ -294,6 +294,7 @@ a{color:var(--fg);text-decoration:none}
       </div>
       <div class="row-right">
         <span class="row-year">2011 → 2016</span>
+        <a href="https://superfuture.github.io/Claude_Code/little-monsters.html" target="_blank" class="link-ext">[case study]</a>
         <a href="https://techcrunch.com/2012/01/20/first-look-backplane-the-lady-gaga-backed-community-platform-with-all-star-investors-invites/" target="_blank" class="link-ext">[↗]</a>
       </div>
     </div>
@@ -378,18 +379,6 @@ a{color:var(--fg);text-decoration:none}
     <div class="sec-label">Contact</div>
 
     <div class="contact-row">
-      <span class="contact-label">email</span>
-      <span class="contact-val">joey@superfuture.com</span>
-      <button class="copy-btn" id="copyBtn" onclick="copyEmail()">[copy]</button>
-    </div>
-
-    <div class="contact-row">
-      <span class="contact-label">portfolio</span>
-      <span class="contact-val">superfuture.github.io</span>
-      <a href="https://superfuture.github.io/Claude_Code/" target="_blank" class="link-ext">[↗]</a>
-    </div>
-
-    <div class="contact-row">
       <span class="contact-label">twitter / x</span>
       <span class="contact-val">@jp</span>
       <a href="https://x.com/jp" target="_blank" class="link-ext">[↗]</a>
@@ -412,7 +401,7 @@ a{color:var(--fg);text-decoration:none}
   <!-- Footer -->
   <div class="ft">
     <span class="ft-left">Joey Primiani · San Francisco, CA</span>
-    <span class="ft-right">© 2025</span>
+    <span class="ft-right">© 2026</span>
   </div>
 
 </div>
