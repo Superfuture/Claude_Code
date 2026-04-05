@@ -1058,11 +1058,11 @@ async function handleAuthSubmit() {
       const { data, error } = await sb.auth.signUp({ email, password });
       if (error) throw error;
       if (data.user) {
-        await sb.from('profiles').upsert({
+        try { await sb.from('profiles').upsert({
           id: data.user.id,
           name: name || email.split('@')[0],
           bio: 'Dreamer from Earth'
-        }).catch(() => {});
+        }); } catch(e) {}
       }
       // If email confirmation is enabled, session will be null — sign in directly
       if (!data.session) {
