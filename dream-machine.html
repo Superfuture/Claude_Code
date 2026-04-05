@@ -1105,7 +1105,7 @@ async function doSignOut() {
   currentUser = null;
   dreams = [];
   profile = { name:'Dreamer', bio:'Dreamer from Earth', photoSrc:null };
-  updateNav();
+  updateNavAvatars();
   showScreen('screen-home');
   setTimeout(() => homeInput.focus(), 400);
 }
@@ -1999,7 +1999,7 @@ function showToast(msg) {
     } else if (event === 'SIGNED_OUT') {
       currentUser = null; dreams = [];
       profile = { name:'Dreamer', bio:'Dreamer from Earth', photoSrc:null };
-      updateNav();
+      updateNavAvatars();
       showScreen('screen-home');
       hideVeil();
       setTimeout(() => homeInput.focus(), 400);
