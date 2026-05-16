@@ -429,10 +429,10 @@
     top: 11px;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;
-    height: 36px;
+    width: 126px;
+    height: 37px;
     background: #000;
-    border-radius: 24px;
+    border-radius: 22px;
     z-index: 20;
   }
 
@@ -444,11 +444,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 32px 8px;
-    font-size: 14px;
+    min-height: 59px;
+    padding: 0 32px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--imessage-text);
     flex-shrink: 0;
+    letter-spacing: -0.01em;
   }
 
   .status-bar .time {
@@ -498,7 +500,7 @@
   .imessage-header {
     display: flex;
     align-items: center;
-    padding: 6px 16px 12px;
+    padding: 10px 16px 14px;
     border-bottom: 0.5px solid #C6C6C8;
     background: rgba(247, 247, 247, 0.92);
     backdrop-filter: blur(20px);
@@ -1363,9 +1365,9 @@
       border-radius: 48px;
     }
     .phone-screen { border-radius: 38px; }
-    .dynamic-island { width: 100px; height: 30px; top: 10px; }
-    .status-bar { padding: 14px 24px 6px; font-size: 13px; }
-    .imessage-header { padding: 4px 14px 10px; }
+    .dynamic-island { width: 110px; height: 32px; top: 10px; }
+    .status-bar { min-height: 52px; padding: 0 26px; font-size: 14px; }
+    .imessage-header { padding: 8px 14px 12px; }
     .ditto-panel { padding: 12px 14px 22px; }
     .suggestion-text { font-size: 13.5px; }
     .tone-chip { font-size: 12.5px; padding: 6px 11px; }
