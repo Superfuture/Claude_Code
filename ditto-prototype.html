@@ -59,19 +59,22 @@
     position: relative;
   }
 
-  /* Atmospheric backdrop */
+  /* Aurora rainbow backdrop */
   body::after {
     content: '';
     position: fixed;
-    top: -20vh;
-    right: -15vw;
-    width: 75vw;
-    height: 75vw;
-    background: radial-gradient(circle, var(--persimmon-soft) 0%, transparent 55%);
-    opacity: 0.55;
+    inset: -10vh -10vw;
+    background:
+      radial-gradient(ellipse 50% 40% at 12% 18%, rgba(255, 181, 197, 0.85) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 38% at 88% 12%, rgba(255, 200, 130, 0.82) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 45% at 95% 55%, rgba(232, 121, 168, 0.55) 0%, transparent 60%),
+      radial-gradient(ellipse 55% 45% at 82% 92%, rgba(155, 200, 255, 0.6) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 42% at 18% 95%, rgba(214, 186, 255, 0.7) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 38% at 5% 60%, rgba(181, 232, 213, 0.5) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 60% at 50% 50%, rgba(255, 229, 153, 0.35) 0%, transparent 70%);
     pointer-events: none;
     z-index: -1;
-    filter: blur(40px);
+    filter: blur(30px) saturate(1.1);
   }
 
   .bg-shape {
@@ -80,12 +83,22 @@
     z-index: -1;
   }
   .bg-shape-1 {
-    bottom: -30vh;
-    left: -20vw;
-    width: 80vw;
-    height: 80vw;
-    background: radial-gradient(circle, rgba(255, 211, 130, 0.55) 0%, transparent 60%);
-    filter: blur(50px);
+    bottom: -10vh;
+    left: 30vw;
+    width: 60vw;
+    height: 50vw;
+    background:
+      conic-gradient(from 180deg at 50% 50%,
+        rgba(255, 181, 197, 0.4) 0deg,
+        rgba(255, 200, 130, 0.4) 60deg,
+        rgba(255, 229, 153, 0.4) 120deg,
+        rgba(181, 232, 213, 0.4) 180deg,
+        rgba(155, 200, 255, 0.4) 240deg,
+        rgba(214, 186, 255, 0.4) 300deg,
+        rgba(255, 181, 197, 0.4) 360deg);
+    filter: blur(80px);
+    opacity: 0.5;
+    border-radius: 50%;
   }
 
   /* ─── Layout ────────────────────────────────────────────── */
@@ -262,10 +275,10 @@
   }
 
   .cta-primary:hover {
-    background: var(--persimmon-deep);
-    border-color: var(--persimmon-deep);
+    background: linear-gradient(120deg, #FF5A36 0%, #E879A8 50%, #9B7BE0 100%);
+    border-color: transparent;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(217, 66, 28, 0.18), 0 14px 36px rgba(217, 66, 28, 0.28);
+    box-shadow: 0 4px 8px rgba(232, 121, 168, 0.22), 0 16px 40px rgba(155, 123, 224, 0.32);
   }
 
   .cta-primary:active {
@@ -555,12 +568,14 @@
 
   .message-thread {
     flex: 1;
-    padding: 16px 14px 0;
+    padding: 12px 14px 12px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
     gap: 4px;
     background: white;
+    min-height: 0;
   }
 
   .message-time {
@@ -618,11 +633,13 @@
 
   /* Inserted draft preview */
   .message.draft-preview {
+    display: none;
     opacity: 0;
     transform: translateY(8px);
     transition: opacity 0.4s ease, transform 0.4s ease;
   }
   .message.draft-preview.show {
+    display: flex;
     opacity: 1;
     transform: translateY(0);
   }
@@ -770,9 +787,12 @@
     font-weight: 500;
     font-style: italic;
     letter-spacing: -0.02em;
-    color: var(--ink);
     font-variation-settings: 'SOFT' 100;
     line-height: 1;
+    background: linear-gradient(120deg, #FF5A36 0%, #E879A8 55%, #9B7BE0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .ditto-counter {
@@ -1040,7 +1060,7 @@
   }
 
   .regenerate-btn:hover {
-    background: var(--persimmon-deep);
+    background: linear-gradient(120deg, #FF5A36 0%, #E879A8 55%, #9B7BE0 100%);
   }
 
   .regenerate-btn svg {
@@ -1296,17 +1316,62 @@
   /* ─── Responsive ────────────────────────────────────────── */
 
   @media (max-width: 1100px) {
-    .hero { grid-template-columns: 1fr; gap: 32px; }
-    .hero-text { padding-top: 0; }
+    .container { padding: 28px 36px 72px; }
+    .hero { grid-template-columns: 1fr; gap: 48px; }
+    .hero-text { padding-top: 0; text-align: center; max-width: 600px; margin: 0 auto; }
+    .hero-meta { justify-content: center; }
+    .hero-cta { justify-content: center; }
+    .eyebrow { justify-content: center; }
     .meta-grid { grid-template-columns: repeat(2, 1fr); }
     .tone-tour-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
-  @media (max-width: 640px) {
-    .container { padding: 20px 20px 60px; }
-    .phone { transform: scale(0.85); transform-origin: top center; margin-bottom: -100px; }
+  @media (max-width: 720px) {
+    .container { padding: 24px 20px 60px; }
+    .top-bar { margin-bottom: 36px; padding-bottom: 20px; }
+    .top-meta { font-size: 10px; gap: 12px; }
+    .display { font-size: clamp(40px, 11vw, 64px); }
+    .subhead { font-size: 16px; }
+    .hero-meta { gap: 20px; row-gap: 12px; }
+    .meta-cell { padding: 24px 22px; }
+    .meta-cell-title { font-size: 19px; }
+    .section-title { font-size: 30px; }
     .meta-grid, .tone-tour-grid { grid-template-columns: 1fr; }
-    .footer { flex-direction: column; gap: 12px; }
+    .footer { flex-direction: column; gap: 12px; text-align: center; }
+    .footer-cred { flex-direction: column; gap: 8px; }
+    .tone-tour { margin-top: 64px; padding-top: 32px; }
+    .meta-grid { margin-top: 64px; }
+  }
+
+  @media (max-width: 520px) {
+    .container { padding: 20px 16px 48px; }
+    .logo-wordmark { font-size: 24px; }
+    .logo-mark { width: 32px; height: 32px; }
+    .display { font-size: clamp(36px, 13vw, 52px); }
+    .subhead { font-size: 15px; }
+    .cta-primary { padding: 11px 20px 11px 16px; }
+    .cta-label { font-size: 20px; }
+    .cta-apple { width: 24px; height: 24px; }
+    .hero-cta { flex-direction: column; align-items: center; gap: 16px; }
+    .hero-meta { font-size: 10px; }
+    .hero-meta-item strong { font-size: 19px; }
+  }
+
+  @media (max-width: 440px) {
+    .phone {
+      width: min(100%, 380px);
+      height: auto;
+      aspect-ratio: 400 / 820;
+      padding: 10px;
+      border-radius: 48px;
+    }
+    .phone-screen { border-radius: 38px; }
+    .dynamic-island { width: 100px; height: 30px; top: 10px; }
+    .status-bar { padding: 14px 24px 6px; font-size: 13px; }
+    .imessage-header { padding: 4px 14px 10px; }
+    .ditto-panel { padding: 12px 14px 22px; }
+    .suggestion-text { font-size: 13.5px; }
+    .tone-chip { font-size: 12.5px; padding: 6px 11px; }
   }
 </style>
 </head>
@@ -1330,15 +1395,14 @@
       <span class="logo-wordmark">Ditto</span>
     </div>
     <div class="top-meta">
-      <span><span class="dot"></span>v1.0 · prototype</span>
-      <span>iMessage Extension</span>
+      <span><span class="dot"></span>iMessage Extension</span>
     </div>
   </header>
 
   <!-- ─── Hero ──────────────────────────────────────────── -->
   <section class="hero">
     <div class="hero-text">
-      <div class="eyebrow">Freemium iOS · Coming Q3</div>
+      <div class="eyebrow">Freemium iOS · iMessage Native</div>
       <h1 class="display">
         Three <em>perfect&nbsp;replies,</em>
         <span class="sub-line">right inside iMessage.</span>
@@ -1359,7 +1423,7 @@
           </span>
         </a>
         <a href="#" class="cta-secondary">
-          <span>Coming Q3 2026. Join the waitlist</span>
+          <span>Or join the waitlist</span>
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="2" y1="8" x2="13" y2="8"/>
             <polyline points="9 4 13 8 9 12"/>
@@ -1419,11 +1483,6 @@
           <!-- Message thread -->
           <div class="message-thread" id="thread">
             <div class="message-time">Today <strong>7:42 PM</strong></div>
-
-            <div class="message outgoing">
-              <div class="bubble">haha i'm sure it'll work out</div>
-            </div>
-            <div class="read-receipt">Read 7:38 PM</div>
 
             <div class="message incoming">
               <div class="bubble">Hey! Just got home, today was wild 😅 how was yours?</div>
@@ -1584,10 +1643,9 @@
   <!-- ─── Footer ────────────────────────────────────────── -->
   <footer class="footer">
     <div class="footer-cred">
-      <span>Ditto · Prototype</span>
-      <span>Joey Primiani · 2026</span>
+      <span>Ditto</span>
+      <span>Vibe coded by Joey Primiani</span>
     </div>
-    <div>Press any element. It mostly works.</div>
   </footer>
 
 </div>
