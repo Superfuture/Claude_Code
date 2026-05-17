@@ -1,0 +1,11 @@
+name = "cusp-api"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+workers_dev = true
+
+[[kv_namespaces]]
+binding = "RATELIMIT"
+id = "TODO_RUN_WRANGLER_KV_NAMESPACE_CREATE"
+
+# Secrets (set via CLI):
+#   npx wrangler secret put ANTHROPIC_API_KEY
