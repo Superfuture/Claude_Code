@@ -38,13 +38,14 @@ struct PaywallView: View {
                     VStack(spacing: 10) {
                         Text("Cusp Pro")
                             .font(BrandFont.display(38))
-                            .foregroundStyle(BrandColor.cream)
+                            .foregroundStyle(BrandColor.parchment)
                         Text("Unlimited rituals. Tarot draws. Transit alerts. Pattern insights across your manifestation history.")
                             .font(BrandFont.serif(15))
                             .italic()
-                            .foregroundStyle(BrandColor.creamMuted)
+                            .foregroundStyle(BrandColor.inkMuted)
                             .multilineTextAlignment(.center)
-                            .padding(.horizontal, 16)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: .infinity)
                     }
 
                     VStack(spacing: 10) {
@@ -68,9 +69,10 @@ struct PaywallView: View {
 
                     Text("Cancel anytime in Settings → Apple ID → Subscriptions. Renews automatically.")
                         .font(.system(size: 11))
-                        .foregroundStyle(BrandColor.creamMuted.opacity(0.7))
+                        .foregroundStyle(BrandColor.inkMuted.opacity(0.7))
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal, 24)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity)
 
                     Spacer(minLength: 32)
                 }
