@@ -57,9 +57,15 @@
     overflow-x: hidden;
     min-height: 100vh;
     position: relative;
+    width: 100%;
+    max-width: 100vw;
   }
 
-  html { overflow-x: hidden; }
+  html {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
 
   /* Aurora rainbow backdrop */
   body::after {
@@ -184,7 +190,7 @@
   }
 
   .hero-text {
-    padding-top: 40px;
+    padding-top: 8px;
   }
 
   .eyebrow {
@@ -381,7 +387,8 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 20px 0;
+    padding: 0;
+    margin-top: -32px;
   }
 
   .phone-stage::before {
@@ -451,9 +458,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 59px;
-    padding: 0 32px;
-    font-size: 16px;
+    min-height: 54px;
+    padding: 0 30px 4px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--imessage-text);
     flex-shrink: 0;
@@ -507,7 +514,7 @@
   .imessage-header {
     display: flex;
     align-items: center;
-    padding: 10px 16px 14px;
+    padding: 4px 16px 10px;
     border-bottom: 0.5px solid #C6C6C8;
     background: rgba(247, 247, 247, 0.92);
     backdrop-filter: blur(20px);
@@ -1286,6 +1293,19 @@
     gap: 24px;
   }
 
+  .footer-link {
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-decoration-color: var(--ink-faint);
+    text-underline-offset: 3px;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  }
+
+  .footer-link:hover {
+    color: var(--persimmon-deep);
+    text-decoration-color: var(--persimmon-deep);
+  }
+
   /* ─── Toast ─────────────────────────────────────────────── */
 
   .toast {
@@ -1429,15 +1449,12 @@
       </svg>
       <span class="logo-wordmark">Ditto</span>
     </div>
-    <div class="top-meta">
-      <span><span class="dot"></span>iMessage Extension</span>
-    </div>
+    <div class="top-meta"></div>
   </header>
 
   <!-- ─── Hero ──────────────────────────────────────────── -->
   <section class="hero">
     <div class="hero-text">
-      <div class="eyebrow">Freemium iOS · iMessage Native</div>
       <h1 class="display">
         Three <em>perfect&nbsp;replies,</em>
         <span class="sub-line">right inside iMessage.</span>
@@ -1456,13 +1473,6 @@
             <span class="cta-eyebrow">Download on the</span>
             <span class="cta-label">App Store</span>
           </span>
-        </a>
-        <a href="#" class="cta-secondary">
-          <span>Or join the waitlist</span>
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="2" y1="8" x2="13" y2="8"/>
-            <polyline points="9 4 13 8 9 12"/>
-          </svg>
         </a>
       </div>
 
@@ -1679,7 +1689,7 @@
   <footer class="footer">
     <div class="footer-cred">
       <span>Ditto</span>
-      <span>Vibe coded by Joey Primiani</span>
+      <span>Vibe coded by <a href="https://www.linkedin.com/in/jprim" target="_blank" rel="noopener" class="footer-link">Joey Primiani</a></span>
     </div>
   </footer>
 
