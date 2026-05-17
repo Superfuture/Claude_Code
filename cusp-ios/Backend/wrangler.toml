@@ -5,7 +5,7 @@ workers_dev = true
 
 [[kv_namespaces]]
 binding = "RATELIMIT"
-id = "TODO_RUN_WRANGLER_KV_NAMESPACE_CREATE"
+id = "139f0e8905934812a447609d6b4d97fe"
 
 # Secrets (set via CLI):
 #   npx wrangler secret put ANTHROPIC_API_KEY

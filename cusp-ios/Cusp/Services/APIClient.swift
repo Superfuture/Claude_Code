@@ -3,8 +3,7 @@ import Foundation
 actor APIClient {
     static let shared = APIClient()
 
-    /// Update after `npx wrangler deploy` of cusp-api Worker.
-    static let baseURL = URL(string: "https://cusp-api.example.workers.dev")!
+    static let baseURL = URL(string: "https://cusp-api.jprimiani.workers.dev")!
 
     enum APIError: Error, LocalizedError {
         case badStatus(Int, String?)

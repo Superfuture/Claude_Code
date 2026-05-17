@@ -36,26 +36,20 @@ const MERCURY_RETROGRADE = [
 
 /** Sun sign from a birth date (Y/M/D). */
 export function sunSign(year, month, day) {
-  // Walk zodiac entries; signs use start-of-period (e.g. Aries 3/21 → 4/19)
+  const value = month * 100 + day; // 0701..0731 etc., comparable
   for (let i = 0; i < ZODIAC.length; i++) {
     const z = ZODIAC[i];
     const [sm, sd] = z.start;
     const next = ZODIAC[(i + 1) % ZODIAC.length];
     const [nm, nd] = next.start;
-    if (afterOrEqual(month, day, sm, sd) && before(month, day, nm, nd)) {
-      return z;
-    }
+    const start = sm * 100 + sd;
+    const end = nm * 100 + nd;
+    // If period wraps the year (Capricorn: 12/22 → 1/20)
+    const inSign = end > start ? value >= start && value < end
+                                : value >= start || value < end;
+    if (inSign) return z;
   }
-  return ZODIAC[0]; // Late December → Capricorn (wraps)
-}
-
-function afterOrEqual(m1, d1, m2, d2) {
-  return m1 > m2 || (m1 === m2 && d1 >= d2);
-}
-function before(m1, d1, m2, d2) {
-  // Wrap: Capricorn extends across year boundary
-  if (m2 < m1) return true;
-  return m1 < m2 || (m1 === m2 && d1 < d2);
+  return ZODIAC[0];
 }
 
 /** Approximate moon phase for a given Date. Returns { name, illumination 0–1 }. */
