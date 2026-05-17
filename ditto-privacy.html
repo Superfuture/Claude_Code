@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Ditto</title>
+<link rel="icon" type="image/svg+xml" href="ditto-favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Geist:wght@300..900&family=Geist+Mono:wght@400..700&display=swap">
+<style>
+  :root {
+    --persimmon: #FF5A36;
+    --persimmon-deep: #D9421C;
+    --cream: #F2E9D6;
+    --paper: #F8F1DF;
+    --ink: #1B1611;
+    --ink-soft: #3F362C;
+    --ink-muted: #847866;
+    --line: rgba(27, 22, 17, 0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--cream); }
+  body {
+    font-family: 'Geist', -apple-system, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    padding: 64px 24px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  header { display: flex; align-items: center; gap: 12px; margin-bottom: 56px; }
+  .logo svg { width: 32px; height: 32px; }
+  .logo-text { font-family: 'Fraunces', serif; font-style: italic; font-size: 24px; }
+  .eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--persimmon-deep);
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .effective {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-bottom: 48px;
+  }
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 24px;
+    letter-spacing: -0.02em;
+    margin-top: 48px;
+    margin-bottom: 16px;
+  }
+  p, li { color: var(--ink-soft); margin-bottom: 14px; }
+  ul { padding-left: 22px; margin-bottom: 14px; }
+  strong { color: var(--ink); font-weight: 600; }
+  a { color: var(--persimmon-deep); text-decoration: underline; text-underline-offset: 3px; }
+  a:hover { color: var(--ink); }
+  .tldr {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 32px 0 48px;
+  }
+  .tldr h3 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  hr { border: none; height: 1px; background: var(--line); margin: 48px 0; }
+  footer {
+    margin-top: 80px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="logo">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M11 14 C11 11, 13 9, 16 9 L33 9 C36 9, 38 11, 38 14 L38 22 C38 25, 36 27, 33 27 L25 27 L20 31 L20 27 C17 27, 11 25, 11 22 Z" stroke="#1B1611" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+      <path d="M2 9 C2 6, 4 4, 7 4 L24 4 C27 4, 29 6, 29 9 L29 17 C29 20, 27 22, 24 22 L16 22 L11 26 L11 22 C8 22, 2 20, 2 17 Z" fill="#FF5A36" stroke="#1B1611" stroke-width="1.5" stroke-linejoin="round"/>
+    </svg>
+  </span>
+  <span class="logo-text">Ditto</span>
+</header>
+
+<div class="eyebrow">Privacy Policy</div>
+<h1>Your messages stay yours.</h1>
+<div class="effective">Effective: 2026-05-16</div>
+
+<div class="tldr">
+  <h3>The short version</h3>
+  <p>Ditto generates reply suggestions for messages you choose to send through the iMessage extension. The text is processed in‑memory by an AI model and immediately discarded. <strong>We never store your messages, never train on them, never sell or share them, and never link them to your identity.</strong></p>
+</div>
+
+<h2>Who we are</h2>
+<p>Ditto is published by Joey Primiani ("we", "us"). Contact: <a href="mailto:hello@ditto.app">hello@ditto.app</a>. This policy describes how the Ditto iOS app and its iMessage extension handle your information.</p>
+
+<h2>What we collect</h2>
+<p>Only what is strictly required to produce a reply suggestion:</p>
+<ul>
+  <li><strong>Message text you submit to Ditto.</strong> When you open the Ditto iMessage extension on a message, or paste a message into Ditto, the text of that message is sent to our backend, which forwards it to a large language model (Anthropic) to generate three reply options.</li>
+  <li><strong>Tone selection</strong> (Funny, Flirty, Formal, Supportive).</li>
+  <li><strong>An anonymous device identifier</strong> generated on first launch, used only to enforce the daily free‑tier limit. It is not tied to your name, email, Apple ID, phone number, or any other personal identifier.</li>
+</ul>
+<p><strong>We do not collect:</strong> your name, email, Apple ID, contacts, photos, location, advertising identifiers, or analytics about your behavior inside the app.</p>
+
+<h2>How your data is used</h2>
+<ul>
+  <li>The submitted message text is sent over HTTPS to our proxy server, which adds the AI prompt and forwards the request to Anthropic's Claude API.</li>
+  <li>Anthropic returns three reply suggestions; we return them to your device.</li>
+  <li><strong>Neither our server nor Anthropic retains the submitted text.</strong> Our server does not log message content. Anthropic processes the request under zero‑data‑retention terms and does not use the input to train models.</li>
+  <li>The anonymous device identifier and a daily counter are stored in Cloudflare Workers KV for up to 36 hours, solely to enforce rate limits. They are not associated with any other identifier.</li>
+</ul>
+
+<h2>On‑device data</h2>
+<p>The app stores the following on your device only, and never transmits them:</p>
+<ul>
+  <li>Your tone preference</li>
+  <li>The daily usage counter</li>
+  <li>Your subscription status (Free or Pro)</li>
+  <li>Optional thumbs‑up / thumbs‑down feedback on suggestions (a boolean per suggestion ID — not the text of the suggestion or the message)</li>
+</ul>
+
+<h2>Third parties</h2>
+<ul>
+  <li><strong>Anthropic, PBC</strong> processes message text to generate suggestions. <a href="https://www.anthropic.com/legal/commercial-terms">Anthropic Commercial Terms</a> · <a href="https://www.anthropic.com/legal/privacy">Anthropic Privacy Policy</a></li>
+  <li><strong>Cloudflare, Inc.</strong> hosts our proxy server. <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare Privacy Policy</a></li>
+  <li><strong>Apple, Inc.</strong> handles subscription billing through the App Store. <a href="https://www.apple.com/legal/privacy/">Apple Privacy Policy</a></li>
+</ul>
+<p>No advertising networks, analytics SDKs, or marketing trackers are integrated.</p>
+
+<h2>In‑App Purchases</h2>
+<p>Subscriptions ($4.99/month or $29.99/year for Ditto Pro) are processed by Apple. We receive only an anonymous receipt confirming entitlement. We do not see your payment method, name, or billing address.</p>
+
+<h2>Children</h2>
+<p>Ditto is not directed at children under 13. We do not knowingly collect information from children. If you believe a child has used the app, contact us and we'll delete any anonymous identifier associated with that device on request.</p>
+
+<h2>Your rights</h2>
+<p>Because we do not store message content or personally identifiable information, there is nothing identifying you to delete. You can:</p>
+<ul>
+  <li>Reset your anonymous device identifier at any time by deleting and reinstalling the app.</li>
+  <li>Stop sending text to our server by simply not using the extension.</li>
+  <li>Cancel a Pro subscription at any time through Settings → Apple ID → Subscriptions.</li>
+</ul>
+<p>Residents of the EU, UK, and California: under GDPR, UK GDPR, and CCPA respectively, we provide the same minimal‑data treatment described above to everyone. Contact us at <a href="mailto:hello@ditto.app">hello@ditto.app</a> with any data‑subject request.</p>
+
+<h2>Security</h2>
+<p>All network requests use HTTPS (TLS 1.3). Our backend secrets (Anthropic API key, Cloudflare credentials) are stored in encrypted environment variables and never exposed to the app binary.</p>
+
+<h2>Changes to this policy</h2>
+<p>If we materially change how Ditto handles data, we will update this page and the effective date above. Continued use of the app after a change constitutes acceptance.</p>
+
+<h2>Contact</h2>
+<p><a href="mailto:hello@ditto.app">hello@ditto.app</a></p>
+
+<hr>
+
+<footer>
+  Ditto · Effective 2026-05-16
+</footer>
+
+</div>
+</body>
+</html>
