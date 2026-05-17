@@ -32,7 +32,7 @@ struct PaywallView: View {
                         }
                     }
 
-                    CuspMark()
+                    EnochianMonas()
                         .frame(width: 64, height: 64)
 
                     VStack(spacing: 10) {

@@ -12,9 +12,12 @@ actor APIClient {
 
         var errorDescription: String? {
             switch self {
-            case .badStatus(let code, let msg): return msg ?? "Server error (\(code))"
-            case .rateLimited(let msg): return msg
-            case .decoding: return "Couldn't read the ritual"
+            case .badStatus:
+                return "The sky was quiet. Try again in a moment."
+            case .rateLimited(let msg):
+                return msg
+            case .decoding:
+                return "Something got lost in translation. Try again."
             }
         }
     }

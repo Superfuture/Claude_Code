@@ -1,25 +1,38 @@
 import SwiftUI
 
-/// Cusp palette. Dark cosmic — midnight blues with lavender and warm cream
-/// accents. Soft gold for premium / sacred moments.
+/// Cusp palette — Enochian / John Dee aesthetic.
+/// Pure black ground, parchment gold for ink, cool cream for type.
+/// All decoration is geometric and subtle. No gradients, no glow.
 enum BrandColor {
-    // Cosmic backgrounds
-    static let midnight = Color(red: 0.102, green: 0.106, blue: 0.227)   // #1A1B3A
-    static let dusk = Color(red: 0.165, green: 0.169, blue: 0.298)        // #2A2B4C
-    static let veil = Color(red: 0.247, green: 0.220, blue: 0.345)        // #3F3858
+    // Grounds
+    static let void = Color(red: 0.0, green: 0.0, blue: 0.0)            // pure black
+    static let onyx = Color(red: 0.039, green: 0.039, blue: 0.055)      // #0A0A0E
+    static let smoke = Color(red: 0.071, green: 0.071, blue: 0.094)     // #121218
 
-    // Type
-    static let cream = Color(red: 0.961, green: 0.929, blue: 0.863)       // #F5EDDC
-    static let creamSoft = Color(red: 0.984, green: 0.965, blue: 0.918)   // #FBF6EA
-    static let creamMuted = Color(red: 0.835, green: 0.800, blue: 0.722)  // #D5CCB8
+    // Ink
+    static let parchment = Color(red: 0.910, green: 0.851, blue: 0.722) // #E8D9B8 aged paper
+    static let lunar = Color(red: 0.925, green: 0.918, blue: 0.875)     // #ECEAA9 (cool cream)
+    static let inkMuted = Color(red: 0.671, green: 0.616, blue: 0.510)  // #ABA084 (faded gold)
 
     // Accents
-    static let lavender = Color(red: 0.722, green: 0.643, blue: 0.831)    // #B8A4D4
-    static let lavenderDeep = Color(red: 0.553, green: 0.451, blue: 0.690) // #8D73B0
-    static let gold = Color(red: 0.831, green: 0.698, blue: 0.435)        // #D4B26F
-    static let goldDeep = Color(red: 0.682, green: 0.541, blue: 0.275)    // #AE8A46
+    static let gold = Color(red: 0.788, green: 0.659, blue: 0.353)      // #C9A85B brass / leaf
+    static let goldDeep = Color(red: 0.553, green: 0.439, blue: 0.196)  // #8D7032
 
-    // Subtle lines
-    static let line = Color.white.opacity(0.08)
-    static let lineSoft = Color.white.opacity(0.04)
+    // Subtle stone tones (used sparingly)
+    static let quartz = Color(red: 0.400, green: 0.400, blue: 0.475)    // #666679
+
+    // Lines — gold at very low opacity
+    static let line = Color(red: 0.910, green: 0.851, blue: 0.722).opacity(0.12)
+    static let lineSoft = Color(red: 0.910, green: 0.851, blue: 0.722).opacity(0.05)
+    static let lineStrong = Color(red: 0.910, green: 0.851, blue: 0.722).opacity(0.25)
+
+    // Legacy aliases (kept so existing files don't break)
+    static let midnight = void
+    static let dusk = onyx
+    static let veil = smoke
+    static let cream = parchment
+    static let creamSoft = lunar
+    static let creamMuted = inkMuted
+    static let lavender = quartz
+    static let lavenderDeep = quartz
 }
