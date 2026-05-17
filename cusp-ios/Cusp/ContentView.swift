@@ -41,14 +41,20 @@ struct ContentView: View {
     // MARK: - Top bar
 
     private var topBar: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 14) {
             EnochianGlyph()
-                .frame(width: 28, height: 28)
-            Text("Cusp")
-                .font(BrandFont.display(22))
-                .foregroundStyle(BrandColor.parchment)
-                .lineLimit(1)
-                .fixedSize()
+                .frame(width: 36, height: 36)
+            VStack(alignment: .leading, spacing: 0) {
+                Text("Cusp")
+                    .font(BrandFont.display(28))
+                    .foregroundStyle(BrandColor.lunar)
+                    .lineLimit(1)
+                    .fixedSize()
+                Text(todayLabel)
+                    .font(BrandFont.micro(9))
+                    .tracking(1.6)
+                    .foregroundStyle(BrandColor.gold)
+            }
             Spacer(minLength: 8)
             if !store.isPro {
                 Button { showPaywall = true } label: {
@@ -65,36 +71,59 @@ struct ContentView: View {
                 .buttonStyle(.plain)
             }
         }
+        .padding(.vertical, 4)
+    }
+
+    private var todayLabel: String {
+        let f = DateFormatter()
+        f.dateFormat = "EEEE · MMMM d"
+        return f.string(from: .now).uppercased()
     }
 
     // MARK: - Intention card (always visible)
 
     private var intentionCard: some View {
         Button { showIntentionEditor = true } label: {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 6) {
                     Image(systemName: "circle.dotted")
                         .font(.system(size: 9, weight: .semibold))
                     Text("Intention")
                         .font(BrandFont.micro(10))
                         .tracking(1.6)
+                    Spacer()
+                    if !store.currentIntention.isEmpty {
+                        Image(systemName: "square.and.pencil")
+                            .font(.system(size: 12, weight: .regular))
+                            .foregroundStyle(BrandColor.gold.opacity(0.6))
+                    }
                 }
                 .foregroundStyle(BrandColor.gold)
 
-                Text(store.currentIntention.isEmpty
-                     ? "Set what you're bringing in."
-                     : "\u{201C}\(store.currentIntention)\u{201D}")
-                    .font(BrandFont.serif(17))
-                    .italic()
-                    .foregroundStyle(BrandColor.parchment)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
+                if store.currentIntention.isEmpty {
+                    HStack(spacing: 8) {
+                        Text("Tap to set what you're bringing in")
+                            .font(BrandFont.serif(17))
+                            .italic()
+                            .foregroundStyle(BrandColor.parchment.opacity(0.85))
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(BrandColor.gold)
+                    }
                     .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    Text("\u{201C}\(store.currentIntention)\u{201D}")
+                        .font(BrandFont.serif(17))
+                        .italic()
+                        .foregroundStyle(BrandColor.lunar)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
             .padding(20)
-            .background(BrandColor.onyx.opacity(0.7))
+            .background(BrandColor.smoke.opacity(0.6))
             .overlay(geometricFrame())
-            .clipShape(RoundedRectangle(cornerRadius: 0))
         }
         .buttonStyle(.plain)
     }
