@@ -6,7 +6,7 @@ import { SYSTEM_PROMPT, FEW_SHOT_EXAMPLE, buildUserTurn } from "./prompts.js";
 import { sunSign, todayContext } from "./astrology.js";
 
 const ANTHROPIC_MODEL = "claude-sonnet-4-6";
-const MAX_FREE_PER_DAY = 1; // Free tier: one ritual per day
+const MAX_FREE_PER_DAY = 3; // Free tier: three rituals per day
 
 export default {
   /** @param {Request} request @param {Env} env */

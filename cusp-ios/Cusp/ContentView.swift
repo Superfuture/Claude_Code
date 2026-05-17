@@ -241,28 +241,6 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Decorative frame (used as overlay on every card)
-
-func geometricFrame(lineWidth: CGFloat = 0.6) -> some View {
-    ZStack {
-        Rectangle()
-            .stroke(BrandColor.lineStrong, lineWidth: lineWidth)
-        // Tiny corner diamonds
-        ForEach(0..<4, id: \.self) { i in
-            GeometryReader { geo in
-                let x = (i % 2 == 0) ? 0 : geo.size.width
-                let y = (i < 2) ? 0 : geo.size.height
-                Rectangle()
-                    .fill(BrandColor.gold)
-                    .frame(width: 4, height: 4)
-                    .rotationEffect(.degrees(45))
-                    .position(x: x, y: y)
-            }
-        }
-    }
-    .allowsHitTesting(false)
-}
-
 // MARK: - Geometric brand marks
 
 /// Small Enochian-style compass glyph — circle + inscribed cross with a
