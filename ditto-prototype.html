@@ -1595,7 +1595,8 @@
   }
 
   @media (max-width: 520px) {
-    .container { padding: 20px 16px 48px; }
+    .container { padding: 20px 16px 24px; }
+    .footer { margin-top: 56px; padding-top: 24px; }
     .final-cta { margin-top: 60px; padding: 44px 20px; border-radius: 24px; }
     .final-line { font-size: clamp(26px, 6.5vw, 36px); }
     .cta-support { font-size: 10px; text-align: center; }
@@ -1626,7 +1627,7 @@
   }
 
   @media (max-width: 380px) {
-    .container { padding: 18px 14px 40px; }
+    .container { padding: 18px 14px 18px; }
     .display { font-size: clamp(36px, 11vw, 48px); letter-spacing: -0.035em; }
     .subhead { font-size: 13.5px; }
     .hero-meta-item strong { font-size: 16px; }
@@ -1642,6 +1643,7 @@
       width: 100%;
       justify-content: center;
       margin-top: -16px;
+      padding: 0;
     }
     .phone {
       width: 100%;
@@ -1652,6 +1654,10 @@
       border-radius: 48px;
       margin: 0 auto;
     }
+    .phone::before {
+      inset: 2px;
+      border-radius: 46px;
+    }
     .phone-screen { border-radius: 38px; }
     .dynamic-island { width: 110px; height: 32px; top: 10px; }
     .status-bar { min-height: 46px; padding: 0 22px; font-size: 14px; }
@@ -1660,6 +1666,7 @@
     .suggestion-text { font-size: 13.5px; }
     .tone-chip { font-size: 12.5px; padding: 6px 11px; }
     .phone-stage::before { display: none; }
+    .home-indicator { bottom: 6px; width: 110px; height: 4px; }
   }
 </style>
 </head>
@@ -1789,10 +1796,10 @@
 
           <!-- iMessage input row -->
           <div class="imessage-input">
-            <button class="input-app-btn" title="Ditto extension open">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M3 11 L21 11 L21 17 L13 17 L11 19 L11 17 L3 17 Z" fill="white"/>
-                <path d="M7 5 L17 5 L17 9 L11 9 L9 11 L9 9 L7 9 Z" fill="white" opacity="0.7"/>
+            <button class="input-app-btn" title="Ditto extension open" aria-label="Ditto">
+              <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 8C16.66 8 18 9.34 18 11V14C18 15.66 16.66 17 15 17H13L11 19V17H10C8.34 17 7 15.66 7 14V11C7 9.34 8.34 8 10 8H15Z" opacity="0.55"/>
+                <path d="M11 4C12.66 4 14 5.34 14 7V10C14 11.66 12.66 13 11 13H9L7 15V13H6C4.34 13 3 11.66 3 10V7C3 5.34 4.34 4 6 4H11Z"/>
               </svg>
             </button>
             <div class="text-field">
