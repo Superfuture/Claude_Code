@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Background (Apple rounds the corners automatically; no transparency) -->
+  <rect width="1024" height="1024" fill="#F2E9D6"/>
+
+  <!-- Echo bubble (back, outline only) — lower-right -->
+  <path d="
+    M 384 528
+    C 384 487  417 454  458 454
+    L 808 454
+    C 849 454  882 487  882 528
+    L 882 638
+    C 882 679  849 712  808 712
+    L 614 712
+    L 484 794
+    L 484 712
+    C 432 710  384 679  384 638
+    Z"
+    fill="#F2E9D6"
+    stroke="#1B1611"
+    stroke-width="40"
+    stroke-linejoin="round"
+    stroke-linecap="round"/>
+
+  <!-- Front bubble (filled persimmon) — upper-left -->
+  <path d="
+    M 142 312
+    C 142 271  175 238  216 238
+    L 566 238
+    C 607 238  640 271  640 312
+    L 640 422
+    C 640 463  607 496  566 496
+    L 372 496
+    L 242 578
+    L 242 496
+    C 190 494  142 463  142 422
+    Z"
+    fill="#FF5A36"
+    stroke="#1B1611"
+    stroke-width="40"
+    stroke-linejoin="round"
+    stroke-linecap="round"/>
+</svg>
