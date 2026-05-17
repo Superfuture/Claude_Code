@@ -24,7 +24,8 @@ struct OnboardingView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .transition(.opacity.combined(with: .move(edge: .leading)))
+                .id(step)
+                .transition(.opacity)
 
                 // Footer
                 VStack(spacing: 14) {
