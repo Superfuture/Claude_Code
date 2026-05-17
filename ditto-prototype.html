@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ditto. Three replies, ready to send.</title>
+<link rel="icon" type="image/svg+xml" href="ditto-favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,200..900,0..100;1,9..144,200..900,0..100&family=Geist:wght@300..900&family=Geist+Mono:wght@400..700&display=swap">
@@ -328,6 +329,26 @@
     letter-spacing: -0.02em;
     font-variation-settings: 'SOFT' 100;
     line-height: 1;
+  }
+
+  .cta-support {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    margin: 0;
+  }
+
+  .cta-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--persimmon);
+    flex-shrink: 0;
   }
 
   .cta-secondary {
@@ -1271,6 +1292,60 @@
     font-style: italic;
   }
 
+  /* ─── Final CTA ─────────────────────────────────────────── */
+
+  .final-cta {
+    margin-top: 120px;
+    padding: 72px 32px;
+    text-align: center;
+    background: var(--paper-light);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xl);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255, 181, 197, 0.5), transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(214, 186, 255, 0.5), transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255, 200, 130, 0.35), transparent 60%);
+    filter: blur(40px);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .final-cta > * { position: relative; z-index: 1; }
+
+  .final-line {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    font-variation-settings: 'SOFT' 100, 'opsz' 144;
+    line-height: 1.05;
+    max-width: 18ch;
+    margin: 0 auto;
+  }
+
+  .final-sub {
+    margin-top: 16px;
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 38ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .final-cta-btn {
+    margin-top: 32px;
+  }
+
   /* ─── Footer ────────────────────────────────────────────── */
 
   .footer {
@@ -1369,8 +1444,17 @@
     .meta-grid { margin-top: 64px; }
   }
 
+  @media (max-width: 720px) {
+    .final-cta { margin-top: 80px; padding: 56px 28px; }
+    .final-line { font-size: clamp(30px, 7vw, 44px); }
+    .final-sub { font-size: 15px; }
+  }
+
   @media (max-width: 520px) {
     .container { padding: 20px 16px 48px; }
+    .final-cta { margin-top: 60px; padding: 44px 20px; border-radius: 24px; }
+    .final-line { font-size: clamp(26px, 6.5vw, 36px); }
+    .cta-support { font-size: 10px; text-align: center; }
     .logo-wordmark { font-size: 22px; }
     .logo-mark { width: 30px; height: 30px; }
     .display {
@@ -1474,6 +1558,10 @@
             <span class="cta-label">App Store</span>
           </span>
         </a>
+        <p class="cta-support">
+          <span class="cta-dot"></span>
+          Free with iMessage · 7-day trial of Pro
+        </p>
       </div>
 
       <div class="hero-meta">
@@ -1528,6 +1616,11 @@
           <!-- Message thread -->
           <div class="message-thread" id="thread">
             <div class="message-time">Today <strong>7:42 PM</strong></div>
+
+            <div class="message outgoing">
+              <div class="bubble">haha you got this</div>
+            </div>
+            <div class="read-receipt">Read 7:38 PM</div>
 
             <div class="message incoming">
               <div class="bubble">Hey! Just got home, today was wild 😅 how was yours?</div>
@@ -1683,6 +1776,21 @@
         <p class="tone-card-sample">"ugh that sounds like a lot. you good? i'm here whenever you want to vent 💛"</p>
       </div>
     </div>
+  </section>
+
+  <!-- ─── Final CTA ─────────────────────────────────────── -->
+  <section class="final-cta">
+    <h2 class="final-line">Stop staring at the chat.</h2>
+    <p class="final-sub">Three perfect replies, always ready.</p>
+    <a href="#" class="cta-primary final-cta-btn">
+      <svg class="cta-apple" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.05 12.04c-.02-2.36 1.93-3.49 2.02-3.55-1.1-1.61-2.82-1.83-3.43-1.86-1.46-.15-2.85.86-3.59.86-.75 0-1.89-.84-3.1-.82-1.6.02-3.07.93-3.89 2.36-1.66 2.87-.42 7.12 1.19 9.46.79 1.14 1.73 2.42 2.96 2.38 1.19-.05 1.64-.77 3.08-.77 1.44 0 1.84.77 3.1.74 1.28-.02 2.09-1.16 2.87-2.31.91-1.33 1.28-2.62 1.3-2.68-.03-.01-2.49-.95-2.51-3.81zm-2.36-7.01c.66-.79 1.1-1.9.98-3.01-.95.04-2.1.63-2.78 1.42-.61.7-1.14 1.83-1 2.92 1.06.08 2.14-.54 2.8-1.33z"/>
+      </svg>
+      <span class="cta-text">
+        <span class="cta-eyebrow">Download on the</span>
+        <span class="cta-label">App Store</span>
+      </span>
+    </a>
   </section>
 
   <!-- ─── Footer ────────────────────────────────────────── -->
