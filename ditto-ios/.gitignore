@@ -1,0 +1,33 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserdata*
+xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+.swiftpm/
+.build/
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# macOS
+.DS_Store
+
+# Cloudflare Workers / Node
+node_modules/
+.wrangler/
+.dev.vars
+.env
+
+# Secrets — never commit
+*.p12
+*.cer
+*.mobileprovision
+GoogleService-Info.plist
