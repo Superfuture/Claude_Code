@@ -45,7 +45,8 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html, body { min-height: 100%; }
+  html, body { background: var(--cream); }
+  html { overscroll-behavior-y: none; }
 
   /* ─── Motion ────────────────────────────────────────────── */
 
@@ -102,7 +103,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    min-height: 100vh;
     position: relative;
     width: 100%;
     max-width: 100vw;
@@ -795,8 +795,8 @@
   .input-app-btn {
     width: 32px;
     height: 32px;
-    border-radius: 50%;
-    background: var(--persimmon);
+    border-radius: 8px;
+    background: var(--cream);
     border: none;
     cursor: pointer;
     display: flex;
@@ -804,22 +804,12 @@
     justify-content: center;
     position: relative;
     flex-shrink: 0;
-    box-shadow: 0 1px 4px rgba(255, 90, 54, 0.4);
-  }
-
-  .input-app-btn::after {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border: 1.5px solid var(--persimmon);
-    border-radius: 50%;
-    opacity: 0.4;
+    padding: 4px;
   }
 
   .input-app-btn svg {
-    width: 16px;
-    height: 16px;
-    fill: white;
+    width: 100%;
+    height: 100%;
   }
 
   .text-field {
@@ -1797,9 +1787,11 @@
           <!-- iMessage input row -->
           <div class="imessage-input">
             <button class="input-app-btn" title="Ditto extension open" aria-label="Ditto">
-              <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 8C16.66 8 18 9.34 18 11V14C18 15.66 16.66 17 15 17H13L11 19V17H10C8.34 17 7 15.66 7 14V11C7 9.34 8.34 8 10 8H15Z" opacity="0.55"/>
-                <path d="M11 4C12.66 4 14 5.34 14 7V10C14 11.66 12.66 13 11 13H9L7 15V13H6C4.34 13 3 11.66 3 10V7C3 5.34 4.34 4 6 4H11Z"/>
+              <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 14 C11 11, 13 9, 16 9 L33 9 C36 9, 38 11, 38 14 L38 22 C38 25, 36 27, 33 27 L25 27 L20 31 L20 27 C17 27, 11 25, 11 22 Z"
+                      stroke="#1B1611" stroke-width="2" fill="none" stroke-linejoin="round"/>
+                <path d="M2 9 C2 6, 4 4, 7 4 L24 4 C27 4, 29 6, 29 9 L29 17 C29 20, 27 22, 24 22 L16 22 L11 26 L11 22 C8 22, 2 20, 2 17 Z"
+                      fill="#FF5A36" stroke="#1B1611" stroke-width="2" stroke-linejoin="round"/>
               </svg>
             </button>
             <div class="text-field">
