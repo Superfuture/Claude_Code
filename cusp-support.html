@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Support — Cusp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Geist:wght@300..900&family=Geist+Mono:wght@400..700&display=swap">
+<style>
+  :root {
+    --void: #0A0E22;
+    --onyx: #13172E;
+    --smoke: #1F2240;
+    --parchment: #EDDFC4;
+    --lunar: #F7EFE0;
+    --ink-muted: #9C9281;
+    --gold: #C9A85B;
+    --rose: #D4A09E;
+    --line: rgba(237, 223, 196, 0.12);
+    --line-strong: rgba(237, 223, 196, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--void); }
+  body {
+    font-family: 'Geist', -apple-system, sans-serif;
+    background: var(--void);
+    color: var(--parchment);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    padding: 64px 24px;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 56px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .mark {
+    width: 36px;
+    height: 36px;
+    color: var(--gold);
+  }
+  .mark svg { width: 100%; height: 100%; }
+  .logo-text {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 26px;
+    color: var(--lunar);
+    letter-spacing: -0.02em;
+  }
+
+  .eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(40px, 6vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--lunar);
+    margin-bottom: 14px;
+  }
+  .lede {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--parchment);
+    opacity: 0.85;
+    max-width: 36em;
+    margin-bottom: 40px;
+  }
+
+  .contact-card {
+    background: var(--onyx);
+    border: 1px solid var(--line-strong);
+    padding: 28px;
+    margin-bottom: 48px;
+    position: relative;
+  }
+  .contact-card::before, .contact-card::after, .contact-card .c1, .contact-card .c2 {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+  .contact-card::before { top: -4px; left: -4px; }
+  .contact-card::after { top: -4px; right: -4px; }
+  .contact-card .c1 { bottom: -4px; left: -4px; }
+  .contact-card .c2 { bottom: -4px; right: -4px; }
+  .contact-card h2 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 24px;
+    color: var(--lunar);
+    margin-bottom: 8px;
+    margin-top: 0;
+  }
+  .contact-card p { margin-bottom: 18px; }
+  .contact-card a.cta {
+    display: inline-block;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--void);
+    background: var(--gold);
+    padding: 12px 22px;
+    text-decoration: none;
+    border: none;
+  }
+  .contact-card a.cta:hover { background: var(--rose); }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 24px;
+    color: var(--lunar);
+    margin-top: 48px;
+    margin-bottom: 16px;
+  }
+
+  .faq { margin-bottom: 14px; }
+  .faq summary {
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    color: var(--lunar);
+    cursor: pointer;
+    padding: 14px 0;
+    list-style: none;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .faq summary::after {
+    content: '+';
+    color: var(--gold);
+    font-size: 18px;
+    transition: transform 0.2s ease;
+  }
+  .faq[open] summary::after { content: '−'; }
+  .faq[open] summary { border-bottom-color: var(--line-strong); }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq p { padding: 14px 0; opacity: 0.85; }
+
+  p, li { color: var(--parchment); opacity: 0.9; margin-bottom: 12px; }
+  a {
+    color: var(--gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(201, 168, 91, 0.4);
+  }
+  a:hover { color: var(--rose); }
+
+  footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  footer a { color: var(--ink-muted); }
+  footer a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="mark">
+    <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.4">
+      <circle cx="18" cy="18" r="15"/>
+      <circle cx="18" cy="18" r="7"/>
+      <line x1="3" y1="18" x2="33" y2="18"/>
+      <line x1="18" y1="3" x2="18" y2="33"/>
+    </svg>
+  </span>
+  <span class="logo-text">Cusp</span>
+</header>
+
+<div class="eyebrow">Support</div>
+<h1>Need a hand?</h1>
+<p class="lede">Cusp is built and maintained by one person. The fastest path to help is email — we usually reply within 24 hours.</p>
+
+<div class="contact-card">
+  <span class="c1"></span><span class="c2"></span>
+  <h2>Contact</h2>
+  <p>Bug reports, billing questions, feature requests, anything else — write us. Include your iPhone model and iOS version if you're reporting a bug.</p>
+  <a href="mailto:hello@cusp.app?subject=Cusp%20Support" class="cta">hello@cusp.app</a>
+</div>
+
+<h2>Frequently asked</h2>
+
+<details class="faq">
+  <summary>How accurate is the astrology?</summary>
+  <p>Cusp uses your sun sign (calculated from your birth date) plus today's moon phase, the planet of the day, and Mercury retrograde status. It does not compute your full natal chart — no rising sign or moon sign yet. The astrology is intentionally light; Cusp is about reflection, not prediction. Birth-time-based features are on the roadmap for Cusp Pro.</p>
+</details>
+
+<details class="faq">
+  <summary>Does Cusp store my rituals or intentions?</summary>
+  <p>No. Your intention and birth date are sent to our backend, which calls Anthropic's Claude to generate the ritual. Neither our server nor Anthropic retains the text. Rituals you've completed are stored on your device only. See our <a href="ditto-privacy.html">privacy policy</a> for full detail.</p>
+</details>
+
+<details class="faq">
+  <summary>How do I cancel my Cusp Pro subscription?</summary>
+  <p>Subscriptions are managed by Apple. Open the Settings app on your iPhone → tap your name at the top → Subscriptions → Cusp Pro → Cancel Subscription. Cancellation takes effect at the end of your current billing period.</p>
+</details>
+
+<details class="faq">
+  <summary>I'm not getting rituals — what's wrong?</summary>
+  <p>Three common causes: (1) you've hit the free-tier daily limit (3 rituals/day); (2) your device is offline; (3) our backend is temporarily down. Pull-to-refresh in the app, check your connection, or try again in a minute. If it persists, email us.</p>
+</details>
+
+<details class="faq">
+  <summary>Can I use Cusp without a subscription?</summary>
+  <p>Yes. The free tier gives you three personalized rituals per day, every day, forever. Cusp Pro unlocks unlimited rituals plus upcoming features (tarot, transit forecasts, pattern insights).</p>
+</details>
+
+<details class="faq">
+  <summary>Why isn't my zodiac glyph showing correctly?</summary>
+  <p>Cusp uses the standard tropical (Western) zodiac. If your sign looks wrong, double-check the birth date you entered during onboarding. To change it: tap the gear icon (coming in a future update). For now, you can reset by deleting and reinstalling the app.</p>
+</details>
+
+<details class="faq">
+  <summary>Does Cusp work without an internet connection?</summary>
+  <p>Generating a new ritual requires an internet connection (we call our AI backend). Reviewing rituals you've already saved works fully offline.</p>
+</details>
+
+<details class="faq">
+  <summary>Is Cusp a fortune-telling app?</summary>
+  <p>No. Cusp generates reflection prompts and small action suggestions inspired by your astrology. It does not predict outcomes, make promises, or function as a divination tool. Think of it as a journaling assistant with a celestial vocabulary.</p>
+</details>
+
+<h2>More</h2>
+<p>
+  <a href="cusp-privacy.html">Privacy Policy</a> · <a href="ditto-prototype.html">Other projects by Joey</a>
+</p>
+
+<footer>
+  <span>Cusp · Made by Joey Primiani</span>
+  <span><a href="mailto:hello@cusp.app">hello@cusp.app</a></span>
+</footer>
+
+</div>
+</body>
+</html>
