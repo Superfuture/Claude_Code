@@ -24,3 +24,6 @@ node_modules/
 *.p12
 *.cer
 *.mobileprovision
+
+# Local builds
+build/
