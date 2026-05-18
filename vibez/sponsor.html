@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sponsor Vibez · get in front of vibe-coded makers</title>
+<meta name="description" content="Sponsor Vibez to put your tool in front of thousands of indie makers building with Claude, Cursor, v0, Bolt and friends." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&family=JetBrains+Mono:ital,wght@0,300;0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A2E;
+    --ink-soft:#3A3A52;
+    --paper:#FCFAF6;
+    --paper-warm:#F6F1E8;
+    --blush:#F2C7DB;
+    --blush-soft:#FBE6F0;
+    --rose:#C76090;
+    --rose-deep:#8E3A6A;
+    --ice:#BBDDED;
+    --ice-deep:#5EA3C4;
+    --sour:#DCEC68;
+    --juice:#E8A85B;
+    --chrome:#CBD0D8;
+    --chrome-light:#E8ECF1;
+    --chrome-dark:#7E848F;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Hanken Grotesk", system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:0;
+    background:
+      radial-gradient(1100px 700px at 8% -5%, rgba(242,199,219,.35), transparent 55%),
+      radial-gradient(900px 700px at 100% 0%, rgba(187,221,237,.22), transparent 55%);
+    pointer-events:none; z-index:0;
+  }
+  body::after{
+    content:""; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    pointer-events:none; z-index:1; mix-blend-mode:multiply;
+  }
+  .page{position:relative; z-index:2; max-width:1100px; margin:0 auto; padding:0 32px 96px}
+
+  /* NAV */
+  .nav{
+    position:sticky; top:18px; z-index:50;
+    margin:24px 0 36px;
+    border-radius:16px;
+    padding:8px 8px 8px 22px;
+    background:rgba(252,250,246,.92);
+    backdrop-filter:blur(14px);
+    border:1px solid var(--chrome);
+    box-shadow:0 1px 0 #fff inset, 0 2px 0 var(--chrome);
+    display:flex; align-items:center; gap:18px;
+  }
+  .nav-logo{
+    display:flex; align-items:center; gap:8px;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1;
+    font-weight:900; font-style:italic;
+    font-size:28px; line-height:1;
+    color:var(--ink);
+    letter-spacing:-.025em;
+    text-decoration:none;
+  }
+  .nav-logo .dot{
+    display:inline-block; width:9px; height:9px; border-radius:50%;
+    background:var(--rose);
+    box-shadow:0 0 0 2.5px var(--blush-soft);
+  }
+  .nav-spacer{flex:1}
+  .nav-back{
+    font-family:"Hanken Grotesk", sans-serif;
+    font-weight:600; font-size:13px;
+    padding:9px 13px; border-radius:9px;
+    color:var(--ink-soft); text-decoration:none;
+    transition:color .12s ease, background .12s ease;
+  }
+  .nav-back:hover{color:var(--ink); background:rgba(26,26,46,.04)}
+
+  /* HERO */
+  .hero{margin:48px 0 56px; text-align:left}
+  .hero .eyebrow{
+    display:inline-block;
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--rose); font-weight:600;
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 40, "WONK" 1;
+    font-weight:900;
+    font-size:clamp(56px, 8vw, 112px);
+    line-height:.95; margin:0;
+    color:var(--ink); letter-spacing:-.035em;
+  }
+  h1 em{
+    font-style:italic;
+    font-variation-settings:"opsz" 144, "SOFT" 80, "WONK" 1;
+    color:var(--rose);
+  }
+  .hero-sub{
+    margin-top:22px; max-width:620px;
+    font-size:17px; line-height:1.55; color:var(--ink-soft);
+  }
+
+  /* AUDIENCE STATS */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:18px;
+    margin:48px 0 64px;
+    padding:28px 32px;
+    background:#fff;
+    border:1px solid var(--chrome);
+    border-radius:18px;
+  }
+  .stat{display:grid; gap:6px}
+  .stat .n{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1;
+    font-weight:900; font-style:italic;
+    font-size:48px; line-height:.9;
+    color:var(--ink); letter-spacing:-.04em;
+  }
+  .stat .n em{
+    color:var(--rose);
+    font-style:italic;
+    font-variation-settings:"opsz" 144, "SOFT" 80, "WONK" 1;
+  }
+  .stat .l{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+
+  /* TIERS */
+  .section-title{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800;
+    font-size:42px; line-height:.95;
+    color:var(--ink); letter-spacing:-.025em;
+    margin:0 0 12px;
+  }
+  .section-title em{
+    font-style:italic; color:var(--rose);
+    font-variation-settings:"opsz" 144, "SOFT" 80, "WONK" 1;
+  }
+  .section-sub{
+    font-size:15px; color:var(--ink-soft); line-height:1.5;
+    margin:0 0 36px; max-width:620px;
+  }
+
+  .tiers{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:18px;
+  }
+  .tier{
+    position:relative;
+    background:#fff;
+    border:1px solid var(--chrome);
+    border-radius:18px;
+    padding:28px 26px 26px;
+    display:flex; flex-direction:column;
+    box-shadow:0 1px 0 var(--chrome);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .tier:hover{transform:translateY(-3px); box-shadow:0 4px 0 var(--chrome)}
+  .tier.is-feat{
+    background:var(--ink); color:var(--paper);
+    border-color:#000;
+    box-shadow:0 1px 0 #000;
+  }
+  .tier.is-feat:hover{box-shadow:0 4px 0 #000}
+  .tier .badge{
+    position:absolute; top:-10px; right:18px;
+    background:var(--sour); color:var(--ink);
+    font-family:"JetBrains Mono",monospace;
+    font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+    padding:4px 9px; border-radius:99px;
+    font-weight:700;
+  }
+  .tier-name{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800;
+    font-size:24px; line-height:1.05;
+    letter-spacing:-.02em;
+    margin-bottom:6px;
+  }
+  .tier-tag{
+    font-size:13.5px; color:var(--ink-soft);
+    margin-bottom:24px; line-height:1.45;
+  }
+  .tier.is-feat .tier-tag{color:rgba(252,250,246,.7)}
+  .tier-price{
+    display:flex; align-items:baseline; gap:8px;
+    margin:0 0 6px;
+  }
+  .tier-price .amt{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1;
+    font-weight:900; font-style:italic;
+    font-size:56px; line-height:.85;
+    letter-spacing:-.04em;
+  }
+  .tier.is-feat .tier-price .amt{color:var(--sour)}
+  .tier-price .per{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px; color:var(--chrome-dark);
+    letter-spacing:.04em;
+  }
+  .tier.is-feat .tier-price .per{color:rgba(252,250,246,.6)}
+  .tier hr{
+    border:none; border-top:1px solid var(--chrome);
+    margin:22px 0 18px;
+  }
+  .tier.is-feat hr{border-color:rgba(252,250,246,.15)}
+  .tier ul{
+    list-style:none; padding:0; margin:0 0 28px;
+    display:grid; gap:10px;
+    font-size:13.5px; line-height:1.4;
+    flex:1;
+  }
+  .tier li{display:flex; gap:10px; align-items:flex-start}
+  .tier li::before{
+    content:"✦"; color:var(--rose);
+    font-size:12px; line-height:1.5; flex-shrink:0;
+  }
+  .tier.is-feat li::before{color:var(--sour)}
+  .tier-cta{
+    display:block; text-align:center;
+    font-family:"Hanken Grotesk", sans-serif;
+    font-weight:700; font-size:14.5px;
+    padding:14px; border-radius:10px;
+    background:var(--ink); color:var(--paper);
+    text-decoration:none;
+    transition:transform .08s ease;
+    box-shadow:0 2px 0 #000;
+  }
+  .tier-cta:hover{transform:translateY(-1px); box-shadow:0 3px 0 #000}
+  .tier.is-feat .tier-cta{
+    background:var(--sour); color:var(--ink);
+    box-shadow:0 2px 0 #87B32D;
+  }
+  .tier.is-feat .tier-cta:hover{box-shadow:0 3px 0 #87B32D}
+
+  /* WHAT YOU GET */
+  .gallery{
+    margin:80px 0;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:36px;
+    align-items:center;
+  }
+  .gallery-img{
+    position:relative;
+    aspect-ratio:4/3;
+    border-radius:18px;
+    overflow:hidden;
+    border:1px solid var(--chrome);
+    background:
+      radial-gradient(circle at 0% 0%, rgba(187,221,237,.6), transparent 55%),
+      radial-gradient(circle at 100% 100%, rgba(242,199,219,.55), transparent 55%),
+      var(--paper-warm);
+    display:grid; place-items:center;
+    box-shadow:0 12px 30px -16px rgba(26,26,46,.2);
+  }
+  .gallery-mock{
+    width:80%; aspect-ratio:1.4;
+    background:#fff;
+    border:1px solid var(--chrome);
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 1px 0 var(--chrome);
+    transform:rotate(-1.5deg);
+    position:relative;
+  }
+  .gallery-mock .mock-eyebrow{
+    font-family:"JetBrains Mono",monospace;
+    font-size:9.5px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:8px;
+  }
+  .gallery-mock h5{
+    margin:0 0 6px;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800; font-size:22px; line-height:1.05;
+    letter-spacing:-.02em;
+  }
+  .gallery-mock p{
+    margin:0 0 14px; font-size:12.5px; line-height:1.4; color:var(--ink-soft);
+  }
+  .gallery-mock .mock-cta{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:"Hanken Grotesk", sans-serif; font-weight:700;
+    font-size:12px; padding:8px 12px; border-radius:8px;
+    background:var(--ink); color:var(--paper);
+  }
+  .gallery h3{
+    margin:0 0 14px;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800; font-size:36px; line-height:.98;
+    color:var(--ink); letter-spacing:-.025em;
+  }
+  .gallery h3 em{
+    font-style:italic; color:var(--rose);
+    font-variation-settings:"opsz" 144, "SOFT" 80, "WONK" 1;
+  }
+  .gallery p{font-size:15px; line-height:1.55; color:var(--ink-soft); margin:0 0 14px}
+
+  /* PARTNERS */
+  .partners{
+    margin:72px 0;
+    background:var(--ink); color:var(--paper);
+    border-radius:18px;
+    padding:48px 40px;
+    position:relative; overflow:hidden;
+  }
+  .partners::before{
+    content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0 1px, transparent 1px 4px);
+    pointer-events:none;
+  }
+  .partners h3{
+    margin:0 0 8px;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800; font-size:32px; letter-spacing:-.025em;
+  }
+  .partners p{font-size:14.5px; color:rgba(252,250,246,.7); margin:0 0 22px; max-width:580px}
+  .partners-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+    gap:14px;
+    position:relative;
+  }
+  .pp{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:12px;
+    padding:18px 16px;
+    text-align:center;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:700; font-size:17px;
+    color:var(--paper);
+    transition:background .12s ease;
+  }
+  .pp:hover{background:rgba(255,255,255,.07)}
+  .pp .ld{
+    display:block;
+    font-family:"JetBrains Mono",monospace;
+    font-size:9.5px; letter-spacing:.16em;
+    color:var(--rose); margin-top:6px; font-weight:500;
+    text-transform:uppercase;
+  }
+
+  /* CUSTOM CTA */
+  .custom{
+    margin:72px 0 0;
+    text-align:center;
+    padding:48px 32px;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(187,221,237,.5), transparent 55%),
+      radial-gradient(circle at 100% 100%, rgba(242,199,219,.5), transparent 55%),
+      var(--paper-warm);
+    border:1px solid var(--chrome);
+    border-radius:18px;
+  }
+  .custom h3{
+    margin:0 0 12px;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800; font-size:36px; line-height:1;
+    letter-spacing:-.025em;
+  }
+  .custom h3 em{
+    font-style:italic; color:var(--rose);
+    font-variation-settings:"opsz" 144, "SOFT" 80, "WONK" 1;
+  }
+  .custom p{
+    max-width:520px; margin:0 auto 24px;
+    font-size:15px; line-height:1.55; color:var(--ink-soft);
+  }
+  .custom-cta{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:"Hanken Grotesk", sans-serif;
+    font-weight:700; font-size:14.5px;
+    padding:14px 22px; border-radius:10px;
+    background:var(--ink); color:var(--paper);
+    text-decoration:none;
+    box-shadow:0 2px 0 #000;
+    transition:transform .08s ease;
+  }
+  .custom-cta:hover{transform:translateY(-1px); box-shadow:0 3px 0 #000}
+
+  /* FAQ */
+  .faq{margin:72px 0 0}
+  details{
+    background:#fff;
+    border:1px solid var(--chrome);
+    border-radius:12px;
+    padding:18px 22px;
+    margin-bottom:10px;
+    cursor:pointer;
+  }
+  details[open]{box-shadow:0 1px 0 var(--chrome)}
+  summary{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:700; font-size:17px;
+    color:var(--ink); list-style:none;
+    display:flex; justify-content:space-between; align-items:center;
+    letter-spacing:-.015em;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::after{
+    content:"+"; font-family:"JetBrains Mono",monospace;
+    color:var(--chrome-dark); font-size:18px; font-weight:300;
+    transition:transform .15s ease;
+  }
+  details[open] summary::after{content:"−"}
+  details p{
+    margin:12px 0 0; font-size:14px; line-height:1.55;
+    color:var(--ink-soft);
+  }
+
+  /* FOOTER */
+  .foot{
+    margin-top:80px; padding-top:32px;
+    border-top:1px solid var(--chrome);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:14px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:10.5px; color:var(--chrome-dark); letter-spacing:.04em;
+  }
+  .foot a{color:var(--rose); text-decoration:none; font-weight:700}
+  .foot a:hover{color:var(--ink)}
+
+  @media (max-width:900px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .tiers{grid-template-columns:1fr}
+    .gallery{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav">
+    <a class="nav-logo" href="index.html"><span class="dot"></span>Vibez</a>
+    <div class="nav-spacer"></div>
+    <a class="nav-back" href="index.html">← Back to the board</a>
+  </nav>
+
+  <header class="hero">
+    <span class="eyebrow">Sponsor Vibez</span>
+    <h1>Get in front of <em>vibe-coded</em><br/>makers.</h1>
+    <p class="hero-sub">Vibez is where thousands of indie developers, designers, and AI-coding power users come to discover what's new each day. If you make a tool they should know about, this is where they find you.</p>
+  </header>
+
+  <section class="stats">
+    <div class="stat"><div class="n">12<em>k</em></div><div class="l">monthly visitors</div></div>
+    <div class="stat"><div class="n">3.4<em>k</em></div><div class="l">weekly returning</div></div>
+    <div class="stat"><div class="n">47<em>%</em></div><div class="l">ship side projects</div></div>
+    <div class="stat"><div class="n">$0</div><div class="l">cost to browse</div></div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Pick a <em>slot.</em></h2>
+    <p class="section-sub">One sponsored slot rotates daily on the homepage above the leaderboard, plus inclusion in the daily email digest going to the maker mailing list. Reserve below; payment via Stripe Checkout.</p>
+
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-name">Daily slot</div>
+        <div class="tier-tag">A single day. Try us out.</div>
+        <div class="tier-price"><span class="amt">$99</span><span class="per">/ day</span></div>
+        <hr/>
+        <ul>
+          <li>24 hours on homepage</li>
+          <li>~3–5k impressions</li>
+          <li>Logo + tagline + link</li>
+          <li>Included in 1 daily digest</li>
+        </ul>
+        <a class="tier-cta" data-tier="daily" href="#">Reserve a day →</a>
+      </div>
+
+      <div class="tier is-feat">
+        <div class="badge">Recommended</div>
+        <div class="tier-name">Weekly slot</div>
+        <div class="tier-tag">A full week. Highest ROI.</div>
+        <div class="tier-price"><span class="amt">$499</span><span class="per">/ week</span></div>
+        <hr/>
+        <ul>
+          <li>7 days on homepage</li>
+          <li>~25k impressions</li>
+          <li>Logo + tagline + UTM link</li>
+          <li>Included in 7 daily digests</li>
+          <li>Mention in weekly recap post</li>
+        </ul>
+        <a class="tier-cta" data-tier="weekly" href="#">Reserve the week →</a>
+      </div>
+
+      <div class="tier">
+        <div class="tier-name">Monthly takeover</div>
+        <div class="tier-tag">Own the month. Co-brand the digest.</div>
+        <div class="tier-price"><span class="amt">$1,499</span><span class="per">/ month</span></div>
+        <hr/>
+        <ul>
+          <li>30 days on homepage</li>
+          <li>~100k impressions</li>
+          <li>Co-branded daily winner email</li>
+          <li>Custom landing for your tool</li>
+          <li>Logo on Hall of Fame</li>
+        </ul>
+        <a class="tier-cta" data-tier="monthly" href="#">Reserve a month →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery">
+    <div class="gallery-img">
+      <div class="gallery-mock">
+        <div class="mock-eyebrow">Brought to you by Cursor</div>
+        <h5>Built by builders, for builders.</h5>
+        <p>The editor your vibe-coded projects are made in. Pro free for 7 days, no card.</p>
+        <span class="mock-cta">Try Cursor Pro →</span>
+      </div>
+    </div>
+    <div>
+      <h3>This is what a sponsored slot <em>looks like.</em></h3>
+      <p>Above the leaderboard fold, in the right rail on every page. Designed to feel native to Vibez, not pasted on. You pick the headline, the body, and the link; we keep the look on-brand.</p>
+      <p>Format constraints: 60-character headline, 140-character body, one CTA. We review before publishing to make sure it lands.</p>
+    </div>
+  </section>
+
+  <section class="partners">
+    <h3>Companies who'd be a great fit</h3>
+    <p>If you make tools, infrastructure, or services that vibe-coded makers actually use, you belong here. Past or in-discussion partners include:</p>
+    <div class="partners-grid">
+      <div class="pp">Cursor<span class="ld">editor</span></div>
+      <div class="pp">Vercel<span class="ld">hosting</span></div>
+      <div class="pp">Supabase<span class="ld">backend</span></div>
+      <div class="pp">Resend<span class="ld">email</span></div>
+      <div class="pp">Linear<span class="ld">issues</span></div>
+      <div class="pp">Stripe<span class="ld">payments</span></div>
+    </div>
+  </section>
+
+  <section class="custom">
+    <h3>Need something <em>custom?</em></h3>
+    <p>Sponsored launches, multi-month deals, co-branded events, or you want to underwrite the whole Hall of Fame. Drop a line and we'll figure it out.</p>
+    <a class="custom-cta" href="mailto:hello@vibez.app?subject=Custom%20sponsorship">hello@vibez.app →</a>
+  </section>
+
+  <section class="faq">
+    <h2 class="section-title" style="margin-top:72px">Common <em>questions.</em></h2>
+
+    <details>
+      <summary>How does payment work?</summary>
+      <p>You're charged on Stripe Checkout at the time of reservation. We confirm your slot within 24 hours and slot you in for the next available date. Receipts and invoices auto-generated.</p>
+    </details>
+    <details>
+      <summary>What format does the ad take?</summary>
+      <p>A native-feeling card with your logo, a short headline (max 60 chars), a 1-2 sentence pitch (max 140 chars), and one CTA. We review every ad before it goes live to keep the bar high.</p>
+    </details>
+    <details>
+      <summary>Can I track conversions?</summary>
+      <p>Yes — we hand you a UTM-tagged link, and every Monday we send an email with click-throughs, impression counts, and click-to-impression ratio.</p>
+    </details>
+    <details>
+      <summary>What if the slot underperforms?</summary>
+      <p>If a weekly or monthly slot delivers fewer than 70% of projected impressions, we credit the gap toward a future slot at no charge. We've never had to do this, but the offer stands.</p>
+    </details>
+    <details>
+      <summary>Can I sponsor a specific category?</summary>
+      <p>Yes. Custom category sponsorships (e.g. "Built with Cursor" leaderboard) are available on the monthly tier and via custom deals.</p>
+    </details>
+  </section>
+
+  <footer class="foot">
+    <span>© 2026 Vibez · sponsorship inquiries: <a href="mailto:hello@vibez.app">hello@vibez.app</a></span>
+    <span>Created by <a href="https://twitter.com/jp" target="_blank" rel="noopener">@jp</a></span>
+  </footer>
+
+</div>
+
+<script>
+  // ─────────────────────────────────────────────
+  //  STRIPE PAYMENT LINKS · plug in your URLs here
+  // ─────────────────────────────────────────────
+  // Create Payment Links in your Stripe Dashboard:
+  //   https://dashboard.stripe.com/payment-links
+  // Then paste the URLs below. Each button opens Stripe-hosted
+  // checkout in a new tab. No backend code required.
+  const STRIPE_LINKS = {
+    daily:   '', // e.g. 'https://buy.stripe.com/abc123_daily'
+    weekly:  '', // e.g. 'https://buy.stripe.com/abc123_weekly'
+    monthly: '', // e.g. 'https://buy.stripe.com/abc123_monthly'
+  };
+
+  document.querySelectorAll('[data-tier]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const tier = btn.dataset.tier;
+      const url = STRIPE_LINKS[tier];
+      if (url) {
+        window.open(url, '_blank', 'noopener');
+      } else {
+        // No Stripe link configured yet — fall back to email.
+        const subject = encodeURIComponent('Vibez sponsorship · ' + tier);
+        const body = encodeURIComponent(`Hi — I'd like to reserve the ${tier} sponsorship slot on Vibez. Let me know next steps.`);
+        window.location.href = `mailto:hello@vibez.app?subject=${subject}&body=${body}`;
+      }
+    });
+  });
+</script>
+</body>
+</html>
