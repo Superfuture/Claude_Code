@@ -175,7 +175,7 @@
                   : `<div class="delta down">▼ ${Math.abs(d.d)}</div>`;
       const a = document.createElement('a');
       a.className = 'row' + (rk <= 3 ? ' top-' + rk : '');
-      a.href = '#';
+      a.href = 'project.html?slug=' + d.n.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
       a.innerHTML = `
         <div class="rk">${String(rk).padStart(2,'0')}</div>
         <div class="media"><img src="https://images.unsplash.com/photo-${d.img}?auto=format&fit=crop&w=400&q=80" alt="" loading="lazy"/></div>

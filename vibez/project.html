@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Project · Vibez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&family=JetBrains+Mono:ital,wght@0,300;0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A2E; --ink-soft:#3A3A52;
+    --paper:#FCFAF6; --paper-warm:#F6F1E8;
+    --blush:#F2C7DB; --blush-soft:#FBE6F0;
+    --rose:#C76090; --rose-deep:#8E3A6A;
+    --ice:#BBDDED; --ice-deep:#5EA3C4;
+    --sour:#DCEC68; --juice:#E8A85B;
+    --chrome:#CBD0D8; --chrome-light:#E8ECF1; --chrome-dark:#7E848F;
+  }
+  *{box-sizing:border-box} html{overflow-y:scroll} html,body{margin:0;padding:0}
+  body{background:var(--paper); color:var(--ink); font-family:"Hanken Grotesk", system-ui, sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden}
+  body::before{content:""; position:fixed; inset:0; background:radial-gradient(1100px 700px at 8% -5%, rgba(242,199,219,.35), transparent 55%), radial-gradient(900px 700px at 100% 0%, rgba(187,221,237,.22), transparent 55%); pointer-events:none; z-index:0}
+  body::after{content:""; position:fixed; inset:0; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); pointer-events:none; z-index:1; mix-blend-mode:multiply}
+  .page{position:relative; z-index:2; max-width:1320px; margin:0 auto; padding:0 32px 96px}
+
+  .nav{position:sticky; top:18px; z-index:50; margin:24px 0 36px; border-radius:16px; padding:8px 8px 8px 22px; background:rgba(252,250,246,.92); backdrop-filter:blur(14px); border:1px solid var(--chrome); box-shadow:0 1px 0 #fff inset, 0 2px 0 var(--chrome); display:flex; align-items:center; gap:18px}
+  .nav-logo{display:flex; align-items:center; gap:8px; font-family:"Fraunces", serif; font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1; font-weight:900; font-style:italic; font-size:28px; line-height:1; color:var(--ink); letter-spacing:-.025em; text-decoration:none}
+  .nav-logo .dot{width:9px; height:9px; border-radius:50%; background:var(--rose); box-shadow:0 0 0 2.5px var(--blush-soft)}
+  .nav-links{display:flex; gap:2px; align-items:center}
+  .nav-links a{text-decoration:none; color:var(--ink-soft); font-weight:600; font-size:13px; padding:9px 13px; border-radius:9px; white-space:nowrap}
+  .nav-links a:hover{color:var(--ink); background:rgba(26,26,46,.04)}
+  .nav-spacer{flex:1}
+  .nav-cta{font-family:"Hanken Grotesk", sans-serif; font-weight:700; font-size:13.5px; padding:11px 18px; border-radius:10px; background:var(--ink); color:var(--paper); cursor:pointer; box-shadow:0 2px 0 #000; text-decoration:none; display:inline-flex; align-items:center; gap:6px}
+  .nav-cta:hover{transform:translateY(-1px)}
+
+  /* breadcrumb */
+  .crumbs{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--chrome-dark); margin-bottom:16px;
+    display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+  }
+  .crumbs a{color:var(--ink-soft); text-decoration:none}
+  .crumbs a:hover{color:var(--rose)}
+  .crumbs .sep{color:var(--chrome)}
+
+  /* hero */
+  .hero{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:36px;
+    align-items:start;
+    margin-bottom:48px;
+  }
+  .hero-media{
+    aspect-ratio:4/3;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid var(--chrome);
+    background:var(--paper-warm);
+    position:relative;
+    box-shadow:0 2px 0 var(--chrome), 0 12px 32px -16px rgba(26,26,46,.2);
+  }
+  .hero-media img{width:100%; height:100%; object-fit:cover}
+  .hero-media::after{content:""; position:absolute; inset:0; background:repeating-linear-gradient(0deg, rgba(0,0,0,.08) 0 1px, transparent 1px 3px); mix-blend-mode:multiply}
+  .hero-rank{
+    position:absolute; top:18px; left:22px;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1;
+    font-weight:900; font-style:italic;
+    font-size:84px; line-height:.8;
+    color:var(--sour); letter-spacing:-.04em;
+    text-shadow:0 2px 12px rgba(0,0,0,.4);
+    z-index:2;
+  }
+  .hero-info{padding-top:8px}
+  .hero-badges{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px}
+  .b{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+    padding:5px 10px; border-radius:99px;
+    background:var(--paper-warm); color:var(--ink-soft);
+    border:1px solid var(--chrome); font-weight:600;
+  }
+  .b.gold{background:var(--sour); color:var(--ink); border-color:#B8C648}
+  .b.tool{background:var(--ice); color:var(--ink); border-color:var(--ice-deep)}
+  .hero-name{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 40, "WONK" 1;
+    font-weight:900;
+    font-size:clamp(48px, 6vw, 84px); line-height:.92;
+    margin:0; color:var(--ink); letter-spacing:-.035em;
+  }
+  .hero-tag{
+    margin:14px 0 0;
+    font-size:18px; line-height:1.5; color:var(--ink-soft);
+    max-width:520px;
+  }
+  .hero-actions{display:flex; gap:10px; margin-top:24px; flex-wrap:wrap}
+  .btn{
+    font-family:"Hanken Grotesk", sans-serif;
+    font-weight:700; font-size:14px;
+    padding:13px 20px; border-radius:11px; border:none;
+    cursor:pointer; white-space:nowrap;
+    box-shadow:0 2px 0 #000; transition:transform .08s ease;
+    text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--ink); color:var(--paper)}
+  .btn-ghost{
+    background:#fff; color:var(--ink);
+    border:1px solid var(--chrome); box-shadow:0 1px 0 var(--chrome);
+  }
+
+  .hero-maker{
+    margin-top:28px; padding-top:24px;
+    border-top:1px solid var(--chrome);
+    display:flex; align-items:center; gap:14px;
+  }
+  .hero-maker .av{
+    width:48px; height:48px; border-radius:50%;
+    overflow:hidden; border:1px solid var(--chrome);
+  }
+  .hero-maker .av img{width:100%; height:100%; object-fit:cover}
+  .hero-maker .info{flex:1}
+  .hero-maker .l{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--chrome-dark); margin-bottom:2px;
+  }
+  .hero-maker .h{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1;
+    font-weight:900; font-style:italic; font-size:22px;
+    color:var(--ink); letter-spacing:-.025em; text-decoration:none;
+    display:block;
+  }
+  .hero-maker .h:hover{color:var(--rose)}
+  .hero-maker .follow{
+    font-family:"Hanken Grotesk", sans-serif;
+    font-weight:700; font-size:12.5px;
+    padding:8px 14px; border-radius:8px; border:none;
+    background:var(--ink); color:var(--paper); cursor:pointer;
+    box-shadow:0 1px 0 #000;
+  }
+
+  /* reactions */
+  .rxs-band{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:24px; flex-wrap:wrap;
+    background:#fff;
+    border:1px solid var(--chrome);
+    border-radius:18px;
+    padding:24px 28px;
+    margin-bottom:36px;
+    box-shadow:0 2px 0 var(--chrome);
+  }
+  .rxs{display:flex; gap:8px; flex-wrap:wrap}
+  .rx{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 14px 8px 12px;
+    border-radius:99px;
+    background:#fff;
+    border:1px solid var(--chrome);
+    font-family:"JetBrains Mono", monospace;
+    font-size:13px; font-weight:600;
+    color:var(--ink-soft); cursor:pointer; user-select:none;
+    transition:all .12s ease;
+  }
+  .rx:hover{transform:translateY(-1px); background:var(--blush-soft); border-color:var(--rose); color:var(--ink)}
+  .rx .e{font-size:18px; line-height:1; transition:transform .15s ease}
+  .rx:hover .e{transform:scale(1.2) rotate(-4deg)}
+  .rx.is-mine{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+  .rxs-score{
+    display:flex; align-items:baseline; gap:10px;
+  }
+  .rxs-score .n{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1;
+    font-weight:900; font-style:italic;
+    font-size:48px; line-height:.9; color:var(--rose);
+    letter-spacing:-.04em;
+  }
+  .rxs-score .l{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--chrome-dark);
+  }
+
+  /* body grid */
+  .body{
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) 320px;
+    gap:36px;
+  }
+  .pc-section{margin-bottom:48px}
+  .pc-section h2{
+    margin:0 0 14px;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800; font-size:26px;
+    color:var(--ink); letter-spacing:-.02em;
+  }
+  .pc-section h2 em{font-style:italic; color:var(--rose); font-variation-settings:"opsz" 144, "SOFT" 80, "WONK" 1}
+  .prose{font-size:16px; line-height:1.65; color:var(--ink-soft)}
+  .prose p{margin:0 0 14px}
+  .prose b, .prose strong{color:var(--ink)}
+
+  /* facts panel */
+  .facts{
+    background:#fff; border:1px solid var(--chrome);
+    border-radius:14px; padding:22px;
+    box-shadow:0 1px 0 var(--chrome);
+    margin-bottom:18px;
+  }
+  .facts h3{
+    margin:0 0 14px;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800; font-size:18px;
+    color:var(--ink); letter-spacing:-.015em;
+  }
+  .fact{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:8px 0; border-bottom:1px solid var(--chrome);
+    font-size:13.5px;
+  }
+  .fact:last-child{border-bottom:none}
+  .fact .k{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10.5px; color:var(--chrome-dark);
+    letter-spacing:.06em; text-transform:uppercase;
+  }
+  .fact .v{
+    color:var(--ink); font-weight:600;
+    text-align:right;
+  }
+  .fact .v a{color:var(--rose); text-decoration:none}
+  .fact .v a:hover{text-decoration:underline}
+
+  /* comments */
+  .comment-form{
+    background:#fff; border:1px solid var(--chrome);
+    border-radius:14px; padding:18px;
+    margin-bottom:18px;
+    box-shadow:0 1px 0 var(--chrome);
+  }
+  .comment-form textarea{
+    width:100%; min-height:80px;
+    border:none; outline:none; resize:vertical;
+    font-family:"Hanken Grotesk", sans-serif;
+    font-size:14.5px; color:var(--ink);
+    background:transparent;
+  }
+  .comment-form textarea::placeholder{color:var(--chrome-dark)}
+  .comment-form .row{display:flex; justify-content:space-between; align-items:center; margin-top:8px}
+  .comment-form .hint{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10.5px; color:var(--chrome-dark);
+    letter-spacing:.06em;
+  }
+  .comment-form button{
+    font-family:"Hanken Grotesk", sans-serif;
+    font-weight:700; font-size:13px;
+    padding:8px 16px; border-radius:8px; border:none;
+    background:var(--ink); color:var(--paper); cursor:pointer;
+    box-shadow:0 1px 0 #000;
+  }
+  .comment{
+    display:grid;
+    grid-template-columns:36px 1fr;
+    gap:12px;
+    padding:14px 0; border-bottom:1px solid var(--chrome);
+  }
+  .comment:last-child{border-bottom:none}
+  .comment .av{
+    width:36px; height:36px; border-radius:50%;
+    overflow:hidden; border:1px solid var(--chrome);
+  }
+  .comment .av img{width:100%; height:100%; object-fit:cover}
+  .comment .meta{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10.5px; color:var(--chrome-dark);
+    letter-spacing:.04em; margin-bottom:4px;
+  }
+  .comment .meta a{color:var(--ink); text-decoration:none; font-weight:600}
+  .comment .meta a:hover{color:var(--rose)}
+  .comment .b{
+    font-family:"Hanken Grotesk", sans-serif;
+    font-size:14px; color:var(--ink); line-height:1.55;
+    background:none; padding:0; border:none; letter-spacing:normal; text-transform:none;
+  }
+
+  /* more from maker */
+  .more{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:14px;
+  }
+  .more .m{
+    background:#fff; border:1px solid var(--chrome);
+    border-radius:14px; overflow:hidden;
+    text-decoration:none; transition:all .15s ease;
+    box-shadow:0 1px 0 var(--chrome);
+    display:block;
+  }
+  .more .m:hover{transform:translateY(-2px); border-color:var(--rose); box-shadow:0 4px 0 var(--rose)}
+  .more .m-img{aspect-ratio:16/10; position:relative; overflow:hidden}
+  .more .m-img img{width:100%; height:100%; object-fit:cover}
+  .more .m-img::after{content:""; position:absolute; inset:0; background:repeating-linear-gradient(0deg, rgba(0,0,0,.08) 0 1px, transparent 1px 3px); mix-blend-mode:multiply}
+  .more .m-body{padding:12px 14px}
+  .more .m-nm{font-family:"Fraunces",serif; font-variation-settings:"opsz" 144,"SOFT" 30; font-weight:800; font-size:16px; color:var(--ink); margin-bottom:3px}
+  .more .m-pts{font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--rose); font-weight:700}
+
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr}
+    .body{grid-template-columns:1fr}
+    .more{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:600px){
+    .more{grid-template-columns:1fr}
+    .rxs-band{flex-direction:column; align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav">
+    <a class="nav-logo" href="index.html"><span class="dot"></span>Vibez</a>
+    <div class="nav-links">
+      <a href="index.html">Today</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="hall-of-fame.html">Hall of Fame</a>
+      <a href="makers.html">Makers</a>
+    </div>
+    <div class="nav-spacer"></div>
+    <a class="nav-cta" href="index.html">← Back to today</a>
+  </nav>
+
+  <div class="crumbs" id="crumbs">
+    <a href="index.html">Today</a> <span class="sep">/</span> <span id="cr-name">Project</span>
+  </div>
+
+  <header class="hero">
+    <div class="hero-media">
+      <img id="hero-img" src="" alt="" />
+      <div class="hero-rank" id="hero-rank"></div>
+    </div>
+    <div class="hero-info">
+      <div class="hero-badges" id="hero-badges"></div>
+      <h1 class="hero-name" id="hero-name">Loading…</h1>
+      <p class="hero-tag" id="hero-tag"></p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" id="hero-url" href="#" target="_blank" rel="noopener">Open live site ↗</a>
+        <button class="btn btn-ghost" id="hero-share">Share</button>
+      </div>
+      <div class="hero-maker">
+        <a class="av" id="hero-maker-av-link" href="#"><img id="hero-maker-av" src="" alt="" /></a>
+        <div class="info">
+          <div class="l">Made by</div>
+          <a class="h" id="hero-maker-h" href="#">@maker</a>
+        </div>
+        <button class="follow" id="follow-btn">Follow</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- reactions band -->
+  <section class="rxs-band">
+    <div class="rxs" id="rxs">
+      <button class="rx" data-w="1"><span class="e">🔥</span><span class="n">0</span></button>
+      <button class="rx" data-w="2"><span class="e">🤯</span><span class="n">0</span></button>
+      <button class="rx" data-w="3"><span class="e">🚂</span><span class="n">0</span></button>
+      <button class="rx" data-w="4"><span class="e">🧠</span><span class="n">0</span></button>
+      <button class="rx" data-w="5"><span class="e">✨</span><span class="n">0</span></button>
+    </div>
+    <div class="rxs-score">
+      <div class="n" id="rxs-total">0</div>
+      <div class="l">Vibez score</div>
+    </div>
+  </section>
+
+  <main class="body">
+    <div>
+      <section class="pc-section">
+        <h2>About this <em>project.</em></h2>
+        <div class="prose" id="prose"></div>
+      </section>
+
+      <section class="pc-section">
+        <h2>Comments <span id="cmt-count" style="color:var(--chrome-dark);font-weight:500">(0)</span></h2>
+        <div class="comment-form">
+          <textarea id="cmt-input" placeholder="Drop a kind thought. Or a sharp one. Either is fair."></textarea>
+          <div class="row">
+            <span class="hint">Markdown: **bold**, *italic*</span>
+            <button id="cmt-post">Post comment</button>
+          </div>
+        </div>
+        <div id="cmt-list"></div>
+      </section>
+    </div>
+
+    <aside>
+      <div class="facts">
+        <h3>Facts</h3>
+        <div class="fact"><span class="k">Today's rank</span><span class="v" id="f-rank">#1</span></div>
+        <div class="fact"><span class="k">Live URL</span><span class="v"><a id="f-url" href="#" target="_blank" rel="noopener">visit ↗</a></span></div>
+        <div class="fact"><span class="k">Built with</span><span class="v" id="f-tool"></span></div>
+        <div class="fact"><span class="k">Build time</span><span class="v" id="f-time"></span></div>
+        <div class="fact"><span class="k">Category</span><span class="v" id="f-cat"></span></div>
+        <div class="fact"><span class="k">Submitted</span><span class="v" id="f-date"></span></div>
+      </div>
+
+      <div class="facts">
+        <h3>More from <span id="more-by" style="font-style:italic;color:var(--rose)">@maker</span></h3>
+        <div class="more" id="more-grid" style="grid-template-columns:1fr"></div>
+      </div>
+    </aside>
+  </main>
+
+</div>
+
+<script>
+  const LS = { user:'vibez.user', comments:'vibez.comments' };
+  const getLS = (k, fb=null) => { try{return JSON.parse(localStorage.getItem(k)) ?? fb}catch{return fb} };
+  const setLS = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+  // ──────────────────────────────────────────
+  //  PROJECT DATABASE
+  // ──────────────────────────────────────────
+  const P = {
+    'pixel-garden':  {n:'Pixel Garden', tg:'Grow weird little plants from one-word prompts. Your garden remembers.', url:'https://pixelgarden.vibez.app', by:'joey', byImg:12, tool:'Claude Code', time:'4 hours, 18 prompts', cat:'Games', date:'May 17, 2026', rank:1, gold:true,
+      img:'1416879595882-3373a0480b5b', rxs:{1:62,2:31,3:18,4:11,5:5},
+      desc:`Pixel Garden started as a tiny prompt: "what if a houseplant remembered me?"\n\nYou type a single word, the AI sketches a plant from that word, and it grows in your garden over time. Water it once a day. Forget for too long and it wilts.\n\nThe whole thing is one HTML file. Built in an afternoon with Claude Code.`},
+    'dreamloop':     {n:'Dreamloop', tg:'Hum a melody, AI loops it into a track you can actually use.', url:'https://dreamloop.app', by:'maya', byImg:23, tool:'Cursor', time:'6 hours', cat:'Tools', date:'May 17, 2026', rank:2,
+      img:'1518972559570-7cc1309f3229', rxs:{1:48,2:24,3:14,4:8,5:3},
+      desc:`Dreamloop is what happens when you give a melody to an AI and ask it not to be precious about it.\n\nYou hum into your laptop mic. The model picks a tempo, picks a key, lays down drums and bass, and loops it. Two clicks to export. No DAW required.`},
+    'tinytune':      {n:'TinyTune', tg:'Pocket synth that fits in a tweet. Tap the dots, share the link.', url:'https://tinytune.fun', by:'karim', byImg:33, tool:'v0', time:'2 hours', cat:'Games', date:'May 17, 2026', rank:3,
+      img:'1485579149621-3123dd979885', rxs:{1:42,2:21,3:12,4:7,5:2},
+      desc:`A pocket synth that fits in a tweet. Twelve dots, twelve sounds. Tap them in a sequence and you've got a melody. Copy the URL — the whole song is in there.\n\nMade in v0 in an evening. Surprisingly addictive.`},
+    'glyphsmith':    {n:'Glyphsmith', tg:'Hand-drawn logo concepts from a single phrase. Drag the slider for more chaos.', url:'https://glyphsmith.io', by:'soraya', byImg:45, tool:'Lovable', time:'3 hours, 27 prompts', cat:'Art', date:'May 17, 2026', rank:4,
+      img:'1496181133206-80ce9b88a853', rxs:{1:38,2:18,3:10,4:7,5:3},
+      desc:`Type a brand idea. Get 20 hand-drawn logo concepts back, all in different styles. Drag the chaos slider for weirder results.\n\nBuilt with Lovable. The trick is asking the model for vibes, not pixels.`},
+    'tabula':        {n:'Tabula', tg:'Notes that remember you. Quietly cluster by mood, season, time of day.', url:'https://tabula.land', by:'theo', byImg:51, tool:'Claude Code', time:'5 hours', cat:'Productivity', date:'May 17, 2026', rank:5,
+      img:'1517842645767-c639042777db', rxs:{1:34,2:16,3:8,4:13,5:2},
+      desc:`Most notes apps are graveyards. Tabula isn't.\n\nIt watches the time of day you write, the mood of the words, the season outside, and quietly clusters your notes by feel. You don't tag anything. It just knows.\n\nMade in five hours of pure Claude Code.`},
+    'shaderbox':     {n:'Shaderbox', tg:'Live-coded WebGL playground. Type a vibe, get a shader.', url:'https://shaderbox.dev', by:'nori', byImg:60, tool:'Cursor', time:'8 hours', cat:'Dev', date:'May 17, 2026', rank:6,
+      img:'1633493702341-4d04841df53b', rxs:{1:28,2:23,3:6,4:10,5:1},
+      desc:`Shaderbox is a live-coded WebGL playground. Type a description ("rippling water at dusk") and it generates a fragment shader. Edit it live. Share the URL.\n\nBuilt with Cursor and a lot of patience.`},
+    'moodmatrix':    {n:'MoodMatrix', tg:'Track every feeling in a single CSV. Surprisingly emotional.', url:'https://moodmatrix.tools', by:'lex', byImg:14, tool:'Bolt', time:'1 hour', cat:'Weird', date:'May 17, 2026', rank:7,
+      img:'1502691876148-a84978e59af8', rxs:{1:25,2:12,3:9,4:5,5:2},
+      desc:`A spreadsheet for your feelings. One row per emotion, one column per day. Bolt built it in an hour. I've been using it for six months.`},
+    'wormhole':      {n:'Wormhole', tg:'Send files via QR code. No upload, no account, no trace.', url:'https://wormhole.now', by:'quinn', byImg:8, tool:'Claude Code + Cursor', time:'3 hours', cat:'Tools', date:'May 17, 2026', rank:8,
+      img:'1622547748225-3fc4abd2cca0', rxs:{1:20,2:16,3:8,4:6,5:3},
+      desc:`Wormhole sends files device-to-device over WebRTC. You scan a QR code, files go directly. Nothing uploaded. No account. Closes the tab and it's gone.`},
+    'karaoke-fm':    {n:'Karaoke.fm', tg:'Solo karaoke booth in your browser. Mic in, swagger out.', url:'https://karaoke.fm', by:'bee', byImg:29, tool:'v0', time:'4 hours', cat:'Social', date:'May 17, 2026', rank:9,
+      img:'1493225457124-a3eb161ffa5f', rxs:{1:23,2:9,3:7,4:4,5:2},
+      desc:`A solo karaoke booth. Browser-based, headphones recommended. Sing into your mic, the AI scores you, you share your run. Free, no signup.`},
+    'postit-online': {n:'Postit.online', tg:'Sticky notes that drift across a shared infinite canvas.', url:'https://postit.online', by:'rin', byImg:47, tool:'ChatGPT', time:'2 hours', cat:'Weird', date:'May 17, 2026', rank:10,
+      img:'1611224923853-80b023f02d71', rxs:{1:18,2:8,3:6,4:3,5:2},
+      desc:`A shared infinite canvas. Drop a sticky note, it drifts slowly across the page. Other people's notes drift too. Every URL is a new room.`},
+    'typeharbor':    {n:'TypeHarbor', tg:'Type to summon ships. Surprisingly emotional.', url:'https://typeharbor.app', by:'joey', byImg:12, tool:'Claude Code', time:'6 hours', cat:'Games', date:'Apr 28, 2026', rank:1, gold:true,
+      img:'1493225457124-a3eb161ffa5f', rxs:{1:68,2:35,3:18,4:14,5:8},
+      desc:`Type any word and a tiny ship sails across the screen, made of that word. Don't ask why it hits.\n\nBuilt with Claude Code over a weekend.`},
+    'quietmaps':     {n:'Quietmaps', tg:'Maps with no roads. Just feelings about places.', url:'https://quietmaps.world', by:'joey', byImg:12, tool:'Claude Code', time:'7 hours', cat:'Art', date:'May 11, 2026', rank:1, gold:true,
+      img:'1517842645767-c639042777db', rxs:{1:70,2:42,3:21,4:18,5:7},
+      desc:`What if a map didn't have roads? Quietmaps shows you a city in moods: where it's loud, where it's lonely, where strangers smile.\n\nMostly an experiment. Got out of hand.`},
+    'inktag':        {n:'Inktag', tg:'Tag your photos with handwritten words.', url:'https://inktag.app', by:'joey', byImg:12, tool:'Claude Code', time:'5 hours', cat:'Art', date:'Apr 14, 2026', rank:1, gold:true,
+      img:'1622547748225-3fc4abd2cca0', rxs:{1:62,2:30,3:18,4:9,5:6},
+      desc:`Tag your photos by writing on them with your finger. Inktag treats the handwriting as the tag. Search "joy" and it knows.`},
+  };
+
+  // weights for reactions
+  const WEIGHTS = {1:1, 2:2, 3:3, 4:4, 5:5};
+
+  // ──────────────────────────────────────────
+  //  RENDER
+  // ──────────────────────────────────────────
+  const params = new URLSearchParams(location.search);
+  const slug = (params.get('slug') || 'pixel-garden').toLowerCase();
+  const p = P[slug] || P['pixel-garden'];
+
+  document.title = `${p.n} · Vibez`;
+  document.getElementById('cr-name').textContent = p.n;
+  document.getElementById('hero-img').src = `https://images.unsplash.com/photo-${p.img}?auto=format&fit=crop&w=1200&q=85`;
+  document.getElementById('hero-img').alt = p.n;
+  document.getElementById('hero-rank').textContent = String(p.rank).padStart(2, '0');
+  document.getElementById('hero-name').textContent = p.n;
+  document.getElementById('hero-tag').textContent = p.tg;
+  document.getElementById('hero-url').href = p.url;
+
+  const badges = document.getElementById('hero-badges');
+  if (p.gold) {
+    const b = document.createElement('span');
+    b.className = 'b gold';
+    b.textContent = `✦ Today's #${p.rank}`;
+    badges.append(b);
+  }
+  const tb = document.createElement('span');
+  tb.className = 'b tool';
+  tb.textContent = p.tool;
+  badges.append(tb);
+  const cb = document.createElement('span');
+  cb.className = 'b';
+  cb.textContent = p.cat;
+  badges.append(cb);
+
+  document.getElementById('hero-maker-av').src = `https://i.pravatar.cc/120?img=${p.byImg}`;
+  document.getElementById('hero-maker-av-link').href = `profile.html?handle=${p.by}`;
+  document.getElementById('hero-maker-h').href = `profile.html?handle=${p.by}`;
+  document.getElementById('hero-maker-h').textContent = `@${p.by}`;
+  document.getElementById('more-by').innerHTML = `<a href="profile.html?handle=${p.by}" style="color:inherit;text-decoration:none">@${p.by}</a>`;
+
+  // facts
+  document.getElementById('f-rank').textContent = `#${p.rank}${p.gold ? ' (gold)' : ''}`;
+  const fUrl = document.getElementById('f-url');
+  fUrl.href = p.url;
+  fUrl.textContent = p.url.replace(/^https?:\/\//, '');
+  document.getElementById('f-tool').textContent = p.tool;
+  document.getElementById('f-time').textContent = p.time;
+  document.getElementById('f-cat').textContent = p.cat;
+  document.getElementById('f-date').textContent = p.date;
+
+  // prose
+  document.getElementById('prose').innerHTML = p.desc.split('\n\n').map(par => `<p>${par.replace(/\n/g, '<br/>')}</p>`).join('');
+
+  // reactions
+  const rxButtons = document.querySelectorAll('.rx');
+  function updateScore(){
+    const total = Array.from(rxButtons).reduce((sum, btn) => {
+      const w = parseInt(btn.dataset.w);
+      const n = parseInt(btn.querySelector('.n').textContent);
+      return sum + (w * n);
+    }, 0);
+    document.getElementById('rxs-total').textContent = total;
+  }
+  rxButtons.forEach(btn => {
+    const w = parseInt(btn.dataset.w);
+    btn.querySelector('.n').textContent = p.rxs[w] || 0;
+  });
+  updateScore();
+  rxButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const n = btn.querySelector('.n');
+      const cur = parseInt(n.textContent);
+      const wasMine = btn.classList.contains('is-mine');
+      if (wasMine) {
+        btn.classList.remove('is-mine');
+        n.textContent = Math.max(0, cur - 1);
+      } else {
+        btn.classList.add('is-mine');
+        n.textContent = cur + 1;
+      }
+      updateScore();
+    });
+  });
+
+  // share
+  document.getElementById('hero-share').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      const btn = document.getElementById('hero-share');
+      const orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = orig, 1500);
+    } catch {}
+  });
+
+  // follow
+  let following = false;
+  document.getElementById('follow-btn').addEventListener('click', (e) => {
+    following = !following;
+    const b = e.target;
+    b.textContent = following ? 'Following ✓' : 'Follow';
+    b.style.background = following ? 'var(--sour)' : 'var(--ink)';
+    b.style.color = following ? 'var(--ink)' : 'var(--paper)';
+  });
+
+  // ──────────────────────────────────────────
+  //  COMMENTS (per-slug, localStorage)
+  // ──────────────────────────────────────────
+  function loadComments(){
+    return (getLS(LS.comments, {}) || {})[slug] || [];
+  }
+  function saveComment(c){
+    const all = getLS(LS.comments, {}) || {};
+    all[slug] = [c, ...(all[slug] || [])];
+    setLS(LS.comments, all);
+  }
+  function renderComments(){
+    const list = document.getElementById('cmt-list');
+    // seed with a few canned comments if none yet
+    const stored = loadComments();
+    const seeded = [
+      { by:'maya', byImg:23, when:'2h ago', body:'This is the kind of thing I think about when I close my laptop.' },
+      { by:'karim', byImg:33, when:'5h ago', body:'How is this only 4 hours of work. Beautiful.' },
+      { by:'soraya', byImg:45, when:'7h ago', body:'I want this on my dock. Make it a Mac app, you cowards.' },
+    ];
+    const all = stored.length ? stored : seeded;
+    document.getElementById('cmt-count').textContent = `(${all.length})`;
+    list.innerHTML = '';
+    all.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'comment';
+      div.innerHTML = `
+        <a class="av" href="profile.html?handle=${c.by}"><img src="https://i.pravatar.cc/80?img=${c.byImg}" alt=""/></a>
+        <div>
+          <div class="meta"><a href="profile.html?handle=${c.by}">@${c.by}</a> · ${c.when}</div>
+          <div class="b">${c.body}</div>
+        </div>
+      `;
+      list.append(div);
+    });
+  }
+  renderComments();
+
+  document.getElementById('cmt-post').addEventListener('click', () => {
+    const input = document.getElementById('cmt-input');
+    const body = input.value.trim();
+    if (!body) return;
+    const user = getLS(LS.user);
+    const handle = user?.handle || 'you';
+    const img = user?.avatar ? null : Math.floor(Math.random() * 70) + 1;
+    saveComment({ by: handle, byImg: img || 10, when:'just now', body });
+    input.value = '';
+    renderComments();
+  });
+
+  // more from maker
+  const moreList = Object.entries(P)
+    .filter(([s, x]) => x.by === p.by && s !== slug)
+    .slice(0, 3);
+  const moreGrid = document.getElementById('more-grid');
+  if (moreList.length === 0) {
+    moreGrid.innerHTML = `<div style="color:var(--chrome-dark);font-size:13px">No other public drops from @${p.by} yet.</div>`;
+  } else {
+    moreList.forEach(([s, x]) => {
+      const a = document.createElement('a');
+      a.className = 'm';
+      a.href = `project.html?slug=${s}`;
+      a.innerHTML = `
+        <div class="m-img"><img src="https://images.unsplash.com/photo-${x.img}?auto=format&fit=crop&w=400&q=80" alt=""/></div>
+        <div class="m-body">
+          <div class="m-nm">${x.n}</div>
+          <div class="m-pts">${Object.entries(x.rxs).reduce((sum, [k, v]) => sum + WEIGHTS[k] * v, 0)} pts</div>
+        </div>
+      `;
+      moreGrid.append(a);
+    });
+  }
+</script>
+</body>
+</html>
