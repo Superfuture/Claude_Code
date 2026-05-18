@@ -890,6 +890,40 @@
   .invited-banner.show{display:flex}
   .invited-banner b{background:var(--ink); color:var(--sour); padding:2px 7px; border-radius:5px; font-family:"JetBrains Mono",monospace}
 
+  /* invite share list */
+  .invites-list{display:grid; gap:6px; margin-top:14px; max-height:360px; overflow:auto}
+  .invite-row{
+    display:flex; align-items:center; gap:12px;
+    padding:10px 14px;
+    background:var(--paper-warm);
+    border:1px solid var(--chrome);
+    border-radius:10px;
+  }
+  .invite-row.is-used{opacity:.5}
+  .invite-row.is-used .invite-code{text-decoration:line-through}
+  .invite-code{
+    font-family:"JetBrains Mono",monospace;
+    font-size:13.5px; font-weight:700;
+    letter-spacing:.05em; flex:1; color:var(--ink);
+  }
+  .invite-copy{
+    font-family:"Hanken Grotesk",sans-serif;
+    font-weight:600; font-size:11.5px;
+    padding:6px 12px; border-radius:6px;
+    background:var(--ink); color:var(--paper);
+    border:none; cursor:pointer;
+    transition:all .12s ease;
+  }
+  .invite-copy:hover{transform:translateY(-1px)}
+  .invite-copy.copied{background:var(--sour); color:var(--ink)}
+  .invites-meta{
+    margin-top:14px; padding:12px 14px;
+    background:var(--blush-soft);
+    border-radius:8px;
+    font-size:12.5px; color:var(--ink-soft); line-height:1.5;
+  }
+  .invites-meta b{color:var(--ink)}
+
   /* ─────────────── RESPONSIVE ─────────────── */
   @media (max-width: 1100px){
     .grid{grid-template-columns:1fr}
@@ -903,6 +937,9 @@
     .nav-search{display:none}
     .podium{grid-template-columns:1fr}
     .pod-2,.pod-3{transform:none}
+    .pod-1{order:1}
+    .pod-2{order:2}
+    .pod-3{order:3}
     .card{grid-template-columns:50px 1fr; grid-template-rows:auto auto auto}
     .card-media{grid-column:1/-1}
     .card-score{grid-column:1/-1; text-align:left; border-left:none; border-top:1px solid var(--chrome); padding:14px 0 0}
@@ -916,10 +953,10 @@
   <nav class="nav" role="navigation">
     <a class="nav-logo" href="#"><span class="dot"></span>Vibez</a>
     <div class="nav-links">
-      <a href="#" class="active">Today</a>
-      <a href="#">Leaderboard</a>
-      <a href="#">Hall of Fame</a>
-      <a href="#">Makers</a>
+      <a href="index.html" class="active">Today</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="hall-of-fame.html">Hall of Fame</a>
+      <a href="makers.html">Makers</a>
     </div>
     <div class="nav-spacer"></div>
     <label class="nav-search">
@@ -934,7 +971,7 @@
       <span class="caret">▾</span>
       <div class="nav-menu" id="nav-menu">
         <a href="#" id="nav-menu-profile">Your profile</a>
-        <a href="#">Your drops</a>
+        <a href="#" data-action="open-invites">Your invites <span style="float:right;color:var(--sour);background:var(--ink);padding:1px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10px;" id="nav-invites-count">10</span></a>
         <a href="#" data-action="open-submit">Drop a project</a>
         <div class="divider"></div>
         <a href="sponsor.html">Sponsor a slot</a>
@@ -1003,7 +1040,7 @@
       </a>
       <a class="pod pod-3" href="#">
         <div class="pod-media">
-          <img src="https://images.unsplash.com/photo-1607019050019-b4ee82c08d80?auto=format&fit=crop&w=800&q=80" alt="TinyTune" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1485579149621-3123dd979885?auto=format&fit=crop&w=800&q=80" alt="TinyTune" loading="lazy" />
           <div class="pod-rank">3</div>
         </div>
         <div class="pod-body">
@@ -1042,14 +1079,14 @@
         <a class="card-link" href="#" aria-label="Glyphsmith"></a>
         <div class="card-rank">04</div>
         <div class="card-media">
-          <img src="https://images.unsplash.com/photo-1561740331-2fc8d3091e60?auto=format&fit=crop&w=600&q=80" alt="" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=600&q=80" alt="" loading="lazy" />
           <div class="play">▶</div>
         </div>
         <div class="card-body">
           <div class="card-name">Glyphsmith</div>
           <div class="card-tag">Hand-drawn logo concepts from a single phrase. Drag the slider for more chaos.</div>
           <div class="card-meta">
-            <a class="by" href="#"><img src="https://i.pravatar.cc/40?img=45" alt="" /> @soraya</a>
+            <a class="by" href="profile.html?handle=soraya"><img src="https://i.pravatar.cc/40?img=45" alt="" /> </a>
             <span class="dot">·</span>
             <span class="tool is-lovable">lovable</span>
             <span class="dot">·</span>
@@ -1084,7 +1121,7 @@
           <div class="card-name">Tabula</div>
           <div class="card-tag">Notes that remember you. Quietly cluster by mood, season, time of day.</div>
           <div class="card-meta">
-            <a class="by" href="#"><img src="https://i.pravatar.cc/40?img=51" alt="" /> @theo</a>
+            <a class="by" href="profile.html?handle=theo"><img src="https://i.pravatar.cc/40?img=51" alt="" /> </a>
             <span class="dot">·</span>
             <span class="tool">claude code</span>
             <span class="dot">·</span>
@@ -1119,7 +1156,7 @@
           <div class="card-name">Shaderbox</div>
           <div class="card-tag">Live-coded WebGL playground. Type a vibe, get a shader. Share the URL.</div>
           <div class="card-meta">
-            <a class="by" href="#"><img src="https://i.pravatar.cc/40?img=60" alt="" /> @nori</a>
+            <a class="by" href="profile.html?handle=nori"><img src="https://i.pravatar.cc/40?img=60" alt="" /> </a>
             <span class="dot">·</span>
             <span class="tool is-cursor">cursor</span>
             <span class="dot">·</span>
@@ -1154,7 +1191,7 @@
           <div class="card-name">MoodMatrix</div>
           <div class="card-tag">Track every feeling in a single CSV. Surprisingly emotional.</div>
           <div class="card-meta">
-            <a class="by" href="#"><img src="https://i.pravatar.cc/40?img=14" alt="" /> @lex</a>
+            <a class="by" href="profile.html?handle=lex"><img src="https://i.pravatar.cc/40?img=14" alt="" /> </a>
             <span class="dot">·</span>
             <span class="tool is-bolt">bolt</span>
             <span class="dot">·</span>
@@ -1189,7 +1226,7 @@
           <div class="card-name">Wormhole</div>
           <div class="card-tag">Send files via QR code. No upload, no account, no trace.</div>
           <div class="card-meta">
-            <a class="by" href="#"><img src="https://i.pravatar.cc/40?img=8" alt="" /> @quinn</a>
+            <a class="by" href="profile.html?handle=quinn"><img src="https://i.pravatar.cc/40?img=8" alt="" /> </a>
             <span class="dot">·</span>
             <span class="tool">claude code</span>
             <span class="tool is-cursor">cursor</span>
@@ -1225,7 +1262,7 @@
           <div class="card-name">Karaoke.fm</div>
           <div class="card-tag">Solo karaoke booth in your browser. Mic in, swagger out.</div>
           <div class="card-meta">
-            <a class="by" href="#"><img src="https://i.pravatar.cc/40?img=29" alt="" /> @bee</a>
+            <a class="by" href="profile.html?handle=bee"><img src="https://i.pravatar.cc/40?img=29" alt="" /> </a>
             <span class="dot">·</span>
             <span class="tool is-v0">v0</span>
             <span class="dot">·</span>
@@ -1260,7 +1297,7 @@
           <div class="card-name">Postit.online</div>
           <div class="card-tag">Sticky notes that drift across a shared infinite canvas.</div>
           <div class="card-meta">
-            <a class="by" href="#"><img src="https://i.pravatar.cc/40?img=47" alt="" /> @rin</a>
+            <a class="by" href="profile.html?handle=rin"><img src="https://i.pravatar.cc/40?img=47" alt="" /> </a>
             <span class="dot">·</span>
             <span class="tool is-chatgpt">chatgpt</span>
             <span class="dot">·</span>
@@ -1312,37 +1349,37 @@
           <a href="#" class="see">See all →</a>
         </div>
         <div class="makers">
-          <a class="maker top" href="#">
+          <a class="maker top" href="profile.html?handle=joey">
             <div class="r">1</div>
             <div class="av"><img src="https://i.pravatar.cc/80?img=12" alt="" loading="lazy"/></div>
             <div class="h"><div class="nm">@joey</div><div class="sl">7 drops · this month</div></div>
             <div class="pts">1,247 <em>pts</em></div>
           </a>
-          <a class="maker top" href="#">
+          <a class="maker top" href="profile.html?handle=maya">
             <div class="r">2</div>
             <div class="av"><img src="https://i.pravatar.cc/80?img=23" alt="" loading="lazy"/></div>
             <div class="h"><div class="nm">@maya</div><div class="sl">5 drops · this month</div></div>
             <div class="pts">982 <em>pts</em></div>
           </a>
-          <a class="maker top" href="#">
+          <a class="maker top" href="profile.html?handle=karim">
             <div class="r">3</div>
             <div class="av"><img src="https://i.pravatar.cc/80?img=33" alt="" loading="lazy"/></div>
             <div class="h"><div class="nm">@karim</div><div class="sl">4 drops · this month</div></div>
             <div class="pts">854 <em>pts</em></div>
           </a>
-          <a class="maker" href="#">
+          <a class="maker" href="profile.html?handle=soraya">
             <div class="r">4</div>
             <div class="av"><img src="https://i.pravatar.cc/80?img=45" alt="" loading="lazy"/></div>
             <div class="h"><div class="nm">@soraya</div><div class="sl">6 drops · this month</div></div>
             <div class="pts">731 <em>pts</em></div>
           </a>
-          <a class="maker" href="#">
+          <a class="maker" href="profile.html?handle=theo">
             <div class="r">5</div>
             <div class="av"><img src="https://i.pravatar.cc/80?img=51" alt="" loading="lazy"/></div>
             <div class="h"><div class="nm">@theo</div><div class="sl">3 drops · this month</div></div>
             <div class="pts">612 <em>pts</em></div>
           </a>
-          <a class="maker" href="#">
+          <a class="maker" href="profile.html?handle=nori">
             <div class="r">6</div>
             <div class="av"><img src="https://i.pravatar.cc/80?img=60" alt="" loading="lazy"/></div>
             <div class="h"><div class="nm">@nori</div><div class="sl">4 drops · this month</div></div>
@@ -1405,11 +1442,11 @@
         <a href="#">About</a>
         <a href="sponsor.html">Sponsor a slot</a>
         <a href="#">Press kit</a>
-        <a href="https://twitter.com/jp" target="_blank" rel="noopener">@vibez on X</a>
+        <a href="https://x.com/jp" target="_blank" rel="noopener">@vibez on X</a>
       </div>
     </div>
     <div class="foot-bot">
-      <span>Created by <a href="https://twitter.com/jp" target="_blank" rel="noopener">@jp</a> · Made in the Bay · Built (mostly) with Claude Code</span>
+      <span>Created by <a href="https://x.com/jp" target="_blank" rel="noopener">@jp</a> · Made in the Bay · Built (mostly) with Claude Code</span>
       <span>v0.1 · Day 4 of forever</span>
     </div>
   </footer>
@@ -1507,6 +1544,20 @@
         <p style="margin-top:16px">We'll email <b id="wl-email-out"></b> when your invite is ready. In the meantime, keep building.</p>
         <button class="modal-cta" data-close>Got it</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- your invites (sharing pool) -->
+<div class="modal-bg" id="modal-invites" data-modal>
+  <div class="modal" role="dialog" aria-modal="true" style="max-width:520px">
+    <button class="modal-close" data-close>×</button>
+    <div class="modal-eyebrow">Your invites</div>
+    <h2>Spread the <em>vibes.</em></h2>
+    <p>You have <b id="invites-remaining">10</b> invites left. Each one unlocks posting on Vibez for a friend. Share generously.</p>
+    <div class="invites-list" id="invites-list"></div>
+    <div class="invites-meta">
+      Invites are tied to your account. They never expire. When someone uses one, you'll get a <b>+50 bonus pts</b> on the next month's maker leaderboard.
     </div>
   </div>
 </div>
@@ -1629,6 +1680,7 @@
     user:'vibez.user',
     waitlist:'vibez.waitlist',
     invite:'vibez.invite',
+    invites:'vibez.invites',     // user's pool of invite codes to share
     projects:'vibez.projects',
   };
 
@@ -1712,6 +1764,7 @@
     signin:   document.getElementById('modal-signin'),
     waitlist: document.getElementById('modal-waitlist'),
     invite:   document.getElementById('modal-invite'),
+    invites:  document.getElementById('modal-invites'),
     submit:   document.getElementById('modal-submit'),
   };
   let pendingAction = null; // action to resume after sign-in
@@ -1800,11 +1853,99 @@
       navMe.classList.add('is-on');
       document.getElementById('nav-me-av').src = user.avatar || `https://i.pravatar.cc/80?u=${encodeURIComponent(user.email)}`;
       document.getElementById('nav-me-handle').textContent = '@' + (user.handle || 'you');
+      ensureInvites();
+      updateInvitesBadge();
     } else {
       navSignin.style.display = '';
       navMe.classList.remove('is-on');
     }
   }
+
+  // ─────────────────────────────────────────────
+  //  INVITES — each signed-in user gets 10 shareable codes
+  // ─────────────────────────────────────────────
+  function generateCode(){
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let s = '';
+    for (let i = 0; i < 5; i++) s += chars[Math.floor(Math.random() * chars.length)];
+    return 'VIBEZ-' + s;
+  }
+  function ensureInvites(){
+    let invites = getLS(LS.invites);
+    if (!invites || !Array.isArray(invites) || invites.length === 0) {
+      invites = Array.from({length:10}, () => ({ code: generateCode(), usedBy: null, createdAt: new Date().toISOString() }));
+      setLS(LS.invites, invites);
+    }
+    return invites;
+  }
+  function updateInvitesBadge(){
+    const invites = getLS(LS.invites) || [];
+    const remaining = invites.filter(i => !i.usedBy).length;
+    const badge = document.getElementById('nav-invites-count');
+    if (badge) badge.textContent = remaining;
+    const rem = document.getElementById('invites-remaining');
+    if (rem) rem.textContent = remaining;
+  }
+  function renderInvites(){
+    const invites = ensureInvites();
+    updateInvitesBadge();
+    const list = document.getElementById('invites-list');
+    list.innerHTML = '';
+    invites.forEach((inv) => {
+      const row = document.createElement('div');
+      row.className = 'invite-row' + (inv.usedBy ? ' is-used' : '');
+      const codeEl = document.createElement('div');
+      codeEl.className = 'invite-code';
+      codeEl.textContent = inv.code;
+      const statusEl = document.createElement('div');
+      statusEl.className = 'invite-status';
+      statusEl.textContent = inv.usedBy ? `used by @${inv.usedBy}` : 'unused';
+      const btn = document.createElement('button');
+      btn.className = 'invite-copy';
+      if (inv.usedBy) {
+        btn.textContent = 'Used';
+        btn.disabled = true;
+        btn.style.opacity = .5;
+      } else {
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          const link = `${location.origin}${location.pathname.replace(/[^/]*$/, '')}index.html?invite=${inv.code}`;
+          try {
+            await navigator.clipboard.writeText(link);
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+          } catch (e) {
+            btn.textContent = inv.code;
+          }
+        });
+      }
+      row.append(codeEl, statusEl, btn);
+      list.append(row);
+    });
+  }
+
+  document.querySelectorAll('[data-action="open-invites"]').forEach(b => {
+    b.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const user = getLS(LS.user);
+      if (!user) { openModal('signin'); return; }
+      renderInvites();
+      openModal('invites');
+    });
+  });
+
+  // Auto-prefill invite code from URL ?invite=CODE
+  (function(){
+    const params = new URLSearchParams(location.search);
+    const fromUrl = params.get('invite');
+    if (fromUrl) {
+      const input = document.getElementById('iv-code');
+      if (input) input.value = fromUrl.toUpperCase();
+    }
+  })();
+
   renderUserState();
 
   // toggle nav-me dropdown
@@ -1938,10 +2079,19 @@
       err.classList.add('show');
       return;
     }
-    if (!CONFIG.validInviteCodes.includes(code)) {
+    // Valid sources: demo codes, or any unused code in this browser's invite pool
+    const isDemo = CONFIG.validInviteCodes.includes(code);
+    const myInvites = getLS(LS.invites) || [];
+    const myUnused = myInvites.find(i => i.code === code && !i.usedBy);
+    if (!isDemo && !myUnused) {
       err.textContent = 'That code isn\'t valid. Want to join the waitlist instead?';
       err.classList.add('show');
       return;
+    }
+    if (myUnused) {
+      myUnused.usedBy = (getLS(LS.user) || {}).handle || 'someone';
+      myUnused.usedAt = new Date().toISOString();
+      setLS(LS.invites, myInvites);
     }
     setLS(LS.invite, { code, unlockedAt: new Date().toISOString() });
     document.getElementById('sub-code').textContent = code;

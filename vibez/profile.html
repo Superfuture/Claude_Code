@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Profile · Vibez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&family=JetBrains+Mono:ital,wght@0,300;0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A2E; --ink-soft:#3A3A52;
+    --paper:#FCFAF6; --paper-warm:#F6F1E8;
+    --blush:#F2C7DB; --blush-soft:#FBE6F0;
+    --rose:#C76090; --rose-deep:#8E3A6A;
+    --ice:#BBDDED; --ice-deep:#5EA3C4;
+    --sour:#DCEC68; --juice:#E8A85B;
+    --chrome:#CBD0D8; --chrome-light:#E8ECF1; --chrome-dark:#7E848F;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:"Hanken Grotesk", system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:0;
+    background:radial-gradient(1100px 700px at 8% -5%, rgba(242,199,219,.35), transparent 55%),
+               radial-gradient(900px 700px at 100% 0%, rgba(187,221,237,.22), transparent 55%);
+    pointer-events:none; z-index:0;
+  }
+  body::after{
+    content:""; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    pointer-events:none; z-index:1; mix-blend-mode:multiply;
+  }
+  .page{position:relative; z-index:2; max-width:1320px; margin:0 auto; padding:0 32px 96px}
+
+  /* NAV (compact shared) */
+  .nav{
+    position:sticky; top:18px; z-index:50; margin:24px 0 36px;
+    border-radius:16px; padding:8px 8px 8px 22px;
+    background:rgba(252,250,246,.92); backdrop-filter:blur(14px);
+    border:1px solid var(--chrome);
+    box-shadow:0 1px 0 #fff inset, 0 2px 0 var(--chrome);
+    display:flex; align-items:center; gap:18px;
+  }
+  .nav-logo{
+    display:flex; align-items:center; gap:8px;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1;
+    font-weight:900; font-style:italic;
+    font-size:28px; line-height:1; color:var(--ink);
+    letter-spacing:-.025em; text-decoration:none;
+  }
+  .nav-logo .dot{
+    width:9px; height:9px; border-radius:50%;
+    background:var(--rose); box-shadow:0 0 0 2.5px var(--blush-soft);
+  }
+  .nav-links{display:flex; gap:2px; align-items:center}
+  .nav-links a{
+    text-decoration:none; color:var(--ink-soft);
+    font-weight:600; font-size:13px;
+    padding:9px 13px; border-radius:9px;
+    transition:all .12s ease; white-space:nowrap;
+  }
+  .nav-links a:hover{color:var(--ink); background:rgba(26,26,46,.04)}
+  .nav-links a.active{color:var(--ink); background:rgba(26,26,46,.06)}
+  .nav-spacer{flex:1}
+  .nav-cta{
+    font-family:"Hanken Grotesk", sans-serif;
+    font-weight:700; font-size:13.5px;
+    padding:11px 18px; border-radius:10px; border:none;
+    background:var(--ink); color:var(--paper); cursor:pointer;
+    box-shadow:0 2px 0 #000; transition:transform .08s ease;
+    text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .nav-cta:hover{transform:translateY(-1px)}
+
+  /* PROFILE HEADER */
+  .pf-head{
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:32px; align-items:center;
+    margin-bottom:48px; padding:36px 32px;
+    background:#fff;
+    border:1px solid var(--chrome);
+    border-radius:24px;
+    box-shadow:0 2px 0 var(--chrome);
+  }
+  .pf-avatar{
+    width:140px; height:140px; border-radius:50%;
+    overflow:hidden;
+    border:4px solid var(--paper);
+    box-shadow:0 0 0 1px var(--chrome), 0 8px 24px -8px rgba(0,0,0,.2);
+  }
+  .pf-avatar img{width:100%; height:100%; object-fit:cover}
+  .pf-handle{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 40, "WONK" 1;
+    font-weight:900; font-style:italic;
+    font-size:64px; line-height:.92; margin:0;
+    color:var(--ink); letter-spacing:-.04em;
+  }
+  .pf-handle em{font-style:italic; color:var(--rose)}
+  .pf-name{
+    font-family:"JetBrains Mono", monospace;
+    font-size:12px; color:var(--chrome-dark);
+    letter-spacing:.16em; text-transform:uppercase;
+    margin:6px 0 0; font-weight:600;
+  }
+  .pf-bio{
+    margin:14px 0 18px;
+    font-size:15px; line-height:1.55; color:var(--ink-soft);
+    max-width:480px;
+  }
+  .pf-stats{display:flex; gap:32px; flex-wrap:wrap}
+  .pf-stat{display:grid; gap:2px}
+  .pf-stat .n{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1;
+    font-weight:900; font-style:italic;
+    font-size:32px; line-height:.9; color:var(--ink);
+    letter-spacing:-.03em;
+  }
+  .pf-stat .n em{font-style:italic; color:var(--rose)}
+  .pf-stat .l{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--chrome-dark); margin-top:4px;
+  }
+  .pf-actions{display:flex; flex-direction:column; gap:8px; align-items:flex-end}
+  .pf-actions .btn{
+    font-family:"Hanken Grotesk", sans-serif;
+    font-weight:700; font-size:13.5px;
+    padding:11px 18px; border-radius:10px; border:none;
+    cursor:pointer; white-space:nowrap;
+    box-shadow:0 2px 0 #000; transition:transform .08s ease;
+    text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+  }
+  .pf-actions .btn:hover{transform:translateY(-1px)}
+  .pf-actions .btn-primary{background:var(--ink); color:var(--paper)}
+  .pf-actions .btn-ghost{
+    background:transparent; color:var(--ink);
+    border:1px solid var(--chrome); box-shadow:0 1px 0 var(--chrome);
+  }
+  .pf-socials{
+    display:flex; gap:8px; margin-top:8px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px; color:var(--chrome-dark);
+  }
+  .pf-socials a{color:var(--ink-soft); text-decoration:none}
+  .pf-socials a:hover{color:var(--rose)}
+
+  /* TABS */
+  .tabs{
+    display:flex; gap:4px; align-items:center;
+    margin-bottom:24px;
+    border-bottom:1px solid var(--chrome);
+    overflow-x:auto;
+  }
+  .tab{
+    font-family:"Hanken Grotesk", sans-serif;
+    font-weight:600; font-size:14px;
+    padding:12px 16px; background:none; border:none;
+    color:var(--ink-soft); cursor:pointer;
+    border-bottom:2px solid transparent;
+    margin-bottom:-1px; white-space:nowrap;
+    text-decoration:none;
+  }
+  .tab:hover{color:var(--ink)}
+  .tab.is-on{color:var(--ink); border-color:var(--rose)}
+  .tab .count{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10px; color:var(--chrome-dark);
+    margin-left:6px;
+    padding:1px 6px; border-radius:4px;
+    background:var(--paper-warm);
+  }
+  .tab.is-on .count{background:var(--blush); color:var(--ink)}
+
+  /* DROP GRID */
+  .drops{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
+  }
+  .drop{
+    background:#fff;
+    border:1px solid var(--chrome);
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 1px 0 var(--chrome);
+    transition:all .15s ease;
+    text-decoration:none; color:inherit;
+    display:block;
+  }
+  .drop:hover{
+    transform:translateY(-3px);
+    border-color:var(--rose);
+    box-shadow:0 4px 0 var(--rose);
+  }
+  .drop-media{
+    position:relative; aspect-ratio:16/10;
+    background:var(--paper-warm); overflow:hidden;
+  }
+  .drop-media img{width:100%; height:100%; object-fit:cover}
+  .drop-media::after{
+    content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.08) 0 1px, transparent 1px 3px);
+    mix-blend-mode:multiply;
+  }
+  .drop-rank{
+    position:absolute; top:10px; left:12px;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1;
+    font-weight:900; font-style:italic;
+    font-size:36px; line-height:.85; color:#fff;
+    letter-spacing:-.04em;
+    text-shadow:0 2px 12px rgba(0,0,0,.4);
+  }
+  .drop-rank.gold{color:var(--sour)}
+  .drop-body{padding:16px 18px}
+  .drop-name{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800; font-size:20px; line-height:1.05;
+    color:var(--ink); letter-spacing:-.02em;
+    margin-bottom:4px;
+  }
+  .drop-tag{
+    font-size:13px; line-height:1.4; color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .drop-meta{
+    display:flex; align-items:center; justify-content:space-between;
+    font-family:"JetBrains Mono",monospace;
+    font-size:10.5px; color:var(--chrome-dark);
+    letter-spacing:.04em;
+    padding-top:10px; border-top:1px solid var(--chrome);
+  }
+  .drop-score{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1;
+    font-weight:900; font-style:italic;
+    font-size:20px; color:var(--rose);
+    letter-spacing:-.03em;
+  }
+  .drop-tool{
+    padding:2px 6px; border-radius:4px;
+    background:var(--ice); color:var(--ink);
+    font-weight:600; text-transform:lowercase;
+  }
+
+  /* SIDE INFO */
+  .section-title{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800;
+    font-size:32px; line-height:.95;
+    color:var(--ink); letter-spacing:-.025em;
+    margin:60px 0 24px;
+  }
+  .section-title em{
+    font-style:italic; color:var(--rose);
+    font-variation-settings:"opsz" 144, "SOFT" 80, "WONK" 1;
+  }
+
+  .achievements{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:14px;
+  }
+  .ach{
+    background:#fff;
+    border:1px solid var(--chrome);
+    border-radius:14px;
+    padding:18px 20px;
+    display:flex; align-items:center; gap:14px;
+  }
+  .ach-icon{
+    width:48px; height:48px; border-radius:12px;
+    display:grid; place-items:center;
+    font-size:24px;
+    background:var(--sour); flex-shrink:0;
+    box-shadow:0 2px 0 var(--ink);
+  }
+  .ach-icon.gold{background:var(--sour)}
+  .ach-icon.silver{background:var(--ice)}
+  .ach-icon.bronze{background:var(--juice)}
+  .ach h4{
+    margin:0;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800; font-size:16px;
+    color:var(--ink); letter-spacing:-.015em;
+  }
+  .ach p{
+    margin:2px 0 0;
+    font-family:"JetBrains Mono", monospace;
+    font-size:10.5px; color:var(--chrome-dark);
+    letter-spacing:.06em;
+  }
+
+  @media (max-width:900px){
+    .pf-head{grid-template-columns:auto 1fr; padding:24px}
+    .pf-actions{grid-column:1/-1; flex-direction:row; justify-content:flex-start; align-items:center}
+    .pf-handle{font-size:48px}
+    .drops{grid-template-columns:repeat(2,1fr)}
+    .achievements{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:600px){
+    .pf-head{grid-template-columns:1fr; text-align:center; place-items:center}
+    .pf-stats{justify-content:center}
+    .pf-bio{margin-left:auto; margin-right:auto}
+    .pf-actions{justify-content:center}
+    .drops{grid-template-columns:1fr}
+    .achievements{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav">
+    <a class="nav-logo" href="index.html"><span class="dot"></span>Vibez</a>
+    <div class="nav-links">
+      <a href="index.html">Today</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="hall-of-fame.html">Hall of Fame</a>
+      <a href="makers.html" class="active">Makers</a>
+    </div>
+    <div class="nav-spacer"></div>
+    <a class="nav-cta" href="index.html">← Back to today</a>
+  </nav>
+
+  <header class="pf-head">
+    <div class="pf-avatar"><img id="pf-img" src="https://i.pravatar.cc/300?img=12" alt="" /></div>
+    <div>
+      <h1 class="pf-handle" id="pf-h">@joey</h1>
+      <p class="pf-name" id="pf-n">Joey Primiani · joined apr 2026</p>
+      <p class="pf-bio" id="pf-bio">Indie maker. Building small things with Claude Code and Cursor. Currently obsessed with games that fit in a tweet.</p>
+      <div class="pf-stats">
+        <div class="pf-stat"><div class="n" id="pf-drops">7</div><div class="l">drops</div></div>
+        <div class="pf-stat"><div class="n" id="pf-pts">1,247</div><div class="l">total pts</div></div>
+        <div class="pf-stat"><div class="n" id="pf-wins"><em>3</em></div><div class="l">days won</div></div>
+        <div class="pf-stat"><div class="n" id="pf-followers">412</div><div class="l">followers</div></div>
+      </div>
+      <div class="pf-socials" id="pf-soc">
+        <a href="#">🌐 joeyprimiani.com</a> · <a href="#">𝕏 @jp</a> · <a href="#">github.com/jp</a>
+      </div>
+    </div>
+    <div class="pf-actions">
+      <button class="btn btn-primary" id="follow-btn">Follow</button>
+      <button class="btn btn-ghost">Share profile</button>
+    </div>
+  </header>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <a class="tab is-on" href="#drops">Drops <span class="count">7</span></a>
+    <a class="tab" href="#reactions">Reactions <span class="count">284</span></a>
+    <a class="tab" href="#wins">Hall of Fame wins <span class="count">3</span></a>
+    <a class="tab" href="#following">Following <span class="count">42</span></a>
+  </div>
+
+  <div class="drops" id="drops">
+    <a class="drop" href="index.html">
+      <div class="drop-media">
+        <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=600&q=80" alt="" />
+        <div class="drop-rank gold">1</div>
+      </div>
+      <div class="drop-body">
+        <div class="drop-name">Pixel Garden</div>
+        <div class="drop-tag">Grow weird little plants from one-word prompts.</div>
+        <div class="drop-meta"><span class="drop-tool">claude code</span><span class="drop-score">287</span></div>
+      </div>
+    </a>
+    <a class="drop" href="index.html">
+      <div class="drop-media">
+        <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=600&q=80" alt="" />
+        <div class="drop-rank">3</div>
+      </div>
+      <div class="drop-body">
+        <div class="drop-name">Tabula</div>
+        <div class="drop-tag">Notes that quietly cluster by mood and season.</div>
+        <div class="drop-meta"><span class="drop-tool">claude code</span><span class="drop-score">174</span></div>
+      </div>
+    </a>
+    <a class="drop" href="index.html">
+      <div class="drop-media">
+        <img src="https://images.unsplash.com/photo-1622547748225-3fc4abd2cca0?auto=format&fit=crop&w=600&q=80" alt="" />
+        <div class="drop-rank">5</div>
+      </div>
+      <div class="drop-body">
+        <div class="drop-name">Wormhole</div>
+        <div class="drop-tag">Send files via QR code. No upload, no account.</div>
+        <div class="drop-meta"><span class="drop-tool">cursor</span><span class="drop-score">128</span></div>
+      </div>
+    </a>
+    <a class="drop" href="index.html">
+      <div class="drop-media">
+        <img src="https://picsum.photos/seed/typeharbor/600/400" alt="" />
+        <div class="drop-rank gold">1</div>
+      </div>
+      <div class="drop-body">
+        <div class="drop-name">TypeHarbor</div>
+        <div class="drop-tag">Type to summon ships. Surprisingly emotional.</div>
+        <div class="drop-meta"><span class="drop-tool">claude code</span><span class="drop-score">312</span></div>
+      </div>
+    </a>
+    <a class="drop" href="index.html">
+      <div class="drop-media">
+        <img src="https://picsum.photos/seed/quietmaps/600/400" alt="" />
+        <div class="drop-rank">2</div>
+      </div>
+      <div class="drop-body">
+        <div class="drop-name">Quietmaps</div>
+        <div class="drop-tag">Maps with no roads. Just feelings about places.</div>
+        <div class="drop-meta"><span class="drop-tool">claude code</span><span class="drop-score">221</span></div>
+      </div>
+    </a>
+    <a class="drop" href="index.html">
+      <div class="drop-media">
+        <img src="https://picsum.photos/seed/inktag/600/400" alt="" />
+        <div class="drop-rank gold">1</div>
+      </div>
+      <div class="drop-body">
+        <div class="drop-name">Inktag</div>
+        <div class="drop-tag">Tag your photos with handwritten words.</div>
+        <div class="drop-meta"><span class="drop-tool">claude code</span><span class="drop-score">298</span></div>
+      </div>
+    </a>
+  </div>
+
+  <h2 class="section-title">Hall of Fame <em>wins.</em></h2>
+  <div class="achievements">
+    <div class="ach">
+      <div class="ach-icon gold">✦</div>
+      <div><h4>Pixel Garden</h4><p>May 17, 2026 · #1</p></div>
+    </div>
+    <div class="ach">
+      <div class="ach-icon gold">✦</div>
+      <div><h4>TypeHarbor</h4><p>Apr 28, 2026 · #1</p></div>
+    </div>
+    <div class="ach">
+      <div class="ach-icon gold">✦</div>
+      <div><h4>Inktag</h4><p>Apr 14, 2026 · #1</p></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Load profile based on ?handle=X
+  const MAKERS = {
+    joey:    {img:12, name:'Joey Primiani',  bio:'Indie maker. Building small things with Claude Code and Cursor. Currently obsessed with games that fit in a tweet.', drops:7, pts:'1,247', wins:3, followers:412},
+    maya:    {img:23, name:'Maya Okafor',     bio:'Designer turned builder. Music + AI + tiny interfaces.', drops:5, pts:'982',   wins:2, followers:284},
+    karim:   {img:33, name:'Karim Hadid',     bio:'Synth nerd. Building toy instruments in the browser.', drops:4, pts:'854',   wins:1, followers:198},
+    soraya:  {img:45, name:'Soraya Lin',      bio:'Logo machine. Lovable + my notebook = day job.', drops:6, pts:'731',   wins:1, followers:152},
+    theo:    {img:51, name:'Theo Vance',      bio:'Productivity apps for people who hate productivity apps.', drops:3, pts:'612',   wins:0, followers:108},
+    nori:    {img:60, name:'Nori Tanaka',     bio:'Shaders, WebGL, and other excuses to make pretty things.', drops:4, pts:'548',   wins:0, followers:91},
+    lex:     {img:14, name:'Lex Park',        bio:'CSV maximalist.',   drops:2, pts:'298',   wins:0, followers:42},
+    quinn:   {img:8,  name:'Quinn Holm',      bio:'No-backend tools that should\'ve always existed.',   drops:3, pts:'401',   wins:0, followers:67},
+    bee:     {img:29, name:'Bee Sato',        bio:'Audio + voice + browser. Always something embarrassing.',   drops:2, pts:'251',   wins:0, followers:55},
+    rin:     {img:47, name:'Rin Yusuke',      bio:'Sticky notes, infinite canvases, drifting things.',   drops:2, pts:'189',   wins:0, followers:38},
+  };
+
+  const params = new URLSearchParams(location.search);
+  const handle = (params.get('handle') || 'joey').toLowerCase();
+  const m = MAKERS[handle] || MAKERS.joey;
+
+  document.getElementById('pf-img').src = `https://i.pravatar.cc/300?img=${m.img}`;
+  document.getElementById('pf-h').innerHTML = `@${handle}`;
+  document.getElementById('pf-n').textContent = `${m.name} · joined apr 2026`;
+  document.getElementById('pf-bio').textContent = m.bio;
+  document.getElementById('pf-drops').textContent = m.drops;
+  document.getElementById('pf-pts').textContent = m.pts;
+  document.getElementById('pf-wins').innerHTML = `<em>${m.wins}</em>`;
+  document.getElementById('pf-followers').textContent = m.followers;
+  document.title = `@${handle} · Vibez`;
+
+  // Follow toggle (mock)
+  const followBtn = document.getElementById('follow-btn');
+  let following = false;
+  followBtn.addEventListener('click', () => {
+    following = !following;
+    followBtn.textContent = following ? 'Following ✓' : 'Follow';
+    followBtn.style.background = following ? 'var(--sour)' : 'var(--ink)';
+    followBtn.style.color = following ? 'var(--ink)' : 'var(--paper)';
+  });
+
+  // Tab routing (anchor-based)
+  document.querySelectorAll('.tab').forEach(t => {
+    t.addEventListener('click', e => {
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('is-on'));
+      t.classList.add('is-on');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hall of Fame · Vibez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&family=JetBrains+Mono:ital,wght@0,300;0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1A1A2E; --ink-soft:#3A3A52;
+    --paper:#FCFAF6; --paper-warm:#F6F1E8;
+    --blush:#F2C7DB; --blush-soft:#FBE6F0;
+    --rose:#C76090; --rose-deep:#8E3A6A;
+    --ice:#BBDDED; --ice-deep:#5EA3C4;
+    --sour:#DCEC68; --juice:#E8A85B;
+    --chrome:#CBD0D8; --chrome-light:#E8ECF1; --chrome-dark:#7E848F;
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{background:var(--paper); color:var(--ink); font-family:"Hanken Grotesk", system-ui, sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden}
+  body::before{content:""; position:fixed; inset:0; background:radial-gradient(1100px 700px at 8% -5%, rgba(242,199,219,.35), transparent 55%), radial-gradient(900px 700px at 100% 0%, rgba(187,221,237,.22), transparent 55%); pointer-events:none; z-index:0}
+  body::after{content:""; position:fixed; inset:0; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); pointer-events:none; z-index:1; mix-blend-mode:multiply}
+  .page{position:relative; z-index:2; max-width:1320px; margin:0 auto; padding:0 32px 96px}
+
+  .nav{position:sticky; top:18px; z-index:50; margin:24px 0 36px; border-radius:16px; padding:8px 8px 8px 22px; background:rgba(252,250,246,.92); backdrop-filter:blur(14px); border:1px solid var(--chrome); box-shadow:0 1px 0 #fff inset, 0 2px 0 var(--chrome); display:flex; align-items:center; gap:18px}
+  .nav-logo{display:flex; align-items:center; gap:8px; font-family:"Fraunces", serif; font-variation-settings:"opsz" 144, "SOFT" 30, "WONK" 1; font-weight:900; font-style:italic; font-size:28px; line-height:1; color:var(--ink); letter-spacing:-.025em; text-decoration:none}
+  .nav-logo .dot{width:9px; height:9px; border-radius:50%; background:var(--rose); box-shadow:0 0 0 2.5px var(--blush-soft)}
+  .nav-links{display:flex; gap:2px; align-items:center}
+  .nav-links a{text-decoration:none; color:var(--ink-soft); font-weight:600; font-size:13px; padding:9px 13px; border-radius:9px; white-space:nowrap}
+  .nav-links a:hover{color:var(--ink); background:rgba(26,26,46,.04)}
+  .nav-links a.active{color:var(--ink); background:rgba(26,26,46,.06)}
+  .nav-spacer{flex:1}
+  .nav-cta{font-family:"Hanken Grotesk", sans-serif; font-weight:700; font-size:13.5px; padding:11px 18px; border-radius:10px; background:var(--ink); color:var(--paper); cursor:pointer; box-shadow:0 2px 0 #000; text-decoration:none}
+  .nav-cta:hover{transform:translateY(-1px)}
+
+  .head{margin:32px 0 48px}
+  h1{margin:0; font-family:"Fraunces", serif; font-variation-settings:"opsz" 144, "SOFT" 40, "WONK" 1; font-weight:900; font-size:clamp(56px, 9vw, 132px); line-height:.92; color:var(--ink); letter-spacing:-.035em}
+  h1 em{font-style:italic; color:var(--rose); font-variation-settings:"opsz" 144, "SOFT" 80, "WONK" 1}
+  .sub{font-size:16px; color:var(--ink-soft); line-height:1.55; max-width:620px; margin:18px 0 0}
+
+  .month-band{
+    display:flex; align-items:center; gap:18px; margin:48px 0 18px;
+  }
+  .month-band h2{
+    margin:0;
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800; font-size:32px;
+    color:var(--ink); letter-spacing:-.025em;
+  }
+  .month-band h2 em{font-style:italic; color:var(--rose); font-variation-settings:"opsz" 144, "SOFT" 80, "WONK" 1}
+  .month-band .line{flex:1; height:1px; background:var(--chrome)}
+  .month-band .count{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--chrome-dark);
+  }
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:14px}
+  .win{
+    position:relative;
+    background:var(--ink); color:var(--paper);
+    border:1px solid #000; border-radius:16px;
+    overflow:hidden;
+    text-decoration:none;
+    transition:all .15s ease;
+    box-shadow:0 1px 0 #000;
+  }
+  .win:hover{transform:translateY(-2px); box-shadow:0 4px 0 #000}
+  .win-media{position:relative; aspect-ratio:16/10; overflow:hidden}
+  .win-media img{width:100%; height:100%; object-fit:cover; filter:saturate(.85)}
+  .win-media::before{content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(26,26,46,.15) 0%, rgba(26,26,46,.6) 100%)}
+  .win-media::after{content:""; position:absolute; inset:0; z-index:1; background:repeating-linear-gradient(0deg, rgba(0,0,0,.1) 0 1px, transparent 1px 3px); mix-blend-mode:multiply}
+  .win-badge{
+    position:absolute; top:10px; left:12px; z-index:2;
+    background:var(--sour); color:var(--ink);
+    font-family:"JetBrains Mono", monospace;
+    font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+    padding:4px 9px; border-radius:99px;
+    font-weight:700;
+  }
+  .win-date{
+    position:absolute; top:14px; right:14px; z-index:2;
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px; color:rgba(252,250,246,.7);
+    letter-spacing:.04em;
+  }
+  .win-body{padding:14px 16px 16px; position:relative}
+  .win-name{
+    font-family:"Fraunces", serif;
+    font-variation-settings:"opsz" 144, "SOFT" 30;
+    font-weight:800; font-size:20px; line-height:1.05;
+    letter-spacing:-.02em; margin-bottom:4px;
+  }
+  .win-by{
+    font-family:"JetBrains Mono", monospace;
+    font-size:10.5px; color:rgba(252,250,246,.6); letter-spacing:.04em;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .win-by .pts{
+    color:var(--sour); font-weight:700;
+    font-family:"JetBrains Mono", monospace;
+  }
+  .win .shimmer{
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:linear-gradient(115deg, transparent 35%, rgba(255,255,255,.06) 50%, transparent 65%);
+    transform:translateX(-100%);
+  }
+  .win:hover .shimmer{animation:shim 1.2s ease-out}
+  @keyframes shim{from{transform:translateX(-100%)}to{transform:translateX(120%)}}
+
+  @media (max-width:600px){
+    .grid{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav">
+    <a class="nav-logo" href="index.html"><span class="dot"></span>Vibez</a>
+    <div class="nav-links">
+      <a href="index.html">Today</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="hall-of-fame.html" class="active">Hall of Fame</a>
+      <a href="makers.html">Makers</a>
+    </div>
+    <div class="nav-spacer"></div>
+    <a class="nav-cta" href="index.html">← Back to today</a>
+  </nav>
+
+  <header class="head">
+    <h1>Hall of <em>Fame.</em></h1>
+    <p class="sub">Every daily #1 winner since Vibez began. One per day. Permanent. Earn yours by topping the board between midnights.</p>
+  </header>
+
+  <div id="hof"></div>
+
+</div>
+
+<script>
+  // Winners — newest first
+  const WINS = [
+    // May 2026
+    {date:'May 17', n:'Pixel Garden',  by:'joey',    img:'1416879595882-3373a0480b5b', pts:287},
+    {date:'May 16', n:'Lensbox',       by:'maya',    img:'1518972559570-7cc1309f3229', pts:264},
+    {date:'May 15', n:'Forestmail',    by:'theo',    img:'1517842645767-c639042777db', pts:241},
+    {date:'May 14', n:'Inktag',        by:'joey',    img:'1622547748225-3fc4abd2cca0', pts:298},
+    {date:'May 13', n:'Glyphsmith',    by:'soraya',  img:'1496181133206-80ce9b88a853', pts:212},
+    {date:'May 12', n:'TinyTune',      by:'karim',   img:'1485579149621-3123dd979885', pts:189},
+    {date:'May 11', n:'Quietmaps',     by:'joey',    img:'1517842645767-c639042777db', pts:331},
+    {date:'May 10', n:'Postit.online', by:'rin',     img:'1611224923853-80b023f02d71', pts:174},
+    {date:'May 09', n:'Karaoke.fm',    by:'bee',     img:'1493225457124-a3eb161ffa5f', pts:218},
+    {date:'May 08', n:'Wormhole',      by:'quinn',   img:'1622547748225-3fc4abd2cca0', pts:201},
+    {date:'May 07', n:'Shaderbox',     by:'nori',    img:'1633493702341-4d04841df53b', pts:267},
+    {date:'May 06', n:'TypeHarbor',    by:'joey',    img:'1493225457124-a3eb161ffa5f', pts:312},
+    {date:'May 05', n:'Tabula',        by:'theo',    img:'1517842645767-c639042777db', pts:178},
+    {date:'May 04', n:'MoodMatrix',    by:'lex',     img:'1502691876148-a84978e59af8', pts:154},
+    {date:'May 03', n:'Dreamloop',     by:'maya',    img:'1518972559570-7cc1309f3229', pts:288},
+    {date:'May 02', n:'Slowtype',      by:'theo',    img:'1517842645767-c639042777db', pts:197},
+    {date:'May 01', n:'Songroom',      by:'maya',    img:'1518972559570-7cc1309f3229', pts:343},
+    // April 2026
+    {date:'Apr 30', n:'Pulse',         by:'karim',   img:'1485579149621-3123dd979885', pts:243, month:'April 2026'},
+    {date:'Apr 29', n:'Carousel',      by:'soraya',  img:'1496181133206-80ce9b88a853', pts:201},
+    {date:'Apr 28', n:'TypeHarbor',    by:'joey',    img:'1493225457124-a3eb161ffa5f', pts:288},
+    {date:'Apr 27', n:'Mirrormode',    by:'nori',    img:'1633493702341-4d04841df53b', pts:223},
+    {date:'Apr 26', n:'Letterloom',    by:'theo',    img:'1517842645767-c639042777db', pts:189},
+    {date:'Apr 25', n:'Snowglobe',     by:'rin',     img:'1611224923853-80b023f02d71', pts:154},
+    {date:'Apr 24', n:'Sonarpads',     by:'bee',     img:'1493225457124-a3eb161ffa5f', pts:174},
+    {date:'Apr 23', n:'Inktag',        by:'joey',    img:'1622547748225-3fc4abd2cca0', pts:267},
+  ];
+
+  // Group by month
+  const months = { 'May 2026': [], 'April 2026': [] };
+  WINS.forEach(w => {
+    const monthKey = w.date.startsWith('May') ? 'May 2026' : 'April 2026';
+    months[monthKey].push(w);
+  });
+
+  const wrap = document.getElementById('hof');
+  Object.entries(months).forEach(([month, list]) => {
+    const band = document.createElement('div');
+    band.className = 'month-band';
+    band.innerHTML = `<h2>${month.split(' ')[0]} <em>${month.split(' ')[1]}.</em></h2><div class="line"></div><div class="count">${list.length} winners</div>`;
+    wrap.append(band);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    list.forEach(w => {
+      const a = document.createElement('a');
+      a.className = 'win';
+      a.href = '#';
+      a.innerHTML = `
+        <div class="win-media">
+          <img src="https://images.unsplash.com/photo-${w.img}?auto=format&fit=crop&w=600&q=80" alt="" loading="lazy"/>
+          <div class="win-badge">✦ #1</div>
+          <div class="win-date">${w.date}</div>
+        </div>
+        <div class="shimmer"></div>
+        <div class="win-body">
+          <div class="win-name">${w.n}</div>
+          <div class="win-by"><span>by <a href="profile.html?handle=${w.by}" style="color:inherit;text-decoration:none">@${w.by}</a></span><span class="pts">${w.pts}</span></div>
+        </div>
+      `;
+      grid.append(a);
+    });
+    wrap.append(grid);
+  });
+</script>
+</body>
+</html>
