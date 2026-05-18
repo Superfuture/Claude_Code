@@ -27,7 +27,7 @@
     --chrome-dark:#7E848F;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
+  html{overflow-y:scroll} html,body{margin:0;padding:0}
   body{
     background:var(--paper);
     color:var(--ink);
@@ -47,7 +47,7 @@
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
     pointer-events:none; z-index:1; mix-blend-mode:multiply;
   }
-  .page{position:relative; z-index:2; max-width:1100px; margin:0 auto; padding:0 32px 96px}
+  .page{position:relative; z-index:2; max-width:1320px; margin:0 auto; padding:0 32px 96px}
 
   /* NAV */
   .nav{
