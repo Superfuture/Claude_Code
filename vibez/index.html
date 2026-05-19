@@ -2240,9 +2240,10 @@
       const row = Array.isArray(res) ? res[0] : res;
       if (error || !row?.ok) {
         const reason = row?.reason || error?.message || 'unknown';
+        console.error('submit_project failed:', { error, res, sent: data });
         err.textContent = reason === 'invalid_invite'
           ? 'That invite code isn\'t valid anymore.'
-          : 'Couldn\'t submit right now. Try again in a sec.';
+          : 'Submit failed: ' + reason;
         err.classList.add('show');
         return;
       }
