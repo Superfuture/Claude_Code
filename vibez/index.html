@@ -1647,6 +1647,13 @@
           <label for="sb-time">Build time <span style="color:var(--chrome-dark);font-weight:400">(optional brag)</span></label>
           <input type="text" id="sb-time" name="buildTime" placeholder="e.g. 4 hours · 18 prompts" />
         </div>
+        <div class="field" id="sb-thumb-field">
+          <label for="sb-image">Thumbnail <span style="color:var(--chrome-dark);font-weight:400" id="sb-image-hint">(auto-pulled from your URL, paste to override)</span></label>
+          <div style="display:flex;gap:10px;align-items:center">
+            <div id="sb-thumb-preview" style="width:64px;height:48px;border-radius:8px;border:1px solid var(--chrome);background:var(--paper-warm) center/cover no-repeat;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--chrome-dark);font-family:'JetBrains Mono',monospace;font-size:9px">—</div>
+            <input type="url" id="sb-image" name="imageUrl" placeholder="https://… (optional)" style="flex:1" />
+          </div>
+        </div>
         <button class="modal-cta" type="submit">Drop it on the board →</button>
         <div class="modal-error" id="sb-error"></div>
       </form>
@@ -1672,10 +1679,34 @@
     // Set to your Formspree / Web3Forms / Resend endpoint. Empty = localStorage only.
     waitlistEndpoint: '',
     submitEndpoint: '',
+    // Real backend. Fill these and run vibez/schema.sql in Supabase → SQL Editor.
+    // When set, waitlist + submit + invite-verify go through Supabase RPCs/tables.
+    supabase: {
+      url:     'https://cptquxafhcxdrjcsbpt.supabase.co',
+      anonKey: 'sb_publishable_Lf0Hi3PwCbfiJ2Ke2lWvVw_o-grDNPh',
+    },
     validInviteCodes: ['VIBEZ', 'EARLY', 'BAGEL', 'JP', 'CLAUDE'],
     // Starting position for waitlist counter so it feels alive on day 1.
     waitlistSeed: 41,
   };
+
+  // Lazy-load Supabase JS only when needed, so unconfigured installs pay nothing.
+  let _sbClient = null, _sbLoading = null;
+  async function getSupabase(){
+    if (!CONFIG.supabase?.url || !CONFIG.supabase?.anonKey) return null;
+    if (_sbClient) return _sbClient;
+    if (!window.supabase) {
+      _sbLoading ??= new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+        s.onload = resolve; s.onerror = reject;
+        document.head.appendChild(s);
+      });
+      try { await _sbLoading; } catch { return null; }
+    }
+    _sbClient = window.supabase.createClient(CONFIG.supabase.url, CONFIG.supabase.anonKey);
+    return _sbClient;
+  }
 
   const LS = {
     user:'vibez.user',
@@ -2050,8 +2081,20 @@
     setLS(LS.waitlist, list);
     const position = CONFIG.waitlistSeed + list.length;
 
-    // Optional: post to a real backend if endpoint is set
-    if (CONFIG.waitlistEndpoint) {
+    // Real backend: insert into Supabase waitlist table (if configured)
+    const sb = await getSupabase();
+    if (sb) {
+      const { error } = await sb.from('waitlist').insert({
+        email: data.email, name: data.name, tool: data.tool, source: 'vibez-web',
+      });
+      // 23505 = unique_violation (already on the list) — treat as success
+      if (error && error.code !== '23505') {
+        err.textContent = 'Couldn\'t save right now. Try again in a sec.';
+        err.classList.add('show');
+        return;
+      }
+    } else if (CONFIG.waitlistEndpoint) {
+      // Fallback: legacy Formspree/Web3Forms POST
       try {
         await fetch(CONFIG.waitlistEndpoint, {
           method:'POST',
@@ -2070,7 +2113,7 @@
   //  INVITE CODE FORM
   // ─────────────────────────────────────────────
   const ivForm = document.getElementById('invite-form');
-  ivForm.addEventListener('submit', (e) => {
+  ivForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const err = document.getElementById('iv-error');
     err.classList.remove('show');
@@ -2080,11 +2123,18 @@
       err.classList.add('show');
       return;
     }
-    // Valid sources: demo codes, or any unused code in this browser's invite pool
+
+    // Real backend check (if configured); falls back to demo list + local pool.
+    let valid = false;
+    const sb = await getSupabase();
+    if (sb) {
+      const { data, error } = await sb.rpc('verify_invite', { p_code: code });
+      if (!error) valid = !!data;
+    }
     const isDemo = CONFIG.validInviteCodes.includes(code);
     const myInvites = getLS(LS.invites) || [];
     const myUnused = myInvites.find(i => i.code === code && !i.usedBy);
-    if (!isDemo && !myUnused) {
+    if (!valid && !isDemo && !myUnused) {
       err.textContent = 'That code isn\'t valid. Want to join the waitlist instead?';
       err.classList.add('show');
       return;
@@ -2102,6 +2152,45 @@
   // ─────────────────────────────────────────────
   //  SUBMIT FORM
   // ─────────────────────────────────────────────
+  // Auto-scrape og:image from the project URL via microlink (free, no key).
+  const sbUrl    = document.getElementById('sb-url');
+  const sbImage  = document.getElementById('sb-image');
+  const sbThumb  = document.getElementById('sb-thumb-preview');
+  const sbHint   = document.getElementById('sb-image-hint');
+  let _imgFetchedFor = '';
+  let _imgUserOverride = false;
+  sbImage.addEventListener('input', () => {
+    _imgUserOverride = sbImage.value.trim().length > 0;
+    paintThumb(sbImage.value.trim());
+  });
+  function paintThumb(url){
+    if (!url) { sbThumb.style.backgroundImage = ''; sbThumb.textContent = '—'; return; }
+    sbThumb.textContent = '';
+    sbThumb.style.backgroundImage = `url("${url.replace(/"/g,'%22')}")`;
+  }
+  async function fetchOgImage(targetUrl){
+    if (!targetUrl || targetUrl === _imgFetchedFor || _imgUserOverride) return;
+    try { new URL(targetUrl); } catch { return; }
+    _imgFetchedFor = targetUrl;
+    sbHint.textContent = '(looking up preview…)';
+    try {
+      const r = await fetch('https://api.microlink.io/?url=' + encodeURIComponent(targetUrl));
+      const j = await r.json();
+      const img = j?.data?.image?.url || j?.data?.logo?.url || '';
+      if (img && !_imgUserOverride) {
+        sbImage.value = img;
+        paintThumb(img);
+        sbHint.textContent = '(auto-pulled — paste to override)';
+      } else {
+        sbHint.textContent = '(no preview found — paste a URL if you want one)';
+      }
+    } catch {
+      sbHint.textContent = '(couldn\'t fetch a preview — paste a URL if you want one)';
+    }
+  }
+  sbUrl.addEventListener('blur', () => fetchOgImage(sbUrl.value.trim()));
+  sbUrl.addEventListener('change', () => fetchOgImage(sbUrl.value.trim()));
+
   const sbForm = document.getElementById('submit-form');
   sbForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -2115,6 +2204,7 @@
       tool: document.getElementById('sb-tool').value,
       category: document.getElementById('sb-cat').value,
       buildTime: document.getElementById('sb-time').value.trim(),
+      imageUrl: document.getElementById('sb-image').value.trim() || null,
       submittedAt: new Date().toISOString(),
       inviteCode: (getLS(LS.invite) || {}).code,
     };
@@ -2134,7 +2224,30 @@
     list.push(data);
     setLS(LS.projects, list);
 
-    if (CONFIG.submitEndpoint) {
+    // Real backend: submit_project RPC validates invite + writes the row.
+    const sb = await getSupabase();
+    if (sb) {
+      const { data: res, error } = await sb.rpc('submit_project', {
+        p_name:        data.name,
+        p_url:         data.url,
+        p_tagline:     data.tagline,
+        p_tool:        data.tool,
+        p_category:    data.category,
+        p_build_time:  data.buildTime,
+        p_image_url:   data.imageUrl,
+        p_invite_code: data.inviteCode,
+      });
+      const row = Array.isArray(res) ? res[0] : res;
+      if (error || !row?.ok) {
+        const reason = row?.reason || error?.message || 'unknown';
+        err.textContent = reason === 'invalid_invite'
+          ? 'That invite code isn\'t valid anymore.'
+          : 'Couldn\'t submit right now. Try again in a sec.';
+        err.classList.add('show');
+        return;
+      }
+    } else if (CONFIG.submitEndpoint) {
+      // Fallback: legacy POST endpoint
       try {
         await fetch(CONFIG.submitEndpoint, {
           method:'POST',
