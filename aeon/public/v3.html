@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aeon — Accelerate Human Progress</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['"Instrument Serif"', 'serif'],
+            body: ['Barlow', 'sans-serif'],
+          },
+          borderRadius: { DEFAULT: '9999px' },
+        },
+      },
+    };
+  </script>
+  <style>
+    html, body { background: #000; font-family: 'Barlow', sans-serif; color: #fff; }
+    body { margin: 0; min-height: 100vh; }
+
+    .liquid-glass {
+      background: rgba(255,255,255,0.01);
+      background-blend-mode: luminosity;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: none;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .liquid-glass::before {
+      content: "";
+      position: absolute; inset: 0;
+      border-radius: inherit;
+      padding: 1.4px;
+      background: linear-gradient(180deg,
+        rgba(255,255,255,0.45) 0%,
+        rgba(255,255,255,0.15) 20%,
+        rgba(255,255,255,0) 40%,
+        rgba(255,255,255,0) 60%,
+        rgba(255,255,255,0.15) 80%,
+        rgba(255,255,255,0.45) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .liquid-glass-strong {
+      background: rgba(255,255,255,0.01);
+      background-blend-mode: luminosity;
+      backdrop-filter: blur(50px);
+      -webkit-backdrop-filter: blur(50px);
+      box-shadow: 4px 4px 4px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .liquid-glass-strong::before {
+      content: "";
+      position: absolute; inset: 0;
+      border-radius: inherit;
+      padding: 1.4px;
+      background: linear-gradient(180deg,
+        rgba(255,255,255,0.5) 0%,
+        rgba(255,255,255,0.2) 20%,
+        rgba(255,255,255,0) 40%,
+        rgba(255,255,255,0) 60%,
+        rgba(255,255,255,0.2) 80%,
+        rgba(255,255,255,0.5) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .grain::after {
+      content: "";
+      position: absolute; inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    .starfield {
+      background-color: #000;
+      background-image:
+        radial-gradient(1px 1px at 25% 30%, rgba(255,255,255,0.6), transparent 50%),
+        radial-gradient(1px 1px at 75% 70%, rgba(255,255,255,0.5), transparent 50%),
+        radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.4), transparent 50%),
+        radial-gradient(1px 1px at 15% 80%, rgba(255,255,255,0.35), transparent 50%),
+        radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.45), transparent 50%),
+        radial-gradient(2px 2px at 60% 15%, rgba(255,255,255,0.5), transparent 50%),
+        radial-gradient(1.5px 1.5px at 35% 85%, rgba(255,255,255,0.4), transparent 50%);
+      background-size: 800px 800px;
+    }
+
+    .glow-orb {
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.05) 30%, transparent 65%);
+      filter: blur(20px);
+    }
+
+    ::selection { background: rgba(255,255,255,0.85); color: #000; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+  const _origError = console.error;
+  console.error = function(...args) {
+    const msg = (args[0] && args[0].toString && args[0].toString()) || '';
+    if (msg.indexOf('Each child in a list should have a unique "key"') !== -1) return;
+    _origError.apply(console, args);
+  };
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/framer-motion@11.11.17/dist/framer-motion.js"></script>
+<script>window.Motion = window.FramerMotion || window.Motion;</script>
+
+<!-- FadingVideo -->
+<script type="text/babel">
+  function FadingVideo({ src, className, style }) {
+    const videoRef = React.useRef(null);
+    const rafRef = React.useRef(null);
+    const fadingOutRef = React.useRef(false);
+    const FADE_MS = 500;
+    const FADE_OUT_LEAD = 0.55;
+    const fadeTo = (target, duration) => {
+      const v = videoRef.current; if (!v) return;
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      const start = performance.now();
+      const so = parseFloat(v.style.opacity || '0');
+      const dt = target - so;
+      const step = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        v.style.opacity = String(so + dt * t);
+        if (t < 1) rafRef.current = requestAnimationFrame(step);
+      };
+      rafRef.current = requestAnimationFrame(step);
+    };
+    React.useEffect(() => {
+      const v = videoRef.current; if (!v) return;
+      v.style.opacity = '0';
+      const onLoaded = () => { v.style.opacity = '0'; v.play().catch(()=>{}); fadeTo(1, FADE_MS); };
+      const onTime = () => {
+        if (!v.duration) return;
+        const r = v.duration - v.currentTime;
+        if (!fadingOutRef.current && r <= FADE_OUT_LEAD && r > 0) {
+          fadingOutRef.current = true; fadeTo(0, FADE_MS);
+        }
+      };
+      const onEnded = () => {
+        v.style.opacity = '0';
+        setTimeout(() => { v.currentTime = 0; v.play().catch(()=>{}); fadingOutRef.current = false; fadeTo(1, FADE_MS); }, 100);
+      };
+      v.addEventListener('loadeddata', onLoaded);
+      v.addEventListener('timeupdate', onTime);
+      v.addEventListener('ended', onEnded);
+      return () => {
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        v.removeEventListener('loadeddata', onLoaded);
+        v.removeEventListener('timeupdate', onTime);
+        v.removeEventListener('ended', onEnded);
+      };
+    }, [src]);
+    return <video ref={videoRef} src={src} autoPlay muted playsInline preload="auto" className={className} style={{ opacity: 0, ...style }} />;
+  }
+  window.FadingVideo = FadingVideo;
+</script>
+
+<!-- BlurText -->
+<script type="text/babel">
+  function BlurText({ text, className }) {
+    const motion = window.Motion.motion;
+    const ref = React.useRef(null);
+    const [visible, setVisible] = React.useState(false);
+    React.useEffect(() => {
+      if (!ref.current) return;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } });
+      }, { threshold: 0.1 });
+      obs.observe(ref.current);
+      return () => obs.disconnect();
+    }, []);
+    const words = text.split(' ');
+    return (
+      <p ref={ref} className={className} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', rowGap: '0.1em' }}>
+        {words.map((word, i) => (
+          <motion.span key={i}
+            style={{ display: 'inline-block', marginRight: '0.28em' }}
+            initial={{ filter: 'blur(10px)', opacity: 0, y: 50 }}
+            animate={visible ? { filter: ['blur(10px)','blur(5px)','blur(0px)'], opacity: [0,0.5,1], y: [50,-5,0] } : {}}
+            transition={{ duration: 0.7, times: [0,0.5,1], ease: 'easeOut', delay: (i*100)/1000 }}
+          >{word}</motion.span>
+        ))}
+      </p>
+    );
+  }
+  window.BlurText = BlurText;
+</script>
+
+<!-- FadeIn helper -->
+<script type="text/babel">
+  function FadeIn({ children, delay = 0, className }) {
+    const motion = window.Motion.motion;
+    return (
+      <motion.div
+        initial={{ filter: 'blur(10px)', opacity: 0, y: 30 }}
+        whileInView={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8, delay, ease: 'easeOut' }}
+        className={className}
+      >{children}</motion.div>
+    );
+  }
+  window.FadeIn = FadeIn;
+</script>
+
+<!-- Icons -->
+<script type="text/babel">
+  function ArrowUpRight({ className }) {
+    return (<svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7" /><path d="M7 7h10v10" /></svg>);
+  }
+  function Play({ className }) {
+    return (<svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4" /></svg>);
+  }
+  function ArrowRight({ className }) {
+    return (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>);
+  }
+  window.ArrowUpRight = ArrowUpRight;
+  window.Play = Play;
+  window.ArrowRight = ArrowRight;
+</script>
+
+<!-- Navbar -->
+<script type="text/babel">
+  function Navbar() {
+    const ArrowUpRight = window.ArrowUpRight;
+    return (
+      <div className="absolute top-4 left-0 right-0 z-50 px-6 lg:px-12 flex items-center justify-between">
+        <div className="liquid-glass w-12 h-12 flex items-center justify-center rounded-full">
+          <span className="font-heading italic text-white text-2xl leading-none">a</span>
+        </div>
+        <div className="hidden md:flex items-center liquid-glass rounded-full p-1.5 gap-0.5">
+          <a href="#vision" className="px-3 py-2 text-sm font-medium text-white/90 font-body">Vision</a>
+          <a href="#prometheus" className="px-3 py-2 text-sm font-medium text-white/90 font-body">Prometheus</a>
+          <a href="#tech" className="px-3 py-2 text-sm font-medium text-white/90 font-body">Technology</a>
+          <a href="#compute" className="px-3 py-2 text-sm font-medium text-white/90 font-body">Compute</a>
+          <a href="#join" className="px-3 py-2 text-sm font-medium text-white/90 font-body">Movement</a>
+          <a href="#join" className="bg-white text-black rounded-full px-4 py-2 text-sm font-medium font-body whitespace-nowrap inline-flex items-center gap-1 ml-1">
+            Join the Mission <ArrowUpRight className="h-4 w-4" />
+          </a>
+        </div>
+        <div className="w-12 h-12" />
+      </div>
+    );
+  }
+  window.Navbar = Navbar;
+</script>
+
+<!-- Hero -->
+<script type="text/babel">
+  function Hero() {
+    const motion = window.Motion.motion;
+    const FadingVideo = window.FadingVideo;
+    const BlurText = window.BlurText;
+    const ArrowUpRight = window.ArrowUpRight;
+    const Play = window.Play;
+    const initial = { filter: 'blur(10px)', opacity: 0, y: 20 };
+    const animate = { filter: 'blur(0px)', opacity: 1, y: 0 };
+
+    const focus = ['Cancer Research','Climate Science','Poverty Alleviation','Clean Energy','Food Security'];
+
+    return (
+      <section className="relative min-h-screen w-full overflow-hidden bg-black">
+        <FadingVideo
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260418_080021_d598092b-c4c2-4e53-8e46-94cf9064cd50.mp4"
+          className="absolute left-1/2 top-0 -translate-x-1/2 object-cover object-top z-0"
+          style={{ width: '120%', height: '120%' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-[1]" />
+
+        <window.Navbar />
+
+        <div className="relative z-10 flex flex-col items-center justify-center pt-32 px-4 text-center min-h-screen pb-16">
+          <motion.div initial={initial} animate={animate}
+            transition={{ duration: 0.8, delay: 0.3, ease: 'easeOut' }}
+            className="liquid-glass rounded-full inline-flex items-center gap-2 p-1">
+            <span className="bg-white text-black rounded-full px-3 py-1 text-[10px] font-bold font-body tracking-[0.15em]">MISSION</span>
+            <span className="text-xs text-white/90 font-body pr-3 tracking-[0.15em]">ACCELERATE HUMAN PROGRESS</span>
+          </motion.div>
+
+          <div className="mt-8 flex justify-center">
+            <BlurText
+              text="Imagine a World Where AI Solves Humanity's Greatest Challenges"
+              className="text-5xl md:text-7xl lg:text-[5.5rem] font-heading italic text-white leading-[0.85] max-w-5xl tracking-[-3px]"
+            />
+          </div>
+
+          <motion.p initial={initial} animate={animate}
+            transition={{ duration: 0.8, delay: 0.9, ease: 'easeOut' }}
+            className="mt-6 text-base md:text-lg text-white/85 max-w-2xl font-body font-light leading-snug">
+            We're building the world's most advanced AI agent to cure cancer, reverse climate change, end poverty, and unlock human potential. Join us in creating a future where billions thrive.
+          </motion.p>
+
+          <motion.div initial={initial} animate={animate}
+            transition={{ duration: 0.8, delay: 1.1, ease: 'easeOut' }}
+            className="flex items-center gap-6 mt-8">
+            <a href="#vision" className="liquid-glass-strong rounded-full px-5 py-2.5 text-sm font-medium text-white font-body inline-flex items-center gap-2">
+              Explore the Vision <ArrowUpRight className="h-5 w-5" />
+            </a>
+            <a href="#" className="text-sm font-medium text-white font-body inline-flex items-center gap-2">
+              Watch the Film <Play className="h-4 w-4" />
+            </a>
+          </motion.div>
+
+          <motion.div initial={initial} animate={animate}
+            transition={{ duration: 0.8, delay: 1.3, ease: 'easeOut' }}
+            className="flex flex-wrap items-center justify-center gap-2 mt-10 max-w-3xl">
+            {focus.map(f => (
+              <span key={f} className="liquid-glass rounded-full px-3.5 py-1.5 text-xs font-medium text-white/90 font-body">{f}</span>
+            ))}
+          </motion.div>
+
+          <motion.div initial={initial} animate={animate}
+            transition={{ duration: 0.8, delay: 1.5, ease: 'easeOut' }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-14 w-full max-w-5xl">
+            {[
+              { n: '8B', l: 'People Impacted' },
+              { n: '195', l: 'Countries' },
+              { n: '47', l: 'Research Institutes' },
+              { n: '12', l: 'AI Breakthroughs' },
+            ].map(s => (
+              <div key={s.l} className="liquid-glass rounded-[1.25rem] p-5 text-left">
+                <div className="text-4xl md:text-5xl font-heading italic text-white tracking-[-1px] leading-none">{s.n}</div>
+                <div className="text-xs text-white/70 font-body font-light mt-2">{s.l}</div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
+  window.Hero = Hero;
+</script>
+
+<!-- The Grand Vision -->
+<script type="text/babel">
+  function Vision() {
+    const FadeIn = window.FadeIn;
+    const pillars = [
+      {
+        title: 'Eradicate Disease',
+        body: "Our AI analyzes trillions of molecular interactions to discover cures for cancer, Alzheimer's, and rare genetic diseases — 10,000× faster than traditional methods.",
+        kicker: '01 / Health',
+      },
+      {
+        title: 'Reverse Climate Change',
+        body: "Optimizing global energy grids, discovering new carbon capture materials, and modeling Earth's systems to keep warming below 1.5°C.",
+        kicker: '02 / Planet',
+      },
+      {
+        title: 'End Extreme Poverty',
+        body: 'Deploying AI-driven economic models that optimize resource distribution, create sustainable livelihoods, and ensure no one is left behind.',
+        kicker: '03 / Prosperity',
+      },
+      {
+        title: 'Universal Education',
+        body: "Personalized AI tutors that adapt to each student's learning style, making world-class education accessible to every child on Earth.",
+        kicker: '04 / Knowledge',
+      },
+    ];
+    return (
+      <section id="vision" className="relative bg-black starfield grain px-6 md:px-12 lg:px-20 py-32 overflow-hidden">
+        <div className="relative max-w-7xl mx-auto">
+          <FadeIn>
+            <div className="text-sm font-body text-white/60 mb-6 tracking-[0.2em]">// THE GRAND VISION</div>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <h2 className="font-heading italic text-white text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.9] tracking-[-3px] max-w-4xl">
+              AI should serve all<br/>of humanity.
+            </h2>
+          </FadeIn>
+          <FadeIn delay={0.2}>
+            <p className="mt-6 text-base md:text-lg text-white/70 font-body font-light max-w-2xl leading-snug">
+              Not just the privileged few. Our mission is to create artificial intelligence that tackles our most pressing global challenges.
+            </p>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-20">
+            {pillars.map((p, i) => (
+              <FadeIn key={p.title} delay={i * 0.1}>
+                <div className="liquid-glass rounded-[1.5rem] p-8 md:p-10 h-full">
+                  <div className="text-xs font-body text-white/50 tracking-[0.2em] mb-6">{p.kicker}</div>
+                  <h3 className="font-heading italic text-white text-3xl md:text-5xl tracking-[-1px] leading-none">{p.title}</h3>
+                  <p className="mt-5 text-sm md:text-base text-white/80 font-body font-light leading-snug">{p.body}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+  window.Vision = Vision;
+</script>
+
+<!-- Meet Prometheus -->
+<script type="text/babel">
+  function Prometheus() {
+    const FadingVideo = window.FadingVideo;
+    const FadeIn = window.FadeIn;
+    const steps = [
+      { n: '01', t: 'Massive Data Integration', b: 'Connects to global scientific databases, satellite imagery, research papers, and real-time sensor networks.' },
+      { n: '02', t: 'Multi-Modal Reasoning', b: 'Processes text, images, scientific formulas, and complex datasets simultaneously.' },
+      { n: '03', t: 'Hypothesis Generation', b: 'Formulates millions of testable scientific hypotheses per day.' },
+      { n: '04', t: 'Autonomous Experimentation', b: 'Controls robotic labs to test and validate promising hypotheses.' },
+    ];
+    const caps = [
+      { n: '94.7%', l: 'Protein Structure Prediction Accuracy' },
+      { n: '1.2B', l: 'Parameters Processed Daily' },
+      { n: '0.3s', l: 'Average Solution Time' },
+    ];
+    return (
+      <section id="prometheus" className="relative min-h-screen w-full overflow-hidden bg-black">
+        <FadingVideo
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260418_094631_d30ab262-45ee-4b7d-99f3-5d5848c8ef13.mp4"
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        />
+        <div className="absolute inset-0 bg-black/30 z-[1]" />
+
+        <div className="relative z-10 px-6 md:px-12 lg:px-20 pt-32 pb-28">
+          <div className="max-w-7xl mx-auto">
+            <FadeIn>
+              <div className="text-sm font-body text-white/70 mb-6 tracking-[0.2em]">// THE AGENT FOR GOOD</div>
+            </FadeIn>
+            <FadeIn delay={0.1}>
+              <h2 className="font-heading italic text-white text-5xl md:text-7xl lg:text-[6rem] leading-[0.88] tracking-[-3px] max-w-4xl">
+                Meet Prometheus.
+              </h2>
+            </FadeIn>
+            <FadeIn delay={0.2}>
+              <p className="mt-6 text-base md:text-lg text-white/85 font-body font-light max-w-2xl leading-snug">
+                The world's first general-purpose AI agent designed specifically to solve humanity's grand challenges.
+              </p>
+            </FadeIn>
+
+            <FadeIn delay={0.3}>
+              <div className="text-xs font-body text-white/60 tracking-[0.2em] mt-24 mb-8">/ AI TECHNOLOGY</div>
+            </FadeIn>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {steps.map((s, i) => (
+                <FadeIn key={s.n} delay={i * 0.1}>
+                  <div className="liquid-glass rounded-[1.25rem] p-6 h-full min-h-[220px] flex flex-col">
+                    <div className="text-sm font-body text-white/50 font-medium">{s.n}</div>
+                    <h4 className="font-heading italic text-white text-2xl md:text-3xl tracking-[-1px] leading-none mt-3">{s.t}</h4>
+                    <p className="mt-4 text-sm text-white/75 font-body font-light leading-snug flex-1">{s.b}</p>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+
+            <FadeIn delay={0.4}>
+              <div className="text-xs font-body text-white/60 tracking-[0.2em] mt-24 mb-8">/ CURRENT CAPABILITIES</div>
+            </FadeIn>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {caps.map((c, i) => (
+                <FadeIn key={c.l} delay={i * 0.1}>
+                  <div className="liquid-glass-strong rounded-[1.5rem] p-8">
+                    <div className="text-5xl md:text-6xl font-heading italic text-white tracking-[-1.5px] leading-none">{c.n}</div>
+                    <div className="text-sm text-white/75 font-body font-light mt-4">{c.l}</div>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+  window.Prometheus = Prometheus;
+</script>
+
+<!-- Architecture -->
+<script type="text/babel">
+  function Architecture() {
+    const FadeIn = window.FadeIn;
+    const cards = [
+      { t: 'Transformer Networks', b: 'Next-generation attention mechanisms for understanding complex relationships in scientific data.', tag: 'Attention' },
+      { t: 'Graph Neural Networks', b: 'Modeling molecular structures, disease pathways, and climate systems as interconnected graphs.', tag: 'Structure' },
+      { t: 'Reinforcement Learning', b: 'AI agents that learn optimal strategies for complex real-world problems through simulated environments.', tag: 'Policy' },
+    ];
+    return (
+      <section id="tech" className="relative bg-black starfield grain px-6 md:px-12 lg:px-20 py-32 overflow-hidden">
+        <div className="relative max-w-7xl mx-auto">
+          <FadeIn>
+            <div className="text-sm font-body text-white/60 mb-6 tracking-[0.2em]">// ADVANCED ARCHITECTURE</div>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <h2 className="font-heading italic text-white text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.9] tracking-[-3px] max-w-4xl">
+              Built for the<br/>complexity of life.
+            </h2>
+          </FadeIn>
+          <FadeIn delay={0.2}>
+            <p className="mt-6 text-base md:text-lg text-white/70 font-body font-light max-w-2xl leading-snug">
+              Cutting-edge research and scalable infrastructure engineered to handle humanity's most complex problems.
+            </p>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-20">
+            {cards.map((c, i) => (
+              <FadeIn key={c.t} delay={i * 0.1}>
+                <div className="liquid-glass rounded-[1.25rem] p-7 h-full flex flex-col min-h-[260px]">
+                  <div className="flex items-center justify-between">
+                    <div className="liquid-glass w-10 h-10 rounded-[0.75rem] flex items-center justify-center">
+                      <span className="font-heading italic text-white text-base">{i + 1}</span>
+                    </div>
+                    <span className="liquid-glass rounded-full px-3 py-1 text-[11px] text-white/80 font-body">{c.tag}</span>
+                  </div>
+                  <h4 className="font-heading italic text-white text-2xl md:text-3xl tracking-[-1px] leading-none mt-auto pt-10">{c.t}</h4>
+                  <p className="mt-3 text-sm text-white/75 font-body font-light leading-snug">{c.b}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+  window.Architecture = Architecture;
+</script>
+
+<!-- Compute -->
+<script type="text/babel">
+  function Compute() {
+    const FadeIn = window.FadeIn;
+    const stats = [
+      { n: '100+', u: 'Petaflops', l: 'Peak performance of our AI supercomputer cluster' },
+      { n: '70+', u: 'PB Storage', l: 'Scientific data repository' },
+      { n: '5,000+', u: 'Nodes', l: 'Distributed computing network' },
+      { n: '99.99%', u: 'Uptime', l: 'Guaranteed availability for critical research' },
+    ];
+    return (
+      <section id="compute" className="relative bg-black grain px-6 md:px-12 lg:px-20 py-32 overflow-hidden">
+        <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] glow-orb" />
+        <div className="relative max-w-7xl mx-auto">
+          <FadeIn>
+            <div className="text-sm font-body text-white/60 mb-6 tracking-[0.2em]">// THE COMPUTE</div>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <h2 className="font-heading italic text-white text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.9] tracking-[-3px] max-w-4xl">
+              The power behind<br/>Prometheus.
+            </h2>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-20">
+            {stats.map((s, i) => (
+              <FadeIn key={s.l} delay={i * 0.08}>
+                <div className="liquid-glass rounded-[1.5rem] p-7 h-full">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl md:text-6xl font-heading italic text-white tracking-[-1.5px] leading-none">{s.n}</span>
+                    <span className="text-base text-white/70 font-body font-light">{s.u}</span>
+                  </div>
+                  <p className="mt-5 text-sm text-white/70 font-body font-light leading-snug">{s.l}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+  window.Compute = Compute;
+</script>
+
+<!-- Join the Movement -->
+<script type="text/babel">
+  function Movement() {
+    const FadeIn = window.FadeIn;
+    const ArrowRight = window.ArrowRight;
+    const tiers = [
+      { kicker: '01 / RESEARCHERS', title: 'Researchers', body: 'Contribute your expertise to our open research platform. Access unprecedented computing resources and collaborate with top minds.', cta: 'Join Research Network' },
+      { kicker: '02 / DONORS', title: 'Donors', body: "Your support funds critical compute time and data acquisition. Every contribution accelerates our mission to solve humanity's grand challenges.", cta: 'Support the Mission' },
+      { kicker: '03 / VOLUNTEERS', title: 'Volunteers', body: 'Help us label datasets, test hypotheses, and spread awareness. No scientific background required — just passion for change.', cta: 'Volunteer' },
+    ];
+    return (
+      <section id="join" className="relative bg-black starfield grain px-6 md:px-12 lg:px-20 py-32 overflow-hidden">
+        <div className="relative max-w-7xl mx-auto">
+          <FadeIn>
+            <div className="text-sm font-body text-white/60 mb-6 tracking-[0.2em]">// JOIN THE MOVEMENT</div>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <h2 className="font-heading italic text-white text-5xl md:text-7xl lg:text-[5.5rem] leading-[0.9] tracking-[-3px] max-w-4xl">
+              The most ambitious<br/>project in history.
+            </h2>
+          </FadeIn>
+          <FadeIn delay={0.2}>
+            <p className="mt-6 text-base md:text-lg text-white/70 font-body font-light max-w-2xl leading-snug">
+              Together, we can solve the unsolvable. Choose how you want to be part of it.
+            </p>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-20">
+            {tiers.map((t, i) => (
+              <FadeIn key={t.title} delay={i * 0.1}>
+                <div className="liquid-glass rounded-[1.5rem] p-8 h-full flex flex-col min-h-[340px]">
+                  <div className="text-xs font-body text-white/50 tracking-[0.2em]">{t.kicker}</div>
+                  <h4 className="font-heading italic text-white text-3xl md:text-4xl tracking-[-1px] leading-none mt-4">{t.title}</h4>
+                  <p className="mt-4 text-sm text-white/75 font-body font-light leading-snug flex-1">{t.body}</p>
+                  <a href="#" className="mt-8 inline-flex items-center gap-2 text-sm text-white font-body font-medium group self-start">
+                    <span>{t.cta}</span>
+                    <span className="liquid-glass w-8 h-8 rounded-full inline-flex items-center justify-center">
+                      <ArrowRight className="w-4 h-4 text-white" />
+                    </span>
+                  </a>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+  window.Movement = Movement;
+</script>
+
+<!-- Subscribe + Footer -->
+<script type="text/babel">
+  function Subscribe() {
+    const FadeIn = window.FadeIn;
+    const ArrowUpRight = window.ArrowUpRight;
+    const [email, setEmail] = React.useState('');
+    return (
+      <section className="relative bg-black grain px-6 md:px-12 lg:px-20 py-24 overflow-hidden">
+        <div className="relative max-w-4xl mx-auto text-center">
+          <FadeIn>
+            <h3 className="font-heading italic text-white text-4xl md:text-5xl lg:text-6xl tracking-[-2px] leading-[0.95]">Subscribe for Updates</h3>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <p className="mt-4 text-sm md:text-base text-white/70 font-body font-light">Monthly reports on our breakthroughs and impact.</p>
+          </FadeIn>
+          <FadeIn delay={0.2}>
+            <form onSubmit={(e) => { e.preventDefault(); }} className="mt-8 flex items-center gap-2 max-w-md mx-auto liquid-glass rounded-full p-1.5">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="flex-1 bg-transparent px-4 py-2 text-sm text-white placeholder:text-white/40 font-body focus:outline-none"
+              />
+              <button type="submit" className="bg-white text-black rounded-full px-5 py-2 text-sm font-medium font-body inline-flex items-center gap-1.5 whitespace-nowrap">
+                Subscribe <ArrowUpRight className="w-4 h-4" />
+              </button>
+            </form>
+          </FadeIn>
+        </div>
+      </section>
+    );
+  }
+  function Footer() {
+    return (
+      <footer className="relative bg-black px-6 md:px-12 lg:px-20 pt-16 pb-10 border-t border-white/10">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-10">
+          <div className="col-span-2 md:col-span-1">
+            <div className="flex items-center gap-2">
+              <div className="liquid-glass w-10 h-10 flex items-center justify-center rounded-full">
+                <span className="font-heading italic text-white text-xl leading-none">a</span>
+              </div>
+              <span className="font-heading italic text-white text-2xl">Aeon</span>
+            </div>
+            <p className="mt-5 text-sm text-white/65 font-body font-light leading-snug max-w-xs">
+              Building artificial intelligence to solve the world's biggest problems and create a better future for all.
+            </p>
+          </div>
+
+          <div>
+            <div className="text-xs font-body text-white/50 tracking-[0.2em] mb-4">SOLUTIONS</div>
+            <ul className="space-y-2.5 text-sm text-white/85 font-body font-light">
+              <li><a href="#">Cancer Research</a></li>
+              <li><a href="#">Climate Change</a></li>
+              <li><a href="#">Poverty Alleviation</a></li>
+              <li><a href="#">Clean Energy</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <div className="text-xs font-body text-white/50 tracking-[0.2em] mb-4">ABOUT</div>
+            <ul className="space-y-2.5 text-sm text-white/85 font-body font-light">
+              <li><a href="#vision">Our Vision</a></li>
+              <li><a href="#tech">Technology</a></li>
+              <li><a href="#">Team</a></li>
+              <li><a href="#">Careers</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <div className="text-xs font-body text-white/50 tracking-[0.2em] mb-4">CONNECT</div>
+            <ul className="space-y-2.5 text-sm text-white/85 font-body font-light">
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">LinkedIn</a></li>
+              <li><a href="#">GitHub</a></li>
+              <li><a href="#">YouTube</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between gap-3 text-xs text-white/50 font-body">
+          <span>© 2026 Aeon — AI for Humanity</span>
+          <span className="font-heading italic text-white/70 text-sm">For the next thousand years.</span>
+        </div>
+      </footer>
+    );
+  }
+  window.Subscribe = Subscribe;
+  window.Footer = Footer;
+</script>
+
+<!-- App -->
+<script type="text/babel">
+  function App() {
+    return (
+      <React.Fragment>
+        <window.Hero />
+        <window.Vision />
+        <window.Prometheus />
+        <window.Architecture />
+        <window.Compute />
+        <window.Movement />
+        <window.Subscribe />
+        <window.Footer />
+      </React.Fragment>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>
