@@ -299,17 +299,6 @@ export default function App() {
 
         <div className="flex items-center gap-2 shrink-0">
           <button
-            onClick={() => setShowSettings(true)}
-            className="btn btn-ghost"
-            title={hasKey ? "Anthropic API key configured" : "Add Anthropic API key"}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: hasKey ? "#4f7d52" : "#b8722b" }}
-            />
-            {hasKey ? "Key" : "Set key"}
-          </button>
-          <button
             onClick={onShare}
             className="btn btn-ghost"
             disabled={!deck}
@@ -327,6 +316,8 @@ export default function App() {
           </button>
           <HeaderMenu
             items={[
+              { label: hasKey ? "Manage API keys" : "Set API key", onClick: () => setShowSettings(true) },
+              { divider: true, label: "", onClick: () => {} },
               { label: showCode ? "Hide code" : "Show code", shortcut: `${META_LABEL}/`, onClick: () => setShowCode((s) => !s) },
               { label: "Undo last change", shortcut: `${META_LABEL}Z`, onClick: undo },
               { divider: true, label: "", onClick: () => {} },
