@@ -93,6 +93,33 @@
       height: auto;
       background: #0a0908;
     }
+    .unmute-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(10, 9, 8, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: white;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      z-index: 5;
+      opacity: 0;
+      transform: translateY(-4px);
+      animation: rise 0.4s ease 0.6s forwards;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .unmute-btn:hover { background: rgba(10, 9, 8, 0.9); border-color: rgba(255,255,255,0.3); }
+    .unmute-btn[hidden] { display: none; }
+    .unmute-btn svg { width: 14px; height: 14px; }
+    @keyframes rise { to { opacity: 1; transform: translateY(0); } }
 
     .links {
       margin-top: 28px;
@@ -125,6 +152,8 @@
       color: var(--ink-3);
       font-size: 12px;
     }
+    footer a { color: var(--ink-2); text-decoration: none; border-bottom: 1px solid var(--rule); }
+    footer a:hover { color: var(--accent); border-color: var(--accent); }
 
     @media (max-width: 600px) {
       body { padding: 32px 16px 48px; }
@@ -140,10 +169,9 @@
     <div class="brand-name">Slidelang</div>
   </div>
 
-  <p class="tagline">A deck-as-code authoring platform. Typed YAML spec, AI generation, layout validation with one-click repair.</p>
-
   <div class="video-wrap">
     <video
+      id="demo-video"
       src="slidelang_video.mp4"
       autoplay
       muted
@@ -152,6 +180,14 @@
       controls
       preload="auto"
     ></video>
+    <button id="unmute" class="unmute-btn" type="button" aria-label="Unmute video">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 6h2.5L9 3v10L5.5 10H3z" fill="currentColor"/>
+        <path d="M11.5 5.5a3.5 3.5 0 0 1 0 5"/>
+        <path d="M13.5 3.5a6.5 6.5 0 0 1 0 9"/>
+      </svg>
+      Tap for sound
+    </button>
   </div>
 
   <div class="links">
@@ -160,7 +196,27 @@
     <a href="../slidelang-plan.html">Plan / PRD / TDD</a>
   </div>
 
-  <footer>Built for the AI Fund build challenge.</footer>
+  <footer>Built for the AI Fund build challenge. Vibe coded by <a href="https://x.com/jp" target="_blank" rel="noreferrer">Joey Primiani</a>.</footer>
+
+  <script>
+    (function () {
+      const v = document.getElementById('demo-video');
+      const btn = document.getElementById('unmute');
+      if (!v || !btn) return;
+      function enableSound() {
+        v.muted = false;
+        v.volume = 1;
+        // Re-play in case the autoplay was paused by browser policy.
+        const p = v.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+        btn.hidden = true;
+      }
+      btn.addEventListener('click', enableSound);
+      v.addEventListener('volumechange', () => {
+        if (!v.muted) btn.hidden = true;
+      });
+    })();
+  </script>
 
 </body>
 </html>
