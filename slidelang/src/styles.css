@@ -96,6 +96,42 @@ html, body, #root { height: 100%; }
 /* Present mode */
 .present-overlay { position: fixed; inset: 0; background: #0a0908; z-index: 100; display: flex; align-items: center; justify-content: center; }
 .present-overlay .slide-canvas { width: min(100vw, calc(100vh * 16 / 9)); height: auto; border-radius: 0; border: 0; box-shadow: none; }
+.present-hint { animation: fade-hint 4s ease forwards; }
+@keyframes fade-hint { 0% { opacity: 0; } 8% { opacity: 0.9; } 70% { opacity: 0.9; } 100% { opacity: 0; pointer-events: none; } }
+.present-hint:hover { opacity: 0.9 !important; animation: none; }
+
+/* Shimmer / skeleton */
+.skeleton {
+  background: linear-gradient(90deg, #f4f1ea 0%, #ede8db 35%, #f4f1ea 70%) !important;
+  background-size: 200% 100% !important;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.skeleton-bar {
+  background-size: 200% 100% !important;
+  background: linear-gradient(90deg, rgba(230,225,213,0.35) 0%, rgba(237,232,219,0.7) 50%, rgba(230,225,213,0.35) 100%) !important;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.image-skeleton {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, #f4f1ea 0%, #ede8db 50%, #f4f1ea 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* No issues success state */
+.success-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(180deg, #f1f6ec 0%, #e7f0e1 100%);
+  border: 1px solid #c9d9c1;
+  color: #355a36;
+  font-size: 12px; font-weight: 500;
+  padding: 6px 12px; border-radius: 999px;
+  font-family: "Source Serif 4", Georgia, serif;
+}
+.success-chip svg { width: 13px; height: 13px; }
+.success-chip .checkmark { stroke-dasharray: 16; stroke-dashoffset: 16; animation: draw-check 0.6s 0.1s ease forwards; }
+@keyframes draw-check { to { stroke-dashoffset: 0; } }
 
 /* Buttons */
 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; transition: background 0.15s, border-color 0.15s; cursor: pointer; }

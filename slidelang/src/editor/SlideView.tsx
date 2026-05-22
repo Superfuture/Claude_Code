@@ -9,7 +9,30 @@ interface SlideViewProps {
   deck: TDeck;
   issues: Issue[];
   onOverflow?: (issues: Issue[]) => void;
-  onPillClick?: (issue: Issue) => void;
+  onPillClick?: (issue: Issue, anchor: { x: number; y: number }) => void;
+}
+
+function getBlockId(issue: Issue): string {
+  return issue.kind === "collision" ? issue.aId : (issue as any).blockId;
+}
+
+// Anti-collision for pills. Stagger pills that would overlap.
+function pillPositions(slide: TSlide, issues: Issue[]) {
+  const seen = new Map<string, number>(); // blockId → count
+  return issues.map((iss) => {
+    const blockId = getBlockId(iss);
+    const block = slide.blocks.find((b) => b.id === blockId);
+    if (!block) return null;
+    const count = seen.get(blockId) ?? 0;
+    seen.set(blockId, count + 1);
+    return {
+      issue: iss,
+      blockId,
+      block,
+      // Stack pills vertically when multiple are on the same block.
+      offsetY: count * 22,
+    };
+  }).filter(Boolean) as Array<{ issue: Issue; blockId: string; block: any; offsetY: number }>;
 }
 
 export function SlideView({ slide, deck, issues, onOverflow, onPillClick }: SlideViewProps) {
@@ -22,7 +45,6 @@ export function SlideView({ slide, deck, issues, onOverflow, onPillClick }: Slid
       const fresh = validateOverflow(ref.current, slide);
       onOverflow(fresh);
     };
-    // Two-pass: once after layout, once after fonts settle.
     raf = requestAnimationFrame(() => {
       measure();
       setTimeout(measure, 250);
@@ -31,32 +53,36 @@ export function SlideView({ slide, deck, issues, onOverflow, onPillClick }: Slid
   }, [slide, onOverflow]);
 
   const myIssues = issues.filter((i) => i.slideId === slide.id);
+  const pills = pillPositions(slide, myIssues);
 
   return (
     <div className="slide-canvas" data-theme={deck.meta.theme} ref={ref}>
       {slide.blocks.map((b) => (
         <BlockRenderer key={b.id} block={b} />
       ))}
-      {myIssues.map((issue, i) => {
-        const blockId =
-          issue.kind === "collision" ? issue.aId :
-          (issue as any).blockId;
-        const block = slide.blocks.find((b) => b.id === blockId);
-        if (!block) return null;
+      {pills.map((p, i) => {
         const label =
-          issue.kind === "overflow" ? "Overflow" :
-          issue.kind === "collision" ? "Overlap" :
-          issue.kind === "contrast" ? "Contrast" : "Chart";
+          p.issue.kind === "overflow" ? "Overflow" :
+          p.issue.kind === "collision" ? "Overlap" :
+          p.issue.kind === "contrast" ? "Contrast" : "Chart";
         return (
           <button
-            key={i}
+            key={`${p.blockId}-${i}`}
             className="repair-pill"
-            style={{ left: `${block.x}%`, top: `${block.y}%` }}
+            style={{
+              left: `${p.block.x}%`,
+              top: `${p.block.y}%`,
+              transform: `translate(-6px, calc(-10px + ${p.offsetY}px))`,
+            }}
             onClick={(e) => {
               e.stopPropagation();
-              onPillClick?.(issue);
+              const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+              const containerRect = (e.currentTarget.offsetParent as HTMLElement)?.getBoundingClientRect();
+              const x = r.left - (containerRect?.left ?? 0) + r.width;
+              const y = r.top - (containerRect?.top ?? 0) + r.height + 4;
+              onPillClick?.(p.issue, { x, y });
             }}
-            title={issue.message}
+            title={p.issue.message}
           >
             {label}
           </button>

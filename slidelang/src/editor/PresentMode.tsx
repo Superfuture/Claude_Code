@@ -26,7 +26,7 @@ export function PresentMode({ deck, onClose }: PresentModeProps) {
       <div onClick={(e) => e.stopPropagation()} className="w-full h-full flex items-center justify-center">
         <SlideView slide={deck.slides[i]} deck={deck} issues={[]} />
       </div>
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-xs font-mono">
+      <div className="present-hint absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 text-xs font-mono pointer-events-auto">
         {i + 1} / {deck.slides.length} · ← → · Esc to exit
       </div>
     </div>

@@ -123,14 +123,7 @@ function ImageBlock({ b }: { b: Extract<TBlock, { type: "image" }> }) {
       {src ? (
         <img src={src} alt={b.alt ?? ""} style={{ objectFit: b.fit ?? "cover" }} />
       ) : (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            background:
-              "linear-gradient(135deg, #f4f1ea 0%, #ede8db 100%)",
-          }}
-        />
+        <div className="image-skeleton" />
       )}
     </div>
   );

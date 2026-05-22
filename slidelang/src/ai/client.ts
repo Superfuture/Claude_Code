@@ -16,6 +16,11 @@ export interface GenerateResult {
   source?: "worker" | "browser" | "mock";
 }
 
+export interface GenerateOpts {
+  onDelta?: (chunk: string, full: string) => void;
+  signal?: AbortSignal;
+}
+
 export interface RepairSuggestion {
   before: string;
   after: string;
@@ -24,7 +29,10 @@ export interface RepairSuggestion {
 
 // ---------------- public API ----------------
 
-export async function generateDeck(prompt: string): Promise<GenerateResult> {
+export async function generateDeck(
+  prompt: string,
+  opts: GenerateOpts = {}
+): Promise<GenerateResult> {
   // 1. Worker path
   if (API_BASE) {
     try {
@@ -32,6 +40,7 @@ export async function generateDeck(prompt: string): Promise<GenerateResult> {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ prompt }),
+        signal: opts.signal,
       });
       if (r.ok) {
         const data = await r.json();
@@ -43,11 +52,11 @@ export async function generateDeck(prompt: string): Promise<GenerateResult> {
     }
   }
 
-  // 2. Browser-direct with stored API key
+  // 2. Browser-direct with stored API key (streaming)
   const key = getAnthropicKey();
   if (key) {
     try {
-      const text = await callClaudeBrowser(key, SYSTEM_GENERATE, prompt, 4096);
+      const text = await streamClaudeBrowser(key, SYSTEM_GENERATE, prompt, 4096, opts);
       const cleaned = text
         .replace(/^```ya?ml\s*\n?/i, "")
         .replace(/```\s*$/i, "")
@@ -58,8 +67,29 @@ export async function generateDeck(prompt: string): Promise<GenerateResult> {
     }
   }
 
-  // 3. Offline mock
-  return { ...mockGenerate(prompt), source: "mock" };
+  // 3. Offline mock with simulated streaming
+  const result = mockGenerate(prompt);
+  if (opts.onDelta && result.yaml) {
+    await simulateStream(result.yaml, opts.onDelta, opts.signal);
+  }
+  return { ...result, source: "mock" };
+}
+
+async function simulateStream(
+  text: string,
+  onDelta: (chunk: string, full: string) => void,
+  signal?: AbortSignal
+) {
+  const chunkSize = 18;
+  let pos = 0;
+  while (pos < text.length) {
+    if (signal?.aborted) return;
+    const next = Math.min(text.length, pos + chunkSize);
+    const chunk = text.slice(pos, next);
+    pos = next;
+    onDelta(chunk, text.slice(0, pos));
+    await new Promise((r) => setTimeout(r, 18));
+  }
 }
 
 export async function repairIssue(issue: Issue, block: TBlock): Promise<RepairSuggestion | null> {
@@ -89,7 +119,7 @@ export async function repairIssue(issue: Issue, block: TBlock): Promise<RepairSu
   return mockRepair(issue, block);
 }
 
-// ---------------- browser-direct call ----------------
+// ---------------- browser-direct calls ----------------
 
 async function callClaudeBrowser(
   apiKey: string,
@@ -124,6 +154,63 @@ async function callClaudeBrowser(
   }
   const data = await r.json();
   return data.content?.[0]?.text ?? "";
+}
+
+async function streamClaudeBrowser(
+  apiKey: string,
+  system: string,
+  user: string,
+  maxTokens: number,
+  opts: GenerateOpts
+): Promise<string> {
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true",
+    },
+    body: JSON.stringify({
+      model: getModel(),
+      max_tokens: maxTokens,
+      system,
+      messages: [{ role: "user", content: user }],
+      stream: true,
+    }),
+    signal: opts.signal,
+  });
+  if (!r.ok || !r.body) {
+    let detail = "";
+    try { const j = await r.json(); detail = j?.error?.message || JSON.stringify(j); }
+    catch { detail = await r.text(); }
+    throw new Error(`Anthropic ${r.status}: ${detail}`);
+  }
+  const reader = r.body.getReader();
+  const decoder = new TextDecoder();
+  let buf = "";
+  let full = "";
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += decoder.decode(value, { stream: true });
+    const lines = buf.split("\n");
+    buf = lines.pop() || "";
+    for (const line of lines) {
+      if (!line.startsWith("data: ")) continue;
+      const payload = line.slice(6).trim();
+      if (!payload || payload === "[DONE]") continue;
+      try {
+        const ev = JSON.parse(payload);
+        if (ev.type === "content_block_delta" && ev.delta?.type === "text_delta") {
+          const chunk = ev.delta.text as string;
+          full += chunk;
+          opts.onDelta?.(chunk, full);
+        }
+      } catch { /* skip malformed */ }
+    }
+  }
+  return full;
 }
 
 // ---------------- mocks (work offline / no key) ----------------
