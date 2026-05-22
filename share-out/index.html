@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Slidelang — demo</title>
+  <meta name="theme-color" content="#c96442" />
+  <meta property="og:title" content="Slidelang — deck-as-code" />
+  <meta property="og:description" content="A typed YAML deck spec, AI-generated slides, layout validation with one-click repair." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --ink: #1f1e1d;
+      --ink-2: #3d3d3a;
+      --ink-3: #6b6963;
+      --rule: #e6e1d5;
+      --accent: #c96442;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; min-height: 100%; background: var(--bg); color: var(--ink); }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 56px 24px 64px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #c96442 0%, #e58b6c 100%);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06), 0 6px 16px -8px rgba(201, 100, 66, 0.45);
+      position: relative;
+    }
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 8px 8px 16px 8px;
+      background: rgba(255,255,255,0.92);
+      border-radius: 3px;
+    }
+    .brand-mark::before {
+      content: "";
+      position: absolute;
+      left: 8px; right: 14px; bottom: 8px; height: 3px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 1.5px;
+    }
+    .brand-name {
+      font-family: "Source Serif 4", Georgia, serif;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+    }
+
+    .tagline {
+      font-family: "Source Serif 4", Georgia, serif;
+      font-size: 17px;
+      color: var(--ink-2);
+      max-width: 560px;
+      text-align: center;
+      margin: -16px 0 28px;
+      line-height: 1.5;
+    }
+
+    .video-wrap {
+      width: min(100%, 1100px);
+      background: #0a0908;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow:
+        0 1px 0 rgba(31, 30, 29, 0.04),
+        0 32px 80px -40px rgba(31, 30, 29, 0.35);
+      position: relative;
+    }
+    video {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #0a0908;
+    }
+
+    .links {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .links a {
+      text-decoration: none;
+      color: var(--ink);
+      background: white;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .links a:hover { border-color: var(--accent); }
+    .links a.primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    .links a.primary:hover { background: #b25538; }
+
+    footer {
+      margin-top: 56px;
+      color: var(--ink-3);
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 32px 16px 48px; }
+      .brand-name { font-size: 24px; }
+      .video-wrap { border-radius: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div class="brand-name">Slidelang</div>
+  </div>
+
+  <p class="tagline">A deck-as-code authoring platform. Typed YAML spec, AI generation, layout validation with one-click repair.</p>
+
+  <div class="video-wrap">
+    <video
+      src="slidelang_video.mp4"
+      autoplay
+      muted
+      playsinline
+      loop
+      controls
+      preload="auto"
+    ></video>
+  </div>
+
+  <div class="links">
+    <a class="primary" href="../slidelang-app/">Try the prototype →</a>
+    <a href="https://github.com/Superfuture/Claude_Code/tree/main/slidelang">Source code</a>
+    <a href="../slidelang-plan.html">Plan / PRD / TDD</a>
+  </div>
+
+  <footer>Built for the AI Fund build challenge.</footer>
+
+</body>
+</html>
