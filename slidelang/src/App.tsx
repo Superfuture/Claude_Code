@@ -10,6 +10,8 @@ import { PresentMode } from "./editor/PresentMode";
 import { Q3_BOARD_UPDATE_YAML, EMPTY_DECK_YAML } from "./spec/examples";
 import { generateDeck, repairIssue, type RepairSuggestion } from "./ai/client";
 import { buildShareUrl, decodeDeckFromHash } from "./share/share";
+import { SettingsDialog } from "./editor/SettingsDialog";
+import { getAnthropicKey } from "./ai/key";
 
 export default function App() {
   const [yaml, setYaml] = useState<string>(Q3_BOARD_UPDATE_YAML);
@@ -22,6 +24,10 @@ export default function App() {
   const [suggestion, setSuggestion] = useState<RepairSuggestion | null>(null);
   const [repairBusy, setRepairBusy] = useState(false);
   const [overflowIssues, setOverflowIssues] = useState<Issue[]>([]);
+  const [showCode, setShowCode] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
+  const [hasKey, setHasKey] = useState(() => !!getAnthropicKey());
+  const [genError, setGenError] = useState<string | null>(null);
 
   // Load deck from URL hash on first mount.
   useEffect(() => {
@@ -130,11 +136,18 @@ export default function App() {
   const onGenerate = useCallback(async () => {
     if (!prompt.trim()) return;
     setGenerating(true);
+    setGenError(null);
     const r = await generateDeck(prompt);
     setGenerating(false);
     if (r.ok && r.yaml) {
       setYaml(r.yaml);
       setActiveSlide(0);
+      if (r.source === "mock") {
+        setShareNotice("Mock deck — add API key for real generation");
+        setTimeout(() => setShareNotice(null), 3000);
+      }
+    } else if (r.error) {
+      setGenError(r.error);
     }
   }, [prompt]);
 
@@ -188,12 +201,48 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowSettings(true)}
+            className="btn btn-ghost"
+            title={hasKey ? "API key configured" : "Add Anthropic API key for real generation"}
+          >
+            <span
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ background: hasKey ? "#4f7d52" : "#b8722b" }}
+            />
+            {hasKey ? "API key" : "Set API key"}
+          </button>
+          <button
+            onClick={() => setShowCode((s) => !s)}
+            className="btn btn-ghost"
+            title={showCode ? "Hide code panel" : "Show code panel"}
+          >
+            {showCode ? "Hide code" : "Show code"}
+          </button>
           <button onClick={() => setYaml(Q3_BOARD_UPDATE_YAML)} className="btn btn-ghost">Example</button>
           <button onClick={() => setYaml(EMPTY_DECK_YAML)} className="btn btn-ghost">New</button>
           <button onClick={onShare} className="btn btn-ghost">Share</button>
           <button onClick={() => setPresenting(true)} className="btn btn-primary">Present</button>
         </div>
       </header>
+
+      {showSettings && (
+        <SettingsDialog
+          onClose={() => {
+            setHasKey(!!getAnthropicKey());
+            setShowSettings(false);
+          }}
+        />
+      )}
+
+      {genError && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-[#b04a3a] text-white px-4 py-2 rounded-lg text-sm shadow-lg max-w-[600px]">
+          <div className="flex items-start gap-2">
+            <span>{genError}</span>
+            <button onClick={() => setGenError(null)} className="text-white/80 hover:text-white">×</button>
+          </div>
+        </div>
+      )}
 
       {/* Toast */}
       {shareNotice && (
@@ -203,7 +252,14 @@ export default function App() {
       )}
 
       {/* Body */}
-      <div className="flex-1 grid min-h-0" style={{ gridTemplateColumns: "140px minmax(0,1fr) minmax(0,1fr)" }}>
+      <div
+        className="flex-1 grid min-h-0"
+        style={{
+          gridTemplateColumns: showCode
+            ? "140px minmax(0,1fr) minmax(0,1fr)"
+            : "140px minmax(0,1fr)",
+        }}
+      >
         {/* Filmstrip */}
         <aside className="border-r border-rule bg-bg-surface/60 min-h-0 overflow-hidden">
           {deck && (
@@ -287,6 +343,7 @@ export default function App() {
         </main>
 
         {/* YAML editor */}
+        {showCode && (
         <aside className="min-h-0 flex flex-col">
           <div className="flex items-center justify-between border-b border-rule px-3 py-2 bg-bg-surface/60">
             <div className="text-[11px] uppercase tracking-wider font-semibold text-ink-3">deck.yaml</div>
@@ -312,6 +369,7 @@ export default function App() {
             />
           </div>
         </aside>
+        )}
       </div>
     </div>
   );

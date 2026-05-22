@@ -1,64 +1,132 @@
 import type { Issue } from "../validator/validate";
 import type { TBlock } from "../spec/schema";
+import { SYSTEM_GENERATE, SYSTEM_REPAIR } from "./prompts";
+import { getAnthropicKey, getModel } from "./key";
 
 // Endpoint base. Override via Vite env or window for prod deploy.
 const API_BASE =
   (import.meta as any).env?.VITE_API_BASE ||
-  (window as any).SLIDELANG_API_BASE ||
+  (typeof window !== "undefined" && (window as any).SLIDELANG_API_BASE) ||
   "";
 
 export interface GenerateResult {
   ok: boolean;
   yaml?: string;
   error?: string;
-}
-
-export async function generateDeck(prompt: string): Promise<GenerateResult> {
-  if (!API_BASE) {
-    // Offline mock — used when no Worker is deployed.
-    return mockGenerate(prompt);
-  }
-  try {
-    const r = await fetch(`${API_BASE}/generate`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ prompt }),
-    });
-    if (!r.ok) return { ok: false, error: `Server error ${r.status}` };
-    const data = await r.json();
-    return { ok: true, yaml: data.yaml };
-  } catch (e: any) {
-    return { ok: false, error: e.message ?? "network error" };
-  }
+  source?: "worker" | "browser" | "mock";
 }
 
 export interface RepairSuggestion {
   before: string;
   after: string;
-  patch: any; // block partial that overrides
+  patch: any;
 }
 
-export async function repairIssue(
-  issue: Issue,
-  block: TBlock
-): Promise<RepairSuggestion | null> {
-  if (!API_BASE) {
-    return mockRepair(issue, block);
+// ---------------- public API ----------------
+
+export async function generateDeck(prompt: string): Promise<GenerateResult> {
+  // 1. Worker path
+  if (API_BASE) {
+    try {
+      const r = await fetch(`${API_BASE}/generate`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+      if (r.ok) {
+        const data = await r.json();
+        return { ok: true, yaml: data.yaml, source: "worker" };
+      }
+      return { ok: false, error: `Worker error ${r.status}`, source: "worker" };
+    } catch (e: any) {
+      return { ok: false, error: e.message ?? "network error", source: "worker" };
+    }
   }
-  try {
-    const r = await fetch(`${API_BASE}/repair`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ issue, block }),
-    });
-    if (!r.ok) return mockRepair(issue, block);
-    return await r.json();
-  } catch {
-    return mockRepair(issue, block);
+
+  // 2. Browser-direct with stored API key
+  const key = getAnthropicKey();
+  if (key) {
+    try {
+      const text = await callClaudeBrowser(key, SYSTEM_GENERATE, prompt, 4096);
+      const cleaned = text
+        .replace(/^```ya?ml\s*\n?/i, "")
+        .replace(/```\s*$/i, "")
+        .trim();
+      return { ok: true, yaml: cleaned, source: "browser" };
+    } catch (e: any) {
+      return { ok: false, error: e.message ?? "Anthropic API error", source: "browser" };
+    }
   }
+
+  // 3. Offline mock
+  return { ...mockGenerate(prompt), source: "mock" };
 }
 
-// --- mocks (work offline / on static deploy) ---
+export async function repairIssue(issue: Issue, block: TBlock): Promise<RepairSuggestion | null> {
+  if (API_BASE) {
+    try {
+      const r = await fetch(`${API_BASE}/repair`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ issue, block }),
+      });
+      if (r.ok) return await r.json();
+    } catch { /* fall through */ }
+  }
+
+  const key = getAnthropicKey();
+  if (key) {
+    try {
+      const user = `Block:\n${JSON.stringify(block, null, 2)}\n\nIssue:\n${JSON.stringify(issue, null, 2)}`;
+      const text = await callClaudeBrowser(key, SYSTEM_REPAIR, user, 800);
+      const cleaned = text.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
+      return JSON.parse(cleaned);
+    } catch {
+      /* fall back to mock */
+    }
+  }
+
+  return mockRepair(issue, block);
+}
+
+// ---------------- browser-direct call ----------------
+
+async function callClaudeBrowser(
+  apiKey: string,
+  system: string,
+  user: string,
+  maxTokens: number
+): Promise<string> {
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true",
+    },
+    body: JSON.stringify({
+      model: getModel(),
+      max_tokens: maxTokens,
+      system,
+      messages: [{ role: "user", content: user }],
+    }),
+  });
+  if (!r.ok) {
+    let detail = "";
+    try {
+      const j = await r.json();
+      detail = j?.error?.message || JSON.stringify(j);
+    } catch {
+      detail = await r.text();
+    }
+    throw new Error(`Anthropic ${r.status}: ${detail}`);
+  }
+  const data = await r.json();
+  return data.content?.[0]?.text ?? "";
+}
+
+// ---------------- mocks (work offline / no key) ----------------
 
 function mockRepair(issue: Issue, block: TBlock): RepairSuggestion {
   if (issue.kind === "overflow" && block.type === "text") {
@@ -76,19 +144,11 @@ function mockRepair(issue: Issue, block: TBlock): RepairSuggestion {
   }
   if (issue.kind === "collision" && block.type === "text") {
     const newH = Math.max(8, block.h - 6);
-    return {
-      before: `h: ${block.h}`,
-      after: `h: ${newH}`,
-      patch: { h: newH },
-    };
+    return { before: `h: ${block.h}`, after: `h: ${newH}`, patch: { h: newH } };
   }
   if (issue.kind === "collision") {
     const newW = Math.max(20, block.w - 4);
-    return {
-      before: `w: ${block.w}`,
-      after: `w: ${newW}`,
-      patch: { w: newW },
-    };
+    return { before: `w: ${block.w}`, after: `w: ${newW}`, patch: { w: newW } };
   }
   if (issue.kind === "contrast" && block.type === "text") {
     return {
@@ -118,12 +178,10 @@ function mockRepair(issue: Issue, block: TBlock): RepairSuggestion {
 }
 
 function mockGenerate(prompt: string): GenerateResult {
-  // Honor a few keywords so the demo still shows variety without a backend.
   const p = prompt.toLowerCase();
   if (p.includes("transformer") || p.includes("attention")) {
     return { ok: true, yaml: TRANSFORMERS_YAML };
   }
-  // Default: return the Q3 board update for any business prompt.
   return { ok: true, yaml: Q3_FALLBACK };
 }
 
@@ -139,14 +197,14 @@ slides:
         y: 38
         w: 84
         h: 18
-        content: "Generated from your prompt"
+        content: "Add an Anthropic API key to enable real generation"
         style: title
       - type: text
         x: 8
         y: 60
         w: 84
         h: 8
-        content: "Deploy a Worker with ANTHROPIC_API_KEY to enable real AI generation"
+        content: "Click \\"Set API key\\" in the top bar"
         style: subtitle
 
   - id: bullets
@@ -156,7 +214,7 @@ slides:
         y: 6
         w: 88
         h: 10
-        content: "Key points"
+        content: "How it works"
         style: h1
       - type: text
         x: 6
