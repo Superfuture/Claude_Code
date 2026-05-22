@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html, body, #root { height: 100%; }
+
+/* Slide canvas */
+.slide-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: white;
+  border: 1px solid #e6e1d5;
+  border-radius: 14px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.03), 0 18px 40px -28px rgba(0,0,0,0.18);
+  overflow: hidden;
+}
+.slide-canvas[data-theme="dark"] { background: #131210; color: #f6f1e5; }
+
+.block { position: absolute; overflow: hidden; }
+.block-text { display: flex; align-items: flex-start; }
+.block-text[data-style="title"] { font-family: "Source Serif 4", Georgia, serif; font-weight: 500; font-size: 56px; letter-spacing: -0.02em; line-height: 1.05; }
+.block-text[data-style="subtitle"] { font-family: "Source Serif 4", Georgia, serif; font-size: 22px; color: #6b6963; }
+.block-text[data-style="h1"] { font-family: "Source Serif 4", Georgia, serif; font-weight: 500; font-size: 36px; letter-spacing: -0.015em; }
+.block-text[data-style="h2"] { font-family: "Source Serif 4", Georgia, serif; font-weight: 500; font-size: 24px; }
+.block-text[data-style="body"] { font-family: -apple-system, system-ui, sans-serif; font-size: 18px; line-height: 1.5; }
+.block-text[data-style="caption"] { font-size: 13px; color: #6b6963; }
+.block-text[data-style="bullets"] { font-size: 18px; line-height: 1.5; }
+.block-text[data-style="bullets"] ul { padding-left: 22px; margin: 0; }
+.block-text[data-style="bullets"] li { margin: 6px 0; }
+
+.block-chart, .block-math { display: flex; align-items: center; justify-content: center; padding: 8px; }
+.block-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Pills */
+.repair-pill {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #b04a3a;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px -4px rgba(176, 74, 58, 0.45);
+  cursor: pointer;
+  transform: translate(-6px, -10px);
+  z-index: 10;
+  white-space: nowrap;
+}
+.repair-pill::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: white; animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.repair-popover {
+  position: absolute;
+  z-index: 30;
+  background: white;
+  border: 1px solid #e6e1d5;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px -20px rgba(0,0,0,0.25);
+  width: 360px;
+  padding: 14px;
+  font-size: 13px;
+}
+.diff-line { font-family: "JetBrains Mono", monospace; font-size: 12px; padding: 2px 8px; border-radius: 4px; }
+.diff-del { background: #fdecea; color: #b04a3a; }
+.diff-add { background: #e8f4ea; color: #2f6e3a; }
+
+/* Monaco container */
+.monaco-host { height: 100%; min-height: 0; }
+
+/* Filmstrip */
+.filmstrip-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: white;
+  border: 1px solid #e6e1d5;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.filmstrip-thumb:hover { border-color: #c0bba8; }
+.filmstrip-thumb[data-active="true"] { border-color: #c96442; box-shadow: 0 0 0 2px rgba(201, 100, 66, 0.18); }
+.filmstrip-thumb .block { transform-origin: 0 0; pointer-events: none; }
+
+/* Present mode */
+.present-overlay { position: fixed; inset: 0; background: #0a0908; z-index: 100; display: flex; align-items: center; justify-content: center; }
+.present-overlay .slide-canvas { width: min(100vw, calc(100vh * 16 / 9)); height: auto; border-radius: 0; border: 0; box-shadow: none; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; transition: background 0.15s, border-color 0.15s; cursor: pointer; }
+.btn-primary { background: #c96442; color: white; }
+.btn-primary:hover { background: #b25538; }
+.btn-primary:disabled { opacity: 0.55; cursor: wait; }
+.btn-ghost { background: transparent; border: 1px solid #e6e1d5; color: #1f1e1d; }
+.btn-ghost:hover { background: #f4f1ea; }
+
+/* Scroll bars */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: #e6e1d5; border-radius: 6px; border: 2px solid #faf9f5; }
+*::-webkit-scrollbar-thumb:hover { background: #c0bba8; }

@@ -1,0 +1,6 @@
+name = "slidelang"
+main = "worker/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Set the secret with:  bunx wrangler secret put ANTHROPIC_API_KEY
