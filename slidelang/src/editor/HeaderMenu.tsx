@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface MenuItem {
   label: string;
@@ -10,20 +11,42 @@ interface MenuItem {
 
 export function HeaderMenu({ items }: { items: MenuItem[] }) {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ top: number; right: number } | null>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!open || !buttonRef.current) return;
+    const r = buttonRef.current.getBoundingClientRect();
+    setPos({
+      top: r.bottom + 6,
+      right: window.innerWidth - r.right,
+    });
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      const t = e.target as Node;
+      if (buttonRef.current?.contains(t)) return;
+      if (menuRef.current?.contains(t)) return;
+      setOpen(false);
     };
-    document.addEventListener("click", handler);
-    return () => document.removeEventListener("click", handler);
+    const onScroll = () => setOpen(false);
+    document.addEventListener("mousedown", handler);
+    window.addEventListener("scroll", onScroll, true);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      window.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("resize", onScroll);
+    };
   }, [open]);
 
   return (
-    <div className="relative" ref={ref}>
+    <>
       <button
+        ref={buttonRef}
         onClick={() => setOpen((o) => !o)}
         className="btn btn-ghost"
         title="More actions"
@@ -34,10 +57,16 @@ export function HeaderMenu({ items }: { items: MenuItem[] }) {
           <circle cx="13" cy="8" r="1.5" />
         </svg>
       </button>
-      {open && (
+      {open && pos && createPortal(
         <div
-          className="absolute right-0 top-[110%] z-50 bg-bg-surface border border-rule rounded-xl shadow-2xl py-1.5 min-w-[200px]"
-          style={{ boxShadow: "0 24px 60px -20px rgba(0,0,0,0.25)" }}
+          ref={menuRef}
+          className="fixed bg-bg-surface border border-rule rounded-xl py-1.5 min-w-[220px]"
+          style={{
+            top: pos.top,
+            right: pos.right,
+            zIndex: 1000,
+            boxShadow: "0 24px 60px -20px rgba(0,0,0,0.25), 0 2px 6px -2px rgba(0,0,0,0.08)",
+          }}
         >
           {items.map((item, i) =>
             item.divider ? (
@@ -55,13 +84,14 @@ export function HeaderMenu({ items }: { items: MenuItem[] }) {
               >
                 <span>{item.label}</span>
                 {item.shortcut && (
-                  <span className="text-ink-3 font-mono text-[11px]">{item.shortcut}</span>
+                  <span className="text-ink-3 font-mono text-[11px] ml-4">{item.shortcut}</span>
                 )}
               </button>
             )
           )}
-        </div>
+        </div>,
+        document.body
       )}
-    </div>
+    </>
   );
 }
