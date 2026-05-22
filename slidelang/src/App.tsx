@@ -310,6 +310,14 @@ export default function App() {
             {hasKey ? "Key" : "Set key"}
           </button>
           <button
+            onClick={onShare}
+            className="btn btn-ghost"
+            disabled={!deck}
+            title="Copy a share link to this deck"
+          >
+            Share
+          </button>
+          <button
             onClick={() => setPresenting(true)}
             className="btn btn-primary"
             disabled={!deck}
@@ -320,7 +328,6 @@ export default function App() {
           <HeaderMenu
             items={[
               { label: showCode ? "Hide code" : "Show code", shortcut: `${META_LABEL}/`, onClick: () => setShowCode((s) => !s) },
-              { label: "Share link", onClick: onShare },
               { label: "Undo last change", shortcut: `${META_LABEL}Z`, onClick: undo },
               { divider: true, label: "", onClick: () => {} },
               { label: "Load example", onClick: () => setYaml(Q3_BOARD_UPDATE_YAML) },
