@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c96442"/>
+      <stop offset="1" stop-color="#e58b6c"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#g)"/>
+  <!-- abstract slide: a small panel and a stack of three lines -->
+  <rect x="14" y="16" width="36" height="22" rx="3" fill="#ffffff" fill-opacity="0.92"/>
+  <rect x="14" y="44" width="22" height="3" rx="1.5" fill="#ffffff" fill-opacity="0.85"/>
+  <rect x="14" y="50" width="32" height="3" rx="1.5" fill="#ffffff" fill-opacity="0.55"/>
+</svg>

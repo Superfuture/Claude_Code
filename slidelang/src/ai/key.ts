@@ -1,5 +1,6 @@
 const KEY = "slidelang.anthropic_key";
 const MODEL_KEY = "slidelang.model";
+const UNSPLASH_KEY = "slidelang.unsplash_key";
 
 export function getAnthropicKey(): string {
   try { return localStorage.getItem(KEY) ?? ""; } catch { return ""; }
@@ -18,6 +19,17 @@ export function getModel(): string {
 
 export function setModel(m: string) {
   try { localStorage.setItem(MODEL_KEY, m); } catch {}
+}
+
+export function getUnsplashKey(): string {
+  try { return localStorage.getItem(UNSPLASH_KEY) ?? ""; } catch { return ""; }
+}
+
+export function setUnsplashKey(k: string) {
+  try {
+    if (k.trim()) localStorage.setItem(UNSPLASH_KEY, k.trim());
+    else localStorage.removeItem(UNSPLASH_KEY);
+  } catch {}
 }
 
 export const MODEL_CHOICES: { id: string; label: string }[] = [

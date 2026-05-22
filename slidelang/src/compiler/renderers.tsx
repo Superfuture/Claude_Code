@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import katex from "katex";
 import vegaEmbed from "vega-embed";
 import type { TBlock } from "../spec/schema";
+import { resolveImageSrc } from "../ai/images";
 
 function positionStyle(b: TBlock): React.CSSProperties {
   return {
@@ -104,20 +105,33 @@ function ChartBlock({ b }: { b: Extract<TBlock, { type: "chart" }> }) {
 }
 
 function ImageBlock({ b }: { b: Extract<TBlock, { type: "image" }> }) {
-  let src = "";
-  if (b.source.provider === "url") src = b.source.src;
-  else if (b.source.provider === "unsplash")
-    src = `https://source.unsplash.com/1600x900/?${encodeURIComponent(b.source.query)}`;
-  else if (b.source.provider === "flux")
-    // Fall back to Unsplash for prompt until /image endpoint is deployed
-    src = `https://source.unsplash.com/1600x900/?${encodeURIComponent(b.source.prompt)}`;
+  const [src, setSrc] = useState<string>("");
+  const sourceKey = JSON.stringify(b.source);
+  useEffect(() => {
+    let cancelled = false;
+    resolveImageSrc(b.source).then((url) => {
+      if (!cancelled) setSrc(url);
+    });
+    return () => { cancelled = true; };
+  }, [sourceKey]);
   return (
     <div
       className="block block-image"
       data-block-id={b.id}
       style={positionStyle(b)}
     >
-      <img src={src} alt={b.alt ?? ""} style={{ objectFit: b.fit ?? "cover" }} />
+      {src ? (
+        <img src={src} alt={b.alt ?? ""} style={{ objectFit: b.fit ?? "cover" }} />
+      ) : (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            background:
+              "linear-gradient(135deg, #f4f1ea 0%, #ede8db 100%)",
+          }}
+        />
+      )}
     </div>
   );
 }

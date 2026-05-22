@@ -256,7 +256,7 @@ export default function App() {
         className="flex-1 grid min-h-0"
         style={{
           gridTemplateColumns: showCode
-            ? "140px minmax(0,1fr) minmax(0,1fr)"
+            ? "140px minmax(0,1.7fr) minmax(0,1fr)"
             : "140px minmax(0,1fr)",
         }}
       >

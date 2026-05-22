@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { getAnthropicKey, setAnthropicKey, getModel, setModel, MODEL_CHOICES } from "../ai/key";
+import {
+  getAnthropicKey, setAnthropicKey,
+  getModel, setModel, MODEL_CHOICES,
+  getUnsplashKey, setUnsplashKey,
+} from "../ai/key";
 
 interface SettingsDialogProps {
   onClose: () => void;
@@ -8,6 +12,7 @@ interface SettingsDialogProps {
 export function SettingsDialog({ onClose }: SettingsDialogProps) {
   const [key, setKey] = useState(getAnthropicKey());
   const [model, setModelLocal] = useState(getModel());
+  const [unsplash, setUnsplash] = useState(getUnsplashKey());
   const [show, setShow] = useState(false);
 
   const masked = key ? key.slice(0, 7) + "…" + key.slice(-4) : "";
@@ -15,6 +20,7 @@ export function SettingsDialog({ onClose }: SettingsDialogProps) {
   function save() {
     setAnthropicKey(key);
     setModel(model);
+    setUnsplashKey(unsplash);
     onClose();
   }
 
@@ -76,7 +82,7 @@ export function SettingsDialog({ onClose }: SettingsDialogProps) {
           ))}
         </select>
 
-        <div className="text-[12px] text-ink-3 mt-5 leading-snug">
+        <div className="text-[12px] text-ink-3 mt-3 leading-snug">
           Don't have one? Create a key at{" "}
           <a
             href="https://console.anthropic.com/settings/keys"
@@ -85,6 +91,26 @@ export function SettingsDialog({ onClose }: SettingsDialogProps) {
             className="text-accent underline"
           >console.anthropic.com</a>.
           Calls use <code className="font-mono text-[11px]">anthropic-dangerous-direct-browser-access</code> — your key stays in this browser.
+        </div>
+
+        <div className="border-t border-rule my-5" />
+
+        <label className="block text-[11px] uppercase tracking-wider font-semibold text-ink-3 mb-1.5">
+          Unsplash Access Key <span className="text-ink-3 normal-case font-normal lowercase">(optional)</span>
+        </label>
+        <input
+          type="password"
+          value={unsplash}
+          onChange={(e) => setUnsplash(e.target.value)}
+          placeholder="Your Unsplash access key"
+          className="w-full bg-bg border border-rule rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:border-accent"
+        />
+        <div className="text-[12px] text-ink-3 mt-2 leading-snug">
+          Without this, image blocks fall back to deterministic{" "}
+          <a href="https://picsum.photos" target="_blank" rel="noreferrer" className="text-accent underline">picsum.photos</a>{" "}
+          (random photo per query). Add a key from{" "}
+          <a href="https://unsplash.com/oauth/applications" target="_blank" rel="noreferrer" className="text-accent underline">unsplash.com/oauth/applications</a>{" "}
+          to get real semantic matches.
         </div>
 
         <div className="flex gap-2 justify-end mt-6">
