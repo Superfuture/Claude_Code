@@ -1,5 +1,6 @@
 import SwiftUI
 import StoreKit
+import RevenueCat
 
 /// Minimal paywall. Plug in RevenueCat or wire StoreKit2 fully — the
 /// scaffold here demonstrates the surface; product fetching + purchase
@@ -123,20 +124,37 @@ struct PaywallView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: - StoreKit hooks
+    // MARK: - RevenueCat hooks
 
     private func purchase() async {
-        // Phase 1: integrate StoreKit2 or RevenueCat here.
-        // Pseudocode for StoreKit2:
-        //   let products = try await Product.products(for: [selected.productID])
-        //   guard let product = products.first else { return }
-        //   let result = try await product.purchase()
-        //   // verify, set AppGroupStore.shared.isPro = true, dismiss
-        AppGroupStore.shared.isPro = true
-        dismiss()
+        do {
+            let offerings = try await Purchases.shared.offerings()
+            // Match the tapped plan to the package selling that product ID.
+            guard let package = offerings.current?.availablePackages
+                .first(where: { $0.storeProduct.productIdentifier == selected.productID }) else {
+                // No matching package — check the Offering is configured in RevenueCat.
+                return
+            }
+            let result = try await Purchases.shared.purchase(package: package)
+            guard !result.userCancelled else { return }
+            if result.customerInfo.entitlements[PurchasesManager.proEntitlement]?.isActive == true {
+                AppGroupStore.shared.isPro = true
+                dismiss()
+            }
+        } catch {
+            // TODO: surface a purchase error to the user.
+        }
     }
 
     private func restore() async {
-        // try? await AppStore.sync()
+        do {
+            let info = try await Purchases.shared.restorePurchases()
+            if info.entitlements[PurchasesManager.proEntitlement]?.isActive == true {
+                AppGroupStore.shared.isPro = true
+                dismiss()
+            }
+        } catch {
+            // TODO: surface a restore error to the user.
+        }
     }
 }
