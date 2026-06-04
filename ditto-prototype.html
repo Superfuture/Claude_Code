@@ -1560,6 +1560,8 @@
     opacity: 0;
     transition: opacity 0.28s ease;
   }
+  /* The .wl-overlay display:flex would otherwise override [hidden]; keep it hidden. */
+  .wl-overlay[hidden] { display: none; }
   .wl-overlay.show { opacity: 1; }
   .wl-modal {
     position: relative;
