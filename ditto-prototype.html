@@ -1545,6 +1545,148 @@
     background: var(--persimmon);
   }
 
+  /* ─── Waitlist modal ────────────────────────────────────── */
+  .wl-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(27, 22, 17, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.28s ease;
+  }
+  .wl-overlay.show { opacity: 1; }
+  .wl-modal {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    background: var(--paper-light);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xl);
+    padding: 40px 36px 30px;
+    box-shadow: 0 40px 100px -20px rgba(27, 22, 17, 0.45);
+    transform: translateY(16px) scale(0.97);
+    opacity: 0;
+    transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.34s ease;
+  }
+  .wl-overlay.show .wl-modal { transform: translateY(0) scale(1); opacity: 1; }
+  .wl-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .wl-close:hover { background: var(--persimmon-ghost); color: var(--ink); }
+  .wl-close svg { width: 16px; height: 16px; }
+  .wl-eyebrow {
+    display: block;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--persimmon-deep);
+    margin-bottom: 12px;
+  }
+  .wl-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    line-height: 1.1;
+    color: var(--ink);
+    margin: 0 0 10px;
+  }
+  .wl-sub {
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 0 0 22px;
+  }
+  .wl-form { display: flex; flex-direction: column; gap: 12px; }
+  .wl-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .wl-input::placeholder { color: var(--ink-faint); }
+  .wl-input:focus {
+    border-color: var(--persimmon);
+    box-shadow: 0 0 0 3px var(--persimmon-ghost);
+  }
+  .wl-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .wl-submit {
+    width: 100%;
+    padding: 14px 20px;
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, box-shadow 0.25s ease;
+  }
+  .wl-submit:hover:not(:disabled) {
+    background: linear-gradient(120deg, #FF5A36 0%, #E879A8 50%, #9B7BE0 100%);
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(232, 121, 168, 0.22), 0 16px 40px rgba(155, 123, 224, 0.32);
+  }
+  .wl-submit:disabled { opacity: 0.6; cursor: default; }
+  .wl-error {
+    font-family: 'Geist', sans-serif;
+    font-size: 13px;
+    color: var(--persimmon-deep);
+    margin: 2px 0 0;
+  }
+  .wl-fine {
+    font-family: 'Geist', sans-serif;
+    font-size: 12px;
+    color: var(--ink-muted);
+    text-align: center;
+    margin: 16px 0 0;
+  }
+  .wl-success { text-align: center; padding: 6px 0; }
+  .wl-check {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--persimmon-ghost);
+    color: var(--persimmon-deep);
+  }
+  .wl-check svg { width: 28px; height: 28px; }
+  .wl-done { margin-top: 22px; }
+  @media (max-width: 480px) {
+    .wl-modal { padding: 34px 24px 24px; }
+    .wl-title { font-size: 24px; }
+  }
+
   /* ─── Responsive ────────────────────────────────────────── */
 
   @media (max-width: 1100px) {
@@ -1956,6 +2098,37 @@
 
 </div>
 
+<!-- Waitlist modal -->
+<div class="wl-overlay" id="waitlistOverlay" role="dialog" aria-modal="true" aria-labelledby="wlTitle" hidden>
+  <div class="wl-modal">
+    <button class="wl-close" id="wlClose" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="wl-body" id="wlBody">
+      <span class="wl-eyebrow">Coming soon to iMessage</span>
+      <h2 class="wl-title" id="wlTitle">Join the waitlist</h2>
+      <p class="wl-sub">Ditto isn't on the App Store just yet. Drop your email and you'll be first to know the moment it goes live.</p>
+      <form class="wl-form" id="wlForm" novalidate>
+        <input class="wl-input" type="email" id="wlEmail" name="email" placeholder="you@email.com" autocomplete="email" required>
+        <input class="wl-hp" type="text" name="company_url" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="wl-submit" type="submit" id="wlSubmit">Join the waitlist</button>
+        <p class="wl-error" id="wlError" hidden></p>
+      </form>
+      <p class="wl-fine">No spam. One email when it's live.</p>
+    </div>
+
+    <div class="wl-success" id="wlSuccess" hidden>
+      <div class="wl-check">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h2 class="wl-title">You're on the list</h2>
+      <p class="wl-sub">Thanks. I'll email you the second Ditto hits the App Store.</p>
+      <button class="wl-submit wl-done" type="button" id="wlDone">Done</button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast" id="toast">
   <span class="toast-dot"></span>
@@ -2274,6 +2447,90 @@
   // ─── Init ──────────────────────────────────────────────
 
   renderSuggestions('funny', 'main', false);
+
+  // ─── Waitlist modal ────────────────────────────────────
+  (function waitlist() {
+    const ENDPOINT = 'https://officialjp.com/api/ditto-waitlist';
+    const overlay = document.getElementById('waitlistOverlay');
+    const form = document.getElementById('wlForm');
+    const emailInput = document.getElementById('wlEmail');
+    const submit = document.getElementById('wlSubmit');
+    const errorEl = document.getElementById('wlError');
+    const bodyEl = document.getElementById('wlBody');
+    const successEl = document.getElementById('wlSuccess');
+    const validEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+    let lastFocus = null;
+
+    function reset() {
+      bodyEl.hidden = false;
+      successEl.hidden = true;
+      errorEl.hidden = true;
+      form.reset();
+      submit.disabled = false;
+      submit.textContent = 'Join the waitlist';
+    }
+    function open(e) {
+      if (e) e.preventDefault();
+      lastFocus = document.activeElement;
+      overlay.hidden = false;
+      requestAnimationFrame(() => overlay.classList.add('show'));
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => emailInput.focus(), 120);
+    }
+    function close() {
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+      setTimeout(() => {
+        overlay.hidden = true;
+        reset();
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }, 280);
+    }
+
+    document.querySelectorAll('#downloadCta, .final-cta-btn').forEach((btn) =>
+      btn.addEventListener('click', open)
+    );
+    document.getElementById('wlClose').addEventListener('click', close);
+    document.getElementById('wlDone').addEventListener('click', close);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !overlay.hidden) close();
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.hidden = true;
+      const email = emailInput.value.trim();
+      if (!validEmail(email)) {
+        errorEl.textContent = 'Please enter a valid email.';
+        errorEl.hidden = false;
+        emailInput.focus();
+        return;
+      }
+      submit.disabled = true;
+      submit.textContent = 'Joining…';
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            source: 'Ditto landing',
+            company_url: form.company_url.value,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong');
+        bodyEl.hidden = true;
+        successEl.hidden = false;
+      } catch (err) {
+        errorEl.textContent = (err && err.message ? err.message : 'Could not join right now') + '. Please try again.';
+        errorEl.hidden = false;
+        submit.disabled = false;
+        submit.textContent = 'Join the waitlist';
+      }
+    });
+  })();
 </script>
 
 </body>
