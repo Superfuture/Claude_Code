@@ -1,12 +1,13 @@
 import Foundation
 
 enum Tone: String, CaseIterable, Identifiable, Codable {
-    case funny, flirty, formal, supportive
+    case smart, funny, flirty, formal, supportive
 
     var id: String { rawValue }
 
     var label: String {
         switch self {
+        case .smart: return "Smart"
         case .funny: return "Funny"
         case .flirty: return "Flirty"
         case .formal: return "Formal"
@@ -16,6 +17,7 @@ enum Tone: String, CaseIterable, Identifiable, Codable {
 
     var emoji: String {
         switch self {
+        case .smart: return "✨"
         case .funny: return "😄"
         case .flirty: return "😏"
         case .formal: return "🎩"

@@ -4,6 +4,17 @@
 <dict>
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.superfuture.ditto</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>ditto</string>
+            </array>
+        </dict>
+    </array>
     <key>CFBundleDisplayName</key>
     <string>Ditto</string>
     <key>CFBundleExecutable</key>
@@ -17,11 +28,13 @@
     <key>CFBundlePackageType</key>
     <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>$(MARKETING_VERSION)</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>$(CURRENT_PROJECT_VERSION)</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Ditto reads your most recent screenshot to suggest replies to the conversation in it. Screenshots are processed on your device and never stored.</string>
     <key>UIApplicationSceneManifest</key>
     <dict>
         <key>UIApplicationSupportsMultipleScenes</key>

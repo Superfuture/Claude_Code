@@ -21,9 +21,9 @@ struct SettingsView: View {
 
             Section("About") {
                 LabeledContent("Version", value: appVersion)
-                Link("Privacy Policy", destination: URL(string: "https://example.com/privacy")!)
-                Link("Terms of Service", destination: URL(string: "https://example.com/terms")!)
-                Link("Support", destination: URL(string: "mailto:support@ditto.app")!)
+                Link("Privacy Policy", destination: URL(string: "https://policies.superfuturelabs.com/ditto/privacy")!)
+                Link("Terms of Use (EULA)", destination: URL(string: "https://policies.superfuturelabs.com/ditto/terms")!)
+                Link("Support", destination: URL(string: "https://policies.superfuturelabs.com/ditto/support")!)
             }
         }
         .navigationTitle("Settings")

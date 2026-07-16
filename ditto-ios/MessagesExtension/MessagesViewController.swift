@@ -18,6 +18,9 @@ final class MessagesViewController: MSMessagesAppViewController {
                 self?.activeConversation?.insertText(text, completionHandler: nil)
             }
         )
+        viewModel.requestExpand = { [weak self] in
+            self?.requestPresentationStyle(.expanded)
+        }
 
         let rootView = DittoView(viewModel: viewModel)
         let host = UIHostingController(rootView: rootView)

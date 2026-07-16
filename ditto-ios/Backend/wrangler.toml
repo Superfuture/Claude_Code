@@ -2,13 +2,9 @@ name = "ditto-api"
 main = "worker.js"
 compatibility_date = "2025-01-01"
 
-# Uncomment after creating a KV namespace:
-#   npx wrangler kv:namespace create "RATELIMIT"
-# Paste the returned id below.
-#
-# [[kv_namespaces]]
-# binding = "RATELIMIT"
-# id = "YOUR_KV_NAMESPACE_ID"
+[[kv_namespaces]]
+binding = "RATELIMIT"
+id = "a23482dede0949c5ba1ec52a352465bb"
 
 # Secrets (set via CLI, not committed):
 #   npx wrangler secret put ANTHROPIC_API_KEY

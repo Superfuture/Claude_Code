@@ -15,18 +15,17 @@ final class PurchasesManager: NSObject, ObservableObject {
     /// RevenueCat entitlement identifier — must match the dashboard exactly.
     static let proEntitlement = "pro"
 
-    /// RevenueCat public SDK API key.
-    /// ⚠️ This is the TEST key from onboarding (RevenueCat Test Store). Before
-    /// shipping real App Store purchases, replace it with your PRODUCTION key
-    /// (starts with `appl_`) from RevenueCat → Apps & providers → your App Store app.
-    private static let apiKey = "test_rPEdUiXubsipFVjNhEAEheWJrYs"
+    /// RevenueCat public SDK API key (production, App Store app).
+    private static let apiKey = "appl_UXHahmgZUXmvQstsuotdWpOCgDo"
 
     @Published private(set) var isPro: Bool = AppGroupStore.shared.isPro
 
     /// Call once, as early as possible (from `DittoApp.init`).
     func configure() {
         Purchases.logLevel = .info
-        Purchases.configure(withAPIKey: Self.apiKey)
+        // Stable app user id (the shared device id) so the backend can verify
+        // Pro server-side when enforcing the daily free limit.
+        Purchases.configure(withAPIKey: Self.apiKey, appUserID: AppGroupStore.shared.deviceID)
         Purchases.shared.delegate = self
         Task { await refresh() }
     }

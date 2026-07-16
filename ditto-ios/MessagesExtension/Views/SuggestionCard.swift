@@ -16,7 +16,7 @@ struct SuggestionCard: View {
         Button(action: onTap) {
             HStack(spacing: 0) {
                 Text("\(index)")
-                    .font(.custom("Fraunces-Italic", size: 12))
+                    .font(.brandSerif(12, weight: .bold))
                     .italic()
                     .foregroundStyle(BrandColor.persimmon)
                     .frame(width: 24)

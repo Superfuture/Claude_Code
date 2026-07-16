@@ -1,7 +1,10 @@
 import SwiftUI
+import UIKit
 
 struct DittoView: View {
     @ObservedObject var viewModel: DittoViewModel
+    @State private var draft: String = ""
+    @FocusState private var draftFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -15,12 +18,11 @@ struct DittoView: View {
                 emptyState
             } else if let error = viewModel.error {
                 errorState(error)
+            } else if viewModel.isLoading {
+                // Shown for first generation AND tone-switch regenerations
+                loadingState
             } else if viewModel.suggestions.isEmpty {
-                if viewModel.isLoading {
-                    loadingState
-                } else {
-                    initialPromptState
-                }
+                initialPromptState
             } else {
                 suggestionList
             }
@@ -29,9 +31,23 @@ struct DittoView: View {
             footer
         }
         .background(BrandColor.paper)
+        .onAppear { Haptics.prepare() }
         .task {
             if !viewModel.contextText.isEmpty && viewModel.suggestions.isEmpty {
                 await viewModel.generate()
+            } else if viewModel.contextText.isEmpty, draft.isEmpty,
+                      UIPasteboard.general.hasStrings,
+                      let pasted = UIPasteboard.general.string?
+                        .trimmingCharacters(in: .whitespacesAndNewlines),
+                      !pasted.isEmpty {
+                // Prefill from the clipboard, and when it looks like a fresh
+                // message go straight to suggestions with zero taps. The
+                // shouldAutoGenerate gate protects the daily quota from URLs,
+                // over-long text, and clipboard content already used once.
+                draft = pasted
+                if viewModel.shouldAutoGenerate(pasted) {
+                    viewModel.autoGenerate(pasted)
+                }
             }
         }
     }
@@ -41,7 +57,7 @@ struct DittoView: View {
             DittoLogo()
                 .frame(width: 24, height: 24)
             Text("Ditto")
-                .font(.custom("Fraunces-Italic", size: 20))
+                .font(.brandSerif(20))
                 .italic()
                 .foregroundStyle(BrandColor.ink)
             usageBadge
@@ -75,7 +91,13 @@ struct DittoView: View {
                         viewModel.selectTone(tone)
                     } label: {
                         HStack(spacing: 5) {
-                            Text(tone.emoji)
+                            if tone == .smart {
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(BrandColor.persimmon)
+                            } else {
+                                Text(tone.emoji)
+                            }
                             Text(tone.label)
                                 .font(.system(size: 13, weight: .medium))
                         }
@@ -90,7 +112,7 @@ struct DittoView: View {
                         )
                         .foregroundStyle(
                             tone == viewModel.selectedTone
-                                ? .white
+                                ? BrandColor.inkInverse
                                 : BrandColor.inkSoft
                         )
                         .overlay(
@@ -134,18 +156,73 @@ struct DittoView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: 8) {
-            Text("Open Ditto inside a conversation")
-                .font(.custom("Fraunces-Italic", size: 18))
-                .italic()
+        VStack(spacing: 12) {
+            Text("What are you replying to?")
+                .font(.brandSerif(19, weight: .bold))
                 .foregroundStyle(BrandColor.ink)
-            Text("Tap a message and share to Ditto, or paste below.")
+            Text("Copy a message and Ditto picks it up, or paste it below.")
                 .font(.system(size: 13))
                 .foregroundStyle(BrandColor.inkSoft)
                 .multilineTextAlignment(.center)
+
+            HStack(spacing: 8) {
+                TextField("Their message...", text: $draft, axis: .vertical)
+                    .lineLimit(1...3)
+                    .font(.system(size: 14))
+                    .foregroundStyle(BrandColor.ink)
+                    .focused($draftFocused)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 9)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12).fill(BrandColor.paperLight)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12).stroke(BrandColor.line, lineWidth: 1)
+                    )
+                    .onChange(of: draftFocused) { focused in
+                        // The keyboard can't appear in compact presentation
+                        if focused { viewModel.requestExpand() }
+                    }
+
+                if draft.isEmpty {
+                    Button {
+                        Haptics.tap()
+                        if let pasted = UIPasteboard.general.string?
+                            .trimmingCharacters(in: .whitespacesAndNewlines),
+                           !pasted.isEmpty {
+                            draft = pasted
+                            viewModel.setContext(pasted)
+                        }
+                    } label: {
+                        Label("Paste", systemImage: "doc.on.clipboard")
+                            .font(.system(size: 13, weight: .medium))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 9)
+                            .background(Capsule().fill(BrandColor.ink))
+                            .foregroundStyle(BrandColor.inkInverse)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            if !draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                Button {
+                    Haptics.tap()
+                    draftFocused = false
+                    viewModel.setContext(draft)
+                } label: {
+                    Text("Suggest replies")
+                        .font(.system(size: 14, weight: .semibold))
+                        .padding(.horizontal, 18)
+                        .padding(.vertical, 10)
+                        .background(Capsule().fill(BrandColor.persimmon))
+                        .foregroundStyle(.white)
+                }
+                .buttonStyle(.plain)
+            }
         }
         .padding(.horizontal, 28)
-        .padding(.vertical, 24)
+        .padding(.vertical, 20)
     }
 
     private var initialPromptState: some View {
@@ -190,6 +267,7 @@ struct DittoView: View {
             }
             Spacer()
             Button {
+                Haptics.soften()
                 Task { await viewModel.generate() }
             } label: {
                 Label("more options", systemImage: "arrow.clockwise")
@@ -197,7 +275,7 @@ struct DittoView: View {
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
                     .background(Capsule().fill(BrandColor.ink))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(BrandColor.inkInverse)
             }
             .buttonStyle(.plain)
         }
@@ -214,18 +292,7 @@ struct DittoView: View {
 }
 
 // MARK: - Brand tokens
-
-enum BrandColor {
-    static let persimmon = Color(red: 1.0, green: 0.353, blue: 0.212)
-    static let cream = Color(red: 0.949, green: 0.914, blue: 0.839)
-    static let creamDeep = Color(red: 0.914, green: 0.871, blue: 0.765)
-    static let paper = Color(red: 0.973, green: 0.945, blue: 0.875)
-    static let paperLight = Color(red: 0.988, green: 0.969, blue: 0.918)
-    static let ink = Color(red: 0.106, green: 0.086, blue: 0.067)
-    static let inkSoft = Color(red: 0.247, green: 0.212, blue: 0.173)
-    static let inkMuted = Color(red: 0.518, green: 0.471, blue: 0.400)
-    static let line = Color(red: 0.106, green: 0.086, blue: 0.067).opacity(0.1)
-}
+// BrandColor moved to Shared/BrandColor.swift so both targets share it.
 
 extension View {
     func shimmer() -> some View { modifier(ShimmerModifier()) }

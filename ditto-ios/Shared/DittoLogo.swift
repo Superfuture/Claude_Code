@@ -1,44 +1,56 @@
 import SwiftUI
 
-/// The brand wordmark icon — two overlapping speech bubbles, persimmon filled
-/// front bubble + outlined echo bubble behind. Matches the website logo.
+/// The brand mark — two overlapping speech bubbles matching the App Store icon:
+/// a persimmon-filled bubble in front (top-left) over a cream echo bubble
+/// behind (bottom-right), both with thick ink outlines and down-left tails.
 struct DittoLogo: View {
     var body: some View {
         Canvas { context, size in
-            let w = size.width
-            let h = size.height
-            let scale = min(w, h) / 40.0
+            let s = min(size.width, size.height) / 40.0
+            let stroke = StrokeStyle(lineWidth: 2.4 * s, lineJoin: .round)
 
-            // Back (echo) bubble — outline only
-            let back = bubblePath(
-                start: CGPoint(x: 11 * scale, y: 14 * scale),
-                end: CGPoint(x: 38 * scale, y: 22 * scale),
-                tail: CGPoint(x: 20 * scale, y: 31 * scale)
+            // Back (cream) bubble
+            let back = bubble(
+                rect: CGRect(x: 14.5 * s, y: 17 * s, width: 21 * s, height: 11.3 * s),
+                r: 4.5 * s,
+                tailX1: 18 * s, tailX2: 24 * s,
+                tip: CGPoint(x: 18.4 * s, y: 31.5 * s)
             )
-            context.stroke(back, with: .color(BrandColor.ink), lineWidth: 2 * scale)
+            context.fill(back, with: .color(BrandColor.cream))
+            context.stroke(back, with: .color(BrandColor.ink), style: stroke)
 
-            // Front bubble — filled persimmon
-            let front = bubblePath(
-                start: CGPoint(x: 2 * scale, y: 9 * scale),
-                end: CGPoint(x: 29 * scale, y: 17 * scale),
-                tail: CGPoint(x: 11 * scale, y: 26 * scale)
+            // Front (persimmon) bubble, drawn on top
+            let front = bubble(
+                rect: CGRect(x: 4.5 * s, y: 8.5 * s, width: 21 * s, height: 11 * s),
+                r: 4.5 * s,
+                tailX1: 8.5 * s, tailX2: 15 * s,
+                tip: CGPoint(x: 9 * s, y: 23.5 * s)
             )
             context.fill(front, with: .color(BrandColor.persimmon))
-            context.stroke(front, with: .color(BrandColor.ink), lineWidth: 2 * scale)
+            context.stroke(front, with: .color(BrandColor.ink), style: stroke)
         }
     }
 
-    private func bubblePath(start: CGPoint, end: CGPoint, tail: CGPoint) -> Path {
-        let r: CGFloat = (end.y - start.y) * 0.2
+    /// One continuous outline: rounded rect with a pointed tail spliced into
+    /// the bottom edge between tailX1 and tailX2 (so fill + stroke stay clean).
+    private func bubble(rect: CGRect, r: CGFloat, tailX1: CGFloat, tailX2: CGFloat, tip: CGPoint) -> Path {
         var p = Path()
-        p.addRoundedRect(
-            in: CGRect(x: start.x, y: start.y, width: end.x - start.x, height: end.y - start.y),
-            cornerSize: CGSize(width: r * 2, height: r * 2)
-        )
-        // Tail
-        p.move(to: CGPoint(x: tail.x - 4, y: end.y))
-        p.addLine(to: CGPoint(x: tail.x, y: tail.y))
-        p.addLine(to: CGPoint(x: tail.x + 4, y: end.y))
+        p.move(to: CGPoint(x: rect.minX + r, y: rect.minY))
+        p.addLine(to: CGPoint(x: rect.maxX - r, y: rect.minY))
+        p.addArc(center: CGPoint(x: rect.maxX - r, y: rect.minY + r), radius: r,
+                 startAngle: .degrees(-90), endAngle: .degrees(0), clockwise: false)
+        p.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - r))
+        p.addArc(center: CGPoint(x: rect.maxX - r, y: rect.maxY - r), radius: r,
+                 startAngle: .degrees(0), endAngle: .degrees(90), clockwise: false)
+        p.addLine(to: CGPoint(x: tailX2, y: rect.maxY))
+        p.addLine(to: tip)
+        p.addLine(to: CGPoint(x: tailX1, y: rect.maxY))
+        p.addLine(to: CGPoint(x: rect.minX + r, y: rect.maxY))
+        p.addArc(center: CGPoint(x: rect.minX + r, y: rect.maxY - r), radius: r,
+                 startAngle: .degrees(90), endAngle: .degrees(180), clockwise: false)
+        p.addLine(to: CGPoint(x: rect.minX, y: rect.minY + r))
+        p.addArc(center: CGPoint(x: rect.minX + r, y: rect.minY + r), radius: r,
+                 startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
         p.closeSubpath()
         return p
     }

@@ -20,6 +20,16 @@ Hard rules:
 // Per-tone few-shot examples, alternating user / assistant turns.
 // Keep these short — they're sent on every request (not cached).
 export const FEW_SHOTS_BY_TONE = {
+  smart: [
+    {
+      role: "user",
+      content: `Incoming message: """hey are we still on for tomorrow? also can you send me the address"""\n\nReply with the 3 best natural reply options that the user could send, the way a thoughtful friend would text back. Return strict JSON in the form { "suggestions": ["...", "...", "..."] } and nothing else.`,
+    },
+    {
+      role: "assistant",
+      content: `{"suggestions":["yes still on! sending the address now","yep, see you tomorrow. address coming in a sec","we're on. i'll text you the address in a minute"]}`,
+    },
+  ],
   funny: [
     {
       role: "user",

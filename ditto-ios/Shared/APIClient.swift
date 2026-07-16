@@ -4,7 +4,7 @@ actor APIClient {
     static let shared = APIClient()
 
     /// Update this after `npx wrangler deploy` prints your Worker URL.
-    static let baseURL = URL(string: "https://ditto-api.example.workers.dev")!
+    static let baseURL = URL(string: "https://ditto-api.jprimiani.workers.dev")!
 
     enum APIError: Error, LocalizedError {
         case badStatus(Int)
@@ -24,17 +24,21 @@ actor APIClient {
         let context: String
         let tone: String
         let device_id: String
+        let is_thread: Bool
+        let is_draft: Bool
     }
 
     private struct SuggestResponse: Decodable {
         let suggestions: [String]
     }
 
-    func suggest(context: String, tone: Tone) async throws -> [Suggestion] {
+    func suggest(context: String, tone: Tone, isThread: Bool = false, isDraft: Bool = false) async throws -> [Suggestion] {
         let body = SuggestRequest(
             context: context,
             tone: tone.rawValue,
-            device_id: AppGroupStore.shared.deviceID
+            device_id: AppGroupStore.shared.deviceID,
+            is_thread: isThread,
+            is_draft: isDraft
         )
 
         var request = URLRequest(url: Self.baseURL.appendingPathComponent("/v1/suggest"))

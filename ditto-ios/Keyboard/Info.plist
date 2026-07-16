@@ -10,9 +10,17 @@
   <key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string>
   <key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string>
   <key>CFBundlePackageType</key><string>XPC!</string>
+  <key>NSPhotoLibraryUsageDescription</key><string>Ditto reads your most recent screenshot to suggest replies to the conversation in it. Screenshots are processed on your device and never stored.</string>
   <key>NSExtension</key>
   <dict>
-    <key>NSExtensionPointIdentifier</key><string>com.apple.message-payload-provider</string>
-    <key>NSExtensionPrincipalClass</key><string>$(PRODUCT_MODULE_NAME).MessagesViewController</string>
+    <key>NSExtensionPointIdentifier</key><string>com.apple.keyboard-service</string>
+    <key>NSExtensionPrincipalClass</key><string>$(PRODUCT_MODULE_NAME).KeyboardViewController</string>
+    <key>NSExtensionAttributes</key>
+    <dict>
+      <key>IsASCIICapable</key><false/>
+      <key>PrefersRightToLeft</key><false/>
+      <key>PrimaryLanguage</key><string>en-US</string>
+      <key>RequestsOpenAccess</key><true/>
+    </dict>
   </dict>
 </dict></plist>

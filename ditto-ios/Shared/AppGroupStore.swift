@@ -6,7 +6,7 @@ import Foundation
 final class AppGroupStore {
     static let shared = AppGroupStore()
 
-    private let groupID = "group.com.yourdomain.ditto"
+    private let groupID = "group.com.superfuture.ditto"
     private let defaults: UserDefaults
 
     private enum Key {
@@ -16,6 +16,8 @@ final class AppGroupStore {
         static let usageCount = "ditto.usageCount"
         static let isPro = "ditto.isPro"
         static let feedbackPrefix = "ditto.feedback."
+        static let lastAutoContext = "ditto.lastAutoContext"
+        static let smartDefaultApplied = "ditto.smartDefaultApplied"
     }
 
     init() {
@@ -23,6 +25,12 @@ final class AppGroupStore {
             preconditionFailure("App Group '\(groupID)' is not configured. Check entitlements.")
         }
         self.defaults = shared
+        // One-time migration: Smart is the new default tone, including for
+        // installs that stored the old "funny" default before Smart existed.
+        if !defaults.bool(forKey: Key.smartDefaultApplied) {
+            defaults.set(Tone.smart.rawValue, forKey: Key.lastTone)
+            defaults.set(true, forKey: Key.smartDefaultApplied)
+        }
     }
 
     // MARK: - Device ID (anonymous, for rate limiting)
@@ -44,7 +52,7 @@ final class AppGroupStore {
                let tone = Tone(rawValue: raw) {
                 return tone
             }
-            return .funny
+            return .smart
         }
         set { defaults.set(newValue.rawValue, forKey: Key.lastTone) }
     }
@@ -62,7 +70,7 @@ final class AppGroupStore {
         let today = Self.dayString(for: Date())
         let savedDay = defaults.string(forKey: Key.usageDate)
         let count = (savedDay == today) ? defaults.integer(forKey: Key.usageCount) : 0
-        return UsageState(used: count, limit: 5, isPro: isPro)
+        return UsageState(used: count, limit: 10, isPro: isPro)
     }
 
     func recordUsage() {
@@ -78,6 +86,22 @@ final class AppGroupStore {
         formatter.dateFormat = "yyyy-MM-dd"
         formatter.timeZone = .current
         return formatter.string(from: date)
+    }
+
+    // MARK: - Auto-generate dedupe
+
+    /// The last clipboard text we auto-generated replies for, so reopening
+    /// the extension with the same clipboard doesn't burn another daily use.
+    var lastAutoContext: String? {
+        get { defaults.string(forKey: Key.lastAutoContext) }
+        set { defaults.set(newValue, forKey: Key.lastAutoContext) }
+    }
+
+    /// The last screenshot asset we auto-generated replies for (same dedupe
+    /// idea as lastAutoContext, keyed by PHAsset localIdentifier).
+    var lastScreenshotID: String? {
+        get { defaults.string(forKey: "ditto.lastScreenshotID") }
+        set { defaults.set(newValue, forKey: "ditto.lastScreenshotID") }
     }
 
     // MARK: - Feedback

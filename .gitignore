@@ -30,3 +30,6 @@ yarn-error.log*
 # Python venv
 .venv/
 __pycache__/
+
+# SPM package caches
+.spm/
