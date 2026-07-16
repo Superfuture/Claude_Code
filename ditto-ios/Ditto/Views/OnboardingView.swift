@@ -6,6 +6,15 @@ struct OnboardingView: View {
     @State private var page = 0
     private let pageCount = 4
 
+    init(onFinish: @escaping () -> Void) {
+        self.onFinish = onFinish
+        #if DEBUG
+        // Jump straight to a page for visual QA:
+        // simctl launch ... com.superfuture.ditto -ditto_onboard_page 3
+        _page = State(initialValue: UserDefaults.standard.integer(forKey: "ditto_onboard_page"))
+        #endif
+    }
+
     var body: some View {
         ZStack {
             BrandColor.cream.ignoresSafeArea()
@@ -257,7 +266,7 @@ struct OnboardingView: View {
                         .foregroundStyle(BrandColor.inkSoft)
                         .padding(.horizontal, 14)
                         .padding(.vertical, 9)
-                        .background(BubbleShape(fromMe: false).fill(BrandColor.creamDeep))
+                        .background(BubbleShape(fromMe: false).fill(BrandColor.bubbleIn))
                     Spacer(minLength: 40)
                 }
                 HStack {

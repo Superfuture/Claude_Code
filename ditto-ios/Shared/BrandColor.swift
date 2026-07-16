@@ -8,6 +8,9 @@ enum BrandColor {
     static let persimmon = Color(red: 1.0, green: 0.353, blue: 0.212)
     static let cream = Color(lightHex: 0xF2E9D6, darkHex: 0x191512)
     static let creamDeep = Color(lightHex: 0xE9DEC3, darkHex: 0x2B241B)
+    /// Received-message bubble: must stay distinct from paperLight cards in
+    /// dark mode (creamDeep is near-identical there and disappears).
+    static let bubbleIn = Color(lightHex: 0xE9DEC3, darkHex: 0x453C2E)
     static let paper = Color(lightHex: 0xF8F1DF, darkHex: 0x1F1A14)
     static let paperLight = Color(lightHex: 0xFCF7EA, darkHex: 0x2A241C)
     static let ink = Color(lightHex: 0x1B1611, darkHex: 0xF3EDE3)
