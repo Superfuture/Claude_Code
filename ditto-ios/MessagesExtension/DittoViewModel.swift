@@ -60,6 +60,12 @@ final class DittoViewModel: ObservableObject {
             store.recordUsage()
             usage = store.currentUsage()
         } catch APIClient.APIError.rateLimited {
+            // The server verifies Pro against RevenueCat on every request, so a
+            // 429 means any local Pro flag is stale (e.g. an expired sandbox
+            // sub). Flip it so the badge and CTA tell the truth; the app
+            // re-mirrors the real entitlement next time it runs.
+            store.isPro = false
+            usage = store.currentUsage()
             self.error = "Daily limit reached. Upgrade to Pro for unlimited replies."
             self.errorIsRateLimit = true
         } catch {

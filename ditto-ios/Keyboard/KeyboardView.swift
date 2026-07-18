@@ -27,6 +27,7 @@ struct KeyboardView: View {
     @State private var readingScreenshot = false
     @State private var photoDenied = false
     @State private var noRecentScreenshot = false
+    @State private var clipboardHasText = false
     @State private var thinkingPulse = false
     @State private var cardsAppeared = false
     /// The screenshot asset behind the current thread context, offered for
@@ -38,6 +39,7 @@ struct KeyboardView: View {
         freshClipboard = hasFullAccess
             && UIPasteboard.general.hasStrings
             && UIPasteboard.general.changeCount != consumedChangeCount
+        clipboardHasText = hasFullAccess && UIPasteboard.general.hasStrings
     }
 
     var body: some View {
@@ -269,13 +271,35 @@ struct KeyboardView: View {
 
     private var emptyState: some View {
         VStack(spacing: 6) {
-            Text("Screenshot the chat, then open Ditto")
+            Text("Copy a message or screenshot the chat")
                 .font(.brandSerif(15, weight: .bold))
                 .foregroundStyle(BrandColor.ink)
-            Text("Replies to the conversation appear automatically. Copying a message works too.")
+            Text("Long-press a message and tap Copy, then use it below. Screenshots of the conversation work too.")
                 .font(.system(size: 12))
                 .foregroundStyle(BrandColor.inkSoft)
                 .multilineTextAlignment(.center)
+
+            if clipboardHasText {
+                Button {
+                    Haptics.tap()
+                    consumedChangeCount = UIPasteboard.general.changeCount
+                    freshClipboard = false
+                    if let pasted = UIPasteboard.general.string?
+                        .trimmingCharacters(in: .whitespacesAndNewlines),
+                       !pasted.isEmpty {
+                        viewModel.setContext(pasted)
+                    }
+                } label: {
+                    Label("Use copied message", systemImage: "doc.on.clipboard")
+                        .font(.system(size: 13, weight: .semibold))
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 9)
+                        .background(Capsule().fill(BrandColor.ink))
+                        .foregroundStyle(BrandColor.inkInverse)
+                }
+                .buttonStyle(.plain)
+                .padding(.top, 6)
+            }
 
             if let draft = readDraft()?.trimmingCharacters(in: .whitespacesAndNewlines),
                !draft.isEmpty {
@@ -415,7 +439,7 @@ struct KeyboardView: View {
                 .font(.system(size: 12))
                 .foregroundStyle(BrandColor.inkSoft)
                 .multilineTextAlignment(.center)
-            if viewModel.errorIsRateLimit && !viewModel.usage.isPro {
+            if viewModel.errorIsRateLimit {
                 Button {
                     Haptics.tap()
                     onUpgrade()
